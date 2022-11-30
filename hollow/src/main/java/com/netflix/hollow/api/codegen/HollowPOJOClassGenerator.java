@@ -67,12 +67,14 @@ public class HollowPOJOClassGenerator implements HollowJavaFileGenerator {
         this.packageName = packageName;
         this.classNameSuffix = classNameSuffix;
         this.className = buildClassName(schema.getName(), classNameSuffix);
-        this.importClasses = new HashSet<Class<?>>();
+        this.importClasses = new HashSet<>();
         this.memoizeOrdinal = memoizeOrdinal;
     }
     
     private static String buildClassName(String name, String suffix) {
-        if (suffix == null) return name;
+        if(suffix == null) {
+            return name;
+        }
         return name + suffix;
     }
 
@@ -111,7 +113,7 @@ public class HollowPOJOClassGenerator implements HollowJavaFileGenerator {
         StringBuilder builder = new StringBuilder();
         builder.append("package ").append(packageName).append(";\n\n");
 
-        List<String> importClassNames = new ArrayList<String>();
+        List<String> importClassNames = new ArrayList<>();
 
         for (Class<?> c : importClasses) {
             importClassNames.add(c.getName());
@@ -268,8 +270,9 @@ public class HollowPOJOClassGenerator implements HollowJavaFileGenerator {
                     classBodyBuilder.append("        hashCode = hashCode * 31 + (" + fieldName + "? 1231 : 1237);\n");
                     break;
                 case DOUBLE:
-                    if (!tempExists)
+                    if(!tempExists) {
                         classBodyBuilder.append("        long temp;\n");
+                    }
                     classBodyBuilder.append("        temp = java.lang.Double.doubleToLongBits(" + fieldName + ")\n");
                     classBodyBuilder.append("        hashCode = hashCode * 31 + (int) (temp ^ (temp >>> 32));\n");
                     break;
@@ -302,8 +305,9 @@ public class HollowPOJOClassGenerator implements HollowJavaFileGenerator {
         classBodyBuilder.append("        StringBuilder builder = new StringBuilder(\"").append(getClassName()).append("{\");\n");
         for (int i=0;i<schema.numFields();i++) {
             classBodyBuilder.append("        builder.append(\"");
-            if (i > 0)
+            if(i > 0) {
                 classBodyBuilder.append(",");
+            }
             classBodyBuilder.append(getFieldName(i)).append("=\").append(").append(getFieldName(i)).append(");\n");
         }
         classBodyBuilder.append("        builder.append(\"}\");\n");

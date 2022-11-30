@@ -75,10 +75,11 @@ public class HollowDiffHtmlKickstarter {
             }
 
 
-            if(!"".equals(origFromIndexValue))
+            if(!"".equals(origFromIndexValue)) {
                 initialHtml.append("<td class=\"margin\">").append(origFromIndexValue).append("</td>");
-            else
+            } else {
                 initialHtml.append("<td class=\"margin\"/>");
+            }
 
             initialHtml.append("<td class=\"").append(fromCellClassname).append("\">").append(fromCellContent).append("</td>");
 
@@ -92,10 +93,11 @@ public class HollowDiffHtmlKickstarter {
                 initialHtml.append("<td class=\"margin\"/>");
             }
 
-            if(!"".equals(origToIndexValue))
+            if(!"".equals(origToIndexValue)) {
                 initialHtml.append("<td class=\"margin\">").append(origToIndexValue).append("</td>");
-            else
+            } else {
                 initialHtml.append("<td class=\"margin\"/>");
+            }
 
             initialHtml.append("<td class=\"").append(toCellClassname).append("\">").append(toCellContent).append("</td>");
         }

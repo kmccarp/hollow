@@ -41,14 +41,16 @@ public class HollowDiffUIRouter extends HollowUIRouter {
         String diffUIKey = getTargetRootPath(target);
 
         if("resource".equals(diffUIKey)) {
-            if(serveResource(req, resp, getResourceName(target)))
+            if(serveResource(req, resp, getResourceName(target))) {
                 return true;
+            }
         } else {
             HollowDiffUI ui = diffUIs.get(diffUIKey);
 
             if(ui != null) {
-                if(ui.serveRequest(getResourceName(target), req, resp))
+                if(ui.serveRequest(getResourceName(target), req, resp)) {
                     return true;
+                }
             }
         }
 

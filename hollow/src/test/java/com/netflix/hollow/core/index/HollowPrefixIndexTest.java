@@ -89,7 +89,7 @@ public class HollowPrefixIndexTest {
 
         ordinals = toSet(tokenizedPrefixIndex.findKeysWithPrefix("the "));// note the whitespace in findKeysWithPrefix string.
         // expected result ordinals size is 0, since entire movie is not indexed. movie name is split by whitespace.
-        Assert.assertTrue(ordinals.size() == 0);
+        Assert.assertTrue(ordinals.isEmpty());
     }
 
     @Test
@@ -224,7 +224,7 @@ public class HollowPrefixIndexTest {
         Set<Integer> ordinals = toSet(prefixIndex.findKeysWithPrefix("carr"));
         Assert.assertTrue(ordinals.size() == 1);
         ordinals = toSet(prefixIndex.findKeysWithPrefix("aaa"));
-        Assert.assertTrue(ordinals.size() == 0);
+        Assert.assertTrue(ordinals.isEmpty());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -387,7 +387,7 @@ public class HollowPrefixIndexTest {
     /**
      * Abstract Movie class for testing purposes.
      */
-    private static abstract class Movie {
+    private abstract static class Movie {
         private int id;
         private int yearRelease;
 

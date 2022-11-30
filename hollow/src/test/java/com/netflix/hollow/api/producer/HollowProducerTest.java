@@ -482,7 +482,9 @@ public class HollowProducerTest {
         }
 
         private File copyFile(File blobFile) {
-            if (!blobFile.exists()) throw new RuntimeException("File does not exists: " + blobFile);
+            if(!blobFile.exists()) {
+                throw new RuntimeException("File does not exists: " + blobFile);
+            }
 
             // Copy file
             File copiedFile = new File(tmpFolder, "copied_" + blobFile.getName());

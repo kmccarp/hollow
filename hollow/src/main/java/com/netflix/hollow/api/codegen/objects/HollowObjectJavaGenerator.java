@@ -259,10 +259,11 @@ public class HollowObjectJavaGenerator extends HollowConsumerJavaFileGenerator {
             methodName = getterPrefix + (isBooleanRefType ?  generateBooleanAccessorMethodName(fieldName, useBooleanFieldErgonomics) : "get" + uppercase(fieldName));
         }
 
-        if(parameterize)
+        if(parameterize) {
             builder.append("    public <T> T ").append(methodName).append("() {\n");
-        else
+        } else {
             builder.append("    public ").append(hollowImplClassname(referencedType)).append(" ").append(methodName).append("() {\n");
+        }
 
         builder.append("        int refOrdinal = delegate().get" + uppercase(fieldName) + "Ordinal(ordinal);\n");
         builder.append("        if(refOrdinal == -1)\n");
@@ -394,7 +395,8 @@ public class HollowObjectJavaGenerator extends HollowConsumerJavaFileGenerator {
         if (pk.numFields() == 1) {
             String fieldPath = pk.getFieldPath(0);
             FieldType fieldType = pk.getFieldType(dataset, 0);
-            String type, boxedType;
+            String type;
+            String boxedType;
             if (FieldType.REFERENCE.equals(fieldType)) {
                 HollowObjectSchema refSchema = pk.getFieldSchema(dataset, 0);
                 type = boxedType = hollowImplClassname(refSchema.getName());
@@ -448,7 +450,7 @@ public class HollowObjectJavaGenerator extends HollowConsumerJavaFileGenerator {
                     .collect(joining(", "));
             classBuilder.append("        public Key(" + parameters + ") {\n");
             parameterList.forEach((n, t) -> {
-                if (t.equals("byte[]")) {
+                if ("byte[]".equals(t)) {
                     classBuilder.append("            this." + n + " = " + n + " == null ? null : " + n + ".clone();\n");
                 } else {
                     classBuilder.append("            this." + n + " = " + n + ";\n");
@@ -472,8 +474,8 @@ public class HollowObjectJavaGenerator extends HollowConsumerJavaFileGenerator {
                 break;
         }
         classBuilder.append("    /**\n");
-        classBuilder.append(String.format("     * Creates a unique key index for {@code %s} that has a primary key.\n", className));
-        classBuilder.append(String.format("     * The primary key is represented by the %s.\n", kindSnippet));
+        classBuilder.append(String.format("     * Creates a unique key index for {@code %s} that has a primary key.%n", className));
+        classBuilder.append(String.format("     * The primary key is represented by the %s.%n", kindSnippet));
         classBuilder.append("     * <p>\n");
         classBuilder.append("     * By default the unique key index will not track updates to the {@code consumer} and thus\n");
         classBuilder.append("     * any changes will not be reflected in matched results.  To track updates the index must be\n");

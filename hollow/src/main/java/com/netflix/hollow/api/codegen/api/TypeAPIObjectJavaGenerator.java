@@ -45,7 +45,7 @@ public class TypeAPIObjectJavaGenerator extends HollowTypeAPIGenerator {
 
     private final HollowObjectSchema objectSchema;
 
-    private final Set<Class<?>> importClasses = new TreeSet<Class<?>>(new Comparator<Class<?>>() {
+    private final Set<Class<?>> importClasses = new TreeSet<>(new Comparator<Class<?>>() {
         @Override
         public int compare(Class<?> o1, Class<?> o2) {
             return o1.getName().compareTo(o2.getName());
@@ -138,8 +138,9 @@ public class TypeAPIObjectJavaGenerator extends HollowTypeAPIGenerator {
 
         for(int i=0;i<objectSchema.numFields();i++) {
             builder.append("            \"" + objectSchema.getFieldName(i) + "\"");
-            if(i < objectSchema.numFields() - 1)
+            if(i < objectSchema.numFields() - 1) {
                 builder.append(",");
+            }
             builder.append("\n");
         }
 

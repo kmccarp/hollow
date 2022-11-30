@@ -18,7 +18,7 @@ package com.netflix.hollow.api.producer.metrics;
 
 import java.util.OptionalLong;
 
-public class AnnouncementMetrics {
+public final class AnnouncementMetrics {
 
     private long dataSizeBytes;                             // Heap footprint of announced blob in bytes
     private long announcementDurationMillis;                // Announcement duration in ms, only applicable to completed cycles (skipped cycles dont announce)

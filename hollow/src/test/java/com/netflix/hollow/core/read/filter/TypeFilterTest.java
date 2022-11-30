@@ -186,7 +186,9 @@ public class TypeFilterTest {
 
         @Test
         public void verify() {
-            if (skip) return;
+            if(skip) {
+                return;
+            }
 
             List<HollowSchema> schemas = generateSchema(models);
 
@@ -196,7 +198,7 @@ public class TypeFilterTest {
 
             Set<String> included = schemas.stream()
                     .map(HollowSchema::getName)
-                    .filter(name -> subject.includes(name))
+                    .filter(subject::includes)
                     .collect(toSet());
             if (expected.isEmpty()) {
                 assertThat(included).isEmpty();
@@ -228,7 +230,9 @@ public class TypeFilterTest {
 
         @Test
         public void verify() {
-            if (skip) return;
+            if(skip) {
+                return;
+            }
             List<HollowSchema> schemas = generateSchema(models);
 
             TypeFilter subject = filteredBy
@@ -262,7 +266,7 @@ public class TypeFilterTest {
         }
     }
 
-    private static abstract class AbstractTypeFilterTest extends TypeFilterTest {
+    private abstract static class AbstractTypeFilterTest extends TypeFilterTest {
         static final String SKIP = "SKIP:";
         protected final boolean skip;
 

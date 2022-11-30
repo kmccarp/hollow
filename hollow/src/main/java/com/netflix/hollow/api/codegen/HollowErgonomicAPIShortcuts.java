@@ -37,7 +37,7 @@ public class HollowErgonomicAPIShortcuts {
     }
     
     HollowErgonomicAPIShortcuts(HollowDataset dataset) {
-        this.shortcutFieldPaths = new HashMap<String, Shortcut>();
+        this.shortcutFieldPaths = new HashMap<>();
         populatePaths(dataset);
     }
     

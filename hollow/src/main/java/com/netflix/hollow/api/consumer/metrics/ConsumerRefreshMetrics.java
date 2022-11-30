@@ -20,7 +20,7 @@ import com.netflix.hollow.api.consumer.HollowConsumer.Blob.BlobType;
 import java.util.List;
 import java.util.OptionalLong;
 
-public class ConsumerRefreshMetrics {
+public final class ConsumerRefreshMetrics {
 
     private long durationMillis;
     private boolean isRefreshSuccess;               // true if refresh was successful, false if refresh failed

@@ -47,8 +47,9 @@ class HollowObjectTypePerfAPIClassGenerator {
 
         builder.append("    public static final String fieldNames[] = { ");
         for(int i=0;i<schema.numFields();i++) {
-            if(i > 0)
+            if(i > 0) {
                 builder.append(", ");
+            }
             builder.append("\"" + schema.getFieldName(i) + "\"");
         }
 
@@ -72,8 +73,9 @@ class HollowObjectTypePerfAPIClassGenerator {
 
     public void appendFieldMethod(StringBuilder builder, FieldType fieldType, String fieldName, int fieldIdx, String referencedType) {
         String type = fieldType.name();
-        if(fieldType == FieldType.REFERENCE)
+        if(fieldType == FieldType.REFERENCE) {
             type += " (" + referencedType + ")";
+        }
 
         builder.append("    /**\n" +
                 "     * <i>"+schema.getName() + "." + fieldName +"</i><br/>\n" +

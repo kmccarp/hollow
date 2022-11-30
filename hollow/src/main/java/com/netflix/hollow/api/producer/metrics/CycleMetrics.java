@@ -19,7 +19,7 @@ package com.netflix.hollow.api.producer.metrics;
 import java.util.Optional;
 import java.util.OptionalLong;
 
-public class CycleMetrics {
+public final class CycleMetrics {
 
     private long consecutiveFailures;
     private OptionalLong cycleDurationMillis;               // Cycle start to end duration, only applicable to completed cycles

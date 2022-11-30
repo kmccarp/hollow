@@ -36,7 +36,7 @@ public class AbstractHollowAPIGeneratorTest {
 
     void runGenerator(String apiClassName, String packageName, Class<?> clazz,
             UnaryOperator<HollowAPIGenerator.Builder> generatorCustomizer) throws Exception {
-        System.out.println(String.format("Folders (%s) : \n\tsource=%s \n\tclasses=%s",
+        System.out.println(String.format("Folders (%s) : %n\tsource=%s %n\tclasses=%s",
                     getClass().getSimpleName(), sourceFolder, clazzFolder));
 
         // Setup Folders

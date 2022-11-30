@@ -41,13 +41,15 @@ public class HollowPatcherCombinerCopyDirector implements HollowCombinerCopyDire
     public boolean shouldCopy(HollowTypeReadState typeState, int ordinal) {
         if(typeState.getStateEngine() == base) {
             BitSet bitSet = baseMatchesClosure.get(typeState.getSchema().getName());
-            if(bitSet == null)
+            if(bitSet == null) {
                 return true;
+            }
             return !bitSet.get(ordinal);
         } else if(typeState.getStateEngine() == patchFrom){
             BitSet bitSet = patchFromMatchesClosure.get(typeState.getSchema().getName());
-            if(bitSet == null)
+            if(bitSet == null) {
                 return false;
+            }
             return bitSet.get(ordinal);
         }
 

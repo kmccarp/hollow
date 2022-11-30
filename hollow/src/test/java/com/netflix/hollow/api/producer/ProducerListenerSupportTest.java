@@ -142,7 +142,7 @@ public class ProducerListenerSupportTest {
             }
         }
 
-        class FirstCycleListener extends SecondCycleListener {
+        final class FirstCycleListener extends SecondCycleListener {
             private SecondCycleListener scl;
 
             private FirstCycleListener(SecondCycleListener scl) {

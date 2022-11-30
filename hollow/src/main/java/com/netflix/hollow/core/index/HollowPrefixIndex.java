@@ -91,8 +91,9 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
         requireNonNull(readStateEngine, "Hollow Prefix Key Index creation for type [" + type
                 + "] failed because read state wasn't initialized");
 
-        if (fieldPath == null || fieldPath.isEmpty())
+        if(fieldPath == null || fieldPath.isEmpty()) {
             throw new IllegalArgumentException("fieldPath cannot be null or empty");
+        }
         if (estimatedMaxStringDuplicates < 1) {
             throw new IllegalArgumentException("estimatedMaxStringDuplicates cannot be < 1");
         }
@@ -101,8 +102,9 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
         this.type = type;
         this.estimatedMaxStringDuplicates = estimatedMaxStringDuplicates;
         this.fieldPath = new FieldPath(readStateEngine, type, fieldPath);
-        if (!this.fieldPath.getLastFieldType().equals(HollowObjectSchema.FieldType.STRING))
+        if(!this.fieldPath.getLastFieldType().equals(HollowObjectSchema.FieldType.STRING)) {
             throw new IllegalArgumentException("Field path should lead to a string type");
+        }
 
         // create memory recycle for using shared memory pools.
         memoryRecycle = WastefulRecycler.DEFAULT_INSTANCE;
@@ -137,11 +139,15 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
 
     private void build() {
 
-        if (!buildIndexOnUpdate) return;
+        if(!buildIndexOnUpdate) {
+            return;
+        }
         // tell memory recycler to use current tst's long arrays next time when long array is requested.
         // note reuse only happens once swap is called and bits are reset
         TST current = prefixIndexVolatile;
-        if (current != null) current.recycleMemory(memoryRecycle);
+        if(current != null) {
+            current.recycleMemory(memoryRecycle);
+        }
 
         long estimatedNumberOfNodes = estimateNumNodes(totalWords, averageWordLen);
         TST tst = new TST(estimatedNumberOfNodes, estimatedMaxStringDuplicates, maxOrdinalOfType,
@@ -227,7 +233,9 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
      * @return {@code true} if the key exists, otherwise {@code false}
      */
     public boolean contains(String key) {
-        if (key == null) throw new IllegalArgumentException("key cannot be null");
+        if(key == null) {
+            throw new IllegalArgumentException("key cannot be null");
+        }
         TST current;
         boolean result;
         do {
@@ -277,7 +285,7 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
         initialize();
     }
 
-    private static class TST {
+    private static final class TST {
 
         private enum NodeType {
             Left, Right, Middle
@@ -342,9 +350,13 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
 
         private long getChildOffset(NodeType nodeType) {
             long offset;
-            if (nodeType.equals(NodeType.Left)) offset = leftChildOffset;
-            else if (nodeType.equals(NodeType.Middle)) offset = middleChildOffset;
-            else offset = rightChildOffset;
+            if(nodeType.equals(NodeType.Left)) {
+                offset = leftChildOffset;
+            } else if(nodeType.equals(NodeType.Middle)) {
+                offset = middleChildOffset;
+            } else {
+                offset = rightChildOffset;
+            }
             return offset;
         }
 
@@ -384,7 +396,9 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
          * Insert into ternary search tree for the given key and ordinal.
          */
         private void insert(String key, int ordinal) {
-            if (key == null) throw new IllegalArgumentException("Null key cannot be indexed");
+            if(key == null) {
+                throw new IllegalArgumentException("Null key cannot be indexed");
+            }
             long currentNodeIndex = 0;
             int keyIndex = 0;
 
@@ -394,26 +408,33 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
                 if (getKey(currentNodeIndex) == 0) {
                     setKey(currentNodeIndex, ch);
                     indexTracker++;
-                    if (indexTracker >= maxNodes)
+                    if(indexTracker >= maxNodes) {
                         throw new IllegalStateException("Index Tracker reached max capacity. Try with larger estimate of number of nodes");
+                    }
                 }
 
                 long keyAtCurrentNode = getKey(currentNodeIndex);
                 if (ch < keyAtCurrentNode) {
                     long leftIndex = getChildIndex(currentNodeIndex, NodeType.Left);
-                    if (leftIndex == 0) leftIndex = indexTracker;
+                    if(leftIndex == 0) {
+                        leftIndex = indexTracker;
+                    }
                     setChildIndex(currentNodeIndex, NodeType.Left, leftIndex);
                     currentNodeIndex = leftIndex;
                 } else if (ch > keyAtCurrentNode) {
                     long rightIndex = getChildIndex(currentNodeIndex, NodeType.Right);
-                    if (rightIndex == 0) rightIndex = indexTracker;
+                    if(rightIndex == 0) {
+                        rightIndex = indexTracker;
+                    }
                     setChildIndex(currentNodeIndex, NodeType.Right, rightIndex);
                     currentNodeIndex = rightIndex;
                 } else {
                     keyIndex++;
                     if (keyIndex < key.length()) {
                         long midIndex = getChildIndex(currentNodeIndex, NodeType.Middle);
-                        if (midIndex == 0) midIndex = indexTracker;
+                        if(midIndex == 0) {
+                            midIndex = indexTracker;
+                        }
                         setChildIndex(currentNodeIndex, NodeType.Middle, midIndex);
                         currentNodeIndex = midIndex;
                     }
@@ -435,20 +456,26 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
             int keyIndex = 0;
 
             while (true) {
-                if (currentNodeIndex == 0 && !atRoot) break;
+                if(currentNodeIndex == 0 && !atRoot) {
+                    break;
+                }
                 long currentValue = getKey(currentNodeIndex);
                 char ch = key.charAt(keyIndex);
-                if (ch < currentValue) currentNodeIndex = getChildIndex(currentNodeIndex, NodeType.Left);
-                else if (ch > currentValue) currentNodeIndex = getChildIndex(currentNodeIndex, NodeType.Right);
-                else {
-                    if (keyIndex == (key.length() - 1)) {
+                if(ch < currentValue) {
+                    currentNodeIndex = getChildIndex(currentNodeIndex, NodeType.Left);
+                } else if(ch > currentValue) {
+                    currentNodeIndex = getChildIndex(currentNodeIndex, NodeType.Right);
+                } else {
+                    if(keyIndex == (key.length() - 1)) {
                         index = currentNodeIndex;
                         break;
                     }
                     currentNodeIndex = getChildIndex(currentNodeIndex, NodeType.Middle);
                     keyIndex++;
                 }
-                if (atRoot) atRoot = false;
+                if(atRoot) {
+                    atRoot = false;
+                }
             }
             return index;
         }
@@ -462,14 +489,17 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
          * Find all the ordinals that match the given prefix.
          */
         private HollowOrdinalIterator findKeysWithPrefix(String prefix) {
-            if (prefix == null) throw new IllegalArgumentException("Cannot findKeysWithPrefix null prefix");
+            if(prefix == null) {
+                throw new IllegalArgumentException("Cannot findKeysWithPrefix null prefix");
+            }
             final Set<Integer> ordinals = new HashSet<>();
             long currentNodeIndex = findNodeWithKey(prefix.toLowerCase());
 
             if (currentNodeIndex >= 0) {
 
-                if (isLeafNode(currentNodeIndex))
+                if(isLeafNode(currentNodeIndex)) {
                     ordinals.addAll(getOrdinals(currentNodeIndex));
+                }
 
                 // go to all leaf nodes from current node mid pointer
                 long subTree = getChildIndex(currentNodeIndex, NodeType.Middle);
@@ -483,11 +513,19 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
                         long right = getChildIndex(nodeIndex, NodeType.Right);
 
                         if (left == 0 && mid == 0 && right == 0) {
-                            if (isLeafNode(nodeIndex)) ordinals.addAll(getOrdinals(nodeIndex));
+                            if(isLeafNode(nodeIndex)) {
+                                ordinals.addAll(getOrdinals(nodeIndex));
+                            }
                         }
-                        if (left != 0) queue.add(left);
-                        if (mid != 0) queue.add(mid);
-                        if (right != 0) queue.add(right);
+                        if(left != 0) {
+                            queue.add(left);
+                        }
+                        if(mid != 0) {
+                            queue.add(mid);
+                        }
+                        if(right != 0) {
+                            queue.add(right);
+                        }
                     }
                 }
             }
@@ -497,7 +535,9 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
 
                 @Override
                 public int next() {
-                    if (it.hasNext()) return it.next();
+                    if(it.hasNext()) {
+                        return it.next();
+                    }
                     return NO_MORE_ORDINALS;
                 }
             };

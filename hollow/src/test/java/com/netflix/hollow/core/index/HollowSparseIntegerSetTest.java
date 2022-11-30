@@ -106,16 +106,11 @@ public class HollowSparseIntegerSetTest {
 
     // this predicate only indexes movie released in 2009
     private HollowSparseIntegerSet.IndexPredicate getPredicate() {
-        return new HollowSparseIntegerSet.IndexPredicate() {
-            @Override
-            public boolean shouldIndex(int ordinal) {
-                HollowObjectTypeDataAccess objectTypeDataAccess = (HollowObjectTypeDataAccess) readStateEngine.getTypeDataAccess("Movie");
-                int yearReleasedFieldPosition = objectTypeDataAccess.getSchema().getPosition("releaseYear");
-                int yearReleased = objectTypeDataAccess.readInt(ordinal, yearReleasedFieldPosition);
-                if (yearReleased == 2009)
-                    return true;
-                return false;
-            }
+        return ordinal -> {
+            HollowObjectTypeDataAccess objectTypeDataAccess = (HollowObjectTypeDataAccess)readStateEngine.getTypeDataAccess("Movie");
+            int yearReleasedFieldPosition = objectTypeDataAccess.getSchema().getPosition("releaseYear");
+            int yearReleased = objectTypeDataAccess.readInt(ordinal, yearReleasedFieldPosition);
+            return yearReleased == 2009;
         };
     }
 

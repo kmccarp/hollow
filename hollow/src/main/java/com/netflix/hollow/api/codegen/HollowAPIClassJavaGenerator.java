@@ -106,7 +106,9 @@ public class HollowAPIClassJavaGenerator extends HollowConsumerJavaFileGenerator
             builder.append("implements ");
             int itemCount = 0;
             for(String pType : primitiveTypes) {
-                if (itemCount++ > 0) builder.append(",");
+                if(itemCount++ > 0) {
+                    builder.append(",");
+                }
 
                 builder.append(" HollowConsumerAPI.").append(HollowCodeGenerationUtils.upperFirstChar(pType)).append("Retriever");
             }
@@ -147,8 +149,9 @@ public class HollowAPIClassJavaGenerator extends HollowConsumerJavaFileGenerator
         builder.append("        objectCreationSampler = new HollowObjectCreationSampler(");
         for(int i=0;i<schemaList.size();i++) {
             builder.append("\"").append(schemaList.get(i).getName()).append("\"");
-            if(i < schemaList.size() - 1)
+            if(i < schemaList.size() - 1) {
                 builder.append(",");
+            }
         }
         builder.append(");\n\n");
 

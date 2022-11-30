@@ -65,12 +65,15 @@ public class HollowFactoryJavaGenerator extends HollowConsumerJavaFileGenerator 
         builder.append("import " + HollowTypeDataAccess.class.getName() + ";\n");
         builder.append("import " + HollowTypeAPI.class.getName() + ";\n");
 
-        if(schema instanceof HollowListSchema)
+        if(schema instanceof HollowListSchema) {
             builder.append("import " + HollowListCachedDelegate.class.getName() + ";\n");
-        if(schema instanceof HollowSetSchema)
+        }
+        if(schema instanceof HollowSetSchema) {
             builder.append("import " + HollowSetCachedDelegate.class.getName() + ";\n");
-        if(schema instanceof HollowMapSchema)
+        }
+        if(schema instanceof HollowMapSchema) {
             builder.append("import " + HollowMapCachedDelegate.class.getName() + ";\n");
+        }
 
         builder.append("\n@SuppressWarnings(\"all\")\n");
         builder.append("public class " + className + "<T extends " + objectClassName + "> extends HollowFactory<T> {\n\n");
