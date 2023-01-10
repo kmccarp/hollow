@@ -84,13 +84,15 @@ public class SearchUtils {
      */
     public static HollowPrimaryKeyIndex findPrimaryKeyIndex(HollowTypeReadState typeState) {
         PrimaryKey pkey = getPrimaryKey(typeState.getSchema());
-        if(pkey == null)
+        if(pkey == null) {
             return null;
+        }
 
         for(HollowTypeStateListener listener : typeState.getListeners()) {
             if(listener instanceof HollowPrimaryKeyIndex) {
-                if(((HollowPrimaryKeyIndex) listener).getPrimaryKey().equals(pkey))
-                    return (HollowPrimaryKeyIndex) listener;
+                if(((HollowPrimaryKeyIndex)listener).getPrimaryKey().equals(pkey)) {
+                    return (HollowPrimaryKeyIndex)listener;
+                }
             }
         }
 
@@ -101,8 +103,9 @@ public class SearchUtils {
      * Get the primary key for an object schema.
      */
     public static PrimaryKey getPrimaryKey(HollowSchema schema) {
-        if(schema.getSchemaType() == HollowSchema.SchemaType.OBJECT)
+        if(schema.getSchemaType() == HollowSchema.SchemaType.OBJECT) {
             return ((HollowObjectSchema)schema).getPrimaryKey();
+        }
         return null;
     }
 
@@ -151,8 +154,9 @@ public class SearchUtils {
                 curState = (HollowObjectTypeReadState) curState.getSchema().getReferencedTypeState(fieldPathIndexes[i][j]);
             }
 
-            if(!HollowReadFieldUtils.fieldValueEquals(curState, curOrdinal, fieldPathIndexes[i][fieldPathIndexes[i].length - 1], key[i]))
+            if(!HollowReadFieldUtils.fieldValueEquals(curState, curOrdinal, fieldPathIndexes[i][fieldPathIndexes[i].length - 1], key[i])) {
                 return false;
+            }
         }
 
         return true;

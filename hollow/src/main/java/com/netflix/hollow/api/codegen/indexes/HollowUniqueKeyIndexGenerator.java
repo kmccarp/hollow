@@ -62,8 +62,9 @@ public class HollowUniqueKeyIndexGenerator extends HollowIndexGenerator {
         builder.append("import " + HollowConsumer.class.getName() + ";\n");
         builder.append("import " + AbstractHollowUniqueKeyIndex.class.getName() + ";\n");
         builder.append("import " + HollowUniqueKeyIndex.class.getName() + ";\n");
-        if (isGenSimpleConstructor)
+        if(isGenSimpleConstructor) {
             builder.append("import " + HollowObjectSchema.class.getName() + ";\n");
+        }
 
         builder.append("\n/**\n");
         genDeprecatedJavaDoc(builder);
@@ -86,8 +87,9 @@ public class HollowUniqueKeyIndexGenerator extends HollowIndexGenerator {
     }
 
     protected void genConstructors(StringBuilder builder) {
-        if (isGenSimpleConstructor)
+        if(isGenSimpleConstructor) {
             genSimpleConstructor(builder);
+        }
 
         genParameterizedConstructor(builder);
     }
@@ -119,8 +121,9 @@ public class HollowUniqueKeyIndexGenerator extends HollowIndexGenerator {
     }
 
     protected void genFindMatchAPI(StringBuilder builder) {
-        if (isImplementsUniqueKeyIndex)
+        if(isImplementsUniqueKeyIndex) {
             builder.append("    @Override\n");
+        }
         builder.append("    public " + hollowImplClassname(type) + " findMatch(Object... keys) {\n");
         builder.append("        int ordinal = idx.getMatchingOrdinal(keys);\n");
         builder.append("        if(ordinal == -1)\n");

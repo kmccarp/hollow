@@ -80,7 +80,9 @@ public abstract class AbstractHollowHashIndex<API> {
     }
 
     public void listenToDataRefresh() {
-        if (isListenToDataRefresh) return;
+        if(isListenToDataRefresh) {
+            return;
+        }
 
         isListenToDataRefresh = true;
         idx.listenForDeltaUpdates();

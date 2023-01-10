@@ -149,7 +149,9 @@ public class HollowTypeDiff {
      * @return The total number of records for this type in the to state.
      */
     public int getTotalItemsInFromState() {
-        if (from == null) return 0;
+        if(from == null) {
+            return 0;
+        }
         return from.getPopulatedOrdinals().cardinality();
     }
 
@@ -157,7 +159,9 @@ public class HollowTypeDiff {
      * @return The total number of records for this type in the to state.
      */
     public int getTotalItemsInToState() {
-        if (to == null) return 0;
+        if(to == null) {
+            return 0;
+        }
         return to.getPopulatedOrdinals().cardinality();
     }
 
@@ -253,10 +257,11 @@ public class HollowTypeDiff {
         for(List<HollowFieldDiff> shardResult : shardedResults) {
             for(HollowFieldDiff fieldDiff : shardResult) {
                 HollowFieldDiff combinedResult = combinedResultsMap.get(fieldDiff.getFieldIdentifier());
-                if(combinedResult != null)
+                if(combinedResult != null) {
                     combinedResult.addResults(fieldDiff);
-                else
+                } else {
                     combinedResultsMap.put(fieldDiff.getFieldIdentifier(), fieldDiff);
+                }
             }
         }
 

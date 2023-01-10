@@ -40,8 +40,9 @@ public class HistoryStateQueryMatches {
         for(Map.Entry<String, IntList> entry : perTypeQueryMatchingKeys.entrySet()) {
             HollowHistoryRecordNamer recordNamer = ui.getHistoryRecordNamer(entry.getKey());
             TypeMatches typeMatches = new TypeMatches(historicalState, recordNamer, entry.getKey(), entry.getValue());
-            if(typeMatches.hasMatches())
+            if(typeMatches.hasMatches()) {
                 this.typeMatches.add(typeMatches);
+            }
         }
     }
 

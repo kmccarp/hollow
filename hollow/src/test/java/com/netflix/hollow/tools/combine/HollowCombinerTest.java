@@ -173,15 +173,18 @@ public class HollowCombinerTest {
             Iterator<HollowRecord> iter = set.iterator();
 
             for(int j=0;j<orderedCValues.length;j++) {
-                if(!iter.hasNext())
+                if(!iter.hasNext()) {
                     break;
+                }
                 HollowObject obj = (HollowObject)iter.next();
                 String cValue = obj.getString("c1");
-                if(!cValue.equals(orderedCValues[j]))
+                if(!cValue.equals(orderedCValues[j])) {
                     break;
+                }
 
-                if(j == (orderedCValues.length - 1))
+                if(j == (orderedCValues.length - 1)) {
                     return true;
+                }
             }
         }
 
@@ -240,8 +243,9 @@ public class HollowCombinerTest {
         for (HollowSchema schema : dataset.getSchemas()) {
             if (schema.getSchemaType() == SchemaType.OBJECT) {
                 PrimaryKey pk = ((HollowObjectSchema) schema).getPrimaryKey();
-                if (pk != null)
+                if(pk != null) {
                     keys.add(pk);
+                }
             }
         }
         

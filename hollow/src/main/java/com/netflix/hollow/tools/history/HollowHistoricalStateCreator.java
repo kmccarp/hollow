@@ -262,8 +262,9 @@ public class HollowHistoricalStateCreator {
         int matchedRecordCount = 0;
         int ordinal = populatedOrdinals.nextSetBit(0);
         while(ordinal != -1) {
-            if(equalityMap.getIdentityFromOrdinal(ordinal) != -1)
+            if(equalityMap.getIdentityFromOrdinal(ordinal) != -1) {
                 matchedRecordCount++;
+            }
             ordinal = populatedOrdinals.nextSetBit(ordinal + 1);
         }
         return matchedRecordCount;
@@ -273,8 +274,9 @@ public class HollowHistoricalStateCreator {
         int unmatchedRecordCount = 0;
         int ordinal = populatedOrdinals.nextSetBit(0);
         while(ordinal != -1) {
-            if(equalityMap.getIdentityFromOrdinal(ordinal) == -1)
+            if(equalityMap.getIdentityFromOrdinal(ordinal) == -1) {
                 unmatchedRecordCount++;
+            }
             ordinal = populatedOrdinals.nextSetBit(ordinal + 1);
         }
         return unmatchedRecordCount;
@@ -327,8 +329,9 @@ public class HollowHistoricalStateCreator {
         IntMapEntryIterator ordinalMappingIter = previousOrdinalMapping.iterator();
         IntMap ordinalLookupMap = new IntMap(previousOrdinalMapping.size());
 
-        while(ordinalMappingIter.next())
+        while(ordinalMappingIter.next()) {
             ordinalLookupMap.put(ordinalRemapper.getMappedOrdinal(typeName, ordinalMappingIter.getKey()), ordinalMappingIter.getValue());
+        }
         return ordinalLookupMap;
     }
 
@@ -371,8 +374,9 @@ public class HollowHistoricalStateCreator {
 
             pipeException.addSuppressed(e);
         }
-        if (pipeException != null)
+        if(pipeException != null) {
             throw new RuntimeException(pipeException);
+        }
 
         return removedRecordCopies;
     }

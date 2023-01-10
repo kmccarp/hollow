@@ -259,10 +259,11 @@ public class HollowObjectJavaGenerator extends HollowConsumerJavaFileGenerator {
             methodName = getterPrefix + (isBooleanRefType ?  generateBooleanAccessorMethodName(fieldName, useBooleanFieldErgonomics) : "get" + uppercase(fieldName));
         }
 
-        if(parameterize)
+        if(parameterize) {
             builder.append("    public <T> T ").append(methodName).append("() {\n");
-        else
+        } else {
             builder.append("    public ").append(hollowImplClassname(referencedType)).append(" ").append(methodName).append("() {\n");
+        }
 
         builder.append("        int refOrdinal = delegate().get" + uppercase(fieldName) + "Ordinal(ordinal);\n");
         builder.append("        if(refOrdinal == -1)\n");

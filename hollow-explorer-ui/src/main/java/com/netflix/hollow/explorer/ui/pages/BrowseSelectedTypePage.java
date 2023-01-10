@@ -64,8 +64,9 @@ public class BrowseSelectedTypePage extends HollowExplorerPage {
         
         BitSet selectedOrdinals = typeState.getPopulatedOrdinals();
 
-        if("true".equals(req.getParameter("clearQuery")))
+        if("true".equals(req.getParameter("clearQuery"))) {
             session.clearAttribute(SESSION_ATTR_QUERY_RESULT);
+        }
 
         if(session.getAttribute(SESSION_ATTR_QUERY_RESULT) != null) {
             QueryResult queryResult =
@@ -73,8 +74,9 @@ public class BrowseSelectedTypePage extends HollowExplorerPage {
             queryResult.recalculateIfNotCurrent(ui.getStateEngine());
             
             selectedOrdinals = queryResult.getQueryMatches().get(typeState.getSchema().getName());
-            if(selectedOrdinals == null)
+            if(selectedOrdinals == null) {
                 selectedOrdinals = new BitSet();
+            }
             
             ctx.put("filteredByQuery", queryResult.getQueryDisplayString());
         }

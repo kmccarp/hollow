@@ -92,10 +92,12 @@ public class ShowAllTypesPage extends HollowExplorerPage {
         default:
             Collections.sort(typeOverviews, new Comparator<TypeOverview>() {
                 public int compare(TypeOverview o1, TypeOverview o2) {
-                    if(!"".equals(o1.getPrimaryKey()) && "".equals(o2.getPrimaryKey()))
+                    if(!"".equals(o1.getPrimaryKey()) && "".equals(o2.getPrimaryKey())) {
                         return -1;
-                    if("".equals(o1.getPrimaryKey()) && !"".equals(o2.getPrimaryKey()))
+                    }
+                    if("".equals(o1.getPrimaryKey()) && !"".equals(o2.getPrimaryKey())) {
                         return 1;
+                    }
                     
                     return o1.getTypeName().compareTo(o2.getTypeName()); 
                 }

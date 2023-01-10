@@ -44,8 +44,9 @@ public abstract class HollowMetrics {
      */
     void calculateTypeMetrics(HollowReadStateEngine hollowReadStateEngine) {
         Collection<HollowTypeReadState> typeStates = hollowReadStateEngine.getTypeStates();
-        if (typeStates == null)
+        if(typeStates == null) {
             return;
+        }
 
         totalHeapFootprint = 0L;
         totalPopulatedOrdinals = 0;

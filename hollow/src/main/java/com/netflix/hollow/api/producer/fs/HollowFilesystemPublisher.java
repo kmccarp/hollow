@@ -65,8 +65,9 @@ public class HollowFilesystemPublisher implements HollowProducer.Publisher {
         ) {
             byte buf[] = new byte[4096];
             int n;
-            while (-1 != (n = is.read(buf)))
+            while(-1 != (n = is.read(buf))) {
                 os.write(buf, 0, n);
+            }
         } catch (IOException e) {
             throw new RuntimeException("Unable to publish file!", e);
         }
@@ -113,8 +114,9 @@ public class HollowFilesystemPublisher implements HollowProducer.Publisher {
                 ) {
                     byte buf[] = new byte[4096];
                     int n;
-                    while (-1 != (n = is.read(buf)))
+                    while(-1 != (n = is.read(buf))) {
                         os.write(buf, 0, n);
+                    }
                 } catch(IOException e) {
                     throw new RuntimeException("Unable to publish optional part file: " + partName, e);
                 }

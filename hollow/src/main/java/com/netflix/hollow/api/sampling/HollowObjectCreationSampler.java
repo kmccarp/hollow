@@ -40,8 +40,9 @@ public class HollowObjectCreationSampler implements HollowSampler {
     }
 
     public void recordCreation(int index) {
-        if(typeDirectors[index].shouldRecord())
+        if(typeDirectors[index].shouldRecord()) {
             creationSamples[index]++;
+        }
     }
 
     @Override
@@ -52,22 +53,26 @@ public class HollowObjectCreationSampler implements HollowSampler {
     @Override
     public void setFieldSpecificSamplingDirector(HollowFilterConfig fieldSpec, HollowSamplingDirector director) {
         for(int i=0;i<typeNames.length;i++) {
-            if(fieldSpec.doesIncludeType(typeNames[i]))
+            if(fieldSpec.doesIncludeType(typeNames[i])) {
                 typeDirectors[i] = director;
+            }
         }
     }
     
     @Override
     public void setUpdateThread(Thread t) {
-        for(int i=0;i<typeDirectors.length;i++)
+        for(int i = 0;i < typeDirectors.length;i++) {
             typeDirectors[i].setUpdateThread(t);
+        }
     }
 
     @Override
     public boolean hasSampleResults() {
-        for(int i=0;i<creationSamples.length;i++)
-            if(creationSamples[i] > 0)
+        for(int i = 0;i < creationSamples.length;i++) {
+            if(creationSamples[i] > 0) {
                 return true;
+            }
+        }
         return false;
     }
 

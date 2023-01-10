@@ -177,7 +177,9 @@ public class HollowHistory {
             for (HollowSchema schema : fwdMovingHollowReadStateEngine.getSchemas()) {
                 if (schema instanceof HollowObjectSchema) {
                     PrimaryKey pKey = ((HollowObjectSchema) schema).getPrimaryKey();
-                    if (pKey == null) continue;
+                    if(pKey == null) {
+                        continue;
+                    }
 
                     keyIndex.addTypeIndex(pKey);
                     keyIndex.indexTypeField(pKey);
@@ -262,8 +264,9 @@ public class HollowHistory {
      * @return The {@link HollowHistoricalState} for the specified version, if it exists.
      */
     public HollowHistoricalState getHistoricalState(long version) {
-        if(latestVersion == version)
+        if(latestVersion == version) {
             return historicalStates.get(0);
+        }
         return historicalStateLookupMap.get(version);
     }
 
@@ -369,8 +372,9 @@ public class HollowHistory {
             throw new UnsupportedOperationException("Double snapshot only supports advancing the latest version");
         }
 
-        if(!keyIndex.isInitialized())
+        if(!keyIndex.isInitialized()) {
             keyIndex.update(latestHollowReadStateEngine, false);
+        }
 
         keyIndex.update(newHollowStateEngine, false);
 
@@ -503,16 +507,18 @@ public class HollowHistory {
 
             int fromOrdinal = fromOrdinals.nextSetBit(0);
             while(fromOrdinal != -1) {
-                if(equalOrdinalMap.getIdentityFromOrdinal(fromOrdinal) == -1)
+                if(equalOrdinalMap.getIdentityFromOrdinal(fromOrdinal) == -1) {
                     typeMapping.removed(fromTypeState, fromOrdinal, ordinalRemapper.getMappedOrdinal(keyType, fromOrdinal));
+                }
 
                 fromOrdinal = fromOrdinals.nextSetBit(fromOrdinal + 1);
             }
 
             int toOrdinal = toOrdinals.nextSetBit(0);
             while(toOrdinal != -1) {
-                if(equalOrdinalMap.getIdentityToOrdinal(toOrdinal) == -1)
+                if(equalOrdinalMap.getIdentityToOrdinal(toOrdinal) == -1) {
                     typeMapping.added(toTypeState, toOrdinal);
+                }
 
                 toOrdinal = toOrdinals.nextSetBit(toOrdinal + 1);
             }
@@ -527,8 +533,9 @@ public class HollowHistory {
         int count = 0;
         int ordinal = ordinals.nextSetBit(0);
         while(ordinal != -1) {
-            if(translator.getIdentityOrdinal(ordinal) == -1)
+            if(translator.getIdentityOrdinal(ordinal) == -1) {
                 count++;
+            }
             ordinal = ordinals.nextSetBit(ordinal + 1);
         }
         return count;

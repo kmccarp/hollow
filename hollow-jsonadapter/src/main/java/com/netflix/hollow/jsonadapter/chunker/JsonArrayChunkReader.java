@@ -61,8 +61,9 @@ public class JsonArrayChunkReader extends Reader {
 
     @Override
     public int read(char[] cbuf, int off, int len) throws IOException {
-        if(currentSegment == segments.size())
+        if(currentSegment == segments.size()) {
             return -1;
+        }
         
         int totalCopiedBytes = 0;
         while(currentSegment < segments.size()) {
@@ -72,9 +73,10 @@ public class JsonArrayChunkReader extends Reader {
             len -= copiedBytes;
             totalCopiedBytes += copiedBytes;
             currentSegmentOffset += copiedBytes;
-            
-            if(len == 0)
+
+            if(len == 0) {
                 return totalCopiedBytes;
+            }
             
             off += copiedBytes;
             currentSegment++;

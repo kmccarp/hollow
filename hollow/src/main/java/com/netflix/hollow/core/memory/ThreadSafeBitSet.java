@@ -50,8 +50,9 @@ public class ThreadSafeBitSet {
     }
 
     public ThreadSafeBitSet(int log2SegmentSizeInBits, int numBitsToPreallocate) {
-        if(log2SegmentSizeInBits < 6)
+        if(log2SegmentSizeInBits < 6) {
             throw new IllegalArgumentException("Cannot specify fewer than 64 bits in each segment!");
+        }
 
         this.log2SegmentSize = log2SegmentSizeInBits;
         this.numLongsPerSegment = (1 << (log2SegmentSizeInBits - 6));
@@ -80,8 +81,9 @@ public class ThreadSafeBitSet {
             long newLongValue = currentLongValue | mask;
 
             // if no other thread has modified the value since we read it, we won the race and we are done.
-            if(segment.compareAndSet(longPosition, currentLongValue, newLongValue))
+            if(segment.compareAndSet(longPosition, currentLongValue, newLongValue)) {
                 break;
+            }
         }
     }
 
@@ -101,8 +103,9 @@ public class ThreadSafeBitSet {
             long newLongValue = currentLongValue & mask;
 
             // if no other thread has modified the value since we read it, we won the race and we are done.
-            if(segment.compareAndSet(longPosition, currentLongValue, newLongValue))
+            if(segment.compareAndSet(longPosition, currentLongValue, newLongValue)) {
                 break;
+            }
         }
     }
 
@@ -127,8 +130,9 @@ public class ThreadSafeBitSet {
             AtomicLongArray segment = segments.getSegment(segmentIdx);
             for(int longIdx=segment.length() - 1; longIdx >= 0; longIdx--) {
                 long l = segment.get(longIdx);
-                if(l != 0)
+                if(l != 0) {
                     return (segmentIdx << log2SegmentSize) + (longIdx * 64) + (63 - Long.numberOfLeadingZeros(l));
+                }
             }
         }
 
@@ -136,15 +140,17 @@ public class ThreadSafeBitSet {
     }
 
     public int nextSetBit(int fromIndex) {
-        if (fromIndex < 0)
+        if(fromIndex < 0) {
             throw new IndexOutOfBoundsException("fromIndex < 0: " + fromIndex);
+        }
 
         int segmentPosition = fromIndex >>> log2SegmentSize; /// which segment -- div by num bits per segment
 
         ThreadSafeBitSetSegments segments = this.segments.get();
 
-        if(segmentPosition >= segments.numSegments())
+        if(segmentPosition >= segments.numSegments()) {
             return -1;
+        }
 
         int longPosition = (fromIndex >>> 6) & segmentMask; /// which long in the segment -- remainder of div by num bits per segment
         int bitPosition = fromIndex & 0x3F; /// which bit in the long -- remainder of div by num bits in long (64)
@@ -153,12 +159,14 @@ public class ThreadSafeBitSet {
         long word = segment.get(longPosition) & (0xffffffffffffffffL << bitPosition);
 
         while (true) {
-            if (word != 0)
+            if(word != 0) {
                 return (segmentPosition << (log2SegmentSize)) + (longPosition << 6) + Long.numberOfTrailingZeros(word);
+            }
             if (++longPosition > segmentMask) {
                 segmentPosition++;
-                if(segmentPosition >= segments.numSegments())
+                if(segmentPosition >= segments.numSegments()) {
                     return -1;
+                }
                 segment = segments.getSegment(segmentPosition);
                 longPosition = 0;
             }
@@ -218,8 +226,9 @@ public class ThreadSafeBitSet {
      * @return the resulting bit set
      */
     public ThreadSafeBitSet andNot(ThreadSafeBitSet other) {
-        if(other.log2SegmentSize != log2SegmentSize)
+        if(other.log2SegmentSize != log2SegmentSize) {
             throw new IllegalArgumentException("Segment sizes must be the same");
+        }
 
         ThreadSafeBitSetSegments thisSegments = this.segments.get();
         ThreadSafeBitSetSegments otherSegments = other.segments.get();
@@ -250,8 +259,9 @@ public class ThreadSafeBitSet {
      * @return the resulting bit set
      */
     public static ThreadSafeBitSet orAll(ThreadSafeBitSet... bitSets) {
-        if(bitSets.length == 0)
+        if(bitSets.length == 0) {
             return new ThreadSafeBitSet();
+        }
 
         int log2SegmentSize = bitSets[0].log2SegmentSize;
         int numLongsPerSegment = bitSets[0].numLongsPerSegment;
@@ -260,12 +270,14 @@ public class ThreadSafeBitSet {
         int maxNumSegments = 0;
 
         for(int i=0;i<bitSets.length;i++) {
-            if(bitSets[i].log2SegmentSize != log2SegmentSize)
+            if(bitSets[i].log2SegmentSize != log2SegmentSize) {
                 throw new IllegalArgumentException("Segment sizes must be the same");
+            }
 
             segments[i] = bitSets[i].segments.get();
-            if(segments[i].numSegments() > maxNumSegments)
+            if(segments[i].numSegments() > maxNumSegments) {
                 maxNumSegments = segments[i].numSegments();
+            }
         }
 
         ThreadSafeBitSetSegments newSegments = new ThreadSafeBitSetSegments(maxNumSegments, numLongsPerSegment);
@@ -282,8 +294,9 @@ public class ThreadSafeBitSet {
             for(int j=0;j<numLongsPerSegment;j++) {
                 long value = 0;
                 for(int k=0;k<segments.length;k++) {
-                    if(segment[k] != null)
+                    if(segment[k] != null) {
                         value |= segment[k].get(j);
+                    }
                 }
                 newSegment.set(j, value);
             }
@@ -376,13 +389,15 @@ public class ThreadSafeBitSet {
 
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof ThreadSafeBitSet))
+        if(!(obj instanceof ThreadSafeBitSet)) {
             return false;
+        }
 
         ThreadSafeBitSet other = (ThreadSafeBitSet)obj;
 
-        if(other.log2SegmentSize != log2SegmentSize)
+        if(other.log2SegmentSize != log2SegmentSize) {
             throw new IllegalArgumentException("Segment sizes must be the same");
+        }
 
         ThreadSafeBitSetSegments thisSegments = this.segments.get();
         ThreadSafeBitSetSegments otherSegments = other.segments.get();
@@ -395,8 +410,9 @@ public class ThreadSafeBitSet {
                 long thisLong = thisArray.get(j);
                 long otherLong = (otherArray == null) ? 0 : otherArray.get(j);
 
-                if(thisLong != otherLong)
+                if(thisLong != otherLong) {
                     return false;
+                }
             }
         }
 
@@ -406,8 +422,9 @@ public class ThreadSafeBitSet {
             for(int j=0;j<otherArray.length();j++) {
                 long l = otherArray.get(j);
 
-                if(l != 0)
+                if(l != 0) {
                     return false;
+                }
             }
         }
 

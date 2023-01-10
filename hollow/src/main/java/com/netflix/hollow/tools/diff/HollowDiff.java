@@ -102,7 +102,9 @@ public class HollowDiff {
                 if (schema instanceof HollowObjectSchema) {
                     HollowObjectSchema objectSchema = ((HollowObjectSchema) schema);
                     PrimaryKey pKey = objectSchema.getPrimaryKey();
-                    if (pKey==null && !isIncludeNonPrimaryKeyTypes) continue;
+                    if(pKey == null && !isIncludeNonPrimaryKeyTypes) {
+                        continue;
+                    }
 
                     // Support basic Single Field Types
                     if (pKey==null && objectSchema.numFields()==1 && SINGLE_FIELD_SUPPORTED_TYPES.contains(objectSchema.getFieldType(0))) {
@@ -124,8 +126,9 @@ public class HollowDiff {
      */
     public HollowTypeDiff addTypeDiff(String type, String... primaryKeyPaths) {
         HollowTypeDiff typeDiff = new HollowTypeDiff(this, type, primaryKeyPaths);
-        if(typeDiff.hasAnyData())
+        if(typeDiff.hasAnyData()) {
             typeDiffs.put(type, typeDiff);
+        }
         return typeDiff;
     }
 

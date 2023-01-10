@@ -552,8 +552,9 @@ abstract class AbstractHollowProducer {
         try {
             // We want a header to be created for all states.
             artifacts.header = blobStager.openHeader(toVersion);
-            if(!readStates.hasCurrent() || doIntegrityCheck || numStatesUntilNextSnapshot <= 0)
+            if(!readStates.hasCurrent() || doIntegrityCheck || numStatesUntilNextSnapshot <= 0) {
                 artifacts.snapshot = stageBlob(listeners, blobStager.openSnapshot(toVersion));
+            }
 
             publishHeaderBlob(artifacts.header);
             if (readStates.hasCurrent()) {

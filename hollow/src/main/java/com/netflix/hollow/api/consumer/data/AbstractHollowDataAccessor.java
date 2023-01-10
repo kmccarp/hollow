@@ -73,8 +73,9 @@ public abstract class AbstractHollowDataAccessor<T> {
             } else {
                 this.primaryKey = primaryKey;
             }
-            if (this.primaryKey == null)
+            if(this.primaryKey == null) {
                 throw new RuntimeException(String.format("Unsupported DataType=%s with SchemaType=%s : %s", type, schema.getSchemaType(), "PrimaryKey is missing"));
+            }
 
         } else {
             throw new RuntimeException(String.format("Unsupported DataType=%s with SchemaType=%s : %s", type, schema.getSchemaType(), "Only supported type=" + SchemaType.OBJECT));
@@ -96,7 +97,9 @@ public abstract class AbstractHollowDataAccessor<T> {
      * Compute Data Change
      */
     public synchronized void computeDataChange() {
-        if (isDataChangeComputed) return;
+        if(isDataChangeComputed) {
+            return;
+        }
 
         computeDataChange(type, rStateEngine, primaryKey);
         isDataChangeComputed = true;
@@ -186,7 +189,9 @@ public abstract class AbstractHollowDataAccessor<T> {
      * @see #getUpdatedRecords()
      */
     public Collection<T> getAddedRecords() {
-        if (!isDataChangeComputed) computeDataChange();
+        if(!isDataChangeComputed) {
+            computeDataChange();
+        }
 
         return new HollowRecordCollection<T>(addedOrdinals) { @Override protected T getForOrdinal(int ordinal) {
                 return getRecord(ordinal);
@@ -198,7 +203,9 @@ public abstract class AbstractHollowDataAccessor<T> {
      * @see #getUpdatedRecords()
      */
     public Collection<T> getRemovedRecords() {
-        if (!isDataChangeComputed) computeDataChange();
+        if(!isDataChangeComputed) {
+            computeDataChange();
+        }
         return new HollowRecordCollection<T>(removedOrdinals) { @Override protected T getForOrdinal(int ordinal) {
             return getRecord(ordinal);
         }};
@@ -209,7 +216,9 @@ public abstract class AbstractHollowDataAccessor<T> {
      * @see UpdatedRecord
      */
     public Collection<UpdatedRecord<T>> getUpdatedRecords() {
-        if (!isDataChangeComputed) computeDataChange();
+        if(!isDataChangeComputed) {
+            computeDataChange();
+        }
         return updatedRecords;
     }
 
@@ -231,9 +240,15 @@ public abstract class AbstractHollowDataAccessor<T> {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            if (!super.equals(o)) return false;
+            if(this == o) {
+                return true;
+            }
+            if(o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            if(!super.equals(o)) {
+                return false;
+            }
             UpdatedRecordOrdinal that = (UpdatedRecordOrdinal) o;
             return before == that.before &&
                     after == that.after;
@@ -276,23 +291,30 @@ public abstract class AbstractHollowDataAccessor<T> {
 
         @Override
         public boolean equals(Object obj) {
-            if (this == obj)
+            if(this == obj) {
                 return true;
-            if (obj == null)
+            }
+            if(obj == null) {
                 return false;
-            if (getClass() != obj.getClass())
+            }
+            if(getClass() != obj.getClass()) {
                 return false;
+            }
             UpdatedRecord<?> other = (UpdatedRecord<?>) obj;
             if (after == null) {
-                if (other.after != null)
+                if(other.after != null) {
                     return false;
-            } else if (!after.equals(other.after))
+                }
+            } else if(!after.equals(other.after)) {
                 return false;
+            }
             if (before == null) {
-                if (other.before != null)
+                if(other.before != null) {
                     return false;
-            } else if (!before.equals(other.before))
+                }
+            } else if(!before.equals(other.before)) {
                 return false;
+            }
             return true;
         }
 

@@ -66,16 +66,18 @@ public class HollowListTypeWriteState extends HollowTypeWriteState {
     }
 
     private void gatherStatistics() {
-        if(numShards == -1)
+        if(numShards == -1) {
             calculateNumShards();
+        }
         
         int maxOrdinal = ordinalMap.maxOrdinal();
         int maxElementOrdinal = 0;
 
         maxShardOrdinal = new int[numShards];
-        int minRecordLocationsPerShard = (maxOrdinal + 1) / numShards; 
-        for(int i=0;i<numShards;i++)
+        int minRecordLocationsPerShard = (maxOrdinal + 1) / numShards;
+        for(int i = 0;i < numShards;i++) {
             maxShardOrdinal[i] = (i < ((maxOrdinal + 1) & (numShards - 1))) ? minRecordLocationsPerShard : minRecordLocationsPerShard - 1;
+        }
         
         ByteData data = ordinalMap.getByteData().getUnderlyingArray();
         
@@ -90,8 +92,9 @@ public class HollowListTypeWriteState extends HollowTypeWriteState {
 
                 for(int j=0;j<size;j++) {
                     int elementOrdinal = VarInt.readVInt(data, pointer);
-                    if(elementOrdinal > maxElementOrdinal)
+                    if(elementOrdinal > maxElementOrdinal) {
                         maxElementOrdinal = elementOrdinal;
+                    }
                     pointer += VarInt.sizeOfVInt(elementOrdinal);
                 }
 
@@ -101,8 +104,9 @@ public class HollowListTypeWriteState extends HollowTypeWriteState {
         
         long maxShardTotalOfListSizes = 0;
         for(int i=0;i<numShards;i++) {
-            if(totalOfListSizes[i] > maxShardTotalOfListSizes)
+            if(totalOfListSizes[i] > maxShardTotalOfListSizes) {
                 maxShardTotalOfListSizes = totalOfListSizes[i];
+            }
         }
 
         bitsPerElement = maxElementOrdinal == 0 ? 1 : 64 - Long.numberOfLeadingZeros(maxElementOrdinal);
@@ -126,8 +130,9 @@ public class HollowListTypeWriteState extends HollowTypeWriteState {
 
                 for(int j=0;j<size;j++) {
                     int elementOrdinal = VarInt.readVInt(data, pointer);
-                    if(elementOrdinal > maxElementOrdinal)
+                    if(elementOrdinal > maxElementOrdinal) {
                         maxElementOrdinal = elementOrdinal;
+                    }
                     pointer += VarInt.sizeOfVInt(elementOrdinal);
                 }
 
@@ -142,8 +147,9 @@ public class HollowListTypeWriteState extends HollowTypeWriteState {
         projectedSizeOfType += (bitsPerListPointer * maxOrdinal + 1) / 8;
         
         numShards = 1;
-        while(stateEngine.getTargetMaxTypeShardSize() * numShards < projectedSizeOfType) 
+        while(stateEngine.getTargetMaxTypeShardSize() * numShards < projectedSizeOfType) {
             numShards *= 2;
+        }
     }
     
     @Override

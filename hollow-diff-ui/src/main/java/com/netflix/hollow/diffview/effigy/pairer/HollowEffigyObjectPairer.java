@@ -37,8 +37,9 @@ public class HollowEffigyObjectPairer extends HollowEffigyFieldPairer {
 
         for(Field toField : to.getFields()) {
             Field fromField = getField(from, toField.getFieldName());
-            if(fromField == null)
+            if(fromField == null) {
                 fieldPairs.add(new EffigyFieldPair(null, toField, -1, -1));
+            }
         }
 
         return fieldPairs;
@@ -46,8 +47,9 @@ public class HollowEffigyObjectPairer extends HollowEffigyFieldPairer {
 
     public Field getField(HollowEffigy effigy, String fieldName) {
         for(Field field : effigy.getFields()) {
-            if(field.getFieldName().equals(fieldName))
+            if(field.getFieldName().equals(fieldName)) {
                 return field;
+            }
         }
 
         return null;

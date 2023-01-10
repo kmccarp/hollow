@@ -82,14 +82,16 @@ public class HollowObjectTypeWriteState extends HollowTypeWriteState {
             projectedSizeOfType += fieldStats.getTotalSizeOfAllVarLengthData();
             
             numShards = 1;
-            while(stateEngine.getTargetMaxTypeShardSize() * numShards < projectedSizeOfType) 
+            while(stateEngine.getTargetMaxTypeShardSize() * numShards < projectedSizeOfType) {
                 numShards *= 2;
+            }
         }
         
         maxShardOrdinal = new int[numShards];
-        int minRecordLocationsPerShard = (maxOrdinal + 1) / numShards; 
-        for(int i=0;i<numShards;i++)
+        int minRecordLocationsPerShard = (maxOrdinal + 1) / numShards;
+        for(int i = 0;i < numShards;i++) {
             maxShardOrdinal[i] = (i < ((maxOrdinal + 1) & (numShards - 1))) ? minRecordLocationsPerShard : minRecordLocationsPerShard - 1;
+        }
     }
 
     private void discoverObjectFieldStatisticsForRecord(FieldStatistics fieldStats, int ordinal) {

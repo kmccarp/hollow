@@ -66,19 +66,23 @@ public class HollowObjectSampler implements HollowSampler {
     }
 
     public void setUpdateThread(Thread t) {
-        for(int i=0;i<samplingDirectors.length;i++)
+        for(int i = 0;i < samplingDirectors.length;i++) {
             samplingDirectors[i].setUpdateThread(t);
+        }
     }
 
     public void recordFieldAccess(int fieldPosition) {
-        if(samplingDirectors[fieldPosition].shouldRecord())
+        if(samplingDirectors[fieldPosition].shouldRecord()) {
             sampleCounts[fieldPosition]++;
+        }
     }
 
     public boolean hasSampleResults() {
-        for(int i=0;i<sampleCounts.length;i++)
-            if(sampleCounts[i] > 0)
+        for(int i = 0;i < sampleCounts.length;i++) {
+            if(sampleCounts[i] > 0) {
                 return true;
+            }
+        }
         return false;
     }
 

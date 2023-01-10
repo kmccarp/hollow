@@ -119,8 +119,9 @@ public class HollowStateEngineRecordPatcher {
                 }
 
 
-                if(foundMatches.size() > 0)
+                if(foundMatches.size() > 0) {
                     matches.put(spec.getTypeName(), foundMatches);
+                }
             }
         }
 
@@ -128,8 +129,9 @@ public class HollowStateEngineRecordPatcher {
     }
 
     private BitSet getOrCreateBitSet(Map<String, BitSet> bitSets, String typeName, int numBitsRequired) {
-        if(numBitsRequired < 0)
+        if(numBitsRequired < 0) {
             return new BitSet(0);
+        }
 
         BitSet bs = bitSets.get(typeName);
         if(bs == null) {

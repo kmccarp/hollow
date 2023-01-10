@@ -101,10 +101,11 @@ public class HollowObjectReverseDeltaTest {
 
         for(int i=0;i<expectedValuesInOrdinalPosition.length;i++) {
             if(expectedValuesInOrdinalPosition[i] != -1) {
-                if(expectedValuesInOrdinalPosition[i] < 0)
+                if(expectedValuesInOrdinalPosition[i] < 0) {
                     Assert.assertFalse(listener.getPopulatedOrdinals().get(i));
-                else
+                } else {
                     Assert.assertTrue(listener.getPopulatedOrdinals().get(i));
+                }
 
                 int expectedValue = Math.abs(expectedValuesInOrdinalPosition[i]);
 

@@ -30,10 +30,12 @@ public abstract class HollowUIRouter {
     protected final VelocityEngine velocityEngine;
 
     public HollowUIRouter(String baseUrlPath) {
-        if(!baseUrlPath.startsWith("/"))
+        if(!baseUrlPath.startsWith("/")) {
             baseUrlPath = "/" + baseUrlPath;
-        if(baseUrlPath.endsWith("/"))
+        }
+        if(baseUrlPath.endsWith("/")) {
             baseUrlPath = baseUrlPath.substring(0, baseUrlPath.length() - 1);
+        }
 
         this.baseUrlPath = baseUrlPath;
         this.velocityEngine = initVelocity();
@@ -50,13 +52,15 @@ public abstract class HollowUIRouter {
     protected String getTargetRootPath(String target) {
         int baseLength = baseUrlPath.length() + 1;
 
-        if(target.length() < baseLength)
+        if(target.length() < baseLength) {
             return "";
+        }
 
         int secondSlashIndex = target.indexOf('/', baseLength);
 
-        if(secondSlashIndex == -1)
+        if(secondSlashIndex == -1) {
             return target.substring(baseLength);
+        }
 
         return target.substring(baseLength, secondSlashIndex);
     }
@@ -65,8 +69,9 @@ public abstract class HollowUIRouter {
         int baseLength = baseUrlPath.length() + 1;
 
         int secondSlashIndex = target.indexOf('/', baseLength);
-        if(secondSlashIndex == -1)
+        if(secondSlashIndex == -1) {
             return "";
+        }
         return target.substring(secondSlashIndex + 1);
     }
 

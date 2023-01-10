@@ -49,8 +49,9 @@ public class FreeOrdinalTracker {
      * @return either an ordinal which was previously deallocated, or the next empty, previously unallocated ordinal in the sequence 0-n
      */
     public int getFreeOrdinal() {
-        if(size == 0)
+        if(size == 0) {
             return nextEmptyOrdinal++;
+        }
 
         return freeOrdinals[--size];
     }
@@ -93,17 +94,20 @@ public class FreeOrdinalTracker {
     public void sort(int numShards) {
         int shardNumberMask = numShards - 1;
         Shard shards[] = new Shard[numShards];
-        for(int i=0;i<shards.length;i++)
+        for(int i = 0;i < shards.length;i++) {
             shards[i] = new Shard();
+        }
 
-        for(int i=0;i<size;i++)
+        for(int i = 0;i < size;i++) {
             shards[freeOrdinals[i] & shardNumberMask].freeOrdinalCount++;
+        }
 
         Shard orderedShards[] = Arrays.copyOf(shards, shards.length);
         Arrays.sort(orderedShards, (s1, s2) -> s2.freeOrdinalCount - s1.freeOrdinalCount);
 
-        for(int i=1;i<numShards;i++)
-            orderedShards[i].currentPos = orderedShards[i-1].currentPos + orderedShards[i-1].freeOrdinalCount;
+        for(int i = 1;i < numShards;i++) {
+            orderedShards[i].currentPos = orderedShards[i - 1].currentPos + orderedShards[i - 1].freeOrdinalCount;
+        }
 
         /// each shard will receive the ordinals in ascending order.
         Arrays.sort(freeOrdinals, 0, size);

@@ -134,7 +134,8 @@ public class HollowCompactor {
             try {
                 
                 for(int i=0;i<numRelocations;i++) {
-                    while(!populatedOrdinals.get(--ordinalToRelocate));
+                    while(!populatedOrdinals.get(--ordinalToRelocate)) {
+                    }
                     relocatePosition = populatedOrdinals.nextClearBit(relocatePosition + 1);
                     typeRelocatedOrdinals.set(ordinalToRelocate);
                     writeState.removeOrdinalFromThisCycle(ordinalToRelocate);
@@ -195,8 +196,9 @@ public class HollowCompactor {
 
         for(HollowSchema schema : schemas) {
             if(isCompactionCandidate(schema.getName())) {
-                if(!candidateIsDependentOnAnyTargetedType(schema.getName(), typesToCompact))
+                if(!candidateIsDependentOnAnyTargetedType(schema.getName(), typesToCompact)) {
                     typesToCompact.add(schema.getName());
+                }
             }
         }
         
@@ -216,8 +218,9 @@ public class HollowCompactor {
     
     private boolean candidateIsDependentOnAnyTargetedType(String type, Set<String> targetedTypes) {
         for(String targetedType : targetedTypes) {
-            if(HollowSchemaSorter.typeIsTransitivelyDependent(readEngine, type, targetedType))
+            if(HollowSchemaSorter.typeIsTransitivelyDependent(readEngine, type, targetedType)) {
                 return true;
+            }
         }
         
         return false;

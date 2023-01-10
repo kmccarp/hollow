@@ -123,16 +123,18 @@ public abstract class DiffPage {
         }
 
         String sessionParam = (String) session.getAttribute(sessionParamName);
-        if(sessionParam != null)
+        if(sessionParam != null) {
             return sessionParam;
+        }
 
         return defaultValue;
     }
 
     protected HollowTypeDiff getTypeDiff(String typeName) {
         for(HollowTypeDiff typeDiff : getDiff().getTypeDiffs()) {
-            if(typeDiff.getTypeName().equals(typeName))
+            if(typeDiff.getTypeName().equals(typeName)) {
                 return typeDiff;
+            }
         }
         return null;
     }

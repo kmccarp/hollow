@@ -229,7 +229,9 @@ public class HollowIncrementalProducer {
         long recordsToRemove = 0L;
         Collection<Object> records = mutations.values();
         for (Object record : records) {
-            if (record == HollowIncrementalCyclePopulator.DELETE_RECORD) recordsToRemove++;
+            if(record == HollowIncrementalCyclePopulator.DELETE_RECORD) {
+                recordsToRemove++;
+            }
         }
         return recordsToRemove;
     }
@@ -290,8 +292,9 @@ public class HollowIncrementalProducer {
         }
 
         protected void checkArguments() {
-            if (producer == null)
+            if(producer == null) {
                 throw new IllegalArgumentException("HollowProducer must be specified.");
+            }
         }
 
         public HollowIncrementalProducer build() {

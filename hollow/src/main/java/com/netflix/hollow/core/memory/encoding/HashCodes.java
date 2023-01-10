@@ -30,8 +30,9 @@ public class HashCodes {
     }
 
     public static int hashCode(final String data) {
-        if(data == null)
+        if(data == null) {
             return -1;
+        }
         
         int arrayLen = calculateByteArrayLength(data);
         
@@ -56,8 +57,9 @@ public class HashCodes {
     private static int calculateByteArrayLength(String data) {
         int length = data.length();
         for(int i=0;i<data.length();i++) {
-            if(data.charAt(i) > 0x7F)
+            if(data.charAt(i) > 0x7F) {
                 length += VarInt.sizeOfVInt(data.charAt(i)) - 1;
+            }
         }
         return length;
     }
@@ -187,10 +189,12 @@ public class HashCodes {
             throw new IllegalArgumentException("exceeds maximum number of buckets; numElements="+numElements);
         }
 
-        if (numElements == 0)
+        if(numElements == 0) {
             return 1;
-        if (numElements < 3)
+        }
+        if(numElements < 3) {
             return numElements * 2;
+        }
 
         // Apply load factor to number of elements and determine next
         // largest power of 2 that fits in an int

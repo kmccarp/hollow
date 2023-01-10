@@ -50,8 +50,9 @@ public class HollowDiffRecordFieldExtractor {
                 HollowObjectTypeDataAccess objectAccess = (HollowObjectTypeDataAccess)typeDataAccess;
                 int fieldIdx = objectAccess.getSchema().getPosition(fieldIdentifier.getParents().get(level+1).getViaFieldName());
                 childDataAccess = typeDataAccess.getDataAccess().getTypeDataAccess(objectAccess.getSchema().getReferencedType(fieldIdx));
-                for(int i=0;i<ordinals.size();i++)
+                for(int i = 0;i < ordinals.size();i++) {
                     childOrdinals.add(objectAccess.readOrdinal(ordinals.get(i), fieldIdx));
+                }
             } else if(typeDataAccess instanceof HollowCollectionTypeDataAccess) {
                 HollowCollectionTypeDataAccess collectionAccess = (HollowCollectionTypeDataAccess)typeDataAccess;
                 childDataAccess = typeDataAccess.getDataAccess().getTypeDataAccess(collectionAccess.getSchema().getElementType());

@@ -141,8 +141,9 @@ public class HollowDiffMatcher {
         }
 
         // Show Display similar to Hollow Explorer when there is no primary key
-        if(key == null)
+        if(key == null) {
             return "ORDINAL:" + ordinal;
+        }
 
         return keyDisplayString(key);
     }

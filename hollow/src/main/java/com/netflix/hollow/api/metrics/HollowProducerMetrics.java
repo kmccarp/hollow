@@ -83,22 +83,25 @@ public class HollowProducerMetrics extends HollowMetrics {
         HollowProducer.Blob.Type blobType = blob.getType();
         switch (blobType) {
             case SNAPSHOT:
-                if(status.getType() == Status.StatusType.SUCCESS)
+                if(status.getType() == Status.StatusType.SUCCESS) {
                     snapshotsCompleted.incrementAndGet();
-                else
+                } else {
                     snapshotsFailed.incrementAndGet();
+                }
                 break;
             case DELTA:
-                if(status.getType() == Status.StatusType.SUCCESS)
+                if(status.getType() == Status.StatusType.SUCCESS) {
                     deltasCompleted++;
-                else
+                } else {
                     deltasFailed++;
+                }
                 break;
             case REVERSE_DELTA:
-                if(status.getType() == Status.StatusType.SUCCESS)
+                if(status.getType() == Status.StatusType.SUCCESS) {
                     reverseDeltasCompleted++;
-                else
+                } else {
                     reverseDeltasFailed++;
+                }
                 break;
         }
     }

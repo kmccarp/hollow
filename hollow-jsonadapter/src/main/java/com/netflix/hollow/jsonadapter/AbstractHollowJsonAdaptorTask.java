@@ -70,8 +70,9 @@ public abstract class AbstractHollowJsonAdaptorTask {
 
     public FieldProcessor getFieldProcessor(String entityName, String fieldName) {
         Map<String, FieldProcessor> entityFieldProcessors = fieldProcessors.get(entityName);
-        if(entityFieldProcessors == null)
+        if(entityFieldProcessors == null) {
             return null;
+        }
         return entityFieldProcessors.get(fieldName);
     }
 

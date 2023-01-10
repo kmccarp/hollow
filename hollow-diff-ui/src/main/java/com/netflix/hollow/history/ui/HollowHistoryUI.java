@@ -176,8 +176,9 @@ public class HollowHistoryUI extends HollowUIRouter implements HollowRecordDiffU
 
 
         if("resource".equals(pageName)) {
-            if(serveResource(req, resp, getResourceName(target)))
+            if(serveResource(req, resp, getResourceName(target))) {
                 return true;
+            }
         } else if("".equals(pageName) || "overview".equals(pageName)) {
         	if(req.getParameter("format") != null && req.getParameter("format").equals("json")) {
         		overviewPage.sendJson(req, resp);
@@ -245,8 +246,9 @@ public class HollowHistoryUI extends HollowUIRouter implements HollowRecordDiffU
     
     public HollowHistoryRecordNamer getHistoryRecordNamer(String typeName) {
          HollowHistoryRecordNamer recordNamer = customHollowRecordNamers.get(typeName);
-         if(recordNamer == null)
-             return HollowHistoryRecordNamer.DEFAULT_RECORD_NAMER;
+        if(recordNamer == null) {
+            return HollowHistoryRecordNamer.DEFAULT_RECORD_NAMER;
+        }
          return recordNamer;
     }
     

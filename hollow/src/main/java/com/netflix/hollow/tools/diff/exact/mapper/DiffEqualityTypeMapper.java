@@ -55,8 +55,9 @@ public abstract class DiffEqualityTypeMapper {
         int hashedOrdinalsLength = 1 << (32 - Integer.numberOfLeadingZeros((toPopulatedOrdinals.cardinality() * 2) - 1));
 
         final AtomicIntegerArray hashedToOrdinals = new AtomicIntegerArray(hashedOrdinalsLength);
-        for(int i=0;i<hashedOrdinalsLength;i++)
+        for(int i = 0;i < hashedOrdinalsLength;i++) {
             hashedToOrdinals.set(i, -1);
+        }
 
         SimultaneousExecutor executor = new SimultaneousExecutor(1.5d, getClass(), "hash-to-ordinals");
         final int numThreads = executor.getCorePoolSize();

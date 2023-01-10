@@ -65,10 +65,11 @@ class HollowListDeltaApplicator {
         target.elementData = new FixedLengthElementArray(target.memoryRecycler, target.totalNumberOfElements * target.bitsPerElement);
 
         if(target.bitsPerListPointer == from.bitsPerListPointer
-                && target.bitsPerElement == from.bitsPerElement)
-                    fastDelta();
-        else
+            && target.bitsPerElement == from.bitsPerElement) {
+            fastDelta();
+        } else {
             slowDelta();
+        }
 
         from.encodedRemovals = null;
         removalsReader.destroy();
@@ -92,8 +93,9 @@ class HollowListDeltaApplicator {
                 mergeOrdinal(i++);
             } else {
                 int recordsToCopy = nextElementDiff - i;
-                if(nextElementDiff > bulkCopyEndOrdinal)
+                if(nextElementDiff > bulkCopyEndOrdinal) {
                     recordsToCopy = bulkCopyEndOrdinal - i + 1;
+                }
 
                 fastCopyRecords(recordsToCopy);
 

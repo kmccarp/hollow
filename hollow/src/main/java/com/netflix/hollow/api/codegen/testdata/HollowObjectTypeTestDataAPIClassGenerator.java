@@ -48,9 +48,10 @@ class HollowObjectTypeTestDataAPIClassGenerator {
         StringBuilder importBuilder = new StringBuilder();
         importBuilder.append("package " + packageName + ";\n\n");
         
-        importBuilder.append("import com.netflix.hollow.api.testdata.HollowTestObjectRecord;\n"); 
-        if(schema.getPrimaryKey() != null)
+        importBuilder.append("import com.netflix.hollow.api.testdata.HollowTestObjectRecord;\n");
+        if(schema.getPrimaryKey() != null) {
             importBuilder.append("import com.netflix.hollow.core.index.key.PrimaryKey;\n");
+        }
         importBuilder.append("import com.netflix.hollow.core.schema.HollowObjectSchema;\n"); 
         importBuilder.append("import com.netflix.hollow.core.schema.HollowObjectSchema.FieldType;\n\n");
         
@@ -187,8 +188,9 @@ class HollowObjectTypeTestDataAPIClassGenerator {
         builder.append("    static {\n");
         for(int i=0;i<schema.numFields();i++) {
             builder.append("        SCHEMA.addField(\"" + schema.getFieldName(i) + "\", FieldType." + schema.getFieldType(i).name());
-            if(schema.getFieldType(i) == FieldType.REFERENCE)
+            if(schema.getFieldType(i) == FieldType.REFERENCE) {
                 builder.append(", \"" + schema.getReferencedType(i) + "\"");
+            }
             builder.append(");\n");
         }
         builder.append("    }\n\n");
@@ -214,8 +216,9 @@ class HollowObjectTypeTestDataAPIClassGenerator {
     }
     
     public boolean canErgonomicShortcut(int fieldIdx) {
-        if(schema.getFieldType(fieldIdx) != FieldType.REFERENCE)
+        if(schema.getFieldType(fieldIdx) != FieldType.REFERENCE) {
             return false;
+        }
         
         String refType = schema.getReferencedType(fieldIdx);
         HollowSchema refSchema = dataset.getSchema(refType);
@@ -224,13 +227,15 @@ class HollowObjectTypeTestDataAPIClassGenerator {
     }
     
     public boolean canErgonomicShortcut(HollowSchema schema) {
-        if(schema.getSchemaType() != SchemaType.OBJECT)
+        if(schema.getSchemaType() != SchemaType.OBJECT) {
             return false;
+        }
         
         HollowObjectSchema objSchema = (HollowObjectSchema)schema;
-        
-        if(objSchema.numFields() != 1)
+
+        if(objSchema.numFields() != 1) {
             return false;
+        }
         
         return objSchema.getFieldType(0) != FieldType.REFERENCE;
     }

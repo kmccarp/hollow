@@ -39,8 +39,9 @@ public class StackTraceRecorder {
         ++omitFirstNFrames;
 
         StackTraceElement[] stackTrace = new Throwable().getStackTrace();
-        if(stackTrace.length <= omitFirstNFrames)
+        if(stackTrace.length <= omitFirstNFrames) {
             return;
+        }
 
         int maxFrameIndexToRecord = Math.min(stackTrace.length, maxStackTraceElementsToRecord + omitFirstNFrames);
 
@@ -101,8 +102,9 @@ public class StackTraceRecorder {
     }
 
     private void append(StringBuilder builder, StackTraceNode node, int level) {
-        for(int i=0;i<level;i++)
+        for(int i = 0;i < level;i++) {
             builder.append("  ");
+        }
         builder.append(node.getTraceLine()).append(" (").append(node.getCount()).append(")\n");
 
         for(Map.Entry<String, StackTraceNode> entry : node.getChildren().entrySet()) {
@@ -113,8 +115,9 @@ public class StackTraceRecorder {
     private StackTraceNode getNode(StackTraceElement element, ConcurrentHashMap<String, StackTraceNode> nodes) {
         String line = element.toString();
         StackTraceNode node = nodes.get(line);
-        if(node != null)
+        if(node != null) {
             return node;
+        }
         node = new StackTraceNode(line);
         StackTraceNode existingNode = nodes.putIfAbsent(line, node);
         return existingNode == null ? node : existingNode;

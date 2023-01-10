@@ -96,7 +96,9 @@ public class HollowHashIndexGenerator extends HollowIndexGenerator {
     }
 
     private void genDeprecatedJavaDoc(List<HollowSchema> schemaList, StringBuilder builder) {
-        if (schemaList.isEmpty()) return;
+        if(schemaList.isEmpty()) {
+            return;
+        }
 
         HollowSchema schema = schemaList.get(0);
         String typeName = hollowImplClassname(schema.getName());

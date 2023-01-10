@@ -48,9 +48,10 @@ public class SchemaDisplay {
         switch(schema.getSchemaType()) {
         case OBJECT:
             HollowObjectSchema objSchema = (HollowObjectSchema)schema;
-            
-            for(int i=0;i<objSchema.numFields();i++)
+
+            for(int i = 0;i < objSchema.numFields();i++) {
                 displayFields.add(new SchemaDisplayField(fieldPath + "." + objSchema.getFieldName(i), objSchema, i));
+            }
 
             return displayFields;
             

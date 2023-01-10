@@ -55,8 +55,9 @@ public class HollowSchemaSorter {
 
         List<HollowSchema> orderedSchemas = new ArrayList<HollowSchema>();
 
-        while(idx.hasMoreTypes())
+        while(idx.hasMoreTypes()) {
             orderedSchemas.add(schemaMap.get(idx.getNextType()));
+        }
 
         return orderedSchemas;
     }
@@ -93,8 +94,9 @@ public class HollowSchemaSorter {
             String firstAvailableType = availableTypes.get(0);
 
             for(int i=1;i<availableTypes.size();i++) {
-                if(availableTypes.get(i).compareTo(firstAvailableType) < 0)
+                if(availableTypes.get(i).compareTo(firstAvailableType) < 0) {
                     firstAvailableType = availableTypes.get(i);
+                }
             }
 
             removeType(firstAvailableType);
@@ -143,8 +145,9 @@ public class HollowSchemaSorter {
 
         private boolean schemaExists(String schemaName, Collection<HollowSchema> allSchemas) {
             for(HollowSchema schema : allSchemas) {
-                if(schema.getName().equals(schemaName))
+                if(schema.getName().equals(schemaName)) {
                     return true;
+                }
             }
             return false;
         }
@@ -166,13 +169,15 @@ public class HollowSchemaSorter {
      * @return Whether or not the dependencyType is equal to, referenced by, or transitively referenced by the dependentType. 
      */
     public static boolean typeIsTransitivelyDependent(HollowStateEngine stateEngine, String dependentType, String dependencyType) {
-        if(dependentType.equals(dependencyType))
+        if(dependentType.equals(dependencyType)) {
             return true;
+        }
         
         HollowSchema dependentTypeSchema = stateEngine.getSchema(dependentType);
-        
-        if(dependentTypeSchema == null)
+
+        if(dependentTypeSchema == null) {
             return false;
+        }
             
         switch(dependentTypeSchema.getSchemaType()) {
         case OBJECT:
@@ -180,8 +185,9 @@ public class HollowSchemaSorter {
             
             for(int i=0;i<objectSchema.numFields();i++) {
                 if(objectSchema.getFieldType(i) == FieldType.REFERENCE) {
-                    if(typeIsTransitivelyDependent(stateEngine, objectSchema.getReferencedType(i), dependencyType))
+                    if(typeIsTransitivelyDependent(stateEngine, objectSchema.getReferencedType(i), dependencyType)) {
                         return true;
+                    }
                 }
             }
             

@@ -41,12 +41,14 @@ public class HollowCombinerOrdinalRemapper implements OrdinalRemapper {
     @Override
     public int getMappedOrdinal(String type, int originalOrdinal) {
         int typeMapping[] = typeMappings.get(type);
-        
-        if(typeMapping == null)
+
+        if(typeMapping == null) {
             return originalOrdinal;
-        
-        if(typeMapping[originalOrdinal] == -1)
+        }
+
+        if(typeMapping[originalOrdinal] == -1) {
             typeMapping[originalOrdinal] = combiner.copyOrdinal(type, originalOrdinal);
+        }
         
         return typeMapping[originalOrdinal];
     }

@@ -138,8 +138,9 @@ public class TypeAPIObjectJavaGenerator extends HollowTypeAPIGenerator {
 
         for(int i=0;i<objectSchema.numFields();i++) {
             builder.append("            \"" + objectSchema.getFieldName(i) + "\"");
-            if(i < objectSchema.numFields() - 1)
+            if(i < objectSchema.numFields() - 1) {
                 builder.append(",");
+            }
             builder.append("\n");
         }
 

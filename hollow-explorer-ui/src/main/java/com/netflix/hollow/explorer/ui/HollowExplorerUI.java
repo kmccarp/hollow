@@ -95,18 +95,22 @@ public class HollowExplorerUI extends HollowUIRouter {
     }
 
     public long getCurrentStateVersion() {
-        if(consumer != null)
+        if(consumer != null) {
             return consumer.getCurrentVersionId();
-        if(client != null)
+        }
+        if(client != null) {
             return client.getCurrentVersionId();
+        }
         return Long.MIN_VALUE;
     }
     
     public HollowReadStateEngine getStateEngine() {
-        if(consumer != null)
+        if(consumer != null) {
             return consumer.getStateEngine();
-        if(client != null)
+        }
+        if(client != null) {
             return client.getStateEngine();
+        }
         return stateEngine;
     }
 

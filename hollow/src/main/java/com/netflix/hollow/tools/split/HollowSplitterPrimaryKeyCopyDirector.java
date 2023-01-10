@@ -61,9 +61,10 @@ public class HollowSplitterPrimaryKeyCopyDirector implements HollowSplitterCopyD
     @Override
     public int getShard(HollowTypeReadState topLevelType, int ordinal) {
         HollowPrimaryKeyValueDeriver deriver = primaryKeyDeriverByType.get(topLevelType.getSchema().getName());
-        
-        if(deriver == null)
+
+        if(deriver == null) {
             return -1;
+        }
         
         Object[] key = deriver.getRecordKey(ordinal);
         

@@ -35,11 +35,13 @@ public class SchemaSolidifier {
             
             if(schema instanceof HollowMapSchema) {
                 String keyType = ((HollowMapSchema)schema).getKeyType();
-                if(!schemaMap.containsKey(keyType))
+                if(!schemaMap.containsKey(keyType)) {
                     schemaMap.put(keyType, getStringSchema(keyType));
+                }
             } else if(referencesGenericStringSchema(schema)) {
-                if(!schemaMap.containsKey("String"))
+                if(!schemaMap.containsKey("String")) {
                     schemaMap.put("String", getStringSchema("String"));
+                }
             }
         }
         

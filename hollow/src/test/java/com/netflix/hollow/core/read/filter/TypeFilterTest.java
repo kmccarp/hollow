@@ -186,7 +186,9 @@ public class TypeFilterTest {
 
         @Test
         public void verify() {
-            if (skip) return;
+            if(skip) {
+                return;
+            }
 
             List<HollowSchema> schemas = generateSchema(models);
 
@@ -228,7 +230,9 @@ public class TypeFilterTest {
 
         @Test
         public void verify() {
-            if (skip) return;
+            if(skip) {
+                return;
+            }
             List<HollowSchema> schemas = generateSchema(models);
 
             TypeFilter subject = filteredBy

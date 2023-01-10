@@ -129,8 +129,9 @@ public class HollowReadStateEngine implements HollowStateEngine, HollowDataAcces
         list.add(listener);
 
         HollowTypeReadState typeState = typeStates.get(typeName);
-        if(typeState != null)
+        if(typeState != null) {
             typeState.addListener(listener);
+        }
     }
 
     void wireTypeStatesToSchemas() {
@@ -139,8 +140,9 @@ public class HollowReadStateEngine implements HollowStateEngine, HollowDataAcces
             case OBJECT:
                 HollowObjectSchema objSchema = (HollowObjectSchema)state.getSchema();
                 for(int i=0;i<objSchema.numFields();i++) {
-                    if(objSchema.getReferencedType(i) != null)
+                    if(objSchema.getReferencedType(i) != null) {
                         objSchema.setReferencedTypeState(i, typeStates.get(objSchema.getReferencedType(i)));
+                    }
                 }
                 break;
             case LIST:
@@ -287,15 +289,17 @@ public class HollowReadStateEngine implements HollowStateEngine, HollowDataAcces
     @Override
     public boolean hasSampleResults() {
         for(Map.Entry<String, HollowTypeReadState> entry : typeStates.entrySet())
-            if(entry.getValue().getSampler().hasSampleResults())
+            if(entry.getValue().getSampler().hasSampleResults()) {
                 return true;
+            }
         return false;
     }
 
     public boolean updatedLastCycle() {
         for(Map.Entry<String, HollowTypeReadState> entry : typeStates.entrySet()) {
-            if(entry.getValue().getListener(PopulatedOrdinalListener.class).updatedLastCycle())
+            if(entry.getValue().getListener(PopulatedOrdinalListener.class).updatedLastCycle()) {
                 return true;
+            }
         }
         return false;
     }

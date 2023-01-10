@@ -48,8 +48,9 @@ public class HollowIndexerValueTraverser {
     }
     
     public void traverse(int ordinal) {
-        for(int i=0;i<fieldMatchLists.length;i++)
+        for(int i = 0;i < fieldMatchLists.length;i++) {
             fieldMatchLists[i].clear();
+        }
         
         rootNode.traverse(ordinal);
     }
@@ -108,8 +109,9 @@ public class HollowIndexerValueTraverser {
     public boolean isMatchEqual(int matchIdx, HollowIndexerValueTraverser otherTraverser, int otherMatchIdx) {
         for(int i=0;i<getNumFieldPaths();i++) {
             if(!HollowReadFieldUtils.fieldsAreEqual((HollowObjectTypeDataAccess)fieldTypeDataAccess[i], fieldMatchLists[i].get(matchIdx), fieldSchemaPosition[i],
-                    (HollowObjectTypeDataAccess)otherTraverser.fieldTypeDataAccess[i], otherTraverser.fieldMatchLists[i].get(otherMatchIdx), otherTraverser.fieldSchemaPosition[i]))
+                (HollowObjectTypeDataAccess)otherTraverser.fieldTypeDataAccess[i], otherTraverser.fieldMatchLists[i].get(otherMatchIdx), otherTraverser.fieldSchemaPosition[i])) {
                 return false;
+            }
         }
         return true;
     }
@@ -118,8 +120,9 @@ public class HollowIndexerValueTraverser {
         for(int i=0;i<getNumFieldPaths();i++) {
             if(fields.get(i)) {
                 if(!HollowReadFieldUtils.fieldsAreEqual((HollowObjectTypeDataAccess)fieldTypeDataAccess[i], fieldMatchLists[i].get(matchIdx), fieldSchemaPosition[i],
-                        (HollowObjectTypeDataAccess)otherTraverser.fieldTypeDataAccess[i], otherTraverser.fieldMatchLists[i].get(otherMatchIdx), otherTraverser.fieldSchemaPosition[i]))
+                    (HollowObjectTypeDataAccess)otherTraverser.fieldTypeDataAccess[i], otherTraverser.fieldMatchLists[i].get(otherMatchIdx), otherTraverser.fieldSchemaPosition[i])) {
                     return false;
+                }
             }
         }
         return true;

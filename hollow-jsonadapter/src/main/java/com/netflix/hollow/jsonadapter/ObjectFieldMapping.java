@@ -128,8 +128,9 @@ public class ObjectFieldMapping {
 
     private FieldProcessor findFieldProcessor(String typeName, String fieldName, String mappedTypeName, String mappedFieldName) {
         FieldProcessor fp = populator.getFieldProcessor(typeName, fieldName);
-        if(fp != null)
+        if(fp != null) {
             return fp;
+        }
 
         return populator.getFieldProcessor(mappedTypeName, mappedFieldName);
     }
@@ -169,11 +170,13 @@ public class ObjectFieldMapping {
                 rec.setReference(childEntry.getKey(), childOrdinal);
             }
 
-            if(passthroughOrdinal != -1)
+            if(passthroughOrdinal != -1) {
                 rec.setReference("passthrough", passthroughOrdinal);
+            }
 
-            if(flatRecordWriter != null)
+            if(flatRecordWriter != null) {
                 return flatRecordWriter.write(typeState.getSchema(), rec);
+            }
             return typeState.add(rec);
         }
 

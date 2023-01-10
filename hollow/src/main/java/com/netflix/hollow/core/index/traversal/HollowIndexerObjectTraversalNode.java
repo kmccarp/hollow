@@ -55,8 +55,9 @@ class HollowIndexerObjectTraversalNode extends HollowIndexerTraversalNode {
                 children[i].traverse(ordinal);
             } else {
                 int childOrdinal = dataAccess().readOrdinal(ordinal, childOrdinalFieldPositions[i]);
-                if(childOrdinal != -1)
+                if(childOrdinal != -1) {
                     children[i].traverse(childOrdinal);
+                }
             }
         }
 

@@ -66,8 +66,9 @@ public class HollowJsonAdapter extends AbstractHollowJsonAdaptorTask {
 
         for(HollowSchema schema : stateEngine.getSchemas()) {
             hollowSchemas.put(schema.getName(), schema);
-            if(schema instanceof HollowObjectSchema)
+            if(schema instanceof HollowObjectSchema) {
                 canonicalObjectFieldMappings.put(schema.getName(), new ObjectFieldMapping(schema.getName(), this));
+            }
         }
 
         ////TODO: Special 'passthrough' processing.
@@ -132,15 +133,17 @@ public class HollowJsonAdapter extends AbstractHollowJsonAdaptorTask {
         HollowSchema subTypeSchema = hollowSchemas.get(subType);
         switch(subTypeSchema.getSchemaType()) {
             case OBJECT:
-                if(currentToken != JsonToken.START_OBJECT)
+                if(currentToken != JsonToken.START_OBJECT) {
                     throw new IOException("Expecting to parse a " + subType + ", which is a " + subTypeSchema.getSchemaType() + ", expected JsonToken.START_OBJECT but instead found a " + currentToken.toString());
+                }
 
                 return addObject(parser, flatRecordWriter, subType);
 
             case LIST:
             case SET:
-                if(currentToken != JsonToken.START_ARRAY)
+                if(currentToken != JsonToken.START_ARRAY) {
                     throw new IOException("Expecting to parse a " + subType + ", which is a " + subTypeSchema.getSchemaType() + ", expected JsonToken.START_ARRAY but instead found a " + currentToken.toString());
+                }
 
                 return addSubArray(parser, flatRecordWriter, subType, getWriteRecord(subType));
 
@@ -393,10 +396,11 @@ public class HollowJsonAdapter extends AbstractHollowJsonAdaptorTask {
                 while(token != JsonToken.END_OBJECT) {
 
                     if(token == JsonToken.START_OBJECT || token == JsonToken.START_ARRAY) {
-                        if("key".equals(parser.getCurrentName()))
+                        if("key".equals(parser.getCurrentName())) {
                             keyOrdinal = parseSubType(parser, flatRecordWriter, token, schema.getKeyType());
-                        else if("value".equals(parser.getCurrentName()))
+                        } else if("value".equals(parser.getCurrentName())) {
                             valueOrdinal = parseSubType(parser, flatRecordWriter, token, schema.getValueType());
+                        }
                     }
 
                     token = parser.nextToken();

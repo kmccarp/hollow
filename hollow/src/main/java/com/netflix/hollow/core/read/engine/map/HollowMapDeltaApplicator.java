@@ -71,12 +71,13 @@ class HollowMapDeltaApplicator {
         target.entryData = new FixedLengthElementArray(target.memoryRecycler, target.totalNumberOfBuckets * target.bitsPerMapEntry);
 
         if(target.bitsPerMapPointer == from.bitsPerMapPointer
-                && target.bitsPerMapSizeValue == from.bitsPerMapSizeValue
-                && target.bitsPerKeyElement == from.bitsPerKeyElement
-                && target.bitsPerValueElement == from.bitsPerValueElement)
-                    fastDelta();
-        else
+            && target.bitsPerMapSizeValue == from.bitsPerMapSizeValue
+            && target.bitsPerKeyElement == from.bitsPerKeyElement
+            && target.bitsPerValueElement == from.bitsPerValueElement) {
+            fastDelta();
+        } else {
             slowDelta();
+        }
 
 
         from.encodedRemovals = null;
@@ -101,8 +102,9 @@ class HollowMapDeltaApplicator {
                 mergeOrdinal(i++);
             } else {
                 int recordsToCopy = nextElementDiff - i;
-                if(nextElementDiff > bulkCopyEndOrdinal)
+                if(nextElementDiff > bulkCopyEndOrdinal) {
                     recordsToCopy = bulkCopyEndOrdinal - i + 1;
+                }
 
                 fastCopyRecords(recordsToCopy);
 
@@ -145,8 +147,9 @@ class HollowMapDeltaApplicator {
                 for(long bucketIdx=currentFromStateStartBucket; bucketIdx<fromDataEndBucket; bucketIdx++) {
                     long bucketKey = from.entryData.getElementValue(bucketIdx * from.bitsPerMapEntry, from.bitsPerKeyElement);
                     long bucketValue = from.entryData.getElementValue(bucketIdx * from.bitsPerMapEntry + from.bitsPerKeyElement, from.bitsPerValueElement);
-                    if(bucketKey == from.emptyBucketKeyValue)
+                    if(bucketKey == from.emptyBucketKeyValue) {
                         bucketKey = target.emptyBucketKeyValue;
+                    }
                     long currentWriteStartBucketBit = currentWriteStartBucket * target.bitsPerMapEntry;
                     target.entryData.setElementValue(currentWriteStartBucketBit, target.bitsPerKeyElement, bucketKey);
                     target.entryData.setElementValue(currentWriteStartBucketBit + target.bitsPerKeyElement, target.bitsPerValueElement, bucketValue);

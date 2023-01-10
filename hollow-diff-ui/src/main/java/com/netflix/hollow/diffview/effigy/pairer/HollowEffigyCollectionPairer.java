@@ -41,8 +41,9 @@ public class HollowEffigyCollectionPairer extends HollowEffigyFieldPairer {
 
     @Override
     public List<EffigyFieldPair> pair() {
-        if(matchHint != null)
+        if(matchHint != null) {
             return pairByMatchHint();
+        }
         return pairByMinDifference();
     }
     
@@ -51,12 +52,14 @@ public class HollowEffigyCollectionPairer extends HollowEffigyFieldPairer {
         List<EffigyFieldPair> fieldPairs = new ArrayList<EffigyFieldPair>();
         
         if(from.getFields().size() == 0) {
-            for(int i=0;i<to.getFields().size();i++)
+            for(int i = 0;i < to.getFields().size();i++) {
                 fieldPairs.add(new EffigyFieldPair(null, to.getFields().get(i), -1, i));
+            }
             return fieldPairs;
         } else if(to.getFields().size() == 0) {
-            for(int i=0;i<from.getFields().size();i++)
+            for(int i = 0;i < from.getFields().size();i++) {
                 fieldPairs.add(new EffigyFieldPair(from.getFields().get(i), null, i, -1));
+            }
         }
 
         int toFieldPathIndexes[][] = new int[matchHint.numFields()][];
@@ -113,8 +116,9 @@ public class HollowEffigyCollectionPairer extends HollowEffigyFieldPairer {
     
     private boolean recordsMatch(HollowEffigy fromElement, HollowEffigy toElement, int[][] fromFieldPathIndexes, int[][] toFieldPathIndexes) {
         for(int i=0;i<fromFieldPathIndexes.length;i++) {
-            if(!fieldsAreEqual(fromElement, toElement, fromFieldPathIndexes[i], toFieldPathIndexes[i]))
+            if(!fieldsAreEqual(fromElement, toElement, fromFieldPathIndexes[i], toFieldPathIndexes[i])) {
                 return false;
+            }
         }
         
         return true;
@@ -189,21 +193,25 @@ public class HollowEffigyCollectionPairer extends HollowEffigyFieldPairer {
             Arrays.sort(diffMatrixElements);
 
             for(long matrixElement : diffMatrixElements) {
-                if(fieldPairs.size() == maxPairs)
+                if(fieldPairs.size() == maxPairs) {
                     break;
+                }
 
                 int diffScore = getDiffScore(matrixElement);
 
-                if(diffScore == MAX_MATRIX_ELEMENT_FIELD_VALUE)
+                if(diffScore == MAX_MATRIX_ELEMENT_FIELD_VALUE) {
                     break;
+                }
 
                 int fromIndex = getFromIndex(matrixElement);
                 int toIndex = getToIndex(matrixElement);
 
-                if(pairedFromIndices.get(fromIndex))
+                if(pairedFromIndices.get(fromIndex)) {
                     continue;
-                if(pairedToIndices.get(toIndex))
+                }
+                if(pairedToIndices.get(toIndex)) {
                     continue;
+                }
 
                 fieldPairs.add(new EffigyFieldPair(from.getFields().get(fromIndex), to.getFields().get(toIndex), fromIndex, toIndex));
                 pairedFromIndices.set(fromIndex);
@@ -219,13 +227,15 @@ public class HollowEffigyCollectionPairer extends HollowEffigyFieldPairer {
 
     private void addUnmatchedElements(List<EffigyFieldPair> fieldPairs, BitSet pairedFromIndices, BitSet pairedToIndices) {
         for(int i=0;i<from.getFields().size();i++) {
-            if(!pairedFromIndices.get(i))
+            if(!pairedFromIndices.get(i)) {
                 fieldPairs.add(new EffigyFieldPair(from.getFields().get(i), null, i, -1));
+            }
         }
 
         for(int i=0;i<to.getFields().size();i++) {
-            if(!pairedToIndices.get(i))
+            if(!pairedToIndices.get(i)) {
                 fieldPairs.add(new EffigyFieldPair(null, to.getFields().get(i), -1, i));
+            }
         }
     }
 

@@ -270,8 +270,9 @@ public class FakeHollowHistoryUtil {
     }
 
     private static long getNextStateVersion(HollowHistoricalState currentHistoricalState) {
-        if (currentHistoricalState.getNextState() != null)
+        if(currentHistoricalState.getNextState() != null) {
             return currentHistoricalState.getNextState().getVersion();
+        }
         return -1;
     }
 

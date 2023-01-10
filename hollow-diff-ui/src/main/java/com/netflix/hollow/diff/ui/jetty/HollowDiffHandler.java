@@ -33,8 +33,9 @@ public class HollowDiffHandler extends AbstractHandler {
 
     @Override
     public void handle(String target, Request baseRequest, HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if(router.handle(target, req, resp))
+        if(router.handle(target, req, resp)) {
             baseRequest.setHandled(true);
+        }
     }
 
     public HollowDiffUIRouter getRouter() {

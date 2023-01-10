@@ -57,11 +57,13 @@ public abstract class HistoryPage {
             throw e;
         }
 
-        if(includeHeaderAndFooter())
+        if(includeHeaderAndFooter()) {
             headerTemplate.merge(ctx, writer);
+        }
         template.merge(ctx, writer);
-        if(includeHeaderAndFooter())
+        if(includeHeaderAndFooter()) {
             footerTemplate.merge(ctx, writer);
+        }
     }
 
     protected abstract void setUpContext(HttpServletRequest req, HollowUISession session, VelocityContext ctx);

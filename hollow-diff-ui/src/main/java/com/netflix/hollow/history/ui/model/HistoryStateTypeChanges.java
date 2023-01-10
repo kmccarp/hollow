@@ -116,21 +116,25 @@ public class HistoryStateTypeChanges {
     
     public RecordDiffTreeNode findTreeNode(String hierarchicalFieldName) {
         RecordDiffTreeNode node = findTreeNode(modifiedRecords, hierarchicalFieldName);
-        if(node != null)
+        if(node != null) {
             return node;
+        }
         node = findTreeNode(addedRecords, hierarchicalFieldName);
-        if(node != null)
+        if(node != null) {
             return node;
+        }
         return findTreeNode(removedRecords, hierarchicalFieldName);
     }
 
     private RecordDiffTreeNode findTreeNode(RecordDiffTreeNode treeNode, String hierarchicalFieldName) {
-        if(treeNode.getHierarchicalFieldName().equals(hierarchicalFieldName))
+        if(treeNode.getHierarchicalFieldName().equals(hierarchicalFieldName)) {
             return treeNode;
+        }
         for(RecordDiffTreeNode child : treeNode.getSubGroups()) {
             RecordDiffTreeNode matchedDescendent = findTreeNode(child, hierarchicalFieldName);
-            if(matchedDescendent != null)
+            if(matchedDescendent != null) {
                 return matchedDescendent;
+            }
         }
         return null;
     }

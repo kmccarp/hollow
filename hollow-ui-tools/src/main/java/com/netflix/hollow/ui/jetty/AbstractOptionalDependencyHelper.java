@@ -29,7 +29,9 @@ public class AbstractOptionalDependencyHelper {
 
     protected Object newFactory(String factory, String dependency, String message) {
         try {
-            if(!isDependencyAvailable(dependency)) throw new OptionalDependencyException(message);
+            if(!isDependencyAvailable(dependency)) {
+                throw new OptionalDependencyException(message);
+            }
             return Class.forName(factory).newInstance();
         } catch(OptionalDependencyException ex) {
             throw ex;

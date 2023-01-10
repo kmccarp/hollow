@@ -40,8 +40,9 @@ public class DiffObjectPage extends DiffPage {
         int toOrdinal = Integer.parseInt(req.getParameter("toOrdinal"));
 
         int fieldIdx = -1;
-        if(req.getParameter("fieldIdx") != null)
+        if(req.getParameter("fieldIdx") != null) {
             fieldIdx = Integer.parseInt(req.getParameter("fieldIdx"));
+        }
 
         ctx.put("typeName", type);
         ctx.put("fromOrdinal", fromOrdinal);

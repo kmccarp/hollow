@@ -135,8 +135,9 @@ public class HollowDiffFieldCountingNode extends HollowDiffCountingNode {
         }
 
         int hashCode = fieldHashCode(fromState, ordinal, fromFieldIndex);
-        if(hashIntoArray(ordinal, hashCode, 1, hashedOrdinals, ordinalHashCodes, ordinalHashCounts))
+        if(hashIntoArray(ordinal, hashCode, 1, hashedOrdinals, ordinalHashCodes, ordinalHashCounts)) {
             hashSize++;
+        }
     }
 
     private void compareToOrdinal(int ordinal) {
@@ -189,8 +190,9 @@ public class HollowDiffFieldCountingNode extends HollowDiffCountingNode {
         int count = 0;
 
         for(int i=0;i<hashedOrdinals.length;i++) {
-            if(hashedOrdinals[i] != -1)
+            if(hashedOrdinals[i] != -1) {
                 ordinalsAndHashCodes[count++] = ((long)hashedOrdinals[i] << 32) | (ordinalHashCodes[i] & 0xFFFFFFFFL);
+            }
         }
 
         Arrays.sort(ordinalsAndHashCodes);
@@ -201,8 +203,9 @@ public class HollowDiffFieldCountingNode extends HollowDiffCountingNode {
     private int findOrdinalCount(int ordinal, int hashCode) {
         int bucket = hashCode & (hashedOrdinals.length - 1);
 
-        while(hashedOrdinals[bucket] != ordinal)
+        while(hashedOrdinals[bucket] != ordinal) {
             bucket = (bucket + 1) & (hashedOrdinals.length - 1);
+        }
 
         return ordinalHashCounts[bucket];
     }
@@ -228,8 +231,9 @@ public class HollowDiffFieldCountingNode extends HollowDiffCountingNode {
 
     @Override
     public List<HollowFieldDiff> getFieldDiffs() {
-        if(fieldDiff.getTotalDiffScore() > 0)
+        if(fieldDiff.getTotalDiffScore() > 0) {
             return Collections.singletonList(fieldDiff);
+        }
         return Collections.emptyList();
     }
 

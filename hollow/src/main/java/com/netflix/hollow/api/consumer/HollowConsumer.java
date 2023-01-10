@@ -179,8 +179,9 @@ public class HollowConsumer {
         this.announcementWatcher = announcementWatcher;
         this.refreshExecutor = refreshExecutor;
         this.refreshLock = new ReentrantReadWriteLock();
-        if (announcementWatcher != null)
+        if(announcementWatcher != null) {
             announcementWatcher.subscribeToUpdates(this);
+        }
         this.memoryMode = memoryMode;
     }
 
@@ -199,14 +200,16 @@ public class HollowConsumer {
                 metrics,
                 builder.metricsCollector);
         updater.setFilter(builder.typeFilter);
-        if(builder.skipTypeShardUpdateWithNoAdditions)
+        if(builder.skipTypeShardUpdateWithNoAdditions) {
             updater.setSkipShardUpdateWithNoAdditions(true);
+        }
         this.announcementWatcher = builder.announcementWatcher;
         this.refreshExecutor = builder.refreshExecutor;
         this.refreshLock = new ReentrantReadWriteLock();
         this.memoryMode = builder.memoryMode;
-        if (announcementWatcher != null)
+        if(announcementWatcher != null) {
             announcementWatcher.subscribeToUpdates(this);
+        }
     }
 
     /**
@@ -259,8 +262,9 @@ public class HollowConsumer {
         refreshExecutor.execute(() -> {
             try {
                 long delay = targetBeginTime - System.currentTimeMillis();
-                if (delay > 0)
+                if(delay > 0) {
                     Thread.sleep(delay);
+                }
             } catch (InterruptedException e) {
                 // Interrupting, such as shutting down the executor pool,
                 // cancels the trigger
@@ -290,8 +294,9 @@ public class HollowConsumer {
      * @param version the version to refresh to
      */
     public void triggerRefreshTo(long version) {
-        if (announcementWatcher != null)
+        if(announcementWatcher != null) {
             throw new UnsupportedOperationException("Cannot trigger refresh to specified version when a HollowConsumer.AnnouncementWatcher is present");
+        }
 
         try {
             updater.updateTo(version);
@@ -539,12 +544,13 @@ public class HollowConsumer {
             this.fromVersion = fromVersion;
             this.toVersion = toVersion;
 
-            if (this.isSnapshot())
+            if(this.isSnapshot()) {
                 this.blobType = BlobType.SNAPSHOT;
-            else if (this.isReverseDelta())
+            } else if(this.isReverseDelta()) {
                 this.blobType = BlobType.REVERSE_DELTA;
-            else
+            } else {
                 this.blobType = BlobType.DELTA;
+            }
         }
 
         /**
@@ -1103,8 +1109,9 @@ public class HollowConsumer {
          * @throws IllegalArgumentException if provided API class is {@code HollowAPI} instead of a subclass
          */
         public B withGeneratedAPIClass(Class<? extends HollowAPI> generatedAPIClass) {
-            if (HollowAPI.class.equals(generatedAPIClass))
+            if(HollowAPI.class.equals(generatedAPIClass)) {
                 throw new IllegalArgumentException("must provide a code generated API class");
+            }
             this.apiFactory = new HollowAPIFactory.ForGeneratedAPI<>(generatedAPIClass);
             return (B)this;
         }

@@ -41,11 +41,13 @@ public class IntMap {
     public int get(int key) {
         int bucket = hashKey(key) % keys.length;
         while (keys[bucket] != -1) {
-            if (keys[bucket] == key)
+            if(keys[bucket] == key) {
                 return values[bucket];
+            }
             bucket++;
-            if (bucket == keys.length)
+            if(bucket == keys.length) {
                 bucket = 0;
+            }
         }
         return -1;
     }
@@ -58,8 +60,9 @@ public class IntMap {
                 return;
             }
             bucket++;
-            if (bucket == keys.length)
+            if(bucket == keys.length) {
                 bucket = 0;
+            }
         }
 
         keys[bucket] = key;
@@ -86,8 +89,9 @@ public class IntMap {
 
         public boolean next() {
             while(++currentEntry < keys.length) {
-                if(keys[currentEntry] != -1)
+                if(keys[currentEntry] != -1) {
                     return true;
+                }
             }
             return false;
         }

@@ -40,8 +40,9 @@ public class HollowSchemaNamer {
                 if (typeNamesMap == null) {
                     typeNamesMap = new ConcurrentHashMap<String, String>();
                     Map<String, String> existingMap = subNamesMap.putIfAbsent(typeName, typeNamesMap);
-                    if(existingMap != null)
+                    if(existingMap != null) {
                         typeNamesMap = existingMap;
+                    }
                 }
             }
         }
@@ -75,7 +76,9 @@ public class HollowSchemaNamer {
     }
 
     private String uppercaseFirstCharacter(String value) {
-        if (value == null) return "";
+        if(value == null) {
+            return "";
+        }
         return value.substring(0, 1).toUpperCase() + value.substring(1);
     }
 

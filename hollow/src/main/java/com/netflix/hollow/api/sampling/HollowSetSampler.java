@@ -39,14 +39,16 @@ public class HollowSetSampler implements HollowSampler {
     }
 
     public void setSamplingDirector(HollowSamplingDirector director) {
-        if(!"".equals(typeName))
+        if(!"".equals(typeName)) {
             this.director = director;
+        }
     }
 
     @Override
     public void setFieldSpecificSamplingDirector(HollowFilterConfig fieldSpec, HollowSamplingDirector director) {
-        if(!"".equals(typeName) && fieldSpec.doesIncludeType(typeName))
+        if(!"".equals(typeName) && fieldSpec.doesIncludeType(typeName)) {
             this.director = director;
+        }
     }
     
 
@@ -56,18 +58,21 @@ public class HollowSetSampler implements HollowSampler {
     }
 
     public void recordGet() {
-        if(director.shouldRecord())
+        if(director.shouldRecord()) {
             getSamples++;
+        }
     }
 
     public void recordSize() {
-        if(director.shouldRecord())
+        if(director.shouldRecord()) {
             sizeSamples++;
+        }
     }
 
     public void recordIterator() {
-        if(director.shouldRecord())
+        if(director.shouldRecord()) {
             iteratorSamples++;
+        }
     }
 
     @Override

@@ -243,8 +243,9 @@ public class HollowSerializationFramework extends SerializationFramework {
         if(objectIdentityOrdinalMap == null) {
             objectIdentityOrdinalMap = new ObjectIdentityOrdinalMap();
             ObjectIdentityOrdinalMap existing = objectIdentityOrdinalMaps.putIfAbsent(type, objectIdentityOrdinalMap);
-            if(existing != null)
+            if(existing != null) {
                 objectIdentityOrdinalMap = existing;
+            }
         }
         return objectIdentityOrdinalMap;
     }

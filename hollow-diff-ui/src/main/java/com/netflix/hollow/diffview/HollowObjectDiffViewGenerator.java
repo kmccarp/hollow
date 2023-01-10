@@ -72,8 +72,9 @@ public class HollowObjectDiffViewGenerator {
     }
 
     List<HollowDiffViewRow> traverseEffigyToCreateViewRows(HollowDiffViewRow parent) {
-        if(parent.getFieldPair().isLeafNode())
+        if(parent.getFieldPair().isLeafNode()) {
             return Collections.emptyList();
+        }
         
         Field fromField = parent.getFieldPair().getFrom();
         Field toField = parent.getFieldPair().getTo();

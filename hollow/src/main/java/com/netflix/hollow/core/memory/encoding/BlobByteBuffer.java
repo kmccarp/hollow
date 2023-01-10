@@ -88,8 +88,9 @@ public final class BlobByteBuffer {
         long bufferCount = size % bufferCapacity == 0
                 ? size / (long)bufferCapacity
                 : (size / (long)bufferCapacity) + 1;
-        if (bufferCount > Integer.MAX_VALUE)
+        if(bufferCount > Integer.MAX_VALUE) {
             throw new IllegalArgumentException("file too large; size=" + size);
+        }
 
         int shift = 31 - Integer.numberOfLeadingZeros(bufferCapacity); // log2
         int mask = (1 << shift) - 1;
@@ -124,8 +125,9 @@ public final class BlobByteBuffer {
      * @return new position in bytes
      */
     public BlobByteBuffer position(long position) {
-        if (position > capacity || position < 0)
+        if(position > capacity || position < 0) {
             throw new IllegalArgumentException("invalid position; position=" + position + " capacity=" + capacity);
+        }
         this.position = position;
         return this;
     }

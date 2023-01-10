@@ -112,8 +112,9 @@ public class HollowSparseIntegerSetTest {
                 HollowObjectTypeDataAccess objectTypeDataAccess = (HollowObjectTypeDataAccess) readStateEngine.getTypeDataAccess("Movie");
                 int yearReleasedFieldPosition = objectTypeDataAccess.getSchema().getPosition("releaseYear");
                 int yearReleased = objectTypeDataAccess.readInt(ordinal, yearReleasedFieldPosition);
-                if (yearReleased == 2009)
+                if(yearReleased == 2009) {
                     return true;
+                }
                 return false;
             }
         };

@@ -53,10 +53,12 @@ public class DiffFieldPage extends DiffPage {
         ctx.put("fieldDiff", fieldDiff);
         ctx.put("fieldIdx", fieldIdx);
 
-        if(diffPairBeginIdx > 0)
+        if(diffPairBeginIdx > 0) {
             ctx.put("previousDiffPairPageBeginIdx", diffPairBeginIdx - diffPairPageSize);
-        if((diffPairBeginIdx + diffPairPageSize) < fieldDiff.getNumDiffs())
+        }
+        if((diffPairBeginIdx + diffPairPageSize) < fieldDiff.getNumDiffs()) {
             ctx.put("nextDiffPairPageBeginIdx", diffPairBeginIdx + diffPairPageSize);
+        }
 
         ctx.put("breadcrumbs", getBreadcrumbs(typeDiff, fieldDiff));
     }

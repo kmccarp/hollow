@@ -74,12 +74,13 @@ public class HollowMapJavaGenerator extends HollowCollectionsGenerator {
         String valueGeneric = parameterizeValue ? "V" : valueClassName;
 
         String classGeneric = "";
-        if(parameterizeKey && parameterizeValue)
+        if(parameterizeKey && parameterizeValue) {
             classGeneric = "<K, V>";
-        else if(parameterizeKey)
+        } else if(parameterizeKey) {
             classGeneric = "<K>";
-        else if(parameterizeValue)
+        } else if(parameterizeValue) {
             classGeneric = "<V>";
+        }
 
         builder.append("public class " + className + classGeneric + " extends HollowMap<" + keyGeneric + ", " + valueGeneric + "> {\n\n");
 
@@ -123,12 +124,14 @@ public class HollowMapJavaGenerator extends HollowCollectionsGenerator {
 
             classBuilder.append("    public " + valueReturnType + " get(");
             classBuilder.append(getKeyFieldType(schema.getHashKey().getFieldPath(0))).append(" k0");
-            for(int i=1;i<schema.getHashKey().numFields();i++)
+            for(int i = 1;i < schema.getHashKey().numFields();i++) {
                 classBuilder.append(", ").append(getKeyFieldType(schema.getHashKey().getFieldPath(i))).append(" k").append(i);
+            }
             classBuilder.append(") {\n");
             classBuilder.append("        return findValue(k0");
-            for(int i=1;i<schema.getHashKey().numFields();i++)
+            for(int i = 1;i < schema.getHashKey().numFields();i++) {
                 classBuilder.append(", k").append(i);
+            }
             classBuilder.append(");\n");
             classBuilder.append("    }\n\n");
         }

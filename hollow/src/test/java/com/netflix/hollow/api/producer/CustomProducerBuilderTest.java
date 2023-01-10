@@ -41,10 +41,11 @@ public class CustomProducerBuilderTest {
         public HollowProducer build() {
             checkArguments();
             HollowProducer producer;
-            if(shouldAugment)
+            if(shouldAugment) {
                 producer = new AugmentedProducer(null, null);
-            else
+            } else {
                 producer = super.build();
+            }
             return producer;
         }
     }

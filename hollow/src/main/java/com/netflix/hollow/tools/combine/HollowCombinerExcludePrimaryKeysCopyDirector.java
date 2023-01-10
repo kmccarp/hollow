@@ -103,8 +103,9 @@ public class HollowCombinerExcludePrimaryKeysCopyDirector implements HollowCombi
     @Override
     public boolean shouldCopy(HollowTypeReadState typeState, int ordinal) {
         BitSet bitSet = excludedOrdinals.get(typeState);
-        if(bitSet != null && bitSet.get(ordinal))
+        if(bitSet != null && bitSet.get(ordinal)) {
             return false;
+        }
         return baseDirector.shouldCopy(typeState, ordinal);
     }
     

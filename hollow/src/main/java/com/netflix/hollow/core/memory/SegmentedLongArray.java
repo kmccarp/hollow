@@ -113,8 +113,9 @@ public class SegmentedLongArray {
 
     public void destroy(ArraySegmentRecycler memoryRecycler) {
         for(int i=0;i<segments.length;i++) {
-            if(segments[i] != null)
+            if(segments[i] != null) {
                 memoryRecycler.recycleLongArray(segments[i]);
+            }
         }
     }
 
@@ -123,8 +124,9 @@ public class SegmentedLongArray {
         int segmentSize = 1 << memoryRecycler.getLog2OfLongSegmentSize();
         int segment = 0;
 
-        if(numLongs == 0)
+        if(numLongs == 0) {
             return;
+        }
 
         long fencepostLong = in.readLong();
 

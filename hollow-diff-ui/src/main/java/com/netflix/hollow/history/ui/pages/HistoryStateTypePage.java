@@ -181,8 +181,9 @@ public class HistoryStateTypePage extends HistoryPage {
     }
     
     private static String[] getGroupedFieldNames(String groupBy) {
-        if(groupBy == null)
+        if(groupBy == null) {
             return new String[0];
+        }
         
         return groupBy.split(",");
     }

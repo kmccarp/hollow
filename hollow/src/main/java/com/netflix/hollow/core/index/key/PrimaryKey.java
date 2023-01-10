@@ -123,8 +123,9 @@ public class PrimaryKey {
     public static FieldType getFieldType(HollowDataset dataAccess, String type, String fieldPath) {
         HollowObjectSchema schema = (HollowObjectSchema)dataAccess.getSchema(type);
         int pathIndexes[] = getFieldPathIndex(dataAccess, type, fieldPath);
-        for(int i=0;i<pathIndexes.length - 1;i++)
+        for(int i = 0;i < pathIndexes.length - 1;i++) {
             schema = (HollowObjectSchema)dataAccess.getSchema(schema.getReferencedType(pathIndexes[i]));
+        }
         return schema.getFieldType(pathIndexes[pathIndexes.length - 1]);
     }
 
@@ -139,8 +140,9 @@ public class PrimaryKey {
     public static HollowObjectSchema getFieldSchema(HollowDataset dataAccess, String type, String fieldPath) {
         HollowObjectSchema schema = (HollowObjectSchema)dataAccess.getSchema(type);
         int pathIndexes[] = getFieldPathIndex(dataAccess, type, fieldPath);
-        for (int i = 0; i < pathIndexes.length; i++)
+        for(int i = 0;i < pathIndexes.length;i++) {
             schema = (HollowObjectSchema)dataAccess.getSchema(schema.getReferencedType(pathIndexes[i]));
+        }
         return schema;
     }
 
@@ -191,20 +193,26 @@ public class PrimaryKey {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if(this == obj) {
             return true;
-        if (obj == null)
+        }
+        if(obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if(getClass() != obj.getClass()) {
             return false;
+        }
         PrimaryKey other = (PrimaryKey) obj;
-        if (!Arrays.equals(fieldPaths, other.fieldPaths))
+        if(!Arrays.equals(fieldPaths, other.fieldPaths)) {
             return false;
+        }
         if (type == null) {
-            if (other.type != null)
+            if(other.type != null) {
                 return false;
-        } else if (!type.equals(other.type))
+            }
+        } else if(!type.equals(other.type)) {
             return false;
+        }
         return true;
     }
 

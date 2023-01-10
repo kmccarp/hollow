@@ -54,8 +54,9 @@ public class HistoryStatePage extends HistoryPage {
 
         for(Map.Entry<String, HollowHistoricalStateTypeKeyOrdinalMapping>entry : historicalState.getKeyOrdinalMapping().getTypeMappings().entrySet()) {
             HistoryStateTypeChangeSummary typeChange = new HistoryStateTypeChangeSummary(historicalState.getVersion(), entry.getKey(), entry.getValue());
-            if(!typeChange.isEmpty())
+            if(!typeChange.isEmpty()) {
                 typeChanges.add(typeChange);
+            }
         }
 
         ctx.put("typeChanges", typeChanges);
@@ -72,8 +73,9 @@ public class HistoryStatePage extends HistoryPage {
     	
     	for(Map.Entry<String, HollowHistoricalStateTypeKeyOrdinalMapping> entry : historicalState.getKeyOrdinalMapping().getTypeMappings().entrySet()) {
     		HistoryStateTypeChangeSummary typeChange = new HistoryStateTypeChangeSummary(historicalState.getVersion(), entry.getKey(), entry.getValue());
-    		if(!typeChange.isEmpty())
-    			typeChanges.add(typeChange);
+            if(!typeChange.isEmpty()) {
+                typeChanges.add(typeChange);
+            }
     	}
     	
     	List<HollowHeaderEntry> headerEntries = getHeaderEntries(historicalState);
@@ -108,8 +110,9 @@ public class HistoryStatePage extends HistoryPage {
     }
     
     private long getNextStateVersion(HollowHistoricalState currentHistoricalState) {
-        if(currentHistoricalState.getNextState() != null)
+        if(currentHistoricalState.getNextState() != null) {
             return currentHistoricalState.getNextState().getVersion();
+        }
         return -1;
     }
 

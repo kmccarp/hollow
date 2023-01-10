@@ -78,8 +78,9 @@ public class HollowUISession {
         if(session == null) {
             session = new HollowUISession();
             HollowUISession existingSession = sessions.putIfAbsent(sessionId, session);
-            if(existingSession != null)
+            if(existingSession != null) {
                 session = existingSession;
+            }
         }
         session.updateLastAccessed();
 

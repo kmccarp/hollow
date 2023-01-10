@@ -63,10 +63,11 @@ public class HollowSetJavaGenerator extends HollowCollectionsGenerator {
         builder.append("import " + GenericHollowRecordHelper.class.getName() + ";\n\n");
 
         builder.append("@SuppressWarnings(\"all\")\n");
-        if(parameterize)
+        if(parameterize) {
             builder.append("public class " + className + "<T> extends HollowSet<T> {\n\n");
-        else
+        } else {
             builder.append("public class " + className + " extends HollowSet<" + elementClassName + "> {\n\n");
+        }
 
         appendConstructor(builder);
         appendInstantiateMethod(builder);

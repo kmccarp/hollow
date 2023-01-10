@@ -34,8 +34,9 @@ public class HollowExplorerHandler extends AbstractHandler {
     
     @Override
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        if(ui.handle(target, request, response))
+        if(ui.handle(target, request, response)) {
             baseRequest.setHandled(true);
+        }
     }
 
 }

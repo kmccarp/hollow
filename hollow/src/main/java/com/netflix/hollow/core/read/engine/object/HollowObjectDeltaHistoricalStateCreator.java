@@ -169,8 +169,9 @@ public class HollowObjectDeltaHistoricalStateCreator {
     }
 
     private long varLengthStartByte(int shard, int translatedOrdinal, int fieldIdx) {
-        if(translatedOrdinal == 0)
+        if(translatedOrdinal == 0) {
             return 0;
+        }
 
         int numBitsForField = stateEngineDataElements[shard].bitsPerField[fieldIdx];
         long currentBitOffset = ((long)stateEngineDataElements[shard].bitsPerRecord * translatedOrdinal) + stateEngineDataElements[shard].bitOffsetPerField[fieldIdx];

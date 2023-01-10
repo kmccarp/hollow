@@ -38,9 +38,10 @@ public class HollowMapTypePerfAPI extends HollowTypePerfAPI {
         
         this.keyMaskedTypeIdx = Ref.toTypeMasked(keyTypeIdx);
         this.valueMaskedTypeIdx = Ref.toTypeMasked(valueTypeIdx);
-        
-        if(typeAccess == null)
+
+        if(typeAccess == null) {
             typeAccess = new HollowMapMissingDataAccess(dataAccess, typeName);
+        }
         this.typeAccess = typeAccess;
     }
     

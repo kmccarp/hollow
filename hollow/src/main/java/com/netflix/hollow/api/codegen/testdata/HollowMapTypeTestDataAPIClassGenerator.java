@@ -140,13 +140,15 @@ class HollowMapTypeTestDataAPIClassGenerator {
     }
     
     private boolean canErgonomicShortcut(HollowSchema schema) {
-        if(schema.getSchemaType() != SchemaType.OBJECT)
+        if(schema.getSchemaType() != SchemaType.OBJECT) {
             return false;
+        }
         
         HollowObjectSchema objSchema = (HollowObjectSchema)schema;
-        
-        if(objSchema.numFields() != 1)
+
+        if(objSchema.numFields() != 1) {
             return false;
+        }
         
         return objSchema.getFieldType(0) != FieldType.REFERENCE;
     }

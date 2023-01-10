@@ -127,8 +127,9 @@ public class HollowFilterConfig implements TypeFilter {
         case OBJECT:
             HollowObjectSchema objSchema = (HollowObjectSchema)schema;
             for(int i=0;i<objSchema.numFields();i++) {
-                if(objSchema.getFieldType(i) == FieldType.REFERENCE)
+                if(objSchema.getFieldType(i) == FieldType.REFERENCE) {
                     addTypeRecursive(objSchema.getReferencedType(i), schemas);
+                }
             }
             break;
         case MAP:
@@ -191,8 +192,9 @@ public class HollowFilterConfig implements TypeFilter {
      * @return whether or not this filter includes the specified type.
      */
     public boolean doesIncludeType(String type) {
-        if(isExcludeFilter)
+        if(isExcludeFilter) {
             return !specifiedTypes.contains(type);
+        }
 
         return specifiedTypes.contains(type) || specifiedFieldConfigs.containsKey(type);
     }
@@ -214,16 +216,19 @@ public class HollowFilterConfig implements TypeFilter {
 
     public ObjectFilterConfig getObjectTypeConfig(String type) {
         ObjectFilterConfig typeConfig = specifiedFieldConfigs.get(type);
-        if(typeConfig != null)
+        if(typeConfig != null) {
             return typeConfig;
+        }
 
         if(isExcludeFilter) {
-            if(specifiedTypes.contains(type))
+            if(specifiedTypes.contains(type)) {
                 return INCLUDE_NONE;
+            }
             return INCLUDE_ALL;
         } else {
-            if(specifiedTypes.contains(type))
+            if(specifiedTypes.contains(type)) {
                 return INCLUDE_ALL;
+            }
             return INCLUDE_NONE;
         }
     }
@@ -256,11 +261,13 @@ public class HollowFilterConfig implements TypeFilter {
         }
 
         public boolean includesField(String field) {
-            if(alwaysAnswer != null)
+            if(alwaysAnswer != null) {
                 return alwaysAnswer.booleanValue();
+            }
 
-            if(isExcludeFilter)
+            if(isExcludeFilter) {
                 return !specifiedFields.contains(field);
+            }
             return specifiedFields.contains(field);
         }
 

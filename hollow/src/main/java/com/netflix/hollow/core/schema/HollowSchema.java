@@ -67,13 +67,15 @@ public abstract class HollowSchema {
         switch(schema.getSchemaType()) {
         case SET:
             HollowSetSchema setSchema = (HollowSetSchema)schema;
-            if(setSchema.getHashKey() != null)
+            if(setSchema.getHashKey() != null) {
                 setSchema = new HollowSetSchema(setSchema.getName(), setSchema.getElementType());
+            }
             return setSchema;
         case MAP:
             HollowMapSchema mapSchema = (HollowMapSchema)schema;
-            if(mapSchema.getHashKey() != null)
+            if(mapSchema.getHashKey() != null) {
                 mapSchema = new HollowMapSchema(mapSchema.getName(), mapSchema.getKeyType(), mapSchema.getValueType());
+            }
             return mapSchema;
         default:
             return schema;
@@ -167,9 +169,15 @@ public abstract class HollowSchema {
     }
 
     protected static <T> boolean isNullableObjectEquals(T o1, T o2) {
-        if (o1==o2) return true;
-        if (o1==null && o2==null) return true;
-        if (o1!=null && o1.equals(o2)) return true;
+        if(o1 == o2) {
+            return true;
+        }
+        if(o1 == null && o2 == null) {
+            return true;
+        }
+        if(o1 != null && o1.equals(o2)) {
+            return true;
+        }
         return false;
     }
 

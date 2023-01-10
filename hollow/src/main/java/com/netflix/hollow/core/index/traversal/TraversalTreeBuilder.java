@@ -48,8 +48,9 @@ class TraversalTreeBuilder {
         this.type = type;
         this.fieldPaths = fieldPaths;
         this.fieldMatchLists = new IntList[fieldPaths.length];
-        for(int i=0;i<fieldPaths.length;i++)
+        for(int i = 0;i < fieldPaths.length;i++) {
             fieldMatchLists[i] = new IntList();
+        }
         this.fieldTypeDataAccess = new HollowTypeDataAccess[fieldPaths.length];
         this.fieldSchemaPositions = new int[fieldPaths.length];
     }
@@ -176,14 +177,15 @@ class TraversalTreeBuilder {
     }
 
     private HollowIndexerTraversalNode createTypeNode(HollowTypeDataAccess typeDataAccess) {
-        if(typeDataAccess instanceof HollowObjectTypeDataAccess)
-            return new HollowIndexerObjectTraversalNode((HollowObjectTypeDataAccess) typeDataAccess, fieldMatchLists);
-        else if(typeDataAccess instanceof HollowListTypeDataAccess)
-            return new HollowIndexerListTraversalNode((HollowListTypeDataAccess) typeDataAccess, fieldMatchLists);
-        else if(typeDataAccess instanceof HollowSetTypeDataAccess)
+        if(typeDataAccess instanceof HollowObjectTypeDataAccess) {
+            return new HollowIndexerObjectTraversalNode((HollowObjectTypeDataAccess)typeDataAccess, fieldMatchLists);
+        } else if(typeDataAccess instanceof HollowListTypeDataAccess) {
+            return new HollowIndexerListTraversalNode((HollowListTypeDataAccess)typeDataAccess, fieldMatchLists);
+        } else if(typeDataAccess instanceof HollowSetTypeDataAccess) {
             return new HollowIndexerCollectionTraversalNode(typeDataAccess, fieldMatchLists);
-        else if(typeDataAccess instanceof HollowMapTypeDataAccess)
+        } else if(typeDataAccess instanceof HollowMapTypeDataAccess) {
             return new HollowIndexerMapTraversalNode(typeDataAccess, fieldMatchLists);
+        }
 
         throw new IllegalArgumentException("I can't create a type node for a " + typeDataAccess.getClass());
     }

@@ -47,14 +47,16 @@ public class HollowUpdatePlan implements Iterable<HollowConsumer.Blob> {
     }
 
     public HollowConsumer.Blob getSnapshotTransition() {
-        if(!isSnapshotPlan())
+        if(!isSnapshotPlan()) {
             return null;
+        }
         return transitions.get(0);
     }
 
     public List<HollowConsumer.Blob> getDeltaTransitions() {
-        if(!isSnapshotPlan())
+        if(!isSnapshotPlan()) {
             return transitions;
+        }
         return transitions.subList(1, transitions.size());
     }
 

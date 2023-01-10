@@ -99,8 +99,9 @@ public class HollowBlobHeaderReader {
         int numSchemas = VarInt.readVInt(in);
 
         List<HollowSchema> schemas = new ArrayList<HollowSchema>(numSchemas);
-        for(int i=0;i<numSchemas;i++)
+        for(int i = 0;i < numSchemas;i++) {
             schemas.add(HollowSchema.readFrom(in));
+        }
 
         return schemas;
     }
@@ -109,8 +110,9 @@ public class HollowBlobHeaderReader {
         int bytesToSkip = VarInt.readVInt(in);
         while(bytesToSkip > 0) {
             int skippedBytes = (int)in.skipBytes(bytesToSkip);
-            if(skippedBytes < 0)
+            if(skippedBytes < 0) {
                 throw new EOFException();
+            }
             bytesToSkip -= skippedBytes;
         }
     }

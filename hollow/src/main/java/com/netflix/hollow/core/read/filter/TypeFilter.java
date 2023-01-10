@@ -409,7 +409,9 @@ final class Resolver {
                         .flatMap(i -> {
                             String field = os.getFieldName(i);
                             Action fa = rule.apply(type, field);
-                            if (fa == next) return Stream.empty();
+                    if(fa == next) {
+                        return Stream.empty();
+                    }
                             TypeActions child = newTypeActions(type, field, fa);
                             Action descendantAction = fa.recursive ? fa : action;
                             if (descendantAction.recursive && os.getFieldType(i) == REFERENCE) {

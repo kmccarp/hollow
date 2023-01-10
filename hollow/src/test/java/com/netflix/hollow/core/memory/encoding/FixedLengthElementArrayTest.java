@@ -38,8 +38,9 @@ public class FixedLengthElementArrayTest {
 
         for(int j=0;j<100;j++) {
             for(int i=0;i<1000000;i++) {
-                if(testValue != arr.getElementValue(i*numBitsPerElement, numBitsPerElement, bitMask))
+                if(testValue != arr.getElementValue(i * numBitsPerElement, numBitsPerElement, bitMask)) {
                     Assert.fail();
+                }
             }
         }
     }
@@ -191,8 +192,9 @@ public class FixedLengthElementArrayTest {
 
         for(int j=0;j<100;j++) {
             for(int i=0;i<10000;i++) {
-                if(testValue != arr.getLargeElementValue(i*numBitsPerElement, numBitsPerElement))
+                if(testValue != arr.getLargeElementValue(i * numBitsPerElement, numBitsPerElement)) {
                     Assert.fail();
+                }
             }
         }
     }
@@ -200,8 +202,9 @@ public class FixedLengthElementArrayTest {
     @Test
     public void testCopyBitRange() {
         for(int iteration = 0;iteration < 100;iteration++) {
-            if(iteration % 1024 == 1023)
+            if(iteration % 1024 == 1023) {
                 System.out.println(iteration);
+            }
 
             Random rand = new Random();
 
@@ -231,8 +234,9 @@ public class FixedLengthElementArrayTest {
                 long fromLong = source.getElementValue(compareBitStart, bitsToCompare);
                 long toLong = dest.getElementValue(compareBitStart + copyToRangeOffset, bitsToCompare);
 
-                if(fromLong != toLong)
+                if(fromLong != toLong) {
                     Assert.fail();
+                }
 
                 numBitsLeftToCompare -= bitsToCompare;
                 compareBitStart += bitsToCompare;
