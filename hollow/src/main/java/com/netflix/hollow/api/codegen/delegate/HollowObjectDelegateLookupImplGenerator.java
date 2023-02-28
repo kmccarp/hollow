@@ -245,7 +245,7 @@ public class HollowObjectDelegateLookupImplGenerator extends HollowObjectDelegat
     private void addShortcutTraversal(StringBuilder builder, Shortcut shortcut) {
         for(int i=0;i<shortcut.getPath().length-1;i++) {
             String typeAPIClassname = typeAPIClassname(shortcut.getPathTypes()[i]);
-            builder.append("        if(ordinal != -1) ordinal = typeAPI.getAPI().get" + typeAPIClassname + "().get" + uppercase(shortcut.getPath()[i]) + "Ordinal(ordinal);\n");
+            builder.append("        if(ordinal != -1) ordinal = typeAPI.getAPI().get").append(typeAPIClassname).append("().get").append(uppercase(shortcut.getPath()[i])).append("Ordinal(ordinal);\n");
         }
     }
 

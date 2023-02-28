@@ -85,8 +85,9 @@ public class HollowObjectDelegateCachedImplGenerator extends HollowObjectDelegat
                 break;
             case REFERENCE:
                 Shortcut shortcut = ergonomicShortcuts.getShortcut(schema.getName() + "." + schema.getFieldName(i));
-                if(shortcut != null)
+                if(shortcut != null) {
                     builder.append("    private final ").append(HollowCodeGenerationUtils.getJavaBoxedType(shortcut.getType())).append(" ").append(substituteInvalidChars(schema.getFieldName(i))).append(";\n");
+                }
                 builder.append("    private final int ").append(substituteInvalidChars(schema.getFieldName(i))).append("Ordinal;\n");
                 break;
             case STRING:
@@ -140,8 +141,9 @@ public class HollowObjectDelegateCachedImplGenerator extends HollowObjectDelegat
             String fieldName = substituteInvalidChars(schema.getFieldName(i));
             if(schema.getFieldType(i) == FieldType.REFERENCE) {
                 Shortcut shortcut = ergonomicShortcuts.getShortcut(schema.getName() + "." + schema.getFieldName(i));
-                if(shortcut != null)
+                if(shortcut != null) {
                     addAccessor(builder, shortcut.getType(), fieldName);
+                }
 
                 builder.append("    public int get").append(uppercase(fieldName)).append("Ordinal(int ordinal) {\n");
                 builder.append("        return ").append(fieldName).append("Ordinal;\n");

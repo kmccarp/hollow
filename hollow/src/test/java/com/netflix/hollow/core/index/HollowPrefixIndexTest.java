@@ -92,7 +92,7 @@ public class HollowPrefixIndexTest {
 
         ordinals = toSet(tokenizedPrefixIndex.findKeysWithPrefix("the "));// note the whitespace in findKeysWithPrefix string.
         // expected result ordinals size is 0, since entire movie is not indexed. movie name is split by whitespace.
-        Assert.assertTrue(ordinals.size() == 0);
+        Assert.assertTrue(ordinals.isEmpty());
     }
 
     @Test
@@ -227,7 +227,7 @@ public class HollowPrefixIndexTest {
         Set<Integer> ordinals = toSet(prefixIndex.findKeysWithPrefix("carr"));
         Assert.assertTrue(ordinals.size() == 1);
         ordinals = toSet(prefixIndex.findKeysWithPrefix("aaa"));
-        Assert.assertTrue(ordinals.size() == 0);
+        Assert.assertTrue(ordinals.isEmpty());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -398,9 +398,9 @@ public class HollowPrefixIndexTest {
     /**
      * Abstract Movie class for testing purposes.
      */
-    private static abstract class Movie {
-        private int id;
-        private int yearRelease;
+    private abstract static class Movie {
+        private final int id;
+        private final int yearRelease;
 
         public Movie(int id, int year) {
             this.id = id;
@@ -441,7 +441,7 @@ public class HollowPrefixIndexTest {
      * Movie class with name attribute being reference to another class with String reference.
      */
     private static class MovieWithReferenceName extends Movie {
-        private Name name;
+        private final Name name;
 
         public MovieWithReferenceName(int id, String name, int yearRelease) {
             super(id, yearRelease);
@@ -461,7 +461,7 @@ public class HollowPrefixIndexTest {
      * Movie class with name attribute being reference to another class with HollowInline string value
      */
     private static class MovieWithReferenceToInlineName extends Movie {
-        private NameInline name;
+        private final NameInline name;
 
         public MovieWithReferenceToInlineName(int id, String name, int yearRelease) {
             super(id, yearRelease);
@@ -521,7 +521,7 @@ public class HollowPrefixIndexTest {
     }
 
     private static class Actor {
-        private String name;
+        private final String name;
 
         public Actor(String name) {
             this.name = name;
@@ -529,8 +529,8 @@ public class HollowPrefixIndexTest {
     }
 
     private static class MovieMapReference extends Movie {
-        private Map<Integer, String> idActorNameMap;
-        private String name;
+        private final Map<Integer, String> idActorNameMap;
+        private final String name;
 
         public MovieMapReference(int id, int yearRelease, String name, Map<Integer, String> idActorMap) {
             super(id, yearRelease);
@@ -540,8 +540,8 @@ public class HollowPrefixIndexTest {
     }
 
     private static class MovieActorMapReference extends Movie {
-        private Map<Integer, Actor> idActorNameMap;
-        private String name;
+        private final Map<Integer, Actor> idActorNameMap;
+        private final String name;
 
         public MovieActorMapReference(int id, int yearRelease, String name, Map<Integer, Actor> idActorMap) {
             super(id, yearRelease);
