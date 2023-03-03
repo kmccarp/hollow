@@ -106,7 +106,9 @@ public class HollowAPIClassJavaGenerator extends HollowConsumerJavaFileGenerator
             builder.append("implements ");
             int itemCount = 0;
             for(String pType : primitiveTypes) {
-                if (itemCount++ > 0) builder.append(",");
+                if(itemCount++ > 0) {
+                    builder.append(",");
+                }
 
                 builder.append(" HollowConsumerAPI.").append(HollowCodeGenerationUtils.upperFirstChar(pType)).append("Retriever");
             }
@@ -147,8 +149,9 @@ public class HollowAPIClassJavaGenerator extends HollowConsumerJavaFileGenerator
         builder.append("        objectCreationSampler = new HollowObjectCreationSampler(");
         for(int i=0;i<schemaList.size();i++) {
             builder.append("\"").append(schemaList.get(i).getName()).append("\"");
-            if(i < schemaList.size() - 1)
+            if(i < schemaList.size() - 1) {
                 builder.append(",");
+            }
         }
         builder.append(");\n\n");
 
@@ -211,8 +214,8 @@ public class HollowAPIClassJavaGenerator extends HollowConsumerJavaFileGenerator
 
                 builder.append("    public Collection<"+hollowImplClassname+"> getAll").append(hollowImplClassname).append("() {\n");
                 builder.append("        HollowTypeDataAccess tda = Objects.requireNonNull(getDataAccess().getTypeDataAccess(\"").append(schema.getName()).append("\"), \"type not loaded or does not exist in dataset; type=").append(schema.getName()).append("\");\n");
-                builder.append("        return new AllHollowRecordCollection<"+hollowImplClassname+">(tda.getTypeState()) {\n");
-                builder.append("            protected "+hollowImplClassname+" getForOrdinal(int ordinal) {\n");
+                builder.append("        return new AllHollowRecordCollection<").append(hollowImplClassname).append(">(tda.getTypeState()) {\n");
+                builder.append("            protected ").append(hollowImplClassname).append(" getForOrdinal(int ordinal) {\n");
                 builder.append("                return get").append(hollowImplClassname).append("(ordinal);\n");
                 builder.append("            }\n");
                 builder.append("        };\n");
