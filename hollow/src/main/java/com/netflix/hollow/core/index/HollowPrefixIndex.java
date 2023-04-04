@@ -103,14 +103,14 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
      * @param caseSensitive                Specify the case sensitivity for indexing and querying
      */
     public HollowPrefixIndex(HollowReadStateEngine readStateEngine, String type, String fieldPath,
-            int estimatedMaxStringDuplicates, boolean caseSensitive) {
+        int estimatedMaxStringDuplicates, boolean caseSensitive) {
         requireNonNull(type, "Hollow Prefix Key Index creation failed because type was null");
         requireNonNull(readStateEngine, "Hollow Prefix Key Index creation for type [" + type
-                + "] failed because read state wasn't initialized");
+            + "] failed because read state wasn't initialized");
 
-        if (fieldPath == null || fieldPath.isEmpty())
+        if(fieldPath == null || fieldPath.isEmpty())
             throw new IllegalArgumentException("fieldPath cannot be null or empty");
-        if (estimatedMaxStringDuplicates < 1) {
+        if(estimatedMaxStringDuplicates < 1) {
             throw new IllegalArgumentException("estimatedMaxStringDuplicates cannot be < 1");
         }
 
@@ -119,7 +119,7 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
         this.estimatedMaxStringDuplicates = estimatedMaxStringDuplicates;
         this.caseSensitive = caseSensitive;
         this.fieldPath = new FieldPath(readStateEngine, type, fieldPath);
-        if (!this.fieldPath.getLastFieldType().equals(HollowObjectSchema.FieldType.STRING))
+        if(!this.fieldPath.getLastFieldType().equals(HollowObjectSchema.FieldType.STRING))
             throw new IllegalArgumentException("Field path should lead to a string type");
 
         // create memory recycle for using shared memory pools.
@@ -137,16 +137,16 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
         totalWords = readStateEngine.getTypeState(lastRefType).getPopulatedOrdinals().cardinality();
         averageWordLen = 0;
         double avg = 0;
-        HollowObjectTypeReadState objectTypeReadState = (HollowObjectTypeReadState) readStateEngine.getTypeState(lastRefType);
+        HollowObjectTypeReadState objectTypeReadState = (HollowObjectTypeReadState)readStateEngine.getTypeState(lastRefType);
         BitSet keyBitSet = objectTypeReadState.getPopulatedOrdinals();
         int ordinal = keyBitSet.nextSetBit(0);
-        while (ordinal != -1) {
-            avg += ((double) objectTypeReadState.readString(ordinal, 0).length()) / ((double) totalWords);
+        while(ordinal != -1) {
+            avg += ((double)objectTypeReadState.readString(ordinal, 0).length()) / ((double)totalWords);
             ordinal = keyBitSet.nextSetBit(ordinal + 1);
         }
-        averageWordLen = (int) Math.ceil(avg);
+        averageWordLen = (int)Math.ceil(avg);
 
-        HollowObjectTypeReadState valueState = (HollowObjectTypeReadState) readStateEngine.getTypeDataAccess(type);
+        HollowObjectTypeReadState valueState = (HollowObjectTypeReadState)readStateEngine.getTypeDataAccess(type);
         maxOrdinalOfType = valueState.maxOrdinal();
 
         // initialize the prefix index.
@@ -155,20 +155,20 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
 
     private void build() {
 
-        if (!buildIndexOnUpdate) return;
+        if(!buildIndexOnUpdate) return;
         // tell memory recycler to use current tst's long arrays next time when long array is requested.
         // note reuse only happens once swap is called and bits are reset
         TST current = prefixIndexVolatile;
-        if (current != null) current.recycleMemory(memoryRecycle);
+        if(current != null) current.recycleMemory(memoryRecycle);
 
         // This is a hard limit, and currently assumes worst case unbalanced tree i.e. the total length of all words
         long estimatedMaxNodes = estimateNumNodes(totalWords, averageWordLen);
         TST tst = new TST(estimatedMaxNodes, estimatedMaxStringDuplicates, maxOrdinalOfType, caseSensitive,
-                memoryRecycle);
+            memoryRecycle);
         BitSet ordinals = readStateEngine.getTypeState(type).getPopulatedOrdinals();
         int ordinal = ordinals.nextSetBit(0);
-        while (ordinal != -1) {
-            for (String key : getKeys(ordinal, caseSensitive)) {
+        while(ordinal != -1) {
+            for(String key : getKeys(ordinal, caseSensitive)) {
                 tst.insert(key, ordinal);
             }
             ordinal = ordinals.nextSetBit(ordinal + 1);
@@ -213,11 +213,11 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
     protected String[] getKeys(int ordinal, boolean caseSensitive) {
         Object[] values = fieldPath.findValues(ordinal);
         String[] stringValues = new String[values.length];
-        for (int i = 0; i < values.length; i++) {
-            if (caseSensitive) {
-                stringValues[i] = (String) values[i];
+        for(int i = 0;i < values.length;i++) {
+            if(caseSensitive) {
+                stringValues[i] = (String)values[i];
             } else {
-                stringValues[i] = ((String) values[i]).toLowerCase();
+                stringValues[i] = ((String)values[i]).toLowerCase();
             }
         }
         return stringValues;
@@ -253,7 +253,7 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
         do {
             current = prefixIndexVolatile;
             it = current.findKeysWithPrefix(prefix);
-        } while (current != this.prefixIndexVolatile);
+        } while(current != this.prefixIndexVolatile);
         return it;
     }
 
@@ -284,7 +284,7 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
             current = prefixIndexVolatile;
             long nodeIndex = current.findLongestMatch(key);
             ordinals = current.getOrdinals(nodeIndex);
-        } while (current != this.prefixIndexVolatile);
+        } while(current != this.prefixIndexVolatile);
         return ordinals;
     }
 
@@ -295,13 +295,13 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
      * @return {@code true} if the key exists, otherwise {@code false}
      */
     public boolean contains(String key) {
-        if (key == null) throw new IllegalArgumentException("key cannot be null");
+        if(key == null) throw new IllegalArgumentException("key cannot be null");
         TST current;
         boolean result;
         do {
             current = prefixIndexVolatile;
             result = current.contains(key);
-        } while (current != this.prefixIndexVolatile);
+        } while(current != this.prefixIndexVolatile);
         return result;
     }
 
@@ -372,11 +372,11 @@ public class HollowPrefixIndex implements HollowTypeStateListener {
         @Override
         public String toString() {
             return "nodesCapacity=" + nodesCapacity + ", "
-                 + "nodesUsed=" + nodesUsed + ", "
-                 + "nodesEmpty=" + nodesEmpty + ", "
-                 + "worstCaseLookups=" + worstCaseLookups + ", "
-                 + "maxValuesPerNode=" + maxValuesPerNode + ", "
-                 + "approxHeapFootprintInBytes=" + approxHeapFootprintInBytes;
+                + "nodesUsed=" + nodesUsed + ", "
+                + "nodesEmpty=" + nodesEmpty + ", "
+                + "worstCaseLookups=" + worstCaseLookups + ", "
+                + "maxValuesPerNode=" + maxValuesPerNode + ", "
+                + "approxHeapFootprintInBytes=" + approxHeapFootprintInBytes;
         }
     }
 }

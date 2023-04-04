@@ -49,24 +49,24 @@ public class UniqueKeyUpdatesTest {
 
     void updates(boolean doubleSnapshot) {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
         long v1 = producer.runCycle(ws -> {
             ws.add(new DataModel.Producer.TypeWithPrimaryKey(
-                    1,
-                    new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("1", 1),
-                    new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("2", 2)));
+                1,
+                new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("1", 1),
+                new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("2", 2)));
         });
         HollowConsumer consumer = HollowConsumer.withBlobRetriever(blobStore)
-                .withGeneratedAPIClass(DataModel.Consumer.Api.class)
-                .build();
+            .withGeneratedAPIClass(DataModel.Consumer.Api.class)
+            .build();
         consumer.triggerRefreshTo(v1);
 
         UniqueKeyIndex<DataModel.Consumer.TypeWithPrimaryKey, Key> uki = UniqueKeyIndex.from(consumer,
-                DataModel.Consumer.TypeWithPrimaryKey.class)
-                .bindToPrimaryKey()
-                .usingBean(Key.class);
+            DataModel.Consumer.TypeWithPrimaryKey.class)
+            .bindToPrimaryKey()
+            .usingBean(Key.class);
         consumer.addRefreshListener(uki);
 
         Assert.assertNotNull(uki.findMatch(new Key(1, "1", 2)));
@@ -74,16 +74,16 @@ public class UniqueKeyUpdatesTest {
 
         long v2 = producer.runCycle(ws -> {
             ws.add(new DataModel.Producer.TypeWithPrimaryKey(
-                    1,
-                    new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("1", 1),
-                    new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("2", 2)));
+                1,
+                new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("1", 1),
+                new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("2", 2)));
 
             ws.add(new DataModel.Producer.TypeWithPrimaryKey(
-                    2,
-                    new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("1", 1),
-                    new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("2", 2)));
+                2,
+                new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("1", 1),
+                new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("2", 2)));
         });
-        if (doubleSnapshot) {
+        if(doubleSnapshot) {
             consumer.forceDoubleSnapshotNextUpdate();
         }
         consumer.triggerRefreshTo(v2);
@@ -95,21 +95,21 @@ public class UniqueKeyUpdatesTest {
         consumer.removeRefreshListener(uki);
         long v3 = producer.runCycle(ws -> {
             ws.add(new DataModel.Producer.TypeWithPrimaryKey(
-                    1,
-                    new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("1", 1),
-                    new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("2", 2)));
+                1,
+                new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("1", 1),
+                new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("2", 2)));
 
             ws.add(new DataModel.Producer.TypeWithPrimaryKey(
-                    2,
-                    new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("1", 1),
-                    new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("2", 2)));
+                2,
+                new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("1", 1),
+                new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("2", 2)));
 
             ws.add(new DataModel.Producer.TypeWithPrimaryKey(
-                    3,
-                    new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("1", 1),
-                    new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("2", 2)));
+                3,
+                new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("1", 1),
+                new DataModel.Producer.SubTypeOfTypeWithPrimaryKey("2", 2)));
         });
-        if (doubleSnapshot) {
+        if(doubleSnapshot) {
             consumer.forceDoubleSnapshotNextUpdate();
         }
         consumer.triggerRefreshTo(v3);

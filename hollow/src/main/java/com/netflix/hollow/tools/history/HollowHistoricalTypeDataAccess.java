@@ -76,7 +76,7 @@ public abstract class HollowHistoricalTypeDataAccess implements HollowTypeDataAc
     public void setFieldSpecificSamplingDirector(HollowFilterConfig fieldSpec, HollowSamplingDirector director) {
         sampler.setFieldSpecificSamplingDirector(fieldSpec, director);
     }
-    
+
     @Override
     public void ignoreUpdateThreadForSampling(Thread t) {
         sampler.setUpdateThread(t);

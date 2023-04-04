@@ -26,7 +26,7 @@ package com.netflix.hollow.api.perfapi;
  * operate on a hollow object whose type corresponds to the reference's type identifier.
  */
 public final class Ref {
-    
+
     public static final int TYPE_ABSENT = -1;
 
     private static final long TYPE_MASK = 0x0000FFFF_00000000L;
@@ -53,11 +53,11 @@ public final class Ref {
     }
 
     public static int ordinal(long ref) {
-        return (int) ref;
+        return (int)ref;
     }
 
     public static int type(long ref) {
-        return (int) (ref >>> 32);
+        return (int)(ref >>> 32);
     }
 
     public static long typeMasked(long ref) {
@@ -74,6 +74,6 @@ public final class Ref {
     }
 
     public static long toTypeMasked(int type) {
-        return ((long) type << 32) & TYPE_MASK;
+        return ((long)type << 32) & TYPE_MASK;
     }
 }

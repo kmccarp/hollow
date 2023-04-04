@@ -116,8 +116,8 @@ public class HollowSetDeltaHistoricalStateCreator {
 
     private void copyRecord(int ordinal) {
         int shard = ordinal & shardNumberMask;
-        int shardOrdinal = ordinal >> shardOrdinalShift; 
-        
+        int shardOrdinal = ordinal >> shardOrdinalShift;
+
         long bitsPerBucket = historicalDataElements.bitsPerElement;
         long size = typeState.size(ordinal);
 

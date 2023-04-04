@@ -39,8 +39,8 @@ public class AbstractHollowUniqueKeyIndexTests {
 
         public TypeAPrimaryKeyIndex(HollowConsumer consumer, boolean isListenToDataRefresh) {
             this(consumer, isListenToDataRefresh,
-                    ((HollowObjectSchema) consumer.getStateEngine().getNonNullSchema("TypeA")).getPrimaryKey()
-                            .getFieldPaths());
+                ((HollowObjectSchema)consumer.getStateEngine().getNonNullSchema("TypeA")).getPrimaryKey()
+                    .getFieldPaths());
         }
 
         private TypeAPrimaryKeyIndex(HollowConsumer consumer, String... fieldPaths) {
@@ -65,9 +65,9 @@ public class AbstractHollowUniqueKeyIndexTests {
     @Test
     public void deltaUpdates() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .withNumStatesBetweenSnapshots(2) /// do not produce snapshots for v2 or v3
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .withNumStatesBetweenSnapshots(2) /// do not produce snapshots for v2 or v3
+            .build();
 
         long v1 = producer.runCycle(ws -> {
             ws.add(new TypeA(1, 1.1d, new TypeB("one")));
@@ -112,7 +112,7 @@ public class AbstractHollowUniqueKeyIndexTests {
         Assert.assertEquals(3, ord3);
         assertArrayEquals(indexer.getRecordKey(0), 1, 1.1d, "one");
         assertArrayEquals(indexer.getRecordKey(1), 1, 1.1d,
-                "1"); // it is a ghost record (marked deleted but it is available)
+            "1"); // it is a ghost record (marked deleted but it is available)
         assertArrayEquals(indexer.getRecordKey(2), 2, 2.2d, "two");
         assertArrayEquals(indexer.getRecordKey(3), 3, 3.3d, "three");
 
@@ -121,9 +121,9 @@ public class AbstractHollowUniqueKeyIndexTests {
     @Test
     public void snapshotUpdates() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .withNumStatesBetweenSnapshots(2) /// do not produce snapshots for v2 or v3
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .withNumStatesBetweenSnapshots(2) /// do not produce snapshots for v2 or v3
+            .build();
 
         long v1 = producer.runCycle(ws -> {
             ws.add(new TypeA(1, 1.1d, new TypeB("one")));

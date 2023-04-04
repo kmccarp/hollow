@@ -47,11 +47,11 @@ public class SegmentedLongArrayPlainPut {
 
     public SegmentedLongArrayPlainPut(ArraySegmentRecycler memoryRecycler, long numLongs) {
         this.log2OfSegmentSize = memoryRecycler.getLog2OfLongSegmentSize();
-        int numSegments = (int) ((numLongs - 1) >>> log2OfSegmentSize) + 1;
+        int numSegments = (int)((numLongs - 1) >>> log2OfSegmentSize) + 1;
         long[][] segments = new long[numSegments][];
         this.bitmask = (1 << log2OfSegmentSize) - 1;
 
-        for (int i = 0; i < segments.length; i++) {
+        for(int i = 0;i < segments.length;i++) {
             segments[i] = memoryRecycler.getLongArray();
         }
 
@@ -71,14 +71,14 @@ public class SegmentedLongArrayPlainPut {
      * @param value to be inserted at specified index
      */
     public void set(long index, long value) {
-        int segmentIndex = (int) (index >> log2OfSegmentSize);
-        int longInSegment = (int) (index & bitmask);
-        unsafe.putLong(segments[segmentIndex], (long) Unsafe.ARRAY_LONG_BASE_OFFSET + (8 * longInSegment), value);
+        int segmentIndex = (int)(index >> log2OfSegmentSize);
+        int longInSegment = (int)(index & bitmask);
+        unsafe.putLong(segments[segmentIndex], (long)Unsafe.ARRAY_LONG_BASE_OFFSET + (8 * longInSegment), value);
 
         /// duplicate the longs here so that we can read faster.
-        if (longInSegment == 0 && segmentIndex != 0) {
+        if(longInSegment == 0 && segmentIndex != 0) {
             unsafe.putLong(segments[segmentIndex - 1],
-                    (long) Unsafe.ARRAY_LONG_BASE_OFFSET + (8 * (1 << log2OfSegmentSize)), value);
+                (long)Unsafe.ARRAY_LONG_BASE_OFFSET + (8 * (1 << log2OfSegmentSize)), value);
         }
     }
 
@@ -89,14 +89,14 @@ public class SegmentedLongArrayPlainPut {
      * @return long value of the byte at the specified index
      */
     public long get(long index) {
-        int segmentIndex = (int) (index >>> log2OfSegmentSize);
-        return segments[segmentIndex][(int) (index & bitmask)];
+        int segmentIndex = (int)(index >>> log2OfSegmentSize);
+        return segments[segmentIndex][(int)(index & bitmask)];
     }
 
     public void fill(long value) {
-        for (int i = 0; i < segments.length; i++) {
+        for(int i = 0;i < segments.length;i++) {
             long offset = Unsafe.ARRAY_LONG_BASE_OFFSET;
-            for (int j = 0; j < segments[i].length; j++) {
+            for(int j = 0;j < segments[i].length;j++) {
                 unsafe.putLong(segments[i], offset, value);
                 offset += 8;
             }
@@ -106,14 +106,14 @@ public class SegmentedLongArrayPlainPut {
     public void writeTo(DataOutputStream dos, long numLongs) throws IOException {
         VarInt.writeVLong(dos, numLongs);
 
-        for (long i = 0; i < numLongs; i++) {
+        for(long i = 0;i < numLongs;i++) {
             dos.writeLong(get(i));
         }
     }
 
     public void destroy(ArraySegmentRecycler memoryRecycler) {
-        for (int i = 0; i < segments.length; i++) {
-            if (segments[i] != null) {
+        for(int i = 0;i < segments.length;i++) {
+            if(segments[i] != null) {
                 memoryRecycler.recycleLongArray(segments[i]);
             }
         }

@@ -24,7 +24,7 @@ public class HollowBooleanFieldErgonomicsAPIGeneratorTest extends AbstractHollow
         String apiClassName = "BooleanErgoTestAPI";
         String packageName = "codegen.booleanfield.ergo";
         runGenerator(apiClassName, packageName, Movie.class,
-                builder -> builder.withBooleanFieldErgonomics(true));
+            builder -> builder.withBooleanFieldErgonomics(true));
     }
 
     static class Movie {

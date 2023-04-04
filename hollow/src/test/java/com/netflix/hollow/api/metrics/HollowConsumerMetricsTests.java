@@ -20,8 +20,8 @@ public class HollowConsumerMetricsTests {
     @Test
     public void metricsWhenLoadingSnapshot() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
         long version = producer.runCycle(new HollowProducer.Populator() {
             public void populate(HollowProducer.WriteState state) throws Exception {
@@ -44,7 +44,8 @@ public class HollowConsumerMetricsTests {
         HollowConsumer consumer = HollowConsumer.withBlobRetriever(blobStore).build();
         try {
             consumer.triggerRefreshTo(0);
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
 
         HollowConsumerMetrics hollowConsumerMetrics = consumer.getMetrics();
         Assert.assertEquals(hollowConsumerMetrics.getRefreshFailed(), 1);
@@ -54,8 +55,8 @@ public class HollowConsumerMetricsTests {
     @Test
     public void metricsWhenRefreshFailsDoNotRestartPreviousOnes() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
         /// Showing verbose version of `runCycle(producer, 1);`
         long version = producer.runCycle(new HollowProducer.Populator() {
@@ -69,7 +70,8 @@ public class HollowConsumerMetricsTests {
 
         try {
             consumer.triggerRefreshTo(0);
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
 
         HollowConsumerMetrics hollowConsumerMetrics = consumer.getMetrics();
         Assert.assertEquals(hollowConsumerMetrics.getRefreshFailed(), 1);

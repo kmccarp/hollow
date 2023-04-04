@@ -44,7 +44,7 @@ public class DiffEqualityMapMapper extends DiffEqualityTypeMapper {
         this.valueEqualOrdinalMap = mapping.getEqualOrdinalMap(schema.getValueType());
 
         this.requiresTraversalForMissingFields =
-                mapping.requiresMissingFieldTraversal(schema.getKeyType())
+            mapping.requiresMissingFieldTraversal(schema.getKeyType())
                 || mapping.requiresMissingFieldTraversal(schema.getValueType());
     }
 
@@ -127,11 +127,11 @@ public class DiffEqualityMapMapper extends DiffEqualityTypeMapper {
     }
 
     private HollowMapTypeReadState fromState() {
-        return (HollowMapTypeReadState) fromState;
+        return (HollowMapTypeReadState)fromState;
     }
 
     private HollowMapTypeReadState toState() {
-        return (HollowMapTypeReadState) toState;
+        return (HollowMapTypeReadState)toState;
     }
 
 }

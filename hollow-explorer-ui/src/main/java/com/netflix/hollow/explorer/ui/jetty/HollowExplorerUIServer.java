@@ -63,6 +63,6 @@ public class HollowExplorerUIServer {
 
     public HollowExplorerUI getUI() {
         return server.getUI();
-    } 
+    }
 
 }

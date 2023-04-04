@@ -43,7 +43,7 @@ public class HollowListDeltaTest extends AbstractStateEngineTest {
 
         roundTripDelta();
 
-        HollowListTypeReadState typeState = (HollowListTypeReadState) readStateEngine.getTypeState("TestList");
+        HollowListTypeReadState typeState = (HollowListTypeReadState)readStateEngine.getTypeState("TestList");
 
         assertList(typeState, 0, 10, 20, 30);
         assertList(typeState, 1, 40, 50, 60);  /// this was "removed", but the data hangs around as a "ghost" until the following cycle.
@@ -80,7 +80,7 @@ public class HollowListDeltaTest extends AbstractStateEngineTest {
 
         roundTripSnapshot();
 
-        HollowListTypeReadState typeState = (HollowListTypeReadState) readStateEngine.getTypeState("TestList");
+        HollowListTypeReadState typeState = (HollowListTypeReadState)readStateEngine.getTypeState("TestList");
 
         assertList(typeState, 0);
     }
@@ -91,7 +91,7 @@ public class HollowListDeltaTest extends AbstractStateEngineTest {
 
         roundTripSnapshot();
 
-        HollowListTypeReadState typeState = (HollowListTypeReadState) readStateEngine.getTypeState("TestList");
+        HollowListTypeReadState typeState = (HollowListTypeReadState)readStateEngine.getTypeState("TestList");
 
         assertList(typeState, 0, 0);
     }
@@ -104,18 +104,19 @@ public class HollowListDeltaTest extends AbstractStateEngineTest {
 
         readStateEngine.invalidate();
 
-        HollowListTypeReadState typeState = (HollowListTypeReadState) readStateEngine.getTypeState("TestList");
+        HollowListTypeReadState typeState = (HollowListTypeReadState)readStateEngine.getTypeState("TestList");
 
         try {
             assertList(typeState, 0, 0);
             Assert.fail("Should have thrown Exception");
-        } catch(NullPointerException expected) { }
+        } catch (NullPointerException expected) {
+        }
     }
 
     private void addRecord(int... ordinals) {
         HollowListWriteRecord rec = new HollowListWriteRecord();
 
-        for(int i=0;i<ordinals.length;i++) {
+        for(int i = 0;i < ordinals.length;i++) {
             rec.addElement(ordinals[i]);
         }
 
@@ -125,7 +126,7 @@ public class HollowListDeltaTest extends AbstractStateEngineTest {
     private void assertList(HollowListTypeReadState readState, int ordinal, int... elements) {
         HollowOrdinalIterator iter = readState.ordinalIterator(ordinal);
 
-        for(int i=0;i<elements.length;i++) {
+        for(int i = 0;i < elements.length;i++) {
             Assert.assertEquals(elements[i], iter.next());
         }
 

@@ -35,13 +35,13 @@ import java.util.concurrent.TimeUnit;
  * @author Kinesh Satiya {@literal kineshsatiya@gmail.com}.
  */
 public interface HollowProducerListener extends
-        DataModelInitializationListener,
-        RestoreListener,
-        CycleListener,
-        PopulateListener,
-        PublishListener,
-        IntegrityCheckListener,
-        AnnouncementListener {
+    DataModelInitializationListener,
+    RestoreListener,
+    CycleListener,
+    PopulateListener,
+    PublishListener,
+    IntegrityCheckListener,
+    AnnouncementListener {
 
 
     ///////////////////////////
@@ -79,7 +79,7 @@ public interface HollowProducerListener extends
     @Override
     default void onProducerRestoreComplete(com.netflix.hollow.api.producer.Status status, long versionDesired, long versionReached, Duration elapsed) {
         onProducerRestoreComplete(new RestoreStatus(status, versionDesired, versionReached),
-                elapsed.toMillis(), TimeUnit.MILLISECONDS);
+            elapsed.toMillis(), TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -128,7 +128,7 @@ public interface HollowProducerListener extends
     @Override
     default void onCycleComplete(com.netflix.hollow.api.producer.Status status, ReadState readState, long version, Duration elapsed) {
         onCycleComplete(new ProducerStatus(status, readState, version),
-                elapsed.toMillis(), TimeUnit.MILLISECONDS);
+            elapsed.toMillis(), TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -159,7 +159,7 @@ public interface HollowProducerListener extends
     @Override
     default void onPopulateComplete(com.netflix.hollow.api.producer.Status status, long version, Duration elapsed) {
         onPopulateComplete(new ProducerStatus(status, version),
-                elapsed.toMillis(), TimeUnit.MILLISECONDS);
+            elapsed.toMillis(), TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -203,7 +203,7 @@ public interface HollowProducerListener extends
     @Override
     default void onBlobPublish(com.netflix.hollow.api.producer.Status status, HollowProducer.Blob blob, Duration elapsed) {
         onArtifactPublish(new PublishStatus(status, blob),
-                elapsed.toMillis(), TimeUnit.MILLISECONDS);
+            elapsed.toMillis(), TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -252,7 +252,7 @@ public interface HollowProducerListener extends
     @Override
     default void onIntegrityCheckComplete(com.netflix.hollow.api.producer.Status status, ReadState readState, long version, Duration elapsed) {
         onIntegrityCheckComplete(new ProducerStatus(status, readState, version),
-                elapsed.toMillis(), TimeUnit.MILLISECONDS);
+            elapsed.toMillis(), TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -311,7 +311,7 @@ public interface HollowProducerListener extends
     @Override
     default void onAnnouncementComplete(com.netflix.hollow.api.producer.Status status, ReadState readState, long version, Duration elapsed) {
         onAnnouncementComplete(new ProducerStatus(status, readState, version),
-                elapsed.toMillis(), TimeUnit.MILLISECONDS);
+            elapsed.toMillis(), TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -499,18 +499,18 @@ public interface HollowProducerListener extends
         // This is currently only used to report skipping of a validator
         // with SingleValidationStatusBuilder and SingleValidationStatus
         @Deprecated
-        SKIP;
+            SKIP;
 
         static Status of(com.netflix.hollow.api.producer.Status.StatusType st) {
             return st == com.netflix.hollow.api.producer.Status.StatusType.SUCCESS
-                    ? Status.SUCCESS
-                    : Status.FAIL;
+                ? Status.SUCCESS
+                : Status.FAIL;
         }
 
         static com.netflix.hollow.api.producer.Status.StatusType from(Status s) {
             return s == Status.SUCCESS
-                    ? com.netflix.hollow.api.producer.Status.StatusType.SUCCESS
-                    : com.netflix.hollow.api.producer.Status.StatusType.FAIL;
+                ? com.netflix.hollow.api.producer.Status.StatusType.SUCCESS
+                : com.netflix.hollow.api.producer.Status.StatusType.FAIL;
         }
     }
 }

@@ -30,10 +30,10 @@ public class HollowPerfBackedSet<T> extends AbstractSet<T> {
     private final HashKeyExtractor hashKeyExtractor;
 
     public HollowPerfBackedSet(
-            HollowSetTypePerfAPI typeApi, 
-            long ref,
-            POJOInstantiator<T> instantiator,
-            HashKeyExtractor hashKeyExtractor) {
+        HollowSetTypePerfAPI typeApi,
+        long ref,
+        POJOInstantiator<T> instantiator,
+        HashKeyExtractor hashKeyExtractor) {
         this.dataAccess = typeApi.typeAccess();
         this.ordinal = typeApi.ordinal(ref);
         this.instantiator = instantiator;
@@ -48,12 +48,14 @@ public class HollowPerfBackedSet<T> extends AbstractSet<T> {
         return new Iterator<T>() {
             int eo = oi.next();
 
-            @Override public boolean hasNext() {
+            @Override
+            public boolean hasNext() {
                 return eo != HollowOrdinalIterator.NO_MORE_ORDINALS;
             }
 
-            @Override public T next() {
-                if (!hasNext()) {
+            @Override
+            public T next() {
+                if(!hasNext()) {
                     throw new NoSuchElementException();
                 }
                 int o = eo;
@@ -67,7 +69,7 @@ public class HollowPerfBackedSet<T> extends AbstractSet<T> {
     public boolean contains(Object o) {
         if(hashKeyExtractor == null)
             throw new UnsupportedOperationException();
-        
+
         Object[] key = hashKeyExtractor.extractArray(o);
         if(key == null)
             return false;

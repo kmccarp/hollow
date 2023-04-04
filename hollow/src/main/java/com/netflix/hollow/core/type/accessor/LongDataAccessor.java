@@ -36,8 +36,9 @@ public class LongDataAccessor extends AbstractHollowDataAccessor<Long> {
         this.api = api;
     }
 
-    @Override public Long getRecord(int ordinal){
+    @Override
+    public Long getRecord(int ordinal) {
         HLong val = api.getHLong(ordinal);
-        return val==null ? null : val.getValueBoxed();
+        return val == null ? null : val.getValueBoxed();
     }
 }

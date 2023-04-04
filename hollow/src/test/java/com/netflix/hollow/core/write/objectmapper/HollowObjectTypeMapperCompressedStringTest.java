@@ -65,11 +65,11 @@ public class HollowObjectTypeMapperCompressedStringTest extends AbstractStateEng
 
         roundTripSnapshot();
 
-        HollowObjectTypeDataAccess typeDataAccess = (HollowObjectTypeDataAccess) readStateEngine.getTypeDataAccess("TypeA");
+        HollowObjectTypeDataAccess typeDataAccess = (HollowObjectTypeDataAccess)readStateEngine.getTypeDataAccess("TypeA");
         int stringFieldIndex = typeDataAccess.getSchema().getPosition("a1");
         int stringValueOrdinal = typeDataAccess.readOrdinal(0, stringFieldIndex);
 
-        HollowObjectTypeDataAccess stringDataAccess = (HollowObjectTypeDataAccess) readStateEngine.getTypeDataAccess("String");
+        HollowObjectTypeDataAccess stringDataAccess = (HollowObjectTypeDataAccess)readStateEngine.getTypeDataAccess("String");
         int stringValueField = stringDataAccess.getSchema().getPosition("value");
         return stringDataAccess.readString(stringValueOrdinal, stringValueField);
     }
@@ -81,7 +81,7 @@ public class HollowObjectTypeMapperCompressedStringTest extends AbstractStateEng
 
         roundTripSnapshot();
 
-        HollowObjectTypeDataAccess typeDataAccess = (HollowObjectTypeDataAccess) readStateEngine.getTypeDataAccess("TypeD");
+        HollowObjectTypeDataAccess typeDataAccess = (HollowObjectTypeDataAccess)readStateEngine.getTypeDataAccess("TypeD");
         int stringFieldIndex = typeDataAccess.getSchema().getPosition("inlinedString");
         return typeDataAccess.readString(0, stringFieldIndex);
     }

@@ -23,10 +23,13 @@ import org.junit.Test;
 public class HollowMapAPIGeneratorTest extends AbstractHollowAPIGeneratorTest {
     private static class Weapon {
     }
+
     private static class Minion {
     }
+
     private static class Frank {
     }
+
     private static class Kevin {
     }
 
@@ -44,13 +47,13 @@ public class HollowMapAPIGeneratorTest extends AbstractHollowAPIGeneratorTest {
     @Test
     public void test_withClassPostfix() throws Exception {
         runGenerator(API_CLASS_NAME, PACKAGE_NAME, Gru.class,
-                builder -> builder.withPackageGrouping().withClassPostfix("Generated"));
+            builder -> builder.withPackageGrouping().withClassPostfix("Generated"));
     }
 
     @Test
     public void test_withPackageGrouping() throws Exception {
         runGenerator(API_CLASS_NAME, PACKAGE_NAME, Gru.class,
-                HollowAPIGenerator.Builder::withPackageGrouping);
+            HollowAPIGenerator.Builder::withPackageGrouping);
     }
 
     @Test

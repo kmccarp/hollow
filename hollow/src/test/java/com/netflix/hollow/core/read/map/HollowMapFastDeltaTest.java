@@ -67,18 +67,18 @@ public class HollowMapFastDeltaTest extends AbstractStateEngineTest {
 
         roundTripDelta();
 
-        HollowMapTypeReadState typeState = (HollowMapTypeReadState) readStateEngine.getTypeState("TestMap");
+        HollowMapTypeReadState typeState = (HollowMapTypeReadState)readStateEngine.getTypeState("TestMap");
 
-        assertMap(typeState, 0,  10,  20,  30,  40);
-        assertMap(typeState, 1,  20,  30,  40,  50);
-        assertMap(typeState, 2,  30,  40,  50,  60);
-        assertMap(typeState, 3,  40,  50,  60,  70);
-        assertMap(typeState, 4,  50,  60,  70,  80);
-        assertMap(typeState, 5,  60,  70,  80,  90);
-        assertMap(typeState, 6,  70,  80,  90,  100);
-        assertMap(typeState, 7,  80,  90,  100, 110);
-        assertMap(typeState, 8,  90,  100, 110, 120);
-        assertMap(typeState, 9,  100, 110, 120, 130, 140, 150, 160, 170); // ghost
+        assertMap(typeState, 0, 10, 20, 30, 40);
+        assertMap(typeState, 1, 20, 30, 40, 50);
+        assertMap(typeState, 2, 30, 40, 50, 60);
+        assertMap(typeState, 3, 40, 50, 60, 70);
+        assertMap(typeState, 4, 50, 60, 70, 80);
+        assertMap(typeState, 5, 60, 70, 80, 90);
+        assertMap(typeState, 6, 70, 80, 90, 100);
+        assertMap(typeState, 7, 80, 90, 100, 110);
+        assertMap(typeState, 8, 90, 100, 110, 120);
+        assertMap(typeState, 9, 100, 110, 120, 130, 140, 150, 160, 170); // ghost
         assertMap(typeState, 10, 110, 120, 130, 140, 150, 160);
         assertMap(typeState, 11, 120, 130, 140, 150);
         assertMap(typeState, 12, 130, 140, 150, 160);
@@ -106,16 +106,16 @@ public class HollowMapFastDeltaTest extends AbstractStateEngineTest {
 
         roundTripDelta();
 
-        assertMap(typeState, 0,  10,  20,  30,  40);
-        assertMap(typeState, 1,  20,  30,  40,  50);
-        assertMap(typeState, 2,  30,  40,  50,  60);
-        assertMap(typeState, 3,  40,  50,  60,  70);
-        assertMap(typeState, 4,  50,  60,  70,  80);
-        assertMap(typeState, 5,  60,  70,  80,  90); // ghost
-        assertMap(typeState, 6,  70,  80,  90,  100);
-        assertMap(typeState, 7,  80,  90,  100, 110);
-        assertMap(typeState, 8,  90,  100, 110, 120);
-        assertMap(typeState, 9,  111, 121, 131, 141, 151, 161);
+        assertMap(typeState, 0, 10, 20, 30, 40);
+        assertMap(typeState, 1, 20, 30, 40, 50);
+        assertMap(typeState, 2, 30, 40, 50, 60);
+        assertMap(typeState, 3, 40, 50, 60, 70);
+        assertMap(typeState, 4, 50, 60, 70, 80);
+        assertMap(typeState, 5, 60, 70, 80, 90); // ghost
+        assertMap(typeState, 6, 70, 80, 90, 100);
+        assertMap(typeState, 7, 80, 90, 100, 110);
+        assertMap(typeState, 8, 90, 100, 110, 120);
+        assertMap(typeState, 9, 111, 121, 131, 141, 151, 161);
         assertMap(typeState, 10, 110, 120, 130, 140, 150, 160); // ghost
         assertMap(typeState, 11, 120, 130, 140, 150);
         assertMap(typeState, 12, 130, 140, 150, 160);
@@ -143,16 +143,16 @@ public class HollowMapFastDeltaTest extends AbstractStateEngineTest {
 
         roundTripDelta();
 
-        assertMap(typeState, 0,  10,  20,  30,  40);
-        assertMap(typeState, 1,  20,  30,  40,  50);
-        assertMap(typeState, 2,  30,  40,  50,  60); // ghost
-        assertMap(typeState, 3,  40,  50,  60,  70);
-        assertMap(typeState, 4,  50,  60,  70,  80);
-        assertMap(typeState, 5,  31,  41,  51,  61);
-        assertMap(typeState, 6,  70,  80,  90,  100);
-        assertMap(typeState, 7,  80,  90,  100, 110);
-        assertMap(typeState, 8,  90,  100, 110, 120);
-        assertMap(typeState, 9,  111, 121, 131, 141, 151, 161);
+        assertMap(typeState, 0, 10, 20, 30, 40);
+        assertMap(typeState, 1, 20, 30, 40, 50);
+        assertMap(typeState, 2, 30, 40, 50, 60); // ghost
+        assertMap(typeState, 3, 40, 50, 60, 70);
+        assertMap(typeState, 4, 50, 60, 70, 80);
+        assertMap(typeState, 5, 31, 41, 51, 61);
+        assertMap(typeState, 6, 70, 80, 90, 100);
+        assertMap(typeState, 7, 80, 90, 100, 110);
+        assertMap(typeState, 8, 90, 100, 110, 120);
+        assertMap(typeState, 9, 111, 121, 131, 141, 151, 161);
         assertMap(typeState, 10);
         assertMap(typeState, 11, 120, 130, 140, 150);
         assertMap(typeState, 12, 130, 140, 150, 160);
@@ -165,8 +165,8 @@ public class HollowMapFastDeltaTest extends AbstractStateEngineTest {
     private void addRecord(int... ordinals) {
         HollowMapWriteRecord rec = new HollowMapWriteRecord();
 
-        for(int i=0;i<ordinals.length;i+=2) {
-            rec.addEntry(ordinals[i], ordinals[i+1]);
+        for(int i = 0;i < ordinals.length;i += 2) {
+            rec.addEntry(ordinals[i], ordinals[i + 1]);
         }
 
         writeStateEngine.add("TestMap", rec);
@@ -175,8 +175,8 @@ public class HollowMapFastDeltaTest extends AbstractStateEngineTest {
     private void assertMap(HollowMapTypeReadState readState, int ordinal, int... elements) {
         Assert.assertEquals(elements.length / 2, readState.size(ordinal));
 
-        for(int i=0;i<elements.length;i+=2) {
-            Assert.assertEquals(elements[i+1], readState.get(ordinal, elements[i]));
+        for(int i = 0;i < elements.length;i += 2) {
+            Assert.assertEquals(elements[i + 1], readState.get(ordinal, elements[i]));
         }
     }
 

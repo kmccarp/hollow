@@ -72,14 +72,14 @@ public class HollowObjectMapper {
         HollowTypeMapper typeMapper = getTypeMapper(o.getClass(), null, null);
         return typeMapper.write(o);
     }
-    
+
     /**
      * Warning: Experimental.  the FlatRecord feature is subject to breaking changes.
      */
     @Deprecated
     public void writeFlat(Object o, FlatRecordWriter flatRecordWriter) {
-    	HollowTypeMapper typeMapper = getTypeMapper(o.getClass(), null, null);
-    	typeMapper.writeFlat(o, flatRecordWriter);
+        HollowTypeMapper typeMapper = getTypeMapper(o.getClass(), null, null);
+        typeMapper.writeFlat(o, flatRecordWriter);
     }
 
     /**
@@ -90,7 +90,7 @@ public class HollowObjectMapper {
      * @throws IllegalArgumentException if the POJO does not have primary key defined
      */
     public RecordPrimaryKey extractPrimaryKey(Object o) {
-        HollowObjectTypeMapper typeMapper = (HollowObjectTypeMapper) getTypeMapper(o.getClass(), null, null);
+        HollowObjectTypeMapper typeMapper = (HollowObjectTypeMapper)getTypeMapper(o.getClass(), null, null);
         return new RecordPrimaryKey(typeMapper.getTypeName(), typeMapper.extractPrimaryKey(o));
     }
 
@@ -126,43 +126,43 @@ public class HollowObjectMapper {
     }
 
     HollowTypeMapper getTypeMapper(
-            Type type, String declaredName, String[] hashKeyFieldPaths, int numShards, Set<Type> visited) {
+        Type type, String declaredName, String[] hashKeyFieldPaths, int numShards, Set<Type> visited) {
 
         // Compute the type name
         String typeName = declaredName != null
-                ? declaredName
-                : findTypeName(type);
+            ? declaredName
+            : findTypeName(type);
         HollowTypeMapper typeMapper = typeMappers.get(typeName);
 
-        if (typeMapper == null) {
-            if (visited == null) {
+        if(typeMapper == null) {
+            if(visited == null) {
                 // Used to detect circular references in the model
                 // See HollowObjectTypeMapper and MappedField
                 visited = new HashSet<>();
             }
 
-            if (type instanceof ParameterizedType) {
-                ParameterizedType parameterizedType = (ParameterizedType) type;
-                Class<?> clazz = (Class<?>) parameterizedType.getRawType();
+            if(type instanceof ParameterizedType) {
+                ParameterizedType parameterizedType = (ParameterizedType)type;
+                Class<?> clazz = (Class<?>)parameterizedType.getRawType();
 
-                if (List.class.isAssignableFrom(clazz)) {
+                if(List.class.isAssignableFrom(clazz)) {
                     typeMapper = new HollowListTypeMapper(this, parameterizedType, typeName, numShards,
-                            ignoreListOrdering, visited);
-                } else if (Set.class.isAssignableFrom(clazz)) {
+                        ignoreListOrdering, visited);
+                } else if(Set.class.isAssignableFrom(clazz)) {
                     typeMapper = new HollowSetTypeMapper(this, parameterizedType, typeName, hashKeyFieldPaths,
-                            numShards, stateEngine, useDefaultHashKeys, visited);
-                } else if (Map.class.isAssignableFrom(clazz)) {
+                        numShards, stateEngine, useDefaultHashKeys, visited);
+                } else if(Map.class.isAssignableFrom(clazz)) {
                     typeMapper = new HollowMapTypeMapper(this, parameterizedType, typeName, hashKeyFieldPaths,
-                            numShards, stateEngine, useDefaultHashKeys, visited);
+                        numShards, stateEngine, useDefaultHashKeys, visited);
                 } else {
                     typeMapper = new HollowObjectTypeMapper(this, clazz, typeName, visited);
                 }
             } else {
-                typeMapper = new HollowObjectTypeMapper(this, (Class<?>) type, typeName, visited);
+                typeMapper = new HollowObjectTypeMapper(this, (Class<?>)type, typeName, visited);
             }
 
             HollowTypeMapper existing = typeMappers.putIfAbsent(typeName, typeMapper);
-            if (existing != null) {
+            if(existing != null) {
                 typeMapper = existing;
             } else {
                 typeMapper.addTypeState(stateEngine);

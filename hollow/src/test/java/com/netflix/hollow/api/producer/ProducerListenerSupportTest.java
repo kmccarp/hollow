@@ -31,7 +31,7 @@ import org.mockito.MockitoAnnotations;
 
 public class ProducerListenerSupportTest {
     interface ProducerAndValidationStatusListener
-            extends HollowProducerListener, ValidationStatusListener {
+        extends HollowProducerListener, ValidationStatusListener {
     }
 
     private ProducerListenerSupport listenerSupport;
@@ -73,17 +73,21 @@ public class ProducerListenerSupportTest {
             int cycleStart;
             int cycleComplete;
 
-            @Override public void onCycleSkip(CycleSkipReason reason) {
+            @Override
+            public void onCycleSkip(CycleSkipReason reason) {
             }
 
-            @Override public void onNewDeltaChain(long version) {
+            @Override
+            public void onNewDeltaChain(long version) {
             }
 
-            @Override public void onCycleStart(long version) {
+            @Override
+            public void onCycleStart(long version) {
                 cycleStart++;
             }
 
-            @Override public void onCycleComplete(Status status, HollowProducer.ReadState rs, long version, Duration elapsed) {
+            @Override
+            public void onCycleComplete(Status status, HollowProducer.ReadState rs, long version, Duration elapsed) {
                 cycleComplete++;
             }
         }
@@ -91,7 +95,8 @@ public class ProducerListenerSupportTest {
         class FirstCycleListener extends SecondCycleListener {
             private SecondCycleListener scl = new SecondCycleListener();
 
-            @Override public void onCycleStart(long version) {
+            @Override
+            public void onCycleStart(long version) {
                 super.onCycleStart(version);
                 ls.addListener(scl);
             }
@@ -127,17 +132,21 @@ public class ProducerListenerSupportTest {
             int cycleStart;
             int cycleComplete;
 
-            @Override public void onCycleSkip(CycleSkipReason reason) {
+            @Override
+            public void onCycleSkip(CycleSkipReason reason) {
             }
 
-            @Override public void onNewDeltaChain(long version) {
+            @Override
+            public void onNewDeltaChain(long version) {
             }
 
-            @Override public void onCycleStart(long version) {
+            @Override
+            public void onCycleStart(long version) {
                 cycleStart++;
             }
 
-            @Override public void onCycleComplete(Status status, HollowProducer.ReadState rs, long version, Duration elapsed) {
+            @Override
+            public void onCycleComplete(Status status, HollowProducer.ReadState rs, long version, Duration elapsed) {
                 cycleComplete++;
             }
         }
@@ -149,7 +158,8 @@ public class ProducerListenerSupportTest {
                 this.scl = scl;
             }
 
-            @Override public void onCycleStart(long version) {
+            @Override
+            public void onCycleStart(long version) {
                 super.onCycleStart(version);
                 ls.removeListener(scl);
             }
@@ -234,13 +244,13 @@ public class ProducerListenerSupportTest {
         Status.RestoreStageBuilder b = new Status.RestoreStageBuilder();
         listenerSupport.listeners().fireProducerRestoreComplete(b);
         ArgumentCaptor<Status> status = ArgumentCaptor.forClass(
-                Status.class);
+            Status.class);
         ArgumentCaptor<Long> desired = ArgumentCaptor.forClass(
-                long.class);
+            long.class);
         ArgumentCaptor<Long> reached = ArgumentCaptor.forClass(
-                long.class);
+            long.class);
         ArgumentCaptor<Duration> elapsed = ArgumentCaptor.forClass(
-                Duration.class);
+            Duration.class);
         Mockito.verify(listener).onProducerRestoreComplete(status.capture(), desired.capture(), reached.capture(), elapsed.capture());
         Assert.assertNotNull(status.getValue());
         Assert.assertNotNull(elapsed.getValue());

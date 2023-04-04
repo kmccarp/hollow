@@ -28,7 +28,7 @@ public abstract class HollowObjectDelegateGenerator extends HollowConsumerJavaFi
     protected final HollowErgonomicAPIShortcuts ergonomicShortcuts;
 
     public HollowObjectDelegateGenerator(String packageName, HollowObjectSchema schema,
-            HollowErgonomicAPIShortcuts ergonomicShortcuts, HollowDataset dataset, CodeGeneratorConfig config) {
+        HollowErgonomicAPIShortcuts ergonomicShortcuts, HollowDataset dataset, CodeGeneratorConfig config) {
         super(packageName, SUB_PACKAGE_NAME, dataset, config);
         this.schema = schema;
         this.ergonomicShortcuts = ergonomicShortcuts;

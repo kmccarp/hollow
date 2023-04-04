@@ -35,9 +35,9 @@ public class AbstractHollowAPIGeneratorTest {
     private String clazzFolder = String.format("%s/classes", tmpFolder);
 
     void runGenerator(String apiClassName, String packageName, Class<?> clazz,
-            UnaryOperator<HollowAPIGenerator.Builder> generatorCustomizer) throws Exception {
+        UnaryOperator<HollowAPIGenerator.Builder> generatorCustomizer) throws Exception {
         System.out.println(String.format("Folders (%s) : \n\tsource=%s \n\tclasses=%s",
-                    getClass().getSimpleName(), sourceFolder, clazzFolder));
+            getClass().getSimpleName(), sourceFolder, clazzFolder));
 
         // Setup Folders
         HollowCodeGenerationCompileUtil.cleanupFolder(new File(sourceFolder), null);
@@ -45,8 +45,8 @@ public class AbstractHollowAPIGeneratorTest {
 
         // Run Generator
         HollowAPIGenerator generator = generatorCustomizer.apply(new HollowAPIGenerator.Builder())
-                .withDataModel(clazz).withAPIClassname(apiClassName).withPackageName(packageName)
-                .withDestination(sourceFolder).build();
+            .withDataModel(clazz).withAPIClassname(apiClassName).withPackageName(packageName)
+            .withDestination(sourceFolder).build();
         generator.generateSourceFiles();
 
         // Compile to validate generated files
@@ -54,7 +54,7 @@ public class AbstractHollowAPIGeneratorTest {
     }
 
     void assertNonEmptyFileExists(String relativePath) throws IOException {
-        if (relativePath.startsWith("/")) {
+        if(relativePath.startsWith("/")) {
             throw new IllegalArgumentException("Relative paths should not start with /");
         }
         File f = new File(sourceFolder + "/" + relativePath);
@@ -66,15 +66,15 @@ public class AbstractHollowAPIGeneratorTest {
         Class cls = cl.loadClass(clazz);
         Annotation annotation = cls.getAnnotation(HollowTypeName.class);
         assertNotNull(annotation);
-        assertEquals(typeName, ((HollowTypeName) annotation).name());
+        assertEquals(typeName, ((HollowTypeName)annotation).name());
     }
 
     void assertFileDoesNotExist(String relativePath) {
-        if (relativePath.startsWith("/")) {
+        if(relativePath.startsWith("/")) {
             throw new IllegalArgumentException("Relative paths should not start with /");
         }
         assertFalse("File should not exist at " + relativePath,
-                new File(sourceFolder + "/" + relativePath).exists());
+            new File(sourceFolder + "/" + relativePath).exists());
     }
 
     @After

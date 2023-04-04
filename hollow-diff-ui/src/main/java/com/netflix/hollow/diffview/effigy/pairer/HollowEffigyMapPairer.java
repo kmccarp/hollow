@@ -27,7 +27,7 @@ public class HollowEffigyMapPairer extends HollowEffigyCollectionPairer {
 
     @Override
     protected HollowEffigy getComparisonEffigy(HollowEffigy effigy) {
-        return (HollowEffigy) effigy.getFields().get(0).getValue();
+        return (HollowEffigy)effigy.getFields().get(0).getValue();
     }
 
 }

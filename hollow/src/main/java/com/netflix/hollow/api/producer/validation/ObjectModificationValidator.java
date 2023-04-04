@@ -50,7 +50,7 @@ import java.util.function.Function;
  * }</pre>
  */
 public class ObjectModificationValidator<A extends HollowAPI, T extends HollowObject>
-        implements ValidatorListener {
+    implements ValidatorListener {
     private final String typeName;
     private final Function<HollowDataAccess, A> apiFunction;
     private final BiFunction<A, Integer, T> hollowObjectFunction;
@@ -58,9 +58,9 @@ public class ObjectModificationValidator<A extends HollowAPI, T extends HollowOb
 
     @SuppressWarnings("WeakerAccess")
     public ObjectModificationValidator(
-            String typeName, BiPredicate<T, T> filter,
-            Function<HollowDataAccess, A> apiFunction,
-            BiFunction<A, Integer, T> hollowObjectFunction) {
+        String typeName, BiPredicate<T, T> filter,
+        Function<HollowDataAccess, A> apiFunction,
+        BiFunction<A, Integer, T> hollowObjectFunction) {
         this.typeName = typeName;
         this.filter = filter;
         this.apiFunction = apiFunction;
@@ -75,47 +75,47 @@ public class ObjectModificationValidator<A extends HollowAPI, T extends HollowOb
     @Override
     public ValidationResult onValidate(ReadState readState) {
         ValidationResult.ValidationResultBuilder vrb = ValidationResult.from(this)
-                .detail("Typename", typeName);
+            .detail("Typename", typeName);
 
         HollowTypeReadState typeState = readState.getStateEngine().getTypeState(typeName);
-        if (typeState == null) {
+        if(typeState == null) {
             return vrb.failed("Cannot execute ObjectModificationValidator on missing type " + typeName);
-        } else if (typeState.getSchema().getSchemaType() != SchemaType.OBJECT) {
+        } else if(typeState.getSchema().getSchemaType() != SchemaType.OBJECT) {
             return vrb.failed("Cannot execute ObjectModificationValidator on type " + typeName
-                    + " because it is not a HollowObjectSchema - it is a "
-                    + typeState.getSchema().getSchemaType());
+                + " because it is not a HollowObjectSchema - it is a "
+                + typeState.getSchema().getSchemaType());
         }
 
         BitSet latestOrdinals = typeState.getPopulatedOrdinals();
         BitSet previousOrdinals = typeState.getPreviousOrdinals();
-        if (previousOrdinals.isEmpty()) {
+        if(previousOrdinals.isEmpty()) {
             return vrb.detail("skipped", Boolean.TRUE)
-                    .passed("Nothing to do because previous cycle has no " + typeName);
+                .passed("Nothing to do because previous cycle has no " + typeName);
         }
 
         BitSet removedAndModified = calculateRemovedAndModifiedOrdinals(latestOrdinals, previousOrdinals);
-        if (removedAndModified.isEmpty()) {
+        if(removedAndModified.isEmpty()) {
             return vrb.detail("skipped", Boolean.TRUE)
-                    .passed("Nothing to do because " + typeName + " has no removals or modifications");
+                .passed("Nothing to do because " + typeName + " has no removals or modifications");
         }
 
         A hollowApi = apiFunction.apply(readState.getStateEngine());
-        HollowObjectTypeReadState objectTypeState = (HollowObjectTypeReadState) typeState;
+        HollowObjectTypeReadState objectTypeState = (HollowObjectTypeReadState)typeState;
         PrimaryKey key = objectTypeState.getSchema().getPrimaryKey();
         // this is guaranteed to give us items from the most recent cycle, not the last one
         HollowPrimaryKeyIndex index = new HollowPrimaryKeyIndex(readState.getStateEngine(), key);
         int fromOrdinal = removedAndModified.nextSetBit(0);
-        while (fromOrdinal != HollowConstants.ORDINAL_NONE) {
+        while(fromOrdinal != HollowConstants.ORDINAL_NONE) {
             Object[] candidateKey = index.getRecordKey(fromOrdinal);
             int matchedOrdinal = index.getMatchingOrdinal(candidateKey);
-            if (matchedOrdinal != HollowConstants.ORDINAL_NONE) {
+            if(matchedOrdinal != HollowConstants.ORDINAL_NONE) {
                 T fromObject = hollowObjectFunction.apply(hollowApi, fromOrdinal);
                 T toObject = hollowObjectFunction.apply(hollowApi, matchedOrdinal);
-                if (!filter.test(fromObject, toObject)) {
+                if(!filter.test(fromObject, toObject)) {
                     return vrb.detail("candidateKey", Arrays.toString(candidateKey))
-                            .detail("fromOrdinal", fromOrdinal)
-                            .detail("toOrdinal", matchedOrdinal)
-                            .failed("Validation failed for candidate key");
+                        .detail("fromOrdinal", fromOrdinal)
+                        .detail("toOrdinal", matchedOrdinal)
+                        .failed("Validation failed for candidate key");
                 }
             }
             fromOrdinal = removedAndModified.nextSetBit(fromOrdinal + 1);

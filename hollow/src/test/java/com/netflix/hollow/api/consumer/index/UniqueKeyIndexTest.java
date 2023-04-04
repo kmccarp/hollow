@@ -41,6 +41,7 @@ import org.junit.runners.Parameterized;
 public class UniqueKeyIndexTest {
     // Map of primitive class to box class
     static final Map<Class<?>, Class<?>> primitiveClasses;
+
     static {
         primitiveClasses = new HashMap<>();
         primitiveClasses.put(boolean.class, Boolean.class);
@@ -62,21 +63,21 @@ public class UniqueKeyIndexTest {
         InMemoryBlobStore blobStore = new InMemoryBlobStore();
 
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
         long v1 = producer.runCycle(ws -> {
             ws.add(new DataModel.Producer.References());
 
-            for (int i = 0; i < 100; i++) {
+            for(int i = 0;i < 100;i++) {
                 ws.add(new DataModel.Producer.TypeA(1, "TypeA" + i));
             }
             ws.add(new DataModel.Producer.TypeWithPrimaryKey2(1));
         });
 
         consumer = HollowConsumer.withBlobRetriever(blobStore)
-                .withGeneratedAPIClass(DataModel.Consumer.Api.class)
-                .build();
+            .withGeneratedAPIClass(DataModel.Consumer.Api.class)
+            .build();
         consumer.triggerRefreshTo(v1);
 
         api = consumer.getAPI(DataModel.Consumer.Api.class);
@@ -98,8 +99,8 @@ public class UniqueKeyIndexTest {
         @Test
         public void test() {
             UniqueKeyIndex<T, Q> pki = UniqueKeyIndex
-                    .from(consumer, uniqueType)
-                    .usingPath(path, type);
+                .from(consumer, uniqueType)
+                .usingPath(path, type);
 
             T r = pki.findMatch(value);
 
@@ -112,26 +113,26 @@ public class UniqueKeyIndexTest {
     static List<Object[]> valuesDataProvider() {
         DataModel.Producer.Values values = new DataModel.Producer.Values();
         return Stream.of(DataModel.Producer.Values.class.getDeclaredFields())
-                .flatMap(f -> {
-                    String path = f.getName();
-                    Class<?> type = f.getType();
-                    Object value;
-                    try {
-                        value = f.get(values);
-                    } catch (IllegalAccessException e) {
-                        throw new InternalError();
-                    }
+            .flatMap(f -> {
+                String path = f.getName();
+                Class<?> type = f.getType();
+                Object value;
+                try {
+                    value = f.get(values);
+                } catch (IllegalAccessException e) {
+                    throw new InternalError();
+                }
 
-                    Object[] args = new Object[] {path, type, value};
-                    if (type.isPrimitive()) {
-                        return Stream.of(args,
-                                new Object[] {path, primitiveClasses.get(type), value}
-                        );
-                    } else {
-                        return Stream.<Object[]>of(args);
-                    }
-                })
-                .collect(toList());
+                Object[] args = new Object[]{path, type, value};
+                if(type.isPrimitive()) {
+                    return Stream.of(args,
+                        new Object[]{path, primitiveClasses.get(type), value}
+                    );
+                } else {
+                    return Stream.<Object[]>of(args);
+                }
+            })
+            .collect(toList());
     }
 
     @RunWith(Parameterized.class)
@@ -168,8 +169,8 @@ public class UniqueKeyIndexTest {
         @Test(expected = IllegalArgumentException.class)
         public void test() {
             UniqueKeyIndex
-                    .from(consumer, DataModel.Consumer.Values.class)
-                    .usingPath(path, Object.class);
+                .from(consumer, DataModel.Consumer.Values.class)
+                .usingPath(path, Object.class);
         }
     }
 
@@ -217,8 +218,8 @@ public class UniqueKeyIndexTest {
         @Test
         public void testFields() {
             UniqueKeyIndex<DataModel.Consumer.Values, ValueFieldsQuery> hi = UniqueKeyIndex
-                    .from(consumer, DataModel.Consumer.Values.class)
-                    .usingBean(MatchOnValuesBeanTest.ValueFieldsQuery.class);
+                .from(consumer, DataModel.Consumer.Values.class)
+                .usingBean(MatchOnValuesBeanTest.ValueFieldsQuery.class);
 
             DataModel.Consumer.Values r = hi.findMatch(MatchOnValuesBeanTest.ValueFieldsQuery.create());
 
@@ -309,8 +310,8 @@ public class UniqueKeyIndexTest {
         @Test
         public void testMethods() {
             UniqueKeyIndex<DataModel.Consumer.Values, ValueMethodsQuery> hi = UniqueKeyIndex
-                    .from(consumer, DataModel.Consumer.Values.class)
-                    .usingBean(MatchOnValuesBeanTest.ValueMethodsQuery.class);
+                .from(consumer, DataModel.Consumer.Values.class)
+                .usingBean(MatchOnValuesBeanTest.ValueMethodsQuery.class);
 
             DataModel.Consumer.Values r = hi.findMatch(MatchOnValuesBeanTest.ValueMethodsQuery.create());
 
@@ -324,20 +325,20 @@ public class UniqueKeyIndexTest {
     static List<Object[]> boxesDataProvider() {
         DataModel.Producer.Boxes values = new DataModel.Producer.Boxes();
         return Stream.of(DataModel.Producer.Boxes.class.getDeclaredFields())
-                .map(f -> {
-                    // Path will be auto-expanded to append ".value"
-                    String path = f.getName();
-                    Class<?> type = f.getType();
-                    Object value;
-                    try {
-                        value = f.get(values);
-                    } catch (IllegalAccessException e) {
-                        throw new InternalError();
-                    }
+            .map(f -> {
+                // Path will be auto-expanded to append ".value"
+                String path = f.getName();
+                Class<?> type = f.getType();
+                Object value;
+                try {
+                    value = f.get(values);
+                } catch (IllegalAccessException e) {
+                    throw new InternalError();
+                }
 
-                    return new Object[] {path, type, value};
-                })
-                .collect(toList());
+                return new Object[]{path, type, value};
+            })
+            .collect(toList());
     }
 
     @RunWith(Parameterized.class)
@@ -357,24 +358,24 @@ public class UniqueKeyIndexTest {
     static List<Object[]> inlineBoxesDataProvider() {
         DataModel.Producer.InlineBoxes values = new DataModel.Producer.InlineBoxes();
         return Stream.of(DataModel.Producer.InlineBoxes.class.getDeclaredFields())
-                .map(f -> {
-                    String path = f.getName();
-                    Class<?> type = f.getType();
-                    Object value;
-                    try {
-                        value = f.get(values);
-                    } catch (IllegalAccessException e) {
-                        throw new InternalError();
-                    }
+            .map(f -> {
+                String path = f.getName();
+                Class<?> type = f.getType();
+                Object value;
+                try {
+                    value = f.get(values);
+                } catch (IllegalAccessException e) {
+                    throw new InternalError();
+                }
 
-                    return new Object[] {path, type, value};
-                })
-                .collect(toList());
+                return new Object[]{path, type, value};
+            })
+            .collect(toList());
     }
 
     @RunWith(Parameterized.class)
     public static class MatchOnInlineBoxesTest<Q> extends
-            MatchTestParameterized<DataModel.Consumer.InlineBoxes, Q> {
+        MatchTestParameterized<DataModel.Consumer.InlineBoxes, Q> {
         // path[type] = value
         @Parameterized.Parameters(name = "{index}: {0}[{1}] = {2}")
         public static Collection<Object[]> data() {
@@ -388,13 +389,13 @@ public class UniqueKeyIndexTest {
 
     @RunWith(Parameterized.class)
     public static class MatchOnMappedReferencesTest<Q>
-            extends MatchTestParameterized<DataModel.Consumer.MappedReferencesToValues, Q> {
+        extends MatchTestParameterized<DataModel.Consumer.MappedReferencesToValues, Q> {
         // path[type] = value
         @Parameterized.Parameters(name = "{index}: {0}[{1}] = {2}")
         public static Collection<Object[]> data() {
             return Arrays.<Object[]>asList(
-                    new Object[] {"date.value", long.class, 0L},
-                    new Object[] {"number._name", String.class, "ONE"}
+                new Object[]{"date.value", long.class, 0L},
+                new Object[]{"number._name", String.class, "ONE"}
             );
         }
 
@@ -408,21 +409,21 @@ public class UniqueKeyIndexTest {
         @Parameterized.Parameters(name = "{index}: {0}[{1} = {2}]")
         public static Collection<Object[]> data() {
             return Arrays.asList(
-                    args("values!", DataModel.Consumer.Values.class,
-                            () -> api.getValues(0)),
-                    args("boxes._string!", DataModel.Consumer.HString.class,
-                            () -> api.getHString(0)),
-                    args("referenceWithStrings!", DataModel.Consumer.ReferenceWithStringsRenamed.class,
-                            () -> api.getReferenceWithStringsRenamed(0)),
-                    args("referenceWithStrings._string1!", DataModel.Consumer.HString.class,
-                            () -> api.getHString(0)),
-                    args("referenceWithStrings._string2!", DataModel.Consumer.FieldOfStringRenamed.class,
-                            () -> api.getFieldOfStringRenamed(0))
+                args("values!", DataModel.Consumer.Values.class,
+                    () -> api.getValues(0)),
+                args("boxes._string!", DataModel.Consumer.HString.class,
+                    () -> api.getHString(0)),
+                args("referenceWithStrings!", DataModel.Consumer.ReferenceWithStringsRenamed.class,
+                    () -> api.getReferenceWithStringsRenamed(0)),
+                args("referenceWithStrings._string1!", DataModel.Consumer.HString.class,
+                    () -> api.getHString(0)),
+                args("referenceWithStrings._string2!", DataModel.Consumer.FieldOfStringRenamed.class,
+                    () -> api.getFieldOfStringRenamed(0))
             );
         }
 
         static <Q extends HollowRecord> Object[] args(String path, Class<Q> type, Supplier<Q> s) {
-            return new Object[] {path, type, s};
+            return new Object[]{path, type, s};
         }
 
         final String path;
@@ -438,8 +439,8 @@ public class UniqueKeyIndexTest {
         @Test
         public void test() {
             UniqueKeyIndex<DataModel.Consumer.References, Q> uki = UniqueKeyIndex
-                    .from(consumer, DataModel.Consumer.References.class)
-                    .usingPath(path, type);
+                .from(consumer, DataModel.Consumer.References.class)
+                .usingPath(path, type);
 
             DataModel.Consumer.References r = uki.findMatch(value);
 
@@ -459,23 +460,23 @@ public class UniqueKeyIndexTest {
         @Test(expected = IllegalArgumentException.class)
         public void testUnknownRootSelectType() {
             UniqueKeyIndex
-                    .from(consumer, ErrorsTest.Unknown.class)
-                    .usingPath("values", DataModel.Consumer.Values.class);
+                .from(consumer, ErrorsTest.Unknown.class)
+                .usingPath("values", DataModel.Consumer.Values.class);
         }
 
         @Test(expected = IllegalArgumentException.class)
         public void testEmptyMatchPath() {
             UniqueKeyIndex
-                    .from(consumer, DataModel.Consumer.References.class)
-                    .usingPath("", DataModel.Consumer.References.class);
+                .from(consumer, DataModel.Consumer.References.class)
+                .usingPath("", DataModel.Consumer.References.class);
         }
 
         @Test(expected = IllegalArgumentException.class)
         public void testNoPrimaryKey() {
             UniqueKeyIndex
-                    .from(consumer, DataModel.Consumer.References.class)
-                    .bindToPrimaryKey()
-                    .usingPath("values._int", int.class);
+                .from(consumer, DataModel.Consumer.References.class)
+                .bindToPrimaryKey()
+                .usingPath("values._int", int.class);
         }
     }
 
@@ -555,9 +556,9 @@ public class UniqueKeyIndexTest {
 
         public <T> void test(Class<T> keyType, T key) {
             UniqueKeyIndex<DataModel.Consumer.TypeWithPrimaryKey, T> pki = UniqueKeyIndex
-                    .from(consumer, DataModel.Consumer.TypeWithPrimaryKey.class)
-                    .bindToPrimaryKey()
-                    .usingBean(keyType);
+                .from(consumer, DataModel.Consumer.TypeWithPrimaryKey.class)
+                .bindToPrimaryKey()
+                .usingBean(keyType);
 
             DataModel.Consumer.TypeWithPrimaryKey match = pki.findMatch(key);
             Assert.assertNotNull(match);
@@ -572,18 +573,18 @@ public class UniqueKeyIndexTest {
         @Test
         public void testWithHollowTypeName() {
             UniqueKeyIndex<DataModel.Consumer.TypeWithPrimaryKeySuffixed, Integer> pki =
-                    UniqueKeyIndex.from(consumer, DataModel.Consumer.TypeWithPrimaryKeySuffixed.class)
-                            .bindToPrimaryKey()
-                            .usingPath("i", Integer.class);
+                UniqueKeyIndex.from(consumer, DataModel.Consumer.TypeWithPrimaryKeySuffixed.class)
+                    .bindToPrimaryKey()
+                    .usingPath("i", Integer.class);
 
             DataModel.Consumer.TypeWithPrimaryKeySuffixed match = pki.findMatch(1);
             Assert.assertNotNull(match);
             Assert.assertEquals(0, match.getOrdinal());
 
             UniqueKeyIndex<DataModel.Consumer.TypeWithPrimaryKeySuffixed, KeyWithSinglePath> pki2 =
-                    UniqueKeyIndex.from(consumer, DataModel.Consumer.TypeWithPrimaryKeySuffixed.class)
-                            .bindToPrimaryKey()
-                            .usingBean(KeyWithSinglePath.class);
+                UniqueKeyIndex.from(consumer, DataModel.Consumer.TypeWithPrimaryKeySuffixed.class)
+                    .bindToPrimaryKey()
+                    .usingBean(KeyWithSinglePath.class);
             match = pki2.findMatch(new KeyWithSinglePath(1));
             Assert.assertNotNull(match);
             Assert.assertEquals(0, match.getOrdinal());

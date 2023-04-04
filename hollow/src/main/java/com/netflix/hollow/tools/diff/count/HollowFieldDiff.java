@@ -62,8 +62,8 @@ public class HollowFieldDiff implements Comparable<HollowFieldDiff> {
 
     private boolean isSameDiffAsLastAdd(int fromOrdinal, int toOrdinal) {
         return diffFromOrdinals.size() > 0
-                && diffFromOrdinals.get(diffFromOrdinals.size() - 1) == fromOrdinal
-                && diffToOrdinals.get(diffToOrdinals.size() - 1) == toOrdinal;
+            && diffFromOrdinals.get(diffFromOrdinals.size() - 1) == fromOrdinal
+            && diffToOrdinals.get(diffToOrdinals.size() - 1) == toOrdinal;
     }
 
     /**
@@ -116,7 +116,7 @@ public class HollowFieldDiff implements Comparable<HollowFieldDiff> {
      * @param otherFieldDiff the field diff to add
      */
     public void addResults(HollowFieldDiff otherFieldDiff) {
-        for(int i=0;i<otherFieldDiff.getNumDiffs();i++) {
+        for(int i = 0;i < otherFieldDiff.getNumDiffs();i++) {
             addDiff(otherFieldDiff.getFromOrdinal(i), otherFieldDiff.getToOrdinal(i), otherFieldDiff.getPairScore(i));
         }
     }
@@ -127,8 +127,7 @@ public class HollowFieldDiff implements Comparable<HollowFieldDiff> {
     @Override
     public int compareTo(HollowFieldDiff o) {
         if(o.getTotalDiffScore() > totalDiffScore)
-            return 1;
-        else if(o.getTotalDiffScore() < totalDiffScore)
+            return 1;else if(o.getTotalDiffScore() < totalDiffScore)
             return -1;
         return 0;
     }

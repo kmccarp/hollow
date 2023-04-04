@@ -70,7 +70,7 @@ public class FloatDataAccessorTest extends AbstractPrimitiveTypeDataAccessorTest
             Assert.assertEquals(0, dAccessor.getUpdatedRecords().size());
         }
 
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("Float");
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)readStateEngine.getTypeState("Float");
         Assert.assertEquals(4, typeState.maxOrdinal());
 
         assertObject(typeState, 0, new Float(1));

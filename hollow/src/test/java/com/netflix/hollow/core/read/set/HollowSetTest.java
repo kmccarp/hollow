@@ -36,7 +36,7 @@ public class HollowSetTest extends AbstractStateEngineTest {
 
         roundTripSnapshot();
 
-        HollowSetTypeReadState typeState = (HollowSetTypeReadState) readStateEngine.getTypeState("TestSet");
+        HollowSetTypeReadState typeState = (HollowSetTypeReadState)readStateEngine.getTypeState("TestSet");
 
         HollowOrdinalIterator iter = typeState.potentialMatchOrdinalIterator(0, 20);
 
@@ -59,7 +59,7 @@ public class HollowSetTest extends AbstractStateEngineTest {
 
         roundTripSnapshot();
 
-        HollowSetTypeReadState typeState = (HollowSetTypeReadState) readStateEngine.getTypeState("TestSet");
+        HollowSetTypeReadState typeState = (HollowSetTypeReadState)readStateEngine.getTypeState("TestSet");
 
         Assert.assertEquals(0, typeState.size(0));
         Assert.assertEquals(0, typeState.maxOrdinal());
@@ -71,7 +71,7 @@ public class HollowSetTest extends AbstractStateEngineTest {
 
         roundTripSnapshot();
 
-        HollowSetTypeReadState typeState = (HollowSetTypeReadState) readStateEngine.getTypeState("TestSet");
+        HollowSetTypeReadState typeState = (HollowSetTypeReadState)readStateEngine.getTypeState("TestSet");
 
         Assert.assertEquals(1, typeState.size(0));
         Assert.assertEquals(0, typeState.maxOrdinal());
@@ -88,19 +88,20 @@ public class HollowSetTest extends AbstractStateEngineTest {
 
         readStateEngine.invalidate();
 
-        HollowSetTypeReadState typeState = (HollowSetTypeReadState) readStateEngine.getTypeState("TestSet");
+        HollowSetTypeReadState typeState = (HollowSetTypeReadState)readStateEngine.getTypeState("TestSet");
 
         try {
             Assert.assertEquals(0, typeState.size(100));
             Assert.fail("Should have thrown Exception");
-        } catch(NullPointerException expected) { }
+        } catch (NullPointerException expected) {
+        }
     }
 
 
     private void addRecord(int... ordinals) {
         HollowSetWriteRecord rec = new HollowSetWriteRecord();
 
-        for(int i=0;i<ordinals.length;i++) {
+        for(int i = 0;i < ordinals.length;i++) {
             rec.addElement(ordinals[i]);
         }
 

@@ -38,7 +38,7 @@ public class MissingSetTest extends AbstractStateEngineTest {
         readStateEngine.setMissingDataHandler(new FakeMissingDataHandler());
 
 
-        GenericHollowSet set = (GenericHollowSet) GenericHollowRecordHelper.instantiate(readStateEngine, "MissingSet", 0);
+        GenericHollowSet set = (GenericHollowSet)GenericHollowRecordHelper.instantiate(readStateEngine, "MissingSet", 0);
 
         Assert.assertEquals(2, set.size());
         Assert.assertTrue(set.contains(new FakeMissingHollowRecord(new HollowObjectMissingDataAccess(readStateEngine, "MissingObject"), 2)));
@@ -101,6 +101,7 @@ public class MissingSetTest extends AbstractStateEngineTest {
 
 
     @Override
-    protected void initializeTypeStates() { }
+    protected void initializeTypeStates() {
+    }
 
 }

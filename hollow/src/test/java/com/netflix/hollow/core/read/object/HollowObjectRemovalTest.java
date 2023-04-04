@@ -67,7 +67,7 @@ public class HollowObjectRemovalTest extends AbstractStateEngineTest {
     }
 
     private void assertObject(int ordinal, int int1, int int2) {
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("TestObject");
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)readStateEngine.getTypeState("TestObject");
 
         GenericHollowObject obj = new GenericHollowObject(new HollowObjectGenericDelegate(typeState), ordinal);
 

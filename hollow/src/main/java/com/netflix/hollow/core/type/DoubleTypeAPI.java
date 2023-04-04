@@ -26,7 +26,7 @@ public class DoubleTypeAPI extends HollowObjectTypeAPI {
     private final DoubleDelegateLookupImpl delegateLookupImpl;
 
     public DoubleTypeAPI(HollowAPI api, HollowObjectTypeDataAccess typeDataAccess) {
-        super(api, typeDataAccess, new String[] {
+        super(api, typeDataAccess, new String[]{
             "value"
         });
         this.delegateLookupImpl = new DoubleDelegateLookupImpl(this);

@@ -118,7 +118,7 @@ public class HollowMapDeltaHistoricalStateCreator {
 
     private void copyRecord(int ordinal) {
         int shard = ordinal & shardNumberMask;
-        int shardOrdinal = ordinal >> shardOrdinalShift; 
+        int shardOrdinal = ordinal >> shardOrdinalShift;
 
         long bitsPerBucket = historicalDataElements.bitsPerMapEntry;
         long size = typeState.size(ordinal);

@@ -52,7 +52,7 @@ public class DiffEqualityMapping {
 
     private final Map<String, DiffEqualOrdinalMap> map = new HashMap<String, DiffEqualOrdinalMap>();
     private final Set<String> typesWhichRequireMissingFieldTraversal = new HashSet<String>();
-    
+
     private boolean isPrepared;
 
     public DiffEqualityMapping(HollowReadStateEngine fromState, HollowReadStateEngine toState) {
@@ -76,7 +76,7 @@ public class DiffEqualityMapping {
             return ordinalMap;
         return isPrepared ? DiffEqualOrdinalMap.EMPTY_MAP : buildMap(type);
     }
-    
+
     public void markPrepared() {
         this.isPrepared = true;
     }

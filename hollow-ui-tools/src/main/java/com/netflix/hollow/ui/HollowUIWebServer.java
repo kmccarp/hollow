@@ -37,8 +37,8 @@ public class HollowUIWebServer {
 
         JoinableExecutorService() {
             super(0, Integer.MAX_VALUE,
-                    60L, TimeUnit.SECONDS,
-                    new SynchronousQueue<Runnable>());
+                60L, TimeUnit.SECONDS,
+                new SynchronousQueue<Runnable>());
             countDownLatch = new CountDownLatch(1);
         }
 
@@ -73,9 +73,9 @@ public class HollowUIWebServer {
     public void stop() throws Exception {
         executor.shutdown();
         try {
-            if (!executor.awaitTermination(10, TimeUnit.SECONDS)) {
+            if(!executor.awaitTermination(10, TimeUnit.SECONDS)) {
                 executor.shutdownNow();
-                if (!executor.awaitTermination(10, TimeUnit.SECONDS))
+                if(!executor.awaitTermination(10, TimeUnit.SECONDS))
                     System.err.println("Http Server ThreadPool did not terminate");
             }
         } catch (InterruptedException ie) {

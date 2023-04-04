@@ -32,6 +32,6 @@ public interface IncrementalPopulateListener extends HollowProducerEventListener
      * @param elapsed Time taken to populate hollow.
      */
     void onIncrementalPopulateComplete(Status status,
-            long removed, long addedOrModified,
-            long version, Duration elapsed);
+        long removed, long addedOrModified,
+        long version, Duration elapsed);
 }

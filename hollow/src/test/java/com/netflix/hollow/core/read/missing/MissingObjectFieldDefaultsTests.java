@@ -52,7 +52,7 @@ public class MissingObjectFieldDefaultsTests extends AbstractStateEngineTest {
 
         roundTripSnapshot();
 
-        GenericHollowObject obj = (GenericHollowObject) GenericHollowRecordHelper.instantiate(readStateEngine, "TestObject", 1);
+        GenericHollowObject obj = (GenericHollowObject)GenericHollowRecordHelper.instantiate(readStateEngine, "TestObject", 1);
 
         assertEquals(2, obj.getInt("f1"));
         assertEquals("two", obj.getString("f2"));

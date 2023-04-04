@@ -21,5 +21,5 @@ import com.netflix.hollow.tools.diff.HollowDiff;
 import com.netflix.hollow.ui.UIServer;
 
 public interface DiffUIServer extends UIServer {
-       HollowDiffUI addDiff(String diffPath, HollowDiff diff, String fromBlobName, String toBlobName);
+    HollowDiffUI addDiff(String diffPath, HollowDiff diff, String fromBlobName, String toBlobName);
 }

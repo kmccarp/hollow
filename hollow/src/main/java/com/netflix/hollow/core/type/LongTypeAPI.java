@@ -26,7 +26,7 @@ public class LongTypeAPI extends HollowObjectTypeAPI {
     private final LongDelegateLookupImpl delegateLookupImpl;
 
     public LongTypeAPI(HollowAPI api, HollowObjectTypeDataAccess typeDataAccess) {
-        super(api, typeDataAccess, new String[] {
+        super(api, typeDataAccess, new String[]{
             "value"
         });
         this.delegateLookupImpl = new LongDelegateLookupImpl(this);

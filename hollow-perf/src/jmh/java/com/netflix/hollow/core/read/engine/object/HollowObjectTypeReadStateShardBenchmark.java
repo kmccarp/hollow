@@ -34,18 +34,18 @@ public class HollowObjectTypeReadStateShardBenchmark {
     HollowObjectTypeDataAccess dataAccess;
     HollowObjectMapper objectMapper;
 
-    @Param({ "500" })
+    @Param({"500"})
     int countStrings;
 
-    @Param({ "100000" })
+    @Param({"100000"})
     int countStringsDb;
 
     ArrayList<Integer> readOrder;
 
-    @Param({ "5", "25", "50", "150", "1000" })
+    @Param({"5", "25", "50", "150", "1000"})
     int maxStringLength;
 
-    @Param({ "10" })
+    @Param({"10"})
     int probabilityUnicode;
 
     @Setup
@@ -55,36 +55,36 @@ public class HollowObjectTypeReadStateShardBenchmark {
         objectMapper.initializeTypeState(String.class);
 
         Random r = new Random();
-        for (int i = 0; i < countStringsDb; i++) {
+        for(int i = 0;i < countStringsDb;i++) {
             StringBuilder sb = new StringBuilder();
             sb.append("string_");
             sb.append(i);
             sb.append("_");
             int thisStringLength = r.nextInt(maxStringLength) - sb.length() + 1;
-            for (int j = 0; j < thisStringLength; j++) {
-                if (r.nextInt(100) < probabilityUnicode) {
+            for(int j = 0;j < thisStringLength;j++) {
+                if(r.nextInt(100) < probabilityUnicode) {
                     sb.append("\u123E");
                 } else {
-                    sb.append((char) (r.nextInt(26) + 'a'));
+                    sb.append((char)(r.nextInt(26) + 'a'));
                 }
             }
             objectMapper.add(sb.toString());
         }
 
         readOrder = new ArrayList<>(countStrings);
-        for (int i = 0; i < countStrings; i++) {
+        for(int i = 0;i < countStrings;i++) {
             readOrder.add(r.nextInt(countStringsDb));
         }
 
         readStateEngine = new HollowReadStateEngine();
 
         StateEngineRoundTripper.roundTripSnapshot(writeStateEngine, readStateEngine, null);
-        dataAccess = (HollowObjectTypeDataAccess) readStateEngine.getTypeDataAccess("String", 0);
+        dataAccess = (HollowObjectTypeDataAccess)readStateEngine.getTypeDataAccess("String", 0);
     }
 
     @Benchmark
     public void testReadString(Blackhole bh) {
-        for (int j : readOrder) {
+        for(int j : readOrder) {
             String result = dataAccess.readString(j, 0);
             //System.out.println(result);
             bh.consume(result);

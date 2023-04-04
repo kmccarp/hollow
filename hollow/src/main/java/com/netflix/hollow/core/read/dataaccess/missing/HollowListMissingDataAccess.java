@@ -47,7 +47,7 @@ public class HollowListMissingDataAccess implements HollowListTypeDataAccess {
 
     @Override
     public HollowListSchema getSchema() {
-        return (HollowListSchema) missingDataHandler().handleSchema(typeName);
+        return (HollowListSchema)missingDataHandler().handleSchema(typeName);
     }
 
     @Override
@@ -77,11 +77,11 @@ public class HollowListMissingDataAccess implements HollowListTypeDataAccess {
     @Override
     public void setSamplingDirector(HollowSamplingDirector director) {
     }
-    
+
     @Override
     public void setFieldSpecificSamplingDirector(HollowFilterConfig fieldSpec, HollowSamplingDirector director) {
     }
-    
+
     @Override
     public void ignoreUpdateThreadForSampling(Thread t) {
     }

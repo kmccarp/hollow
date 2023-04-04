@@ -46,7 +46,7 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
 
     private static final String B_TYPE = "B";
     private static final String B_FN_PREFIX = "b";
-    
+
     @Override
     @Before
     public void setUp() {
@@ -58,7 +58,7 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
         aSchema.addField("a2", FieldType.INT);
         aSchema.addField("a3", FieldType.INT);
 
-        bSchema = new HollowObjectSchema(B_TYPE, 2,  B_FN_PREFIX + "1");
+        bSchema = new HollowObjectSchema(B_TYPE, 2, B_FN_PREFIX + "1");
         bSchema.addField(B_FN_PREFIX + "1", FieldType.INT);
         bSchema.addField(B_FN_PREFIX + "2", FieldType.INT);
 
@@ -119,19 +119,19 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
         history.deltaOccurred(5L);
 
         assertRecord(retrieveRemovedRecord(history, 2L, 2), 2, 3, 4);
-        assertRecord(retrieveAddedRecord  (history, 2L, 2), 2, 3, 7);
+        assertRecord(retrieveAddedRecord(history, 2L, 2), 2, 3, 7);
 
         assertRecord(retrieveRemovedRecord(history, 3L, 3), 3, 4, 5);
-        assertRecord(retrieveAddedRecord  (history, 3L, 3), 3, 4, 7);
+        assertRecord(retrieveAddedRecord(history, 3L, 3), 3, 4, 7);
 
         assertRecord(retrieveRemovedRecord(history, 4L, 4), 4, 5, 6);
-        assertRecord(retrieveAddedRecord  (history, 4L, 4), 4, 5, 7);
+        assertRecord(retrieveAddedRecord(history, 4L, 4), 4, 5, 7);
         assertRecord(retrieveRemovedRecord(history, 4L, 3), 3, 4, 7);
 
         assertRecord(retrieveRemovedRecord(history, 5L, 4), 4, 5, 7);
         assertRecord(retrieveRemovedRecord(history, 5L, 2), 2, 3, 7);
-        assertRecord(retrieveAddedRecord  (history, 5L, 5), 5, 6, 7);
-        assertRecord(retrieveAddedRecord  (history, 5L, 3), 3, 4, 7);
+        assertRecord(retrieveAddedRecord(history, 5L, 5), 5, 6, 7);
+        assertRecord(retrieveAddedRecord(history, 5L, 3), 3, 4, 7);
     }
 
     @Test
@@ -177,7 +177,7 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
             assertRecord(retrieveAddedRecord(history, 3L, B_TYPE, 2), B_FN_PREFIX, 2, 3);
         }
     }
-    
+
     @Test
     public void testRemoveType() throws IOException {
         addRecord(1, 2, 3);
@@ -376,14 +376,14 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
 
     private void setupKeyIndex(HollowReadStateEngine stateEngine, HollowHistory history) {
         HollowHistoryKeyIndex keyIndex = history.getKeyIndex();
-        for (String type : stateEngine.getAllTypes()) {
+        for(String type : stateEngine.getAllTypes()) {
 
             HollowTypeReadState typeState = stateEngine.getTypeState(type);
             HollowSchema schema = typeState.getSchema();
-            if (schema instanceof HollowObjectSchema) {
-                HollowObjectSchema oSchema = (HollowObjectSchema) schema;
+            if(schema instanceof HollowObjectSchema) {
+                HollowObjectSchema oSchema = (HollowObjectSchema)schema;
                 PrimaryKey pKey = oSchema.getPrimaryKey();
-                if (pKey == null) continue;
+                if(pKey == null) continue;
 
                 keyIndex.indexTypeField(pKey, stateEngine);
                 System.out.println("Setup KeyIndex: type=" + type + "\t" + pKey);
@@ -407,7 +407,7 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
 
         int removedOrdinal = historicalState.getKeyOrdinalMapping().getTypeMapping(type).findRemovedOrdinal(keyOrdinal);
 
-        return (HollowObject) GenericHollowRecordHelper.instantiate(historicalState.getDataAccess(), type, removedOrdinal);
+        return (HollowObject)GenericHollowRecordHelper.instantiate(historicalState.getDataAccess(), type, removedOrdinal);
     }
 
 
@@ -420,7 +420,7 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
 
         int addedOrdinal = historicalState.getKeyOrdinalMapping().getTypeMapping(type).findAddedOrdinal(keyOrdinal);
 
-        return (HollowObject) GenericHollowRecordHelper.instantiate(historicalState.getDataAccess(), type, addedOrdinal);
+        return (HollowObject)GenericHollowRecordHelper.instantiate(historicalState.getDataAccess(), type, addedOrdinal);
     }
 
     private void assertRecord(HollowObject obj, int a1, int a2, int a3) {
@@ -444,9 +444,9 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
 
         writeStateEngine.add("A", rec);
     }
-    
+
     private void assertRecord(HollowObject obj, String fnPrefix, int... vals) {
-        for (int i = 0; i < vals.length; i++) {
+        for(int i = 0;i < vals.length;i++) {
             String fn = fnPrefix + (i + 1);
             Assert.assertEquals(vals[i], obj.getInt(fn));
         }
@@ -454,12 +454,12 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
 
     private void addRecord(HollowObjectSchema schema, String fnPrefix, int ... vals) {
         String bType = schema.getName();
-        if (writeStateEngine.getTypeState(bType) == null) {
+        if(writeStateEngine.getTypeState(bType) == null) {
             writeStateEngine.addTypeState(new HollowObjectTypeWriteState(schema));
         }
 
         HollowObjectWriteRecord rec = new HollowObjectWriteRecord(schema);
-        for (int i = 0; i < vals.length; i++) {
+        for(int i = 0;i < vals.length;i++) {
             String fn = fnPrefix + (i + 1);
             rec.setInt(fn, vals[i]);
         }

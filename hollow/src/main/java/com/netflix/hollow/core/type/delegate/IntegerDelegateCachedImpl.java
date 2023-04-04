@@ -62,7 +62,7 @@ public class IntegerDelegateCachedImpl extends HollowObjectAbstractDelegate impl
 
     @Override
     public void updateTypeAPI(HollowTypeAPI typeAPI) {
-        this.typeAPI = (IntegerTypeAPI) typeAPI;
+        this.typeAPI = (IntegerTypeAPI)typeAPI;
     }
 
 }

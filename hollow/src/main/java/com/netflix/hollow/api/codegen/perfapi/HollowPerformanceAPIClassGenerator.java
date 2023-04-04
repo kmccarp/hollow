@@ -40,17 +40,17 @@ class HollowPerformanceAPIClassGenerator {
         builder.append("package " + packageName + ";\n\n");
 
         builder.append("import com.netflix.hollow.api.perfapi.HollowListTypePerfAPI;\n" +
-                "import com.netflix.hollow.api.perfapi.HollowMapTypePerfAPI;\n" +
-                "import com.netflix.hollow.api.perfapi.HollowPerformanceAPI;\n" +
-                "import com.netflix.hollow.api.perfapi.HollowSetTypePerfAPI;\n" +
-                "import com.netflix.hollow.core.read.dataaccess.HollowDataAccess;\n" +
-                "import com.netflix.hollow.core.read.dataaccess.HollowListTypeDataAccess;\n" +
-                "import com.netflix.hollow.core.read.dataaccess.HollowMapTypeDataAccess;\n" +
-                "import com.netflix.hollow.core.read.dataaccess.HollowObjectTypeDataAccess;\n" +
-                "import com.netflix.hollow.core.read.dataaccess.HollowSetTypeDataAccess;\n" +
-                "import com.netflix.hollow.core.read.dataaccess.HollowTypeDataAccess;\n" +
-                "import java.util.Set;\n" +
-                "\n");
+            "import com.netflix.hollow.api.perfapi.HollowMapTypePerfAPI;\n" +
+            "import com.netflix.hollow.api.perfapi.HollowPerformanceAPI;\n" +
+            "import com.netflix.hollow.api.perfapi.HollowSetTypePerfAPI;\n" +
+            "import com.netflix.hollow.core.read.dataaccess.HollowDataAccess;\n" +
+            "import com.netflix.hollow.core.read.dataaccess.HollowListTypeDataAccess;\n" +
+            "import com.netflix.hollow.core.read.dataaccess.HollowMapTypeDataAccess;\n" +
+            "import com.netflix.hollow.core.read.dataaccess.HollowObjectTypeDataAccess;\n" +
+            "import com.netflix.hollow.core.read.dataaccess.HollowSetTypeDataAccess;\n" +
+            "import com.netflix.hollow.core.read.dataaccess.HollowTypeDataAccess;\n" +
+            "import java.util.Set;\n" +
+            "\n");
 
 
         builder.append("public class " + apiClassName + " extends HollowPerformanceAPI {\n\n");
@@ -85,7 +85,7 @@ class HollowPerformanceAPIClassGenerator {
         for(HollowSchema schema : schemas) {
             String schemaName = schema.getName();
 
-            switch (schema.getSchemaType()) {
+            switch(schema.getSchemaType()) {
                 case OBJECT:
                     builder.append("        this." + schemaName + " = new " + schemaName + "PerfAPI(dataAccess, \"" + schemaName + "\", this);\n");
                     break;

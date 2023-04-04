@@ -65,7 +65,7 @@ public class RestoreWriteStateEngineObjectTest extends AbstractStateEngineTest {
 
         roundTripDelta();
 
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("TestObject");
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)readStateEngine.getTypeState("TestObject");
 
         Assert.assertEquals(4, typeState.maxOrdinal());
         assertObject(typeState, 0, 1, "one");
@@ -91,7 +91,7 @@ public class RestoreWriteStateEngineObjectTest extends AbstractStateEngineTest {
     @Test
     public void restoreFailsIfShardConfigurationChanges() throws IOException {
         roundTripSnapshot();
-        
+
         HollowWriteStateEngine writeStateEngine = new HollowWriteStateEngine();
         HollowObjectTypeWriteState misconfiguredTypeState = new HollowObjectTypeWriteState(schema, 4);
         writeStateEngine.addTypeState(misconfiguredTypeState);
@@ -99,7 +99,8 @@ public class RestoreWriteStateEngineObjectTest extends AbstractStateEngineTest {
         try {
             writeStateEngine.restoreFrom(readStateEngine);
             Assert.fail("Should have thrown IllegalStateException because shard configuration has changed");
-        } catch(IllegalStateException expected) { }
+        } catch (IllegalStateException expected) {
+        }
     }
 
     private void addRecord(int intVal, String strVal) {

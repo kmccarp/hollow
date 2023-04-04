@@ -43,7 +43,7 @@ public class HollowListJavaGenerator extends HollowCollectionsGenerator {
     private final boolean parameterize;
 
     public HollowListJavaGenerator(String packageName, String apiClassname, HollowListSchema schema, Set<String>
-            parameterizedTypes, boolean parameterizeClassNames, HollowDataset dataset, CodeGeneratorConfig config) {
+        parameterizedTypes, boolean parameterizeClassNames, HollowDataset dataset, CodeGeneratorConfig config) {
         super(packageName, apiClassname, schema, dataset, config);
 
         this.schema = schema;

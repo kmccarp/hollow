@@ -61,7 +61,7 @@ public class LongList {
         if(other instanceof LongList) {
             LongList that = (LongList)other;
             if(this.size() == that.size()) {
-                for(int i=0;i<size;i++) {
+                for(int i = 0;i < size;i++) {
                     if(this.get(i) != that.get(i))
                         return false;
                 }

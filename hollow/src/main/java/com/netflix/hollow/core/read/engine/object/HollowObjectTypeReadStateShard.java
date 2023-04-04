@@ -38,7 +38,7 @@ class HollowObjectTypeReadStateShard {
     private volatile HollowObjectTypeDataElements currentDataVolatile;
 
     private final HollowObjectSchema schema;
-    
+
     HollowObjectTypeReadStateShard(HollowObjectSchema schema) {
         this.schema = schema;
     }
@@ -54,21 +54,21 @@ class HollowObjectTypeReadStateShard {
             int numBitsForField = currentData.bitsPerField[fieldIndex];
 
             fixedLengthValue = numBitsForField <= 56 ?
-                    currentData.fixedLengthData.getElementValue(bitOffset, numBitsForField)
-                    : currentData.fixedLengthData.getLargeElementValue(bitOffset, numBitsForField);
+                currentData.fixedLengthData.getElementValue(bitOffset, numBitsForField)
+                : currentData.fixedLengthData.getLargeElementValue(bitOffset, numBitsForField);
         } while(readWasUnsafe(currentData));
 
         switch(schema.getFieldType(fieldIndex)) {
-        case BYTES:
-        case STRING:
-            int numBits = currentData.bitsPerField[fieldIndex];
-            return (fixedLengthValue & (1L << (numBits - 1))) != 0;
-        case FLOAT:
-            return (int)fixedLengthValue == HollowObjectWriteRecord.NULL_FLOAT_BITS;
-        case DOUBLE:
-            return fixedLengthValue == HollowObjectWriteRecord.NULL_DOUBLE_BITS;
-        default:
-            return fixedLengthValue == currentData.nullValueForField[fieldIndex];
+            case BYTES:
+            case STRING:
+                int numBits = currentData.bitsPerField[fieldIndex];
+                return (fixedLengthValue & (1L << (numBits - 1))) != 0;
+            case FLOAT:
+                return (int)fixedLengthValue == HollowObjectWriteRecord.NULL_FLOAT_BITS;
+            case DOUBLE:
+                return fixedLengthValue == HollowObjectWriteRecord.NULL_DOUBLE_BITS;
+            default:
+                return fixedLengthValue == currentData.nullValueForField[fieldIndex];
         }
     }
 
@@ -193,7 +193,7 @@ class HollowObjectTypeReadStateShard {
 
             int length = (int)(endByte - startByte);
             result = new byte[length];
-            for(int i=0;i<length;i++)
+            for(int i = 0;i < length;i++)
                 result[i] = currentData.varLengthData[fieldIndex].get(startByte + i);
 
         } while(readWasUnsafe(currentData));
@@ -319,7 +319,7 @@ class HollowObjectTypeReadStateShard {
 
     private String readString(ByteData data, long position, int length) {
         char[] chararr = HollowObjectTypeReadStateShard.chararr.get();
-        if (length > chararr.length) {
+        if(length > chararr.length) {
             chararr = new char[length];
         } else {
             Arrays.fill(chararr, 0, length, '\0');
@@ -398,12 +398,12 @@ class HollowObjectTypeReadStateShard {
         HollowObjectSchema commonSchema = schema.findCommonSchema((HollowObjectSchema)withSchema);
 
         List<String> commonFieldNames = new ArrayList<String>();
-        for(int i=0;i<commonSchema.numFields();i++)
+        for(int i = 0;i < commonSchema.numFields();i++)
             commonFieldNames.add(commonSchema.getFieldName(i));
         Collections.sort(commonFieldNames);
-        
+
         int fieldIndexes[] = new int[commonFieldNames.size()];
-        for(int i=0;i<commonFieldNames.size();i++) {
+        for(int i = 0;i < commonFieldNames.size();i++) {
             fieldIndexes[i] = schema.getPosition(commonFieldNames.get(i));
         }
 
@@ -413,15 +413,15 @@ class HollowObjectTypeReadStateShard {
             if((ordinal & (numShards - 1)) == shardNumber) {
                 int shardOrdinal = ordinal / numShards;
                 checksum.applyInt(ordinal);
-                for(int i=0;i<fieldIndexes.length;i++) {
+                for(int i = 0;i < fieldIndexes.length;i++) {
                     int fieldIdx = fieldIndexes[i];
                     if(!schema.getFieldType(fieldIdx).isVariableLength()) {
                         long bitOffset = fieldOffset(currentData, shardOrdinal, fieldIdx);
                         int numBitsForField = currentData.bitsPerField[fieldIdx];
                         long fixedLengthValue = numBitsForField <= 56 ?
-                                currentData.fixedLengthData.getElementValue(bitOffset, numBitsForField)
-                                : currentData.fixedLengthData.getLargeElementValue(bitOffset, numBitsForField);
-    
+                            currentData.fixedLengthData.getElementValue(bitOffset, numBitsForField)
+                            : currentData.fixedLengthData.getLargeElementValue(bitOffset, numBitsForField);
+
                         if(fixedLengthValue == currentData.nullValueForField[fieldIdx])
                             checksum.applyInt(Integer.MAX_VALUE);
                         else
@@ -439,30 +439,30 @@ class HollowObjectTypeReadStateShard {
     public long getApproximateHeapFootprintInBytes() {
         HollowObjectTypeDataElements currentData = currentDataVolatile;
         long bitsPerFixedLengthData = (long)currentData.bitsPerRecord * (currentData.maxOrdinal + 1);
-        
+
         long requiredBytes = bitsPerFixedLengthData / 8;
-        
-        for(int i=0;i<currentData.varLengthData.length;i++) {
+
+        for(int i = 0;i < currentData.varLengthData.length;i++) {
             if(currentData.varLengthData[i] != null)
                 requiredBytes += currentData.varLengthData[i].size();
         }
-        
+
         return requiredBytes;
     }
-    
+
     public long getApproximateHoleCostInBytes(BitSet populatedOrdinals, int shardNumber, int numShards) {
         HollowObjectTypeDataElements currentData = currentDataVolatile;
         long holeBits = 0;
-        
+
         int holeOrdinal = populatedOrdinals.nextClearBit(0);
         while(holeOrdinal <= currentData.maxOrdinal) {
             if((holeOrdinal & (numShards - 1)) == shardNumber)
                 holeBits += currentData.bitsPerRecord;
-            
+
             holeOrdinal = populatedOrdinals.nextClearBit(holeOrdinal + 1);
         }
-        
+
         return holeBits / 8;
     }
-    
+
 }

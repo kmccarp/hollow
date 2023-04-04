@@ -76,7 +76,7 @@ public class GapEncodedVariableLengthIntegerReader {
         nextElement = 0;
         advance();
     }
-    
+
     public int remainingElements() {
         int remainingElementCount = 0;
         while(nextElement != Integer.MAX_VALUE) {
@@ -90,7 +90,7 @@ public class GapEncodedVariableLengthIntegerReader {
         if(data != null)
             data.destroy();
     }
-    
+
     public void writeTo(OutputStream os) throws IOException {
         VarInt.writeVInt(os, numBytes);
         data.writeTo(os, 0, numBytes);

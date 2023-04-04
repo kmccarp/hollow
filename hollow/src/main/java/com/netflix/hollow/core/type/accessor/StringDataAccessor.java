@@ -36,7 +36,8 @@ public class StringDataAccessor extends AbstractHollowDataAccessor<String> {
         this.api = api;
     }
 
-    @Override public String getRecord(int ordinal){
+    @Override
+    public String getRecord(int ordinal) {
         HString val = api.getHString(ordinal);
         return val == null ? null : val.getValue();
     }

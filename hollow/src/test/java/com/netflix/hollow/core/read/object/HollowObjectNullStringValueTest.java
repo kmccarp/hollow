@@ -50,7 +50,7 @@ public class HollowObjectNullStringValueTest extends AbstractStateEngineTest {
 
         roundTripSnapshot();
 
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("TestObject");
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)readStateEngine.getTypeState("TestObject");
 
         assertObject(typeState, 0, 0, "zero");
         assertObject(typeState, 1, 1, null);

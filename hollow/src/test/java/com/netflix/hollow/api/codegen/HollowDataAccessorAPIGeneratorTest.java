@@ -25,16 +25,16 @@ public class HollowDataAccessorAPIGeneratorTest extends AbstractHollowAPIGenerat
     @Test
     public void test() throws Exception {
         runGenerator(API_CLASS_NAME, PACKAGE_NAME, Movie.class,
-                builder -> builder.withAggressiveSubstitutions(true));
+            builder -> builder.withAggressiveSubstitutions(true));
     }
 
     @Test
     public void testGenerateWithPostfix() throws Exception {
         runGenerator(API_CLASS_NAME, PACKAGE_NAME, Movie.class,
-                builder -> builder.withClassPostfix("Generated").withPackageGrouping());
+            builder -> builder.withClassPostfix("Generated").withPackageGrouping());
     }
 
-    @HollowPrimaryKey(fields="id")
+    @HollowPrimaryKey(fields = "id")
     static class Movie {
         int id;
 

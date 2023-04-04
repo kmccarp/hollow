@@ -17,15 +17,15 @@ public class LocalBlobStoreTest {
         InMemoryBlobStore bs = new InMemoryBlobStore();
 
         HollowProducer producer = HollowProducer.withPublisher(bs)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
         long v1 = producer.runCycle(ws -> {
             ws.add(1);
         });
 
         HollowConsumer consumer = HollowConsumer.withBlobRetriever(bs)
-                .withLocalBlobStore(localDir).build();
+            .withLocalBlobStore(localDir).build();
         consumer.triggerRefreshTo(v1);
         Assert.assertEquals(v1, consumer.getCurrentVersionId());
         assertNSnapshots(1, localDir);
@@ -35,10 +35,10 @@ public class LocalBlobStoreTest {
         });
 
         consumer = HollowConsumer.withBlobRetriever(bs)
-                .withLocalBlobStore(localDir).build();
-        
+            .withLocalBlobStore(localDir).build();
+
         consumer.triggerRefreshTo(v2);
-        
+
         Assert.assertEquals(v2, consumer.getCurrentVersionId());
         assertNSnapshots(2, localDir);
         assertNDeltas(0, localDir);
@@ -50,8 +50,8 @@ public class LocalBlobStoreTest {
         InMemoryBlobStore bs = new InMemoryBlobStore(Collections.singleton("LONG"));
 
         HollowProducer producer = HollowProducer.withPublisher(bs)
-                .withBlobStager(new HollowInMemoryBlobStager(optionalPartConfig()))
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager(optionalPartConfig()))
+            .build();
 
         long v1 = producer.runCycle(ws -> {
             ws.add(1);
@@ -59,7 +59,7 @@ public class LocalBlobStoreTest {
         });
 
         HollowConsumer consumer = HollowConsumer.withBlobRetriever(bs)
-                .withLocalBlobStore(localDir, true).build();
+            .withLocalBlobStore(localDir, true).build();
         consumer.triggerRefreshTo(v1);
         Assert.assertEquals(v1, consumer.getCurrentVersionId());
         assertNSnapshots(1, localDir);
@@ -70,7 +70,7 @@ public class LocalBlobStoreTest {
         });
 
         consumer = HollowConsumer.withBlobRetriever(bs)
-                .withLocalBlobStore(localDir, true).build();
+            .withLocalBlobStore(localDir, true).build();
         consumer.triggerRefreshTo(v2);
 
         Assert.assertEquals(v2, consumer.getCurrentVersionId());
@@ -79,15 +79,15 @@ public class LocalBlobStoreTest {
         assertNDeltas(1, localDir);
         assertNDeltas(1, "LONG", localDir);
     }
-    
+
     @Test
     public void testBlobStoreOverrideOptionalPartNotLoaded() throws Exception {
         File localDir = createLocalDir();
         InMemoryBlobStore bs = new InMemoryBlobStore(Collections.emptySet());
 
         HollowProducer producer = HollowProducer.withPublisher(bs)
-                .withBlobStager(new HollowInMemoryBlobStager(optionalPartConfig()))
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager(optionalPartConfig()))
+            .build();
 
         long v1 = producer.runCycle(ws -> {
             ws.add(1);
@@ -95,7 +95,7 @@ public class LocalBlobStoreTest {
         });
 
         HollowConsumer consumer = HollowConsumer.withBlobRetriever(bs)
-                .withLocalBlobStore(localDir, true).build();
+            .withLocalBlobStore(localDir, true).build();
         consumer.triggerRefreshTo(v1);
         Assert.assertEquals(v1, consumer.getCurrentVersionId());
         assertNSnapshots(1, localDir);
@@ -106,7 +106,7 @@ public class LocalBlobStoreTest {
         });
 
         consumer = HollowConsumer.withBlobRetriever(bs)
-                .withLocalBlobStore(localDir, true).build();
+            .withLocalBlobStore(localDir, true).build();
         consumer.triggerRefreshTo(v2);
 
         Assert.assertEquals(v2, consumer.getCurrentVersionId());
@@ -114,8 +114,8 @@ public class LocalBlobStoreTest {
         assertNSnapshots(0, "LONG", localDir);
         assertNDeltas(1, localDir);
         assertNDeltas(0, "LONG", localDir);
-    }    
-    
+    }
+
     static ProducerOptionalBlobPartConfig optionalPartConfig() throws IOException {
         ProducerOptionalBlobPartConfig optionalPartConfig = new ProducerOptionalBlobPartConfig();
         optionalPartConfig.addTypesToPart("LONG", "Long");
@@ -130,25 +130,25 @@ public class LocalBlobStoreTest {
 
     static void assertNSnapshots(int n, File localDir) throws IOException {
         long nSnapshots = Files.list(localDir.toPath()).filter(p -> p.getFileName().toString().startsWith("snapshot-"))
-                .count();
+            .count();
         Assert.assertEquals(n, nSnapshots);
     }
 
     static void assertNDeltas(int n, File localDir) throws IOException {
         long nDeltas = Files.list(localDir.toPath()).filter(p -> p.getFileName().toString().startsWith("delta-"))
-                .count();
+            .count();
         Assert.assertEquals(n, nDeltas);
     }
 
     static void assertNSnapshots(int n, String optionalPart, File localDir) throws IOException {
         long nSnapshots = Files.list(localDir.toPath()).filter(p -> p.getFileName().toString().startsWith("snapshot_" + optionalPart + "-"))
-                .count();
+            .count();
         Assert.assertEquals(n, nSnapshots);
     }
-    
+
     static void assertNDeltas(int n, String optionalPart, File localDir) throws IOException {
         long nDeltas = Files.list(localDir.toPath()).filter(p -> p.getFileName().toString().startsWith("delta_" + optionalPart + "-"))
-                .count();
+            .count();
         Assert.assertEquals(n, nDeltas);
-    }    
+    }
 }

@@ -50,14 +50,14 @@ public class HollowTypeDiff {
     HollowTypeDiff(HollowDiff rootDiff, String type, String... matchPaths) {
         this.rootDiff = rootDiff;
         this.type = type;
-        this.from = (HollowObjectTypeReadState) rootDiff.getFromStateEngine().getTypeState(type);
-        this.to = (HollowObjectTypeReadState) rootDiff.getToStateEngine().getTypeState(type);
+        this.from = (HollowObjectTypeReadState)rootDiff.getFromStateEngine().getTypeState(type);
+        this.to = (HollowObjectTypeReadState)rootDiff.getToStateEngine().getTypeState(type);
         this.matcher = new HollowDiffMatcher(this.from, this.to);
         this.shortcutTypes = new HashSet<>();
 
         // Allow Basic diffing of Type that do not have PrimaryKey/MatchPaths
-        if (matchPaths!=null && matchPaths.length>0) {
-            for (String matchPath : matchPaths) {
+        if(matchPaths != null && matchPaths.length > 0) {
+            for(String matchPath : matchPaths) {
                 addMatchPath(matchPath);
             }
         }
@@ -149,7 +149,7 @@ public class HollowTypeDiff {
      * @return The total number of records for this type in the to state.
      */
     public int getTotalItemsInFromState() {
-        if (from == null) return 0;
+        if(from == null) return 0;
         return from.getPopulatedOrdinals().cardinality();
     }
 
@@ -157,7 +157,7 @@ public class HollowTypeDiff {
      * @return The total number of records for this type in the to state.
      */
     public int getTotalItemsInToState() {
-        if (to == null) return 0;
+        if(to == null) return 0;
         return to.getPopulatedOrdinals().cardinality();
     }
 
@@ -191,7 +191,7 @@ public class HollowTypeDiff {
 
         final List<HollowFieldDiff>results[] = new List[numThreads];
 
-        for(int i=0;i<numThreads;i++) {
+        for(int i = 0;i < numThreads;i++) {
             final int threadId = i;
 
             executor.execute(new Runnable() {
@@ -204,12 +204,12 @@ public class HollowTypeDiff {
                     boolean requiresMissingFieldTraversal = equalityMapping.requiresMissingFieldTraversal(type);
 
                     LongList matches = matcher.getMatchedOrdinals();
-                    for(int i=threadId;i<matches.size();i+=numThreads) {
+                    for(int i = threadId;i < matches.size();i += numThreads) {
                         int fromOrdinal = (int)(matches.get(i) >> 32);
                         int toOrdinal = (int)matches.get(i);
 
                         if(rootNodeOrdinalMap.getIdentityFromOrdinal(fromOrdinal) == -1
-                                || rootNodeOrdinalMap.getIdentityFromOrdinal(fromOrdinal) != rootNodeOrdinalMap.getIdentityToOrdinal(toOrdinal)) {
+                            || rootNodeOrdinalMap.getIdentityFromOrdinal(fromOrdinal) != rootNodeOrdinalMap.getIdentityToOrdinal(toOrdinal)) {
                             rootNode.prepare(fromOrdinal, toOrdinal);
                             rootNode.traverseDiffs(fromIntList(fromOrdinal), toIntList(toOrdinal));
                         } else if(requiresMissingFieldTraversal) {

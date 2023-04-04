@@ -62,7 +62,7 @@ public class BooleanDelegateCachedImpl extends HollowObjectAbstractDelegate impl
 
     @Override
     public void updateTypeAPI(HollowTypeAPI typeAPI) {
-        this.typeAPI = (BooleanTypeAPI) typeAPI;
+        this.typeAPI = (BooleanTypeAPI)typeAPI;
     }
 
 }

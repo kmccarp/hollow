@@ -43,16 +43,16 @@ public class HollowObjectMapperTest extends AbstractStateEngineTest {
     public void testBasic() throws IOException {
         HollowObjectMapper mapper = new HollowObjectMapper(writeStateEngine);
 
-        mapper.add(new TypeA("two", 2, new TypeB((short) 20, 20000000L, 2.2f, "two".toCharArray(), new byte[]{2, 2, 2}),
-                Collections.<TypeC>emptySet()));
-        mapper.add(new TypeA("one", 1, new TypeB((short) 10, 10000000L, 1.1f, "one".toCharArray(), new byte[]{1, 1, 1}),
-                new HashSet<TypeC>(Arrays.asList(new TypeC('d', map("one.1", 1, "one.2", 1, 1, "one.3", 1, 2, 3))))));
+        mapper.add(new TypeA("two", 2, new TypeB((short)20, 20000000L, 2.2f, "two".toCharArray(), new byte[]{2, 2, 2}),
+            Collections.<TypeC>emptySet()));
+        mapper.add(new TypeA("one", 1, new TypeB((short)10, 10000000L, 1.1f, "one".toCharArray(), new byte[]{1, 1, 1}),
+            new HashSet<TypeC>(Arrays.asList(new TypeC('d', map("one.1", 1, "one.2", 1, 1, "one.3", 1, 2, 3))))));
 
         roundTripSnapshot();
 
 
         Assert.assertEquals("{\"a1\": \"two\",\"a2\": 2,\"b\": {\"b1\": 20,\"b2\": 20000000,\"b3\": 2.2,\"b4\": \"two\",\"b5\": [2, 2, 2]},\"cList\": []}",
-                new HollowRecordJsonStringifier(false, true).stringify(readStateEngine, "TypeA", 0));
+            new HollowRecordJsonStringifier(false, true).stringify(readStateEngine, "TypeA", 0));
 
         //System.out.println("---------------------------------");
         //System.out.println(new HollowRecordJsonStringifier(false, true).stringify(readStateEngine, "TypeA", 1));
@@ -383,12 +383,12 @@ public class HollowObjectMapperTest extends AbstractStateEngineTest {
         Map<String, List<Integer>> map = new HashMap<String, List<Integer>>();
         int i = 0;
 
-        while (i < keyValues.length) {
-            String key = (String) keyValues[i];
+        while(i < keyValues.length) {
+            String key = (String)keyValues[i];
             List<Integer> values = new ArrayList<Integer>();
             i++;
-            while (i < keyValues.length && keyValues[i] instanceof Integer) {
-                values.add((Integer) keyValues[i]);
+            while(i < keyValues.length && keyValues[i] instanceof Integer) {
+                values.add((Integer)keyValues[i]);
                 i++;
             }
 
@@ -523,7 +523,7 @@ public class HollowObjectMapperTest extends AbstractStateEngineTest {
 
         TypeWithMap(String... kv) {
             m = new HashMap<>();
-            for (int i = 0; i < kv.length; i += 2) {
+            for(int i = 0;i < kv.length;i += 2) {
                 m.put(kv[i], kv[i + 1]);
             }
         }
@@ -540,7 +540,7 @@ public class HollowObjectMapperTest extends AbstractStateEngineTest {
 
         TypeWithFinalAssignedOrdinal() {
             this.__assigned_ordinal = HollowConstants.ORDINAL_NONE;
-        };
+        }
     }
 
     static class TypeWithIntAssignedOrdinal {

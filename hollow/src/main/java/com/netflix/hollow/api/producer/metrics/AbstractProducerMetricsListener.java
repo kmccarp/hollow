@@ -29,7 +29,7 @@ import java.util.OptionalLong;
  * {@code ProducerMetricsReporting} interface which enforces concrete subclasses to implement custom metrics reporting behavior.
  */
 public abstract class AbstractProducerMetricsListener extends AbstractHollowProducerListener implements
-        ProducerMetricsReporting {
+    ProducerMetricsReporting {
 
     private AnnouncementMetrics.Builder announcementMetricsBuilder;
 
@@ -80,7 +80,7 @@ public abstract class AbstractProducerMetricsListener extends AbstractHollowProd
         boolean isAnnouncementSuccess = false;
         long dataSizeBytes = 0l;
 
-        if (status.getType() == com.netflix.hollow.api.producer.Status.StatusType.SUCCESS) {
+        if(status.getType() == com.netflix.hollow.api.producer.Status.StatusType.SUCCESS) {
             isAnnouncementSuccess = true;
             lastAnnouncementSuccessTimeNanoOptional = OptionalLong.of(System.nanoTime());
         }
@@ -89,9 +89,9 @@ public abstract class AbstractProducerMetricsListener extends AbstractHollowProd
         dataSizeBytes = stateEngine.calcApproxDataSize();
 
         announcementMetricsBuilder
-                .setDataSizeBytes(dataSizeBytes)
-                .setIsAnnouncementSuccess(isAnnouncementSuccess)
-                .setAnnouncementDurationMillis(elapsed.toMillis());
+            .setDataSizeBytes(dataSizeBytes)
+            .setIsAnnouncementSuccess(isAnnouncementSuccess)
+            .setAnnouncementDurationMillis(elapsed.toMillis());
         lastAnnouncementSuccessTimeNanoOptional.ifPresent(announcementMetricsBuilder::setLastAnnouncementSuccessTimeNano);
 
         announcementMetricsReporting(announcementMetricsBuilder.build());
@@ -109,19 +109,19 @@ public abstract class AbstractProducerMetricsListener extends AbstractHollowProd
         boolean isCycleSuccess;
         long cycleEndTimeNano = System.nanoTime();
 
-        if (status.getType() == com.netflix.hollow.api.producer.Status.StatusType.SUCCESS) {
+        if(status.getType() == com.netflix.hollow.api.producer.Status.StatusType.SUCCESS) {
             isCycleSuccess = true;
             consecutiveFailures = 0l;
             lastCycleSuccessTimeNanoOptional = OptionalLong.of(cycleEndTimeNano);
         } else {
             isCycleSuccess = false;
-            consecutiveFailures ++;
+            consecutiveFailures++;
         }
 
         CycleMetrics.Builder cycleMetricsBuilder = new CycleMetrics.Builder()
-                .setConsecutiveFailures(consecutiveFailures)
-                .setCycleDurationMillis(elapsed.toMillis())
-                .setIsCycleSuccess(isCycleSuccess);
+            .setConsecutiveFailures(consecutiveFailures)
+            .setCycleDurationMillis(elapsed.toMillis())
+            .setIsCycleSuccess(isCycleSuccess);
         lastCycleSuccessTimeNanoOptional.ifPresent(cycleMetricsBuilder::setLastCycleSuccessTimeNano);
 
         cycleMetricsReporting(cycleMetricsBuilder.build());

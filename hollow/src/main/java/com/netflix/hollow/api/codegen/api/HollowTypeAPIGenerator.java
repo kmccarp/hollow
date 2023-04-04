@@ -28,7 +28,7 @@ public abstract class HollowTypeAPIGenerator extends HollowConsumerJavaFileGener
     protected final String apiClassname;
 
     public HollowTypeAPIGenerator(String stateEngineClassname, String packageName, HollowSchema schema,
-            HollowDataset dataset, CodeGeneratorConfig config) {
+        HollowDataset dataset, CodeGeneratorConfig config) {
         super(packageName, SUB_PACKAGE_NAME, dataset, config);
         this.apiClassname = stateEngineClassname;
         this.className = typeAPIClassname(schema.getName());

@@ -38,23 +38,23 @@ public class HollowDiffUIRouter extends HollowUIRouter {
     }
 
     public boolean handle(String target, HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
+        throws IOException {
         String diffUIKey = getTargetRootPath(target);
 
-        if ("resource".equals(diffUIKey)) {
-            if (serveResource(req, resp, getResourceName(target, diffUIKey)))
+        if("resource".equals(diffUIKey)) {
+            if(serveResource(req, resp, getResourceName(target, diffUIKey)))
                 return true;
         } else {
             HollowDiffUI ui = diffUIs.get(diffUIKey);
-            if (ui == null) {
+            if(ui == null) {
                 ui = diffUIs.get("");
-                if (ui != null) {  // if a diff was added at path ""
+                if(ui != null) {  // if a diff was added at path ""
                     diffUIKey = "";
                 }
             }
 
-            if (ui != null) {
-                if (ui.serveRequest(getResourceName(target, diffUIKey), req, resp))
+            if(ui != null) {
+                if(ui.serveRequest(getResourceName(target, diffUIKey), req, resp))
                     return true;
             }
         }

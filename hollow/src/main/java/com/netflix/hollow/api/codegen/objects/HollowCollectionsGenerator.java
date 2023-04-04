@@ -26,7 +26,7 @@ public abstract class HollowCollectionsGenerator extends HollowConsumerJavaFileG
     protected final String apiClassname;
 
     public HollowCollectionsGenerator(String packageName, String apiClassname, HollowSchema schema,
-            HollowDataset dataset, CodeGeneratorConfig config) {
+        HollowDataset dataset, CodeGeneratorConfig config) {
         super(packageName, SUB_PACKAGE_NAME, dataset, config);
 
         this.apiClassname = apiClassname;

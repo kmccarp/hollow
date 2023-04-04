@@ -35,7 +35,7 @@ public class HollowPrimaryKeyIndexBenchmark {
     }
 
     public static class AbstractHollowPrimaryKeyIndexBenchmark
-            extends AbstractHollowIndexBenchmark<HollowPrimaryKeyIndex> {
+        extends AbstractHollowIndexBenchmark<HollowPrimaryKeyIndex> {
         @Override
         public HollowPrimaryKeyIndex createIndex() {
             return new HollowPrimaryKeyIndex(readStateEngine, IntType.class.getSimpleName(), matchFields);
@@ -44,13 +44,13 @@ public class HollowPrimaryKeyIndexBenchmark {
 
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
-                .include(HollowPrimaryKeyIndexBenchmark.class.getSimpleName())
-                .warmupIterations(5)
-                .warmupTime(TimeValue.seconds(1))
-                .measurementIterations(1)
-                .measurementTime(TimeValue.seconds(3))
-                .forks(1)
-                .build();
+            .include(HollowPrimaryKeyIndexBenchmark.class.getSimpleName())
+            .warmupIterations(5)
+            .warmupTime(TimeValue.seconds(1))
+            .measurementIterations(1)
+            .measurementTime(TimeValue.seconds(3))
+            .forks(1)
+            .build();
         new Runner(opt).run();
     }
 }

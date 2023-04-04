@@ -54,7 +54,7 @@ public class HollowSetCopier extends HollowRecordCopier {
     }
 
     private HollowSetTypeReadState readState() {
-        return (HollowSetTypeReadState) readTypeState;
+        return (HollowSetTypeReadState)readTypeState;
     }
 
     private HollowSetWriteRecord rec() {

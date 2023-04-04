@@ -63,7 +63,7 @@ public class HollowObjectVarLengthFieldRemovalTest extends AbstractStateEngineTe
 
         roundTripDelta();
 
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("TestObject");
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)readStateEngine.getTypeState("TestObject");
         Assert.assertEquals(3, typeState.maxOrdinal());
         assertObject(typeState, 0, 1, "one");
         assertObject(typeState, 1, 4, "four");

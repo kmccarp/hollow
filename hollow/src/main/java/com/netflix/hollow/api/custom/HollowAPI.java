@@ -56,13 +56,13 @@ public class HollowAPI {
             typeAPI.setSamplingDirector(samplingDirector);
         }
     }
-    
+
     public void setFieldSpecificSamplingDirector(HollowFilterConfig fieldSpec, HollowSamplingDirector director) {
         for(HollowTypeAPI typeAPI : typeAPIs) {
             typeAPI.setFieldSpecificSamplingDirector(fieldSpec, director);
         }
     }
-    
+
     public void ignoreUpdateThreadForSampling(Thread t) {
         for(HollowTypeAPI typeAPI : typeAPIs) {
             typeAPI.ignoreUpdateThreadForSampling(t);
@@ -93,7 +93,8 @@ public class HollowAPI {
         return sampleResults;
     }
 
-    public void detachCaches() { }
+    public void detachCaches() {
+    }
 
     protected void addTypeAPI(HollowTypeAPI typeAPI) {
         this.typeAPIs.add(typeAPI);

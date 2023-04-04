@@ -51,9 +51,9 @@ public class HollowObjectCacheProviderTest {
         populatedOrdinalListener = new PopulatedOrdinalListener();
 
         when(typeReadState.getTypeState())
-                .thenReturn(typeReadState);
+            .thenReturn(typeReadState);
         when(typeReadState.getListener(PopulatedOrdinalListener.class))
-                .thenReturn(populatedOrdinalListener);
+            .thenReturn(populatedOrdinalListener);
 
         subject = memoize(() -> new HollowObjectCacheProvider<>(typeReadState, typeAPI, factory));
     }
@@ -117,17 +117,18 @@ public class HollowObjectCacheProviderTest {
             // filled with null
             subject.get().getHollowObject(0);
             fail("expected exception to be thrown");
-        } catch (IndexOutOfBoundsException expected) {}
+        } catch (IndexOutOfBoundsException expected) {
+        }
     }
 
     private void prepopulate(TypeA...population) {
-        for (TypeA a : population)
+        for(TypeA a : population)
             populatedOrdinalListener.addedOrdinal(a.ordinal);
     }
 
     private void notifyAdded(TypeA...added) {
         subject.get().beginUpdate();
-        for (TypeA a : added)
+        for(TypeA a : added)
             subject.get().addedOrdinal(a.ordinal);
         subject.get().endUpdate();
     }
@@ -135,7 +136,7 @@ public class HollowObjectCacheProviderTest {
     private TypeA typeA(int ordinal) {
         TypeA a = new TypeA(ordinal);
         when(factory.newCachedHollowObject(typeReadState, typeAPI, ordinal))
-                .thenReturn(a);
+            .thenReturn(a);
         return a;
     }
 

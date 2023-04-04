@@ -34,7 +34,7 @@ public class GenericHollowRecordDataAccessor extends AbstractHollowDataAccessor<
     }
 
     public GenericHollowRecordDataAccessor(HollowReadStateEngine rStateEngine, String type) {
-        super(rStateEngine, type, (PrimaryKey) null);
+        super(rStateEngine, type, (PrimaryKey)null);
     }
 
     public GenericHollowRecordDataAccessor(HollowReadStateEngine rStateEngine, String type, String... fieldPaths) {
@@ -47,7 +47,7 @@ public class GenericHollowRecordDataAccessor extends AbstractHollowDataAccessor<
 
     @Override
     public GenericHollowObject getRecord(int ordinal) {
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) rStateEngine.getTypeDataAccess(type).getTypeState();
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)rStateEngine.getTypeDataAccess(type).getTypeState();
         GenericHollowObject obj = new GenericHollowObject(new HollowObjectGenericDelegate(typeState), ordinal);
         return obj;
     }

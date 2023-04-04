@@ -67,22 +67,22 @@ public class DiffOverviewPage extends DiffPage {
             HollowTypeReadState toTypeState = diff.getToTypeState();
 
             overviewEntries.add(new HollowDiffOverviewTypeEntry(diff.getTypeName(), diff.hasMatchPaths(), totalDiffScore, unmatchedInFrom, unmatchedInTo, fromCount, toCount,
-                    fromTypeState==null ? 0:fromTypeState.getApproximateHeapFootprintInBytes(), toTypeState==null ? 0:toTypeState.getApproximateHeapFootprintInBytes(),
-                    fromTypeState==null ? 0:fromTypeState.getApproximateHoleCostInBytes(), toTypeState==null ? 0:toTypeState.getApproximateHoleCostInBytes()));
+                fromTypeState == null ? 0 : fromTypeState.getApproximateHeapFootprintInBytes(), toTypeState == null ? 0 : toTypeState.getApproximateHeapFootprintInBytes(),
+                fromTypeState == null ? 0 : fromTypeState.getApproximateHoleCostInBytes(), toTypeState == null ? 0 : toTypeState.getApproximateHoleCostInBytes()));
         }
 
         if(sortBy == null || "diffs".equals(sortBy)) {
             overviewEntries.sort((o1, o2) -> {
                 int result = Comparator
-                        .comparing(HollowDiffOverviewTypeEntry::getTotalDiffScore)
-                        .thenComparing(HollowDiffOverviewTypeEntry::getDeltaSize)
-                        .thenComparing(HollowDiffOverviewTypeEntry::hasData)
-                        .thenComparing(HollowDiffOverviewTypeEntry::hasUnmatched)
-                        .thenComparing(HollowDiffOverviewTypeEntry::hasUniqueKey)
-                        .compare(o2, o1);
+                    .comparing(HollowDiffOverviewTypeEntry::getTotalDiffScore)
+                    .thenComparing(HollowDiffOverviewTypeEntry::getDeltaSize)
+                    .thenComparing(HollowDiffOverviewTypeEntry::hasData)
+                    .thenComparing(HollowDiffOverviewTypeEntry::hasUnmatched)
+                    .thenComparing(HollowDiffOverviewTypeEntry::hasUniqueKey)
+                    .compare(o2, o1);
 
                 // Fallback to Type Name Ordering
-                if (result==0) {
+                if(result == 0) {
                     return o1.getTypeName().compareTo(o2.getTypeName());
                 }
 
@@ -97,13 +97,13 @@ public class DiffOverviewPage extends DiffPage {
         } else if("toCount".equals(sortBy)) {
             overviewEntries.sort((o1, o2) -> o2.getTotalInTo() - o1.getTotalInTo());
         } else if("fromHeap".equals(sortBy)) {
-            overviewEntries.sort((o1, o2) -> (int) (o2.getHeapInFrom() - o1.getHeapInFrom()));
+            overviewEntries.sort((o1, o2) -> (int)(o2.getHeapInFrom() - o1.getHeapInFrom()));
         } else if("toHeap".equals(sortBy)) {
-            overviewEntries.sort((o1, o2) -> (int) (o2.getHeapInTo() - o1.getHeapInTo()));
+            overviewEntries.sort((o1, o2) -> (int)(o2.getHeapInTo() - o1.getHeapInTo()));
         } else if("fromHole".equals(sortBy)) {
-            overviewEntries.sort((o1, o2) -> (int) (o2.getHoleInFrom() - o1.getHoleInFrom()));
+            overviewEntries.sort((o1, o2) -> (int)(o2.getHoleInFrom() - o1.getHoleInFrom()));
         } else if("toHole".equals(sortBy)) {
-            overviewEntries.sort((o1, o2) -> (int) (o2.getHoleInTo() - o1.getHoleInTo()));
+            overviewEntries.sort((o1, o2) -> (int)(o2.getHoleInTo() - o1.getHoleInTo()));
         }
 
         return overviewEntries;

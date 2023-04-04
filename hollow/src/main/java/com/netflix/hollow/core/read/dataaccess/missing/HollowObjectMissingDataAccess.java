@@ -48,7 +48,7 @@ public class HollowObjectMissingDataAccess implements HollowObjectTypeDataAccess
 
     @Override
     public HollowObjectSchema getSchema() {
-        return (HollowObjectSchema) missingDataHandler().handleSchema(typeName);
+        return (HollowObjectSchema)missingDataHandler().handleSchema(typeName);
     }
 
     @Override
@@ -127,7 +127,7 @@ public class HollowObjectMissingDataAccess implements HollowObjectTypeDataAccess
     @Override
     public void setSamplingDirector(HollowSamplingDirector director) {
     }
-    
+
     @Override
     public void setFieldSpecificSamplingDirector(HollowFilterConfig fieldSpec, HollowSamplingDirector director) {
     }

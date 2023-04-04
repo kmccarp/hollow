@@ -61,7 +61,7 @@ public class DiffEqualOrdinalMap {
         if(toOrdinals.size() > 1) {
             fromOrdinalMapEntry = Long.MIN_VALUE | (long)pivotedToOrdinalClusters.size() << 32 | fromOrdinal;
 
-            for(int i=0;i<toOrdinals.size();i++) {
+            for(int i = 0;i < toOrdinals.size();i++) {
                 int valueToAdd = toOrdinals.get(i);
                 if(i == toOrdinals.size() - 1)
                     valueToAdd |= Integer.MIN_VALUE;
@@ -80,7 +80,7 @@ public class DiffEqualOrdinalMap {
     }
 
     public void buildToOrdinalIdentityMapping() {
-        for(int i=0;i<fromOrdinalsMap.length;i++) {
+        for(int i = 0;i < fromOrdinalsMap.length;i++) {
             if(fromOrdinalsMap[i] >= 0) {
                 int toOrdinal = (int)(fromOrdinalsMap[i] >> 32);
                 addToOrdinalIdentity(toOrdinal, toOrdinal);
@@ -90,7 +90,7 @@ public class DiffEqualOrdinalMap {
         boolean newCluster = true;
         int currentIdentity = 0;
 
-        for(int i=0;i<pivotedToOrdinalClusters.size();i++) {
+        for(int i = 0;i < pivotedToOrdinalClusters.size();i++) {
             if(newCluster)
                 currentIdentity = pivotedToOrdinalClusters.get(i);
             addToOrdinalIdentity(pivotedToOrdinalClusters.get(i) & Integer.MAX_VALUE, currentIdentity);
@@ -183,15 +183,20 @@ public class DiffEqualOrdinalMap {
 
     public static interface MatchIterator {
         public boolean hasNext();
+
         public int next();
     }
 
     public static class EmptyMatchIterator implements MatchIterator {
         static EmptyMatchIterator INSTANCE = new EmptyMatchIterator();
 
-        public boolean hasNext() { return false; }
+        public boolean hasNext() {
+            return false;
+        }
 
-        public int next() { return -1; }
+        public int next() {
+            return -1;
+        }
     }
 
     public static class SingleMatchIterator implements MatchIterator {

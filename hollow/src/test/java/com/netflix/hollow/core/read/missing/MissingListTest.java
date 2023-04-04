@@ -38,7 +38,7 @@ public class MissingListTest extends AbstractStateEngineTest {
         readStateEngine.setMissingDataHandler(new FakeMissingDataHandler());
 
 
-        GenericHollowList list = (GenericHollowList) GenericHollowRecordHelper.instantiate(readStateEngine, "MissingList", 0);
+        GenericHollowList list = (GenericHollowList)GenericHollowRecordHelper.instantiate(readStateEngine, "MissingList", 0);
 
         Assert.assertEquals(2, list.size());
         Assert.assertTrue(list.contains(new FakeMissingHollowRecord(new HollowObjectMissingDataAccess(readStateEngine, "MissingObject"), 2)));
@@ -96,5 +96,6 @@ public class MissingListTest extends AbstractStateEngineTest {
 
 
     @Override
-    protected void initializeTypeStates() { }
+    protected void initializeTypeStates() {
+    }
 }

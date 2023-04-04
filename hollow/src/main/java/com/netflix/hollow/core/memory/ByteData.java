@@ -30,11 +30,11 @@ package com.netflix.hollow.core.memory;
 public interface ByteData {
 
     default long readLongBits(long position) {
-        long longBits = (long) (get(position++) & 0xFF) << 56;
-        longBits |= (long) (get(position++) & 0xFF) << 48;
-        longBits |= (long) (get(position++) & 0xFF) << 40;
-        longBits |= (long) (get(position++) & 0xFF) << 32;
-        longBits |= (long) (get(position++) & 0xFF) << 24;
+        long longBits = (long)(get(position++) & 0xFF) << 56;
+        longBits |= (long)(get(position++) & 0xFF) << 48;
+        longBits |= (long)(get(position++) & 0xFF) << 40;
+        longBits |= (long)(get(position++) & 0xFF) << 32;
+        longBits |= (long)(get(position++) & 0xFF) << 24;
         longBits |= (get(position++) & 0xFF) << 16;
         longBits |= (get(position++) & 0xFF) << 8;
         longBits |= (get(position) & 0xFF);

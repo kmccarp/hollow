@@ -67,9 +67,9 @@ public class HollowClientTest {
         delta3.reset();
 
         client = new HollowClient.Builder()
-                              .withBlobRetriever(new FakeHollowBlobRetriever())
-                              .withMemoryConfig(new HollowClientMemoryConfig.SpecifiedConfig(true, false, 10000L, 10000L))
-                              .build();
+            .withBlobRetriever(new FakeHollowBlobRetriever())
+            .withMemoryConfig(new HollowClientMemoryConfig.SpecifiedConfig(true, false, 10000L, 10000L))
+            .build();
 
         createChain();
     }
@@ -80,7 +80,7 @@ public class HollowClientTest {
 
         HollowAPI api = client.getAPI();
 
-        HollowObjectTypeDataAccess dataAccess = (HollowObjectTypeDataAccess) api.getDataAccess().getTypeDataAccess("TestObject");
+        HollowObjectTypeDataAccess dataAccess = (HollowObjectTypeDataAccess)api.getDataAccess().getTypeDataAccess("TestObject");
 
         client.triggerRefreshTo(2);
         client.triggerRefreshTo(3);
@@ -166,9 +166,9 @@ public class HollowClientTest {
         @Override
         public HollowBlob retrieveDeltaBlob(long currentVersion) {
             byte[] data = null;
-            if(currentVersion == 1)  data = delta1.toByteArray();
-            if(currentVersion == 2)  data = delta2.toByteArray();
-            if(currentVersion == 3)  data = delta3.toByteArray();
+            if(currentVersion == 1) data = delta1.toByteArray();
+            if(currentVersion == 2) data = delta2.toByteArray();
+            if(currentVersion == 3) data = delta3.toByteArray();
 
             final byte b[] = data;
 

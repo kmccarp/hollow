@@ -36,7 +36,7 @@ public abstract class HollowObjectAbstractDelegate implements HollowObjectDelega
                 return missingDataHandler().handleIsNull(getSchema().getName(), ordinal, fieldName);
 
             return dataAccess.isNull(ordinal, fieldIndex);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             throw new RuntimeException(String.format("Unable to handle ordinal=%s, fieldName=%s", ordinal, fieldName), ex);
         }
     }
@@ -47,8 +47,8 @@ public abstract class HollowObjectAbstractDelegate implements HollowObjectDelega
         int fieldIndex = getSchema().getPosition(fieldName);
 
         Boolean bool = (fieldIndex != -1) ?
-                dataAccess.readBoolean(ordinal, fieldIndex)
-                : missingDataHandler().handleBoolean(getSchema().getName(), ordinal, fieldName);
+            dataAccess.readBoolean(ordinal, fieldIndex)
+            : missingDataHandler().handleBoolean(getSchema().getName(), ordinal, fieldName);
 
         return bool == null ? false : bool.booleanValue();
     }

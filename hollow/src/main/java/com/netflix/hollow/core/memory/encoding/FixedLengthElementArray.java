@@ -78,7 +78,7 @@ public class FixedLengthElementArray extends SegmentedLongArray implements Fixed
     @Override
     public void clearElementValue(long index, int bitsPerElement) {
         long whichLong = index >>> 6;
-        int whichBit = (int) (index & 0x3F);
+        int whichBit = (int)(index & 0x3F);
 
         long mask = ((1L << bitsPerElement) - 1);
 
@@ -86,20 +86,20 @@ public class FixedLengthElementArray extends SegmentedLongArray implements Fixed
 
         int bitsRemaining = 64 - whichBit;
 
-        if (bitsRemaining < bitsPerElement)
+        if(bitsRemaining < bitsPerElement)
             set(whichLong + 1, get(whichLong + 1) & ~(mask >>> bitsRemaining));
     }
 
     @Override
     public void setElementValue(long index, int bitsPerElement, long value) {
         long whichLong = index >>> 6;
-        int whichBit = (int) (index & 0x3F);
+        int whichBit = (int)(index & 0x3F);
 
         set(whichLong, get(whichLong) | (value << whichBit));
 
         int bitsRemaining = 64 - whichBit;
 
-        if (bitsRemaining < bitsPerElement)
+        if(bitsRemaining < bitsPerElement)
             set(whichLong + 1, get(whichLong + 1) | (value >>> bitsRemaining));
     }
 
@@ -111,12 +111,12 @@ public class FixedLengthElementArray extends SegmentedLongArray implements Fixed
     @Override
     public long getElementValue(long index, int bitsPerElement, long mask) {
         long whichByte = index >>> 3;
-        int whichBit = (int) (index & 0x07);
+        int whichBit = (int)(index & 0x07);
 
-        int whichSegment = (int) (whichByte >>> log2OfSegmentSizeInBytes);
+        int whichSegment = (int)(whichByte >>> log2OfSegmentSizeInBytes);
 
         long[] segment = segments[whichSegment];
-        long elementByteOffset = (long) Unsafe.ARRAY_LONG_BASE_OFFSET + (whichByte & byteBitmask);
+        long elementByteOffset = (long)Unsafe.ARRAY_LONG_BASE_OFFSET + (whichByte & byteBitmask);
         long longVal = unsafe.getLong(segment, elementByteOffset);
         long l = longVal >>> whichBit;
 
@@ -132,13 +132,13 @@ public class FixedLengthElementArray extends SegmentedLongArray implements Fixed
     @Override
     public long getLargeElementValue(long index, int bitsPerElement, long mask) {
         long whichLong = index >>> 6;
-        int whichBit = (int) (index & 0x3F);
+        int whichBit = (int)(index & 0x3F);
 
         long l = get(whichLong) >>> whichBit;
 
         int bitsRemaining = 64 - whichBit;
 
-        if (bitsRemaining < bitsPerElement) {
+        if(bitsRemaining < bitsPerElement) {
             whichLong++;
             l |= get(whichLong) << bitsRemaining;
         }
@@ -150,9 +150,9 @@ public class FixedLengthElementArray extends SegmentedLongArray implements Fixed
     public void copyBits(FixedLengthData copyFrom, long sourceStartBit, long destStartBit, long numBits) {
         if(numBits == 0)
             return;
-        
-        if ((destStartBit & 63) != 0) {
-            int fillBits = (int) Math.min(64 - (destStartBit & 63), numBits);
+
+        if((destStartBit & 63) != 0) {
+            int fillBits = (int)Math.min(64 - (destStartBit & 63), numBits);
             long fillValue = copyFrom.getLargeElementValue(sourceStartBit, fillBits);
             setElementValue(destStartBit, fillBits, fillValue);
 
@@ -163,7 +163,7 @@ public class FixedLengthElementArray extends SegmentedLongArray implements Fixed
 
         long currentWriteLong = destStartBit >>> 6;
 
-        while (numBits >= 64) {
+        while(numBits >= 64) {
             long l = copyFrom.getLargeElementValue(sourceStartBit, 64, -1);
             set(currentWriteLong, l);
             numBits -= 64;
@@ -171,52 +171,52 @@ public class FixedLengthElementArray extends SegmentedLongArray implements Fixed
             currentWriteLong++;
         }
 
-        if (numBits != 0) {
+        if(numBits != 0) {
             destStartBit = currentWriteLong << 6;
 
-            long fillValue = copyFrom.getLargeElementValue(sourceStartBit, (int) numBits);
-            setElementValue(destStartBit, (int) numBits, fillValue);
+            long fillValue = copyFrom.getLargeElementValue(sourceStartBit, (int)numBits);
+            setElementValue(destStartBit, (int)numBits, fillValue);
         }
     }
 
     @Override
     public void incrementMany(long startBit, long increment, long bitsBetweenIncrements, int numIncrements) {
         long endBit = startBit + (bitsBetweenIncrements * numIncrements);
-        for(; startBit<endBit; startBit += bitsBetweenIncrements) {
+        for(;startBit < endBit;startBit += bitsBetweenIncrements) {
             increment(startBit, increment);
         }
     }
 
     public void increment(long index, long increment) {
         long whichByte = index >>> 3;
-        int whichBit = (int) (index & 0x07);
+        int whichBit = (int)(index & 0x07);
 
-        int whichSegment = (int) (whichByte >>> log2OfSegmentSizeInBytes);
+        int whichSegment = (int)(whichByte >>> log2OfSegmentSizeInBytes);
 
         long[] segment = segments[whichSegment];
-        long elementByteOffset = (long) Unsafe.ARRAY_LONG_BASE_OFFSET + (whichByte & byteBitmask);
+        long elementByteOffset = (long)Unsafe.ARRAY_LONG_BASE_OFFSET + (whichByte & byteBitmask);
         long l = unsafe.getLong(segment, elementByteOffset);
 
         unsafe.putLong(segment, elementByteOffset, l + (increment << whichBit));
 
         /// update the fencepost longs
         if((whichByte & byteBitmask) > bitmask * 8 && (whichSegment + 1) < segments.length) {
-            unsafe.putLong(segments[whichSegment + 1], (long) Unsafe.ARRAY_LONG_BASE_OFFSET, segments[whichSegment][bitmask + 1]);
+            unsafe.putLong(segments[whichSegment + 1], (long)Unsafe.ARRAY_LONG_BASE_OFFSET, segments[whichSegment][bitmask + 1]);
         }
         if((whichByte & byteBitmask) < 8 && whichSegment > 0) {
-            unsafe.putLong(segments[whichSegment - 1], (long) Unsafe.ARRAY_LONG_BASE_OFFSET + (8 * (bitmask + 1)), segments[whichSegment][0]);
+            unsafe.putLong(segments[whichSegment - 1], (long)Unsafe.ARRAY_LONG_BASE_OFFSET + (8 * (bitmask + 1)), segments[whichSegment][0]);
         }
     }
 
     public static FixedLengthElementArray newFrom(HollowBlobInput in, ArraySegmentRecycler memoryRecycler)
-            throws IOException {
+        throws IOException {
 
         long numLongs = VarInt.readVLong(in);
         return newFrom(in, memoryRecycler, numLongs);
     }
 
     public static FixedLengthElementArray newFrom(HollowBlobInput in, ArraySegmentRecycler memoryRecycler, long numLongs)
-            throws IOException {
+        throws IOException {
 
         FixedLengthElementArray arr = new FixedLengthElementArray(memoryRecycler, numLongs * 64);
         arr.readFrom(in, memoryRecycler, numLongs);

@@ -49,7 +49,7 @@ import java.util.stream.Stream;
  * @param <Q> the key type
  */
 public class UniqueKeyIndex<T extends HollowObject, Q>
-        implements HollowConsumer.RefreshListener, HollowConsumer.RefreshRegistrationListener, Function<Q, T> {
+    implements HollowConsumer.RefreshListener, HollowConsumer.RefreshRegistrationListener, Function<Q, T> {
     final HollowConsumer consumer;
     HollowAPI api;
     final SelectFieldPathResultExtractor<T> uniqueTypeExtractor;
@@ -59,51 +59,51 @@ public class UniqueKeyIndex<T extends HollowObject, Q>
     HollowPrimaryKeyIndex hpki;
 
     UniqueKeyIndex(
-            HollowConsumer consumer,
-            Class<T> uniqueType,
-            PrimaryKey primaryTypeKey,
-            List<MatchFieldPathArgumentExtractor<Q>> matchFields) {
+        HollowConsumer consumer,
+        Class<T> uniqueType,
+        PrimaryKey primaryTypeKey,
+        List<MatchFieldPathArgumentExtractor<Q>> matchFields) {
         this.consumer = consumer;
         this.api = consumer.getAPI();
         this.uniqueSchemaName = HollowObjectTypeMapper.getDefaultTypeName(uniqueType);
 
         this.uniqueTypeExtractor = SelectFieldPathResultExtractor
-                .from(consumer.getAPI().getClass(), consumer.getStateEngine(), uniqueType, "", uniqueType);
+            .from(consumer.getAPI().getClass(), consumer.getStateEngine(), uniqueType, "", uniqueType);
 
-        if (primaryTypeKey != null) {
+        if(primaryTypeKey != null) {
             matchFields = validatePrimaryKeyFieldPaths(consumer, uniqueSchemaName, primaryTypeKey, matchFields);
         }
 
         this.matchFields = matchFields;
         this.matchFieldPaths = matchFields.stream()
-                .map(mf -> mf.fieldPath.toString())
-                .toArray(String[]::new);
-        
+            .map(mf -> mf.fieldPath.toString())
+            .toArray(String[]::new);
+
         this.hpki = new HollowPrimaryKeyIndex(consumer.getStateEngine(), uniqueSchemaName, matchFieldPaths);
     }
 
     static <Q> List<MatchFieldPathArgumentExtractor<Q>> validatePrimaryKeyFieldPaths(
-            HollowConsumer consumer, String primaryTypeName,
-            PrimaryKey primaryTypeKey, List<MatchFieldPathArgumentExtractor<Q>> matchFields) {
+        HollowConsumer consumer, String primaryTypeName,
+        PrimaryKey primaryTypeKey, List<MatchFieldPathArgumentExtractor<Q>> matchFields) {
 
         // Validate primary key field paths
         List<FieldPaths.FieldPath<FieldPaths.ObjectFieldSegment>> paths = Stream.of(
-                primaryTypeKey.getFieldPaths())
-                .map(fp -> FieldPaths
-                        .createFieldPathForPrimaryKey(consumer.getStateEngine(), primaryTypeName, fp))
-                .collect(toList());
+            primaryTypeKey.getFieldPaths())
+            .map(fp -> FieldPaths
+                .createFieldPathForPrimaryKey(consumer.getStateEngine(), primaryTypeName, fp))
+            .collect(toList());
 
         // Validate that primary key field paths are the same as that on the match fields
         // If so then match field extractors are shuffled to have the same order as primary key field paths
 
         List<MatchFieldPathArgumentExtractor<Q>> orderedMatchFields = paths.stream().flatMap(
-                path -> {
-                    MatchFieldPathArgumentExtractor<Q> mfe =
-                            matchFields.stream().filter(e -> e.fieldPath.equals(path)).findFirst().orElse(null);
-                    return mfe != null ? Stream.of(mfe) : null;
-                }).collect(toList());
+            path -> {
+                MatchFieldPathArgumentExtractor<Q> mfe =
+                    matchFields.stream().filter(e -> e.fieldPath.equals(path)).findFirst().orElse(null);
+                return mfe != null ? Stream.of(mfe) : null;
+            }).collect(toList());
 
-        if (orderedMatchFields.size() != paths.size()) {
+        if(orderedMatchFields.size() != paths.size()) {
             // @@@
             throw new IllegalArgumentException();
         }
@@ -111,32 +111,32 @@ public class UniqueKeyIndex<T extends HollowObject, Q>
     }
 
     UniqueKeyIndex(
-            HollowConsumer consumer,
-            Class<T> uniqueType,
-            PrimaryKey primaryTypeKey,
-            Class<Q> matchFieldsType) {
+        HollowConsumer consumer,
+        Class<T> uniqueType,
+        PrimaryKey primaryTypeKey,
+        Class<Q> matchFieldsType) {
         // @@@ Use FieldPaths.createFieldPathForPrimaryKey
         this(consumer,
-                uniqueType,
-                primaryTypeKey,
-                MatchFieldPathArgumentExtractor
-                        .fromHolderClass(consumer.getStateEngine(), uniqueType, matchFieldsType,
-                                FieldPaths::createFieldPathForPrimaryKey));
+            uniqueType,
+            primaryTypeKey,
+            MatchFieldPathArgumentExtractor
+                .fromHolderClass(consumer.getStateEngine(), uniqueType, matchFieldsType,
+                    FieldPaths::createFieldPathForPrimaryKey));
     }
 
     UniqueKeyIndex(
-            HollowConsumer consumer,
-            Class<T> uniqueType,
-            PrimaryKey primaryTypeKey,
-            String fieldPath, Class<Q> matchFieldType) {
+        HollowConsumer consumer,
+        Class<T> uniqueType,
+        PrimaryKey primaryTypeKey,
+        String fieldPath, Class<Q> matchFieldType) {
         // @@@ Use FieldPaths.createFieldPathForPrimaryKey
         this(consumer,
-                uniqueType,
-                primaryTypeKey,
-                Collections.singletonList(
-                        MatchFieldPathArgumentExtractor
-                                .fromPathAndType(consumer.getStateEngine(), uniqueType, fieldPath, matchFieldType,
-                                        FieldPaths::createFieldPathForPrimaryKey)));
+            uniqueType,
+            primaryTypeKey,
+            Collections.singletonList(
+                MatchFieldPathArgumentExtractor
+                    .fromPathAndType(consumer.getStateEngine(), uniqueType, fieldPath, matchFieldType,
+                        FieldPaths::createFieldPathForPrimaryKey)));
     }
 
 
@@ -160,27 +160,24 @@ public class UniqueKeyIndex<T extends HollowObject, Q>
     public T findMatch(Q key) {
         Object[] keyArray = new Object[matchFields.size()];
         int keyArrayLogicalSize = 0;
-        for (int i = 0; i < matchFields.size(); i++)
+        for(int i = 0;i < matchFields.size();i++)
         {
             Object matched = matchFields.get(i).extract(key);
-            if (matched != null) {
+            if(matched != null) {
                 keyArray[keyArrayLogicalSize++] = matched;
             }
         }
 
         int ordinal = -1;
-        if (keyArrayLogicalSize <= 0)
-            return null;
-        else if (keyArrayLogicalSize == 1)
-            ordinal = hpki.getMatchingOrdinal(keyArray[0]);
-        else if (keyArrayLogicalSize == 2)
-            ordinal = hpki.getMatchingOrdinal(keyArray[0], keyArray[1]);
-        else if (keyArrayLogicalSize == 3)
+        if(keyArrayLogicalSize <= 0)
+            return null;else if(keyArrayLogicalSize == 1)
+            ordinal = hpki.getMatchingOrdinal(keyArray[0]);else if(keyArrayLogicalSize == 2)
+            ordinal = hpki.getMatchingOrdinal(keyArray[0], keyArray[1]);else if(keyArrayLogicalSize == 3)
             ordinal = hpki.getMatchingOrdinal(keyArray[0], keyArray[1], keyArray[2]);
         else
             ordinal = hpki.getMatchingOrdinal(keyArray);
 
-        if (ordinal == HollowConstants.ORDINAL_NONE) {
+        if(ordinal == HollowConstants.ORDINAL_NONE) {
             return null;
         }
         return uniqueTypeExtractor.extract(api, ordinal);
@@ -188,10 +185,12 @@ public class UniqueKeyIndex<T extends HollowObject, Q>
 
     // HollowConsumer.RefreshListener
 
-    @Override public void refreshStarted(long currentVersion, long requestedVersion) {
+    @Override
+    public void refreshStarted(long currentVersion, long requestedVersion) {
     }
 
-    @Override public void snapshotUpdateOccurred(HollowAPI api, HollowReadStateEngine stateEngine, long version) {
+    @Override
+    public void snapshotUpdateOccurred(HollowAPI api, HollowReadStateEngine stateEngine, long version) {
         HollowPrimaryKeyIndex hpki = this.hpki;
         hpki.detachFromDeltaUpdates();
         hpki = new HollowPrimaryKeyIndex(consumer.getStateEngine(), hpki.getPrimaryKey());
@@ -200,30 +199,36 @@ public class UniqueKeyIndex<T extends HollowObject, Q>
         this.api = api;
     }
 
-    @Override public void deltaUpdateOccurred(HollowAPI api, HollowReadStateEngine stateEngine, long version) {
+    @Override
+    public void deltaUpdateOccurred(HollowAPI api, HollowReadStateEngine stateEngine, long version) {
         this.api = api;
     }
 
-    @Override public void blobLoaded(HollowConsumer.Blob transition) {
+    @Override
+    public void blobLoaded(HollowConsumer.Blob transition) {
     }
 
-    @Override public void refreshSuccessful(long beforeVersion, long afterVersion, long requestedVersion) {
+    @Override
+    public void refreshSuccessful(long beforeVersion, long afterVersion, long requestedVersion) {
     }
 
-    @Override public void refreshFailed(
-            long beforeVersion, long afterVersion, long requestedVersion, Throwable failureCause) {
+    @Override
+    public void refreshFailed(
+        long beforeVersion, long afterVersion, long requestedVersion, Throwable failureCause) {
     }
 
     // HollowConsumer.RefreshRegistrationListener
 
-    @Override public void onBeforeAddition(HollowConsumer c) {
-        if (c != consumer) {
+    @Override
+    public void onBeforeAddition(HollowConsumer c) {
+        if(c != consumer) {
             throw new IllegalStateException("The index's consumer and the listener's consumer are not the same");
         }
         hpki.listenForDeltaUpdates();
     }
 
-    @Override public void onAfterRemoval(HollowConsumer c) {
+    @Override
+    public void onAfterRemoval(HollowConsumer c) {
         hpki.detachFromDeltaUpdates();
     }
 
@@ -269,10 +274,10 @@ public class UniqueKeyIndex<T extends HollowObject, Q>
 
             assert schema.getSchemaType() == HollowSchema.SchemaType.OBJECT;
 
-            this.primaryTypeKey = ((HollowObjectSchema) schema).getPrimaryKey();
-            if (primaryTypeKey == null) {
+            this.primaryTypeKey = ((HollowObjectSchema)schema).getPrimaryKey();
+            if(primaryTypeKey == null) {
                 throw new IllegalArgumentException(
-                        String.format("No primary key associated with primary type %s", uniqueType));
+                    String.format("No primary key associated with primary type %s", uniqueType));
             }
             return this;
         }
@@ -292,7 +297,7 @@ public class UniqueKeyIndex<T extends HollowObject, Q>
         public <Q> UniqueKeyIndex<T, Q> usingBean(Class<Q> keyType) {
             Objects.requireNonNull(keyType);
             return new UniqueKeyIndex<>(consumer, uniqueType, primaryTypeKey,
-                    keyType);
+                keyType);
         }
 
         /**
@@ -310,12 +315,12 @@ public class UniqueKeyIndex<T extends HollowObject, Q>
          */
         public <Q> UniqueKeyIndex<T, Q> usingPath(String keyFieldPath, Class<Q> keyFieldType) {
             Objects.requireNonNull(keyFieldPath);
-            if (keyFieldPath.isEmpty()) {
+            if(keyFieldPath.isEmpty()) {
                 throw new IllegalArgumentException("keyFieldPath argument is an empty String");
             }
             Objects.requireNonNull(keyFieldType);
             return new UniqueKeyIndex<>(consumer, uniqueType, primaryTypeKey,
-                    keyFieldPath, keyFieldType);
+                keyFieldPath, keyFieldType);
         }
     }
 }

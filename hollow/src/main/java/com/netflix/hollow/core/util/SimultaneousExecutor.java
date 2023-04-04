@@ -96,7 +96,7 @@ public class SimultaneousExecutor extends ThreadPoolExecutor {
      * @param description brief description used to name created threads; combined with {@code context}
      */
     public SimultaneousExecutor(double threadsPerCpu, Class<?> context, String description) {
-        this((int) ((double) Runtime.getRuntime().availableProcessors() * threadsPerCpu), context, description);
+        this((int)((double)Runtime.getRuntime().availableProcessors() * threadsPerCpu), context, description);
     }
 
     /**
@@ -110,7 +110,7 @@ public class SimultaneousExecutor extends ThreadPoolExecutor {
      */
     @Deprecated
     public SimultaneousExecutor(double threadsPerCpu, String description) {
-        this((int) ((double) Runtime.getRuntime().availableProcessors() * threadsPerCpu), SimultaneousExecutor.class, description);
+        this((int)((double)Runtime.getRuntime().availableProcessors() * threadsPerCpu), SimultaneousExecutor.class, description);
     }
 
     /**
@@ -159,7 +159,7 @@ public class SimultaneousExecutor extends ThreadPoolExecutor {
      * @param threadPriority the priority set to each thread
      */
     public SimultaneousExecutor(double threadsPerCpu, Class<?> context, String description, int threadPriority) {
-        this((int) ((double) Runtime.getRuntime().availableProcessors() * threadsPerCpu), context, description, threadPriority);
+        this((int)((double)Runtime.getRuntime().availableProcessors() * threadsPerCpu), context, description, threadPriority);
     }
 
     /**
@@ -209,10 +209,11 @@ public class SimultaneousExecutor extends ThreadPoolExecutor {
      */
     public void awaitUninterruptibly() {
         shutdown();
-        while (!isTerminated()) {
+        while(!isTerminated()) {
             try {
                 awaitTermination(1, TimeUnit.DAYS);
-            } catch (final InterruptedException e) { }
+            } catch (final InterruptedException e) {
+            }
         }
     }
 
@@ -243,7 +244,7 @@ public class SimultaneousExecutor extends ThreadPoolExecutor {
      */
     public void awaitSuccessfulCompletion() throws InterruptedException, ExecutionException {
         awaitUninterruptibly();
-        for (final Future<?> f : futures) {
+        for(final Future<?> f : futures) {
             f.get();
         }
     }

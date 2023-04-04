@@ -156,16 +156,16 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
     public HollowUniqueKeyIndex(HollowDataAccess hollowDataAccess, PrimaryKey primaryKey, ArraySegmentRecycler memoryRecycler, BitSet specificOrdinalsToIndex) {
         requireNonNull(primaryKey, "Hollow Primary Key Index creation failed because primaryKey was null");
         requireNonNull(hollowDataAccess, "Hollow Primary Key Index creation for type [" + primaryKey.getType()
-                + "] failed because read state wasn't initialized");
+            + "] failed because read state wasn't initialized");
 
         this.primaryKey = primaryKey;
         //Obviously, the type we're indexing must be an object... no point in indexing primitives, etc.
-        this.objectTypeDataAccess = (HollowObjectTypeDataAccess) hollowDataAccess.getTypeDataAccess(primaryKey.getType());
+        this.objectTypeDataAccess = (HollowObjectTypeDataAccess)hollowDataAccess.getTypeDataAccess(primaryKey.getType());
         this.fields = new HollowHashIndexField[primaryKey.numFields()];
 
         this.memoryRecycler = memoryRecycler;
 
-        for (int fieldIdx = 0; fieldIdx < primaryKey.numFields(); fieldIdx++) {
+        for(int fieldIdx = 0;fieldIdx < primaryKey.numFields();fieldIdx++) {
             //This is the field type of the final item on the path.
             FieldType fieldType = primaryKey.getFieldType(hollowDataAccess, fieldIdx);
 
@@ -177,8 +177,8 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
             int[] fieldPathPositions = primaryKey.getFieldPathIndex(hollowDataAccess, fieldIdx);
             FieldPathSegment[] fieldPathElements = new FieldPathSegment[fieldPathPositions.length];
 
-            for (int posIdx = 0; posIdx < fieldPathPositions.length; posIdx++) {
-                if (currentDataAccess == null) {
+            for(int posIdx = 0;posIdx < fieldPathPositions.length;posIdx++) {
+                if(currentDataAccess == null) {
                     //This gets set to null if the previous segment was a non-reference type (i.e. we can't traverse a primitive, etc).
                     throw new IllegalArgumentException("Path " + primaryKey.getFieldPath(fieldIdx) + " traverses a non-reference type. Non-reference types must be the last element of the path.");
                 }
@@ -192,9 +192,9 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
                 //hollowDataAccess. There is a non-zero cost to performing these lookups so we do them here rather than
                 //at the place where we access the data.
                 String referencedType = currentDataAccess.getSchema().getReferencedType(fieldPosition);
-                if (referencedType != null) {
+                if(referencedType != null) {
                     //This is instead of currentDataAccess.getSchema().getReferencedTypeState()
-                    currentDataAccess = (HollowObjectTypeDataAccess) hollowDataAccess.getTypeDataAccess(referencedType);
+                    currentDataAccess = (HollowObjectTypeDataAccess)hollowDataAccess.getTypeDataAccess(referencedType);
                 } else {
                     currentDataAccess = null;
                 }
@@ -216,13 +216,13 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
      * discarding the index.
      */
     public void listenForDeltaUpdates() {
-        if (specificOrdinalsToIndex != null)
+        if(specificOrdinalsToIndex != null)
             throw new IllegalStateException("Cannot listen for delta updates when indexing only specified ordinals!");
-        if (!(objectTypeDataAccess instanceof HollowObjectTypeReadState))
+        if(!(objectTypeDataAccess instanceof HollowObjectTypeReadState))
             throw new IllegalStateException("Cannot listen for delta updates when objectTypeDataAccess is a "
-                    + objectTypeDataAccess.getClass().getSimpleName() + ". You may have created this index from a Data Access instance that has object longevity enabled.");
+                + objectTypeDataAccess.getClass().getSimpleName() + ". You may have created this index from a Data Access instance that has object longevity enabled.");
 
-        ((HollowObjectTypeReadState) objectTypeDataAccess).addListener(this);
+        ((HollowObjectTypeReadState)objectTypeDataAccess).addListener(this);
     }
 
     /**
@@ -232,8 +232,8 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
      */
     public void detachFromDeltaUpdates() {
         //We won't throw here. Just silently fail since it's unlikely this class was ever successfully added as a listener.
-        if (objectTypeDataAccess instanceof HollowObjectTypeReadState)
-            ((HollowObjectTypeReadState) objectTypeDataAccess).removeListener(this);
+        if(objectTypeDataAccess instanceof HollowObjectTypeReadState)
+            ((HollowObjectTypeReadState)objectTypeDataAccess).removeListener(this);
     }
 
     public HollowObjectTypeDataAccess getObjectTypeDataAccess() {
@@ -257,7 +257,7 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
      * @return the matching ordinal for the key, otherwise -1 if the key is not present
      */
     public int getMatchingOrdinal(Object key) {
-        if (isProvidedKeyCountNotEqualToIndexedFieldsCount(1))
+        if(isProvidedKeyCountNotEqualToIndexedFieldsCount(1))
             return ORDINAL_NONE;
 
         return getMatchingOrdinalImpl(key, null, null);
@@ -273,7 +273,7 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
      * @return the matching ordinal for the two keys, otherwise -1 if the key is not present
      */
     public int getMatchingOrdinal(Object key0, Object key1) {
-        if (isProvidedKeyCountNotEqualToIndexedFieldsCount(2))
+        if(isProvidedKeyCountNotEqualToIndexedFieldsCount(2))
             return ORDINAL_NONE;
 
         return getMatchingOrdinalImpl(key0, key1, null);
@@ -290,7 +290,7 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
      * @return the matching ordinal for the three keys, otherwise -1 if the key is not present
      */
     public int getMatchingOrdinal(Object key0, Object key1, Object key2) {
-        if (isProvidedKeyCountNotEqualToIndexedFieldsCount(3))
+        if(isProvidedKeyCountNotEqualToIndexedFieldsCount(3))
             return ORDINAL_NONE;
 
         return getMatchingOrdinalImpl(key0, key1, key2);
@@ -306,15 +306,15 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
      * @return ordinal or {@link com.netflix.hollow.core.HollowConstants#ORDINAL_NONE}
      */
     private int getMatchingOrdinalImpl(
-            Object key0,
-            Object key1,
-            Object key2) {
+        Object key0,
+        Object key1,
+        Object key2) {
         int fieldCount = fields.length;
 
         int hashCode = generateKeyHashCode(key0, fields[0].getFieldType());
-        if (fieldCount >= 2) {
+        if(fieldCount >= 2) {
             hashCode ^= generateKeyHashCode(key1, fields[1].getFieldType());
-            if (fieldCount == 3) {
+            if(fieldCount == 3) {
                 hashCode ^= generateKeyHashCode(key2, fields[2].getFieldType());
             }
         }
@@ -325,10 +325,10 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
             hashTable = this.hashTableVolatile;
             int bucket = hashCode & hashTable.hashMask;
             ordinal = readOrdinal(hashTable, bucket);
-            while (ordinal != ORDINAL_NONE) {
-                if (keyMatches(key0, ordinal, 0)
-                        && (fieldCount < 2 || keyMatches(key1, ordinal, 1))
-                        && (fieldCount < 3 || keyMatches(key2, ordinal, 2))) {
+            while(ordinal != ORDINAL_NONE) {
+                if(keyMatches(key0, ordinal, 0)
+                    && (fieldCount < 2 || keyMatches(key1, ordinal, 1))
+                    && (fieldCount < 3 || keyMatches(key2, ordinal, 2))) {
                     //This is a match. Break and return the ordinal.
                     break;
                 }
@@ -337,7 +337,7 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
                 bucket &= hashTable.hashMask;
                 ordinal = readOrdinal(hashTable, bucket);
             }
-        } while (this.hashTableVolatile != hashTable);
+        } while(this.hashTableVolatile != hashTable);
 
         return ordinal;
     }
@@ -351,11 +351,11 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
      * @return the matching ordinal for the keys, otherwise -1 if the key is not present
      */
     public int getMatchingOrdinal(Object... keys) {
-        if (isProvidedKeyCountNotEqualToIndexedFieldsCount(keys.length))
+        if(isProvidedKeyCountNotEqualToIndexedFieldsCount(keys.length))
             return ORDINAL_NONE;
 
         int hashCode = 0;
-        for (int fieldIdx = 0; fieldIdx < keys.length; fieldIdx++)
+        for(int fieldIdx = 0;fieldIdx < keys.length;fieldIdx++)
             hashCode ^= generateKeyHashCode(keys[fieldIdx], fields[fieldIdx].getFieldType());
 
         PrimaryKeyIndexHashTable hashTable;
@@ -365,15 +365,15 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
             hashTable = this.hashTableVolatile;
             int bucket = hashCode & hashTable.hashMask;
             ordinal = readOrdinal(hashTable, bucket);
-            while (ordinal != -1) {
-                if (keysAllMatch(ordinal, keys))
+            while(ordinal != -1) {
+                if(keysAllMatch(ordinal, keys))
                     break;
 
                 bucket++;
                 bucket &= hashTable.hashMask;
                 ordinal = readOrdinal(hashTable, bucket);
             }
-        } while (hashTableVolatile != hashTable);
+        } while(hashTableVolatile != hashTable);
 
         return ordinal;
     }
@@ -384,28 +384,28 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
     }
 
     private int readOrdinal(PrimaryKeyIndexHashTable hashTable, int bucket) {
-        return (int) hashTable.hashTable.getElementValue((long) hashTable.bitsPerElement * (long) bucket, hashTable.bitsPerElement) - 1;
+        return (int)hashTable.hashTable.getElementValue((long)hashTable.bitsPerElement * (long)bucket, hashTable.bitsPerElement) - 1;
     }
 
     @SuppressWarnings("UnnecessaryUnboxing")
     private static int generateKeyHashCode(Object key, FieldType fieldType) {
-        switch (fieldType) {
+        switch(fieldType) {
             case BOOLEAN:
-                return HashCodes.hashInt(HollowReadFieldUtils.booleanHashCode((Boolean) key));
+                return HashCodes.hashInt(HollowReadFieldUtils.booleanHashCode((Boolean)key));
             case DOUBLE:
-                return HashCodes.hashInt(HollowReadFieldUtils.doubleHashCode(((Double) key).doubleValue()));
+                return HashCodes.hashInt(HollowReadFieldUtils.doubleHashCode(((Double)key).doubleValue()));
             case FLOAT:
-                return HashCodes.hashInt(HollowReadFieldUtils.floatHashCode(((Float) key).floatValue()));
+                return HashCodes.hashInt(HollowReadFieldUtils.floatHashCode(((Float)key).floatValue()));
             case INT:
-                return HashCodes.hashInt(HollowReadFieldUtils.intHashCode(((Integer) key).intValue()));
+                return HashCodes.hashInt(HollowReadFieldUtils.intHashCode(((Integer)key).intValue()));
             case LONG:
-                return HashCodes.hashInt(HollowReadFieldUtils.longHashCode(((Long) key).longValue()));
+                return HashCodes.hashInt(HollowReadFieldUtils.longHashCode(((Long)key).longValue()));
             case REFERENCE:
-                return HashCodes.hashInt(((Integer) key).intValue());
+                return HashCodes.hashInt(((Integer)key).intValue());
             case BYTES:
-                return HashCodes.hashCode((byte[]) key);
+                return HashCodes.hashCode((byte[])key);
             case STRING:
-                return HashCodes.hashCode((String) key);
+                return HashCodes.hashCode((String)key);
         }
 
         throw new IllegalArgumentException("I don't know how to hash a " + fieldType);
@@ -424,23 +424,23 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
 
     public synchronized Collection<Object[]> getDuplicateKeys() {
         PrimaryKeyIndexHashTable hashTable = hashTableVolatile;
-        if (hashTable.bitsPerElement == 0)
+        if(hashTable.bitsPerElement == 0)
             return Collections.emptyList();
 
         List<Object[]> duplicateKeys = new ArrayList<>();
 
-        for (int i = 0; i < hashTable.hashTableSize; i++) {
-            int ordinal = (int) hashTable.hashTable.getElementValue((long) i * (long) hashTable.bitsPerElement, hashTable.bitsPerElement) - 1;
+        for(int i = 0;i < hashTable.hashTableSize;i++) {
+            int ordinal = (int)hashTable.hashTable.getElementValue((long)i * (long)hashTable.bitsPerElement, hashTable.bitsPerElement) - 1;
 
-            if (ordinal != -1) {
+            if(ordinal != -1) {
                 int compareBucket = (i + 1) & hashTable.hashMask;
-                int compareOrdinal = (int) hashTable.hashTable.getElementValue((long) compareBucket * (long) hashTable.bitsPerElement, hashTable.bitsPerElement) - 1;
-                while (compareOrdinal != -1) {
-                    if (recordsHaveEqualKeys(ordinal, compareOrdinal))
+                int compareOrdinal = (int)hashTable.hashTable.getElementValue((long)compareBucket * (long)hashTable.bitsPerElement, hashTable.bitsPerElement) - 1;
+                while(compareOrdinal != -1) {
+                    if(recordsHaveEqualKeys(ordinal, compareOrdinal))
                         duplicateKeys.add(getRecordKey(ordinal));
 
                     compareBucket = (compareBucket + 1) & hashTable.hashMask;
-                    compareOrdinal = (int) hashTable.hashTable.getElementValue((long) compareBucket * (long) hashTable.bitsPerElement, hashTable.bitsPerElement) - 1;
+                    compareOrdinal = (int)hashTable.hashTable.getElementValue((long)compareBucket * (long)hashTable.bitsPerElement, hashTable.bitsPerElement) - 1;
                 }
             }
         }
@@ -461,11 +461,11 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
     }
 
     private static final boolean ALLOW_DELTA_UPDATE =
-            Boolean.getBoolean("com.netflix.hollow.core.index.HollowUniqueKeyIndex.allowDeltaUpdate");
+        Boolean.getBoolean("com.netflix.hollow.core.index.HollowUniqueKeyIndex.allowDeltaUpdate");
 
     @Override
     public synchronized void endUpdate() {
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) this.objectTypeDataAccess.getTypeState();
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)this.objectTypeDataAccess.getTypeState();
         //This doesn't affect compatibility with object longevity since this only gets invoked
         //when the index is being updated.
         BitSet ordinals = typeState.getPopulatedOrdinals();
@@ -474,10 +474,10 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
         int bitsPerElement = (32 - Integer.numberOfLeadingZeros(typeState.maxOrdinal() + 1));
 
         PrimaryKeyIndexHashTable hashTable = hashTableVolatile;
-        if (ALLOW_DELTA_UPDATE
-                && hashTableSize == hashTable.hashTableSize
-                && bitsPerElement == hashTable.bitsPerElement
-                && shouldPerformDeltaUpdate()) {
+        if(ALLOW_DELTA_UPDATE
+            && hashTableSize == hashTable.hashTableSize
+            && bitsPerElement == hashTable.bitsPerElement
+            && shouldPerformDeltaUpdate()) {
             try {
                 deltaUpdate(hashTableSize, bitsPerElement);
             } catch (OrdinalNotFoundException e) {
@@ -506,21 +506,21 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
 
     public void destroy() {
         PrimaryKeyIndexHashTable hashTable = hashTableVolatile;
-        if (hashTable != null)
+        if(hashTable != null)
             hashTable.hashTable.destroy(memoryRecycler);
     }
 
     private synchronized void reindex() {
         PrimaryKeyIndexHashTable hashTable = hashTableVolatile;
         // Could be null on first reindex
-        if (hashTable != null) {
+        if(hashTable != null) {
             hashTable.hashTable.destroy(memoryRecycler);
         }
 
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) this.objectTypeDataAccess.getTypeState();
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)this.objectTypeDataAccess.getTypeState();
 
         BitSet ordinals = specificOrdinalsToIndex;
-        if (ordinals == null) {
+        if(ordinals == null) {
             //Note: this call is what makes it impossible to create an index against a non-current client.
             //This works even when object longevity it turned on *ONLY* if it is created against the
             //current version. Otherwise, this will return a bit set that does not match the HollowAPI's
@@ -531,19 +531,19 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
         int hashTableSize = HashCodes.hashTableSize(ordinals.cardinality());
         int bitsPerElement = (32 - Integer.numberOfLeadingZeros(typeState.maxOrdinal() + 1));
 
-        FixedLengthElementArray hashedArray = new FixedLengthElementArray(memoryRecycler, (long) hashTableSize * (long) bitsPerElement);
+        FixedLengthElementArray hashedArray = new FixedLengthElementArray(memoryRecycler, (long)hashTableSize * (long)bitsPerElement);
 
         int hashMask = hashTableSize - 1;
 
         int ordinal = ordinals.nextSetBit(0);
-        while (ordinal != ORDINAL_NONE) {
+        while(ordinal != ORDINAL_NONE) {
             int hashCode = generateRecordHash(ordinal);
             int bucket = hashCode & hashMask;
 
-            while (hashedArray.getElementValue((long) bucket * (long) bitsPerElement, bitsPerElement) != 0)
+            while(hashedArray.getElementValue((long)bucket * (long)bitsPerElement, bitsPerElement) != 0)
                 bucket = (bucket + 1) & hashMask;
 
-            hashedArray.setElementValue((long) bucket * (long) bitsPerElement, bitsPerElement, ordinal + 1);
+            hashedArray.setElementValue((long)bucket * (long)bitsPerElement, bitsPerElement, ordinal + 1);
 
             ordinal = ordinals.nextSetBit(ordinal + 1);
         }
@@ -558,42 +558,42 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
         PrimaryKeyIndexHashTable hashTable = hashTableVolatile;
         hashTable.hashTable.destroy(memoryRecycler);
 
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) this.objectTypeDataAccess.getTypeState();
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)this.objectTypeDataAccess.getTypeState();
         //This doesn't affect compatibility with object longevity since this only gets invoked
         //when the index is being updated.
         BitSet prevOrdinals = typeState.getPreviousOrdinals();
         BitSet ordinals = typeState.getPopulatedOrdinals();
 
-        long totalBitsInHashTable = (long) hashTableSize * (long) bitsPerElement;
+        long totalBitsInHashTable = (long)hashTableSize * (long)bitsPerElement;
         FixedLengthElementArray hashedArray = new FixedLengthElementArray(memoryRecycler, totalBitsInHashTable);
         hashedArray.copyBits(hashTable.hashTable, 0, 0, totalBitsInHashTable);
 
         int hashMask = hashTableSize - 1;
 
         int prevOrdinal = prevOrdinals.nextSetBit(0);
-        while (prevOrdinal != ORDINAL_NONE) {
-            if (!ordinals.get(prevOrdinal)) {
+        while(prevOrdinal != ORDINAL_NONE) {
+            if(!ordinals.get(prevOrdinal)) {
                 /// find and remove this ordinal
                 int hashCode = generateRecordHash(prevOrdinal);
                 int bucket = findOrdinalBucket(bitsPerElement, hashedArray, hashCode, hashMask, prevOrdinal);
 
-                hashedArray.clearElementValue((long) bucket * (long) bitsPerElement, bitsPerElement);
+                hashedArray.clearElementValue((long)bucket * (long)bitsPerElement, bitsPerElement);
                 int emptyBucket = bucket;
                 bucket = (bucket + 1) & hashMask;
-                int moveOrdinal = (int) hashedArray.getElementValue((long) bucket * (long) bitsPerElement, bitsPerElement) - 1;
+                int moveOrdinal = (int)hashedArray.getElementValue((long)bucket * (long)bitsPerElement, bitsPerElement) - 1;
 
-                while (moveOrdinal != ORDINAL_NONE) {
+                while(moveOrdinal != ORDINAL_NONE) {
                     int naturalHash = generateRecordHash(moveOrdinal);
                     int naturalBucket = naturalHash & hashMask;
 
-                    if (!bucketInRange(emptyBucket, bucket, naturalBucket)) {
-                        hashedArray.setElementValue((long) emptyBucket * (long) bitsPerElement, bitsPerElement, moveOrdinal + 1);
-                        hashedArray.clearElementValue((long) bucket * (long) bitsPerElement, bitsPerElement);
+                    if(!bucketInRange(emptyBucket, bucket, naturalBucket)) {
+                        hashedArray.setElementValue((long)emptyBucket * (long)bitsPerElement, bitsPerElement, moveOrdinal + 1);
+                        hashedArray.clearElementValue((long)bucket * (long)bitsPerElement, bitsPerElement);
                         emptyBucket = bucket;
                     }
 
                     bucket = (bucket + 1) & hashMask;
-                    moveOrdinal = (int) hashedArray.getElementValue((long) bucket * (long) bitsPerElement, bitsPerElement) - 1;
+                    moveOrdinal = (int)hashedArray.getElementValue((long)bucket * (long)bitsPerElement, bitsPerElement) - 1;
                 }
 
             }
@@ -603,16 +603,16 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
 
 
         int ordinal = ordinals.nextSetBit(0);
-        while (ordinal != ORDINAL_NONE) {
-            if (!prevOrdinals.get(ordinal)) {
+        while(ordinal != ORDINAL_NONE) {
+            if(!prevOrdinals.get(ordinal)) {
                 int hashCode = generateRecordHash(ordinal);
                 int bucket = hashCode & hashMask;
 
-                while (hashedArray.getElementValue((long) bucket * (long) bitsPerElement, bitsPerElement) != 0) {
+                while(hashedArray.getElementValue((long)bucket * (long)bitsPerElement, bitsPerElement) != 0) {
                     bucket = (bucket + 1) & hashMask;
                 }
 
-                hashedArray.setElementValue((long) bucket * (long) bitsPerElement, bitsPerElement, ordinal + 1);
+                hashedArray.setElementValue((long)bucket * (long)bitsPerElement, bitsPerElement, ordinal + 1);
             }
 
             ordinal = ordinals.nextSetBit(ordinal + 1);
@@ -628,24 +628,24 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
         int bucket = startBucket;
         long value;
         do {
-            value = hashedArray.getElementValue((long) bucket * (long) bitsPerElement, bitsPerElement);
-            if (prevOrdinal + 1 == value) {
+            value = hashedArray.getElementValue((long)bucket * (long)bitsPerElement, bitsPerElement);
+            if(prevOrdinal + 1 == value) {
                 return bucket;
             }
             bucket = (bucket + 1) & hashMask;
-        } while (value != 0 && bucket != startBucket);
+        } while(value != 0 && bucket != startBucket);
 
-        if (value == 0) {
+        if(value == 0) {
             throw new OrdinalNotFoundException(String.format("Ordinal not found (found empty entry): "
-                    + "ordinal=%d startBucket=%d", prevOrdinal, startBucket));
+                + "ordinal=%d startBucket=%d", prevOrdinal, startBucket));
         } else {
             throw new OrdinalNotFoundException(String.format("Ordinal not found (wrapped around table): "
-                    + "ordinal=%d startBucket=%d", prevOrdinal, startBucket));
+                + "ordinal=%d startBucket=%d", prevOrdinal, startBucket));
         }
     }
 
     private boolean bucketInRange(int fromBucket, int toBucket, int testBucket) {
-        if (toBucket > fromBucket) {
+        if(toBucket > fromBucket) {
             return testBucket > fromBucket && testBucket <= toBucket;
         } else {
             return testBucket > fromBucket || testBucket <= toBucket;
@@ -654,7 +654,7 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
 
     private int generateRecordHash(int ordinal) {
         int hashCode = 0;
-        for (int i = 0; i < fields.length; i++) {
+        for(int i = 0;i < fields.length;i++) {
             hashCode ^= generateFieldHash(ordinal, i);
         }
         return hashCode;
@@ -667,7 +667,7 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
 
         HollowHashIndexField field = fields[fieldIdx];
         int lastPathIdx = field.getSchemaFieldPositionPath().length - 1;
-        for (int pathIdx = 0; pathIdx < lastPathIdx; pathIdx++) {
+        for(int pathIdx = 0;pathIdx < lastPathIdx;pathIdx++) {
             FieldPathSegment pathElement = field.getSchemaFieldPositionPath()[pathIdx];
             ordinal = pathElement.getOrdinalForField(ordinal);
         }
@@ -676,7 +676,7 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
 
         int hashCode = HollowReadFieldUtils.fieldHashCode(lastPathElement.getObjectTypeDataAccess(), ordinal, lastPathElement.getSegmentFieldPosition());
 
-        switch (field.getFieldType()) {
+        switch(field.getFieldType()) {
             case STRING:
             case BYTES:
                 return hashCode;
@@ -688,7 +688,7 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
     public Object[] getRecordKey(int ordinal) {
         Object[] results = new Object[fields.length];
 
-        for (int i = 0; i < fields.length; i++) {
+        for(int i = 0;i < fields.length;i++) {
             HollowHashIndexField field = fields[i];
             int lastPathOrdinal = getOrdinalForFieldPath(field, ordinal);
             FieldPathSegment lastElement = field.getLastFieldPositionPathElement();
@@ -708,7 +708,7 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
         //from a HollowAPI to maintain support for object longevity. Do not get an accessor
         //from a Schema.
         FieldPathSegment[] pathElements = field.getSchemaFieldPositionPath();
-        for (int posIdx = 0; posIdx < pathElements.length - 1; posIdx++) {
+        for(int posIdx = 0;posIdx < pathElements.length - 1;posIdx++) {
             FieldPathSegment fieldPathElement = pathElements[posIdx];
             ordinal = fieldPathElement.getOrdinalForField(ordinal);
         }
@@ -723,8 +723,8 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
      * @return true if object's keys matches the specified keys
      */
     private boolean keysAllMatch(int ordinal, Object... keys) {
-        for (int i = 0; i < keys.length; i++) {
-            if (!keyMatches(keys[i], ordinal, i))
+        for(int i = 0;i < keys.length;i++) {
+            if(!keyMatches(keys[i], ordinal, i))
                 return false;
         }
 
@@ -757,8 +757,8 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
     }
 
     private boolean recordsHaveEqualKeys(int ordinal1, int ordinal2) {
-        for (int fieldIdx = 0; fieldIdx < fields.length; fieldIdx++) {
-            if (!fieldsAreEqual(ordinal1, ordinal2, fieldIdx))
+        for(int fieldIdx = 0;fieldIdx < fields.length;fieldIdx++) {
+            if(!fieldsAreEqual(ordinal1, ordinal2, fieldIdx))
                 return false;
         }
         return true;
@@ -771,7 +771,7 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
 
         HollowHashIndexField field = fields[fieldIdx];
         FieldPathSegment[] fieldPathElements = field.getSchemaFieldPositionPath();
-        for (int posIdx = 0; posIdx < fieldPathElements.length - 1; posIdx++) {
+        for(int posIdx = 0;posIdx < fieldPathElements.length - 1;posIdx++) {
             FieldPathSegment pathElement = fieldPathElements[posIdx];
             ordinal1 = pathElement.getOrdinalForField(ordinal1);
             ordinal2 = pathElement.getOrdinalForField(ordinal2);
@@ -781,17 +781,17 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
         //ordinal will refer to the record for the first element. Using that ordinal, you can
         //then invoke lastPathElement.getOrdinal(ordinal) to get the final element.
 
-        if (field.getFieldType() == FieldType.REFERENCE)
+        if(field.getFieldType() == FieldType.REFERENCE)
             return ordinal1 == ordinal2;
 
         FieldPathSegment lastPathElement = field.getLastFieldPositionPathElement();
         return HollowReadFieldUtils.fieldsAreEqual(
-                lastPathElement.getObjectTypeDataAccess(), ordinal1, lastPathElement.getSegmentFieldPosition(),
-                lastPathElement.getObjectTypeDataAccess(), ordinal2, lastPathElement.getSegmentFieldPosition());
+            lastPathElement.getObjectTypeDataAccess(), ordinal1, lastPathElement.getSegmentFieldPosition(),
+            lastPathElement.getObjectTypeDataAccess(), ordinal2, lastPathElement.getSegmentFieldPosition());
     }
 
     private boolean shouldPerformDeltaUpdate() {
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) this.objectTypeDataAccess.getTypeState();
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)this.objectTypeDataAccess.getTypeState();
         //This doesn't affect compatibility with object longevity since this only gets invoked
         //when the index is being updated.
         BitSet previousOrdinals = typeState.getPreviousOrdinals();
@@ -801,9 +801,9 @@ public class HollowUniqueKeyIndex implements HollowTypeStateListener, TestableUn
         int removedRecords = 0;
 
         int prevOrdinal = previousOrdinals.nextSetBit(0);
-        while (prevOrdinal != ORDINAL_NONE) {
+        while(prevOrdinal != ORDINAL_NONE) {
             prevCardinality++;
-            if (!ordinals.get(prevOrdinal))
+            if(!ordinals.get(prevOrdinal))
                 removedRecords++;
 
             prevOrdinal = previousOrdinals.nextSetBit(prevOrdinal + 1);

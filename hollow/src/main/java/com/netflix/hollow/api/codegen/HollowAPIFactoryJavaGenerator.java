@@ -36,7 +36,7 @@ public class HollowAPIFactoryJavaGenerator extends HollowConsumerJavaFileGenerat
     private final String apiClassname;
 
     public HollowAPIFactoryJavaGenerator(String packageName, String apiClassname, HollowDataset dataset,
-            CodeGeneratorConfig config) {
+        CodeGeneratorConfig config) {
         super(packageName, SUB_PACKAGE_NAME, dataset, config);
         this.apiClassname = apiClassname;
         this.className = apiClassname + "Factory";

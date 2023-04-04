@@ -29,18 +29,18 @@ public class HollowEffigyCollectionPairerTest {
     @Test
     public void test() {
         HollowEffigy list1 = list(
-                element("1", 1, 1),
-                element("2", 2, 2),
-                element("3", 3, 3),
-                element("4", 4, 4)
+            element("1", 1, 1),
+            element("2", 2, 2),
+            element("3", 3, 3),
+            element("4", 4, 4)
         );
 
         HollowEffigy list2 = list(
-                element("3", 103, 103),
-                element("1", 2, 1),
-                element("2", 102, 2),
-                element("5", 5, 5),
-                element("1", 1, 1)
+            element("3", 103, 103),
+            element("1", 2, 1),
+            element("2", 102, 2),
+            element("5", 5, 5),
+            element("1", 1, 1)
         );
 
         HollowEffigyCollectionPairer pairer = new HollowEffigyCollectionPairer(list1, list2, null);
@@ -58,14 +58,14 @@ public class HollowEffigyCollectionPairerTest {
 
     private void assertPair(EffigyFieldPair pair, String expectedFromField1, String expectedToField1) {
         if(expectedFromField1 != null) {
-            HollowEffigy element = (HollowEffigy) pair.getFrom().getValue();
+            HollowEffigy element = (HollowEffigy)pair.getFrom().getValue();
             Assert.assertEquals(expectedFromField1, element.getFields().get(0).getValue());
         } else {
             Assert.assertNull(pair.getFrom());
         }
 
         if(expectedToField1 != null) {
-            HollowEffigy element = (HollowEffigy) pair.getTo().getValue();
+            HollowEffigy element = (HollowEffigy)pair.getTo().getValue();
             Assert.assertEquals(expectedToField1, element.getFields().get(0).getValue());
         } else {
             Assert.assertNull(pair.getTo());

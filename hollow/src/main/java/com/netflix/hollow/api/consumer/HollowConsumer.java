@@ -58,7 +58,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-
 /**
  * A HollowConsumer is the top-level class used by consumers of Hollow data to initialize and keep up-to-date a local in-memory
  * copy of a hollow dataset.  The interactions between the "blob" transition store and announcement listener are defined by
@@ -133,19 +132,19 @@ public class HollowConsumer {
      */
     @Deprecated
     protected HollowConsumer(BlobRetriever blobRetriever,
-                             AnnouncementWatcher announcementWatcher,
-                             List<RefreshListener> refreshListeners,
-                             HollowAPIFactory apiFactory,
-                             HollowFilterConfig dataFilter,
-                             ObjectLongevityConfig objectLongevityConfig,
-                             ObjectLongevityDetector objectLongevityDetector,
-                             DoubleSnapshotConfig doubleSnapshotConfig,
-                             HollowObjectHashCodeFinder hashCodeFinder,
-                             Executor refreshExecutor,
-                             MemoryMode memoryMode) {
+        AnnouncementWatcher announcementWatcher,
+        List<RefreshListener> refreshListeners,
+        HollowAPIFactory apiFactory,
+        HollowFilterConfig dataFilter,
+        ObjectLongevityConfig objectLongevityConfig,
+        ObjectLongevityDetector objectLongevityDetector,
+        DoubleSnapshotConfig doubleSnapshotConfig,
+        HollowObjectHashCodeFinder hashCodeFinder,
+        Executor refreshExecutor,
+        MemoryMode memoryMode) {
         this(blobRetriever, announcementWatcher, refreshListeners, apiFactory, dataFilter,
-                objectLongevityConfig, objectLongevityDetector, doubleSnapshotConfig,
-                hashCodeFinder, refreshExecutor, memoryMode,null);
+            objectLongevityConfig, objectLongevityDetector, doubleSnapshotConfig,
+            hashCodeFinder, refreshExecutor, memoryMode, null);
     }
 
     /**
@@ -153,33 +152,33 @@ public class HollowConsumer {
      */
     @Deprecated
     protected HollowConsumer(BlobRetriever blobRetriever,
-                             AnnouncementWatcher announcementWatcher,
-                             List<RefreshListener> refreshListeners,
-                             HollowAPIFactory apiFactory,
-                             HollowFilterConfig dataFilter,
-                             ObjectLongevityConfig objectLongevityConfig,
-                             ObjectLongevityDetector objectLongevityDetector,
-                             DoubleSnapshotConfig doubleSnapshotConfig,
-                             HollowObjectHashCodeFinder hashCodeFinder,
-                             Executor refreshExecutor,
-                             MemoryMode memoryMode,
-                             HollowMetricsCollector<HollowConsumerMetrics> metricsCollector) {
+        AnnouncementWatcher announcementWatcher,
+        List<RefreshListener> refreshListeners,
+        HollowAPIFactory apiFactory,
+        HollowFilterConfig dataFilter,
+        ObjectLongevityConfig objectLongevityConfig,
+        ObjectLongevityDetector objectLongevityDetector,
+        DoubleSnapshotConfig doubleSnapshotConfig,
+        HollowObjectHashCodeFinder hashCodeFinder,
+        Executor refreshExecutor,
+        MemoryMode memoryMode,
+        HollowMetricsCollector<HollowConsumerMetrics> metricsCollector) {
         this.metrics = new HollowConsumerMetrics();
         this.updater = new HollowClientUpdater(blobRetriever,
-                refreshListeners,
-                apiFactory,
-                doubleSnapshotConfig,
-                hashCodeFinder,
-                memoryMode,
-                objectLongevityConfig,
-                objectLongevityDetector,
-                metrics,
-                metricsCollector);
+            refreshListeners,
+            apiFactory,
+            doubleSnapshotConfig,
+            hashCodeFinder,
+            memoryMode,
+            objectLongevityConfig,
+            objectLongevityDetector,
+            metrics,
+            metricsCollector);
         updater.setFilter(dataFilter);
         this.announcementWatcher = announcementWatcher;
         this.refreshExecutor = refreshExecutor;
         this.refreshLock = new ReentrantReadWriteLock();
-        if (announcementWatcher != null)
+        if(announcementWatcher != null)
             announcementWatcher.subscribeToUpdates(this);
         this.memoryMode = memoryMode;
     }
@@ -189,15 +188,15 @@ public class HollowConsumer {
         // constructor subscribes to the announcement watcher and we have more setup to do first
         this.metrics = new HollowConsumerMetrics();
         this.updater = new HollowClientUpdater(builder.blobRetriever,
-                builder.refreshListeners,
-                builder.apiFactory,
-                builder.doubleSnapshotConfig,
-                builder.hashCodeFinder,
-                builder.memoryMode,
-                builder.objectLongevityConfig,
-                builder.objectLongevityDetector,
-                metrics,
-                builder.metricsCollector);
+            builder.refreshListeners,
+            builder.apiFactory,
+            builder.doubleSnapshotConfig,
+            builder.hashCodeFinder,
+            builder.memoryMode,
+            builder.objectLongevityConfig,
+            builder.objectLongevityDetector,
+            metrics,
+            builder.metricsCollector);
         updater.setFilter(builder.typeFilter);
         if(builder.skipTypeShardUpdateWithNoAdditions)
             updater.setSkipShardUpdateWithNoAdditions(true);
@@ -205,7 +204,7 @@ public class HollowConsumer {
         this.refreshExecutor = builder.refreshExecutor;
         this.refreshLock = new ReentrantReadWriteLock();
         this.memoryMode = builder.memoryMode;
-        if (announcementWatcher != null)
+        if(announcementWatcher != null)
             announcementWatcher.subscribeToUpdates(this);
     }
 
@@ -259,7 +258,7 @@ public class HollowConsumer {
         refreshExecutor.execute(() -> {
             try {
                 long delay = targetBeginTime - System.currentTimeMillis();
-                if (delay > 0)
+                if(delay > 0)
                     Thread.sleep(delay);
             } catch (InterruptedException e) {
                 // Interrupting, such as shutting down the executor pool,
@@ -290,7 +289,7 @@ public class HollowConsumer {
      * @param version the version to refresh to
      */
     public void triggerRefreshTo(long version) {
-        if (announcementWatcher != null)
+        if(announcementWatcher != null)
             throw new UnsupportedOperationException("Cannot trigger refresh to specified version when a HollowConsumer.AnnouncementWatcher is present");
 
         try {
@@ -482,12 +481,12 @@ public class HollowConsumer {
 
         InputStream getInputStream() throws IOException;
 
-         default File getFile() throws IOException {
+        default File getFile() throws IOException {
             throw new UnsupportedOperationException();
         }
     }
 
-    public static abstract class HeaderBlob implements VersionedBlob{
+    public static abstract class HeaderBlob implements VersionedBlob {
 
         private final long version;
 
@@ -514,7 +513,7 @@ public class HollowConsumer {
      * <dd>Implementations will define how to retrieve the actual blob data for this specific blob from a data store as an InputStream.</dd>
      * </dl>
      */
-    public static abstract class Blob implements VersionedBlob{
+    public static abstract class Blob implements VersionedBlob {
 
         protected final long fromVersion;
         protected final long toVersion;
@@ -539,9 +538,8 @@ public class HollowConsumer {
             this.fromVersion = fromVersion;
             this.toVersion = toVersion;
 
-            if (this.isSnapshot())
-                this.blobType = BlobType.SNAPSHOT;
-            else if (this.isReverseDelta())
+            if(this.isSnapshot())
+                this.blobType = BlobType.SNAPSHOT;else if(this.isReverseDelta())
                 this.blobType = BlobType.REVERSE_DELTA;
             else
                 this.blobType = BlobType.DELTA;
@@ -580,6 +578,7 @@ public class HollowConsumer {
             REVERSE_DELTA("reversedelta");
 
             private final String type;
+
             BlobType(String type) {
                 this.type = type;
             }
@@ -902,7 +901,8 @@ public class HollowConsumer {
          * @param isSnapshotPlan Indicates whether the refresh involves a snapshot transition
          * @param transitionSequence List of transitions comprising the refresh
          */
-        default void transitionsPlanned(long beforeVersion, long desiredVersion, boolean isSnapshotPlan, List<HollowConsumer.Blob.BlobType> transitionSequence) {}
+        default void transitionsPlanned(long beforeVersion, long desiredVersion, boolean isSnapshotPlan, List<HollowConsumer.Blob.BlobType> transitionSequence) {
+        }
     }
 
     /**
@@ -1103,7 +1103,7 @@ public class HollowConsumer {
          * @throws IllegalArgumentException if provided API class is {@code HollowAPI} instead of a subclass
          */
         public B withGeneratedAPIClass(Class<? extends HollowAPI> generatedAPIClass) {
-            if (HollowAPI.class.equals(generatedAPIClass))
+            if(HollowAPI.class.equals(generatedAPIClass))
                 throw new IllegalArgumentException("must provide a code generated API class");
             this.apiFactory = new HollowAPIFactory.ForGeneratedAPI<>(generatedAPIClass);
             return (B)this;
@@ -1206,7 +1206,7 @@ public class HollowConsumer {
             this.metricsCollector = metricsCollector;
             return (B)this;
         }
-        
+
         /**
          * Experimental: When there are no updates for a type shard in a delta, skip updating that type shard.
          */
@@ -1222,37 +1222,37 @@ public class HollowConsumer {
         }
 
         protected void checkArguments() {
-            if (filterConfig != null && typeFilter != null) {
+            if(filterConfig != null && typeFilter != null) {
                 // this should only be possible in custom subclasses that override #withFilterConfig(...)
                 throw new IllegalStateException("Only one of typeFilter and filterConfig can be set");
             }
-            if (blobRetriever == null && localBlobStoreDir == null) {
+            if(blobRetriever == null && localBlobStoreDir == null) {
                 throw new IllegalArgumentException(
-                        "A HollowBlobRetriever or local blob store directory must be specified when building a HollowClient");
+                    "A HollowBlobRetriever or local blob store directory must be specified when building a HollowClient");
             }
 
             BlobRetriever blobRetriever = this.blobRetriever;
-            if (localBlobStoreDir != null) {
+            if(localBlobStoreDir != null) {
                 this.blobRetriever = new HollowFilesystemBlobRetriever(
-                        localBlobStoreDir.toPath(), blobRetriever, useExistingStaleSnapshot);
+                    localBlobStoreDir.toPath(), blobRetriever, useExistingStaleSnapshot);
             }
 
-            if (refreshExecutor == null) {
+            if(refreshExecutor == null) {
                 refreshExecutor = newSingleThreadExecutor(r -> daemonThread(r, getClass(), "refresh"));
             }
 
-            if (!memoryMode.consumerSupported()) {
+            if(!memoryMode.consumerSupported()) {
                 throw new UnsupportedOperationException("Cinder Consumer in " + memoryMode + " mode is not supported");
             }
 
-            if ((filterConfig != null || typeFilter != null) && !memoryMode.supportsFiltering()) {
+            if((filterConfig != null || typeFilter != null) && !memoryMode.supportsFiltering()) {
                 throw new UnsupportedOperationException("Filtering is not supported in shared memory mode");
             }
         }
 
         public HollowConsumer build() {
             checkArguments();
-            if (filterConfig != null) {
+            if(filterConfig != null) {
                 // TODO: remove once deprecated #withFilterConfig is removed
                 typeFilter = filterConfig;
                 filterConfig = null;

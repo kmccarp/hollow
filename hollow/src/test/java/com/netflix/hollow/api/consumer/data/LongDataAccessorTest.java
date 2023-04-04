@@ -70,7 +70,7 @@ public class LongDataAccessorTest extends AbstractPrimitiveTypeDataAccessorTest<
             Assert.assertEquals(0, dAccessor.getUpdatedRecords().size());
         }
 
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("Long");
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)readStateEngine.getTypeState("Long");
         Assert.assertEquals(4, typeState.maxOrdinal());
 
         assertObject(typeState, 0, new Long(1));

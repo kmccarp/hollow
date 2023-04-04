@@ -88,21 +88,21 @@ public class HttpHandlerWithServletSupport implements HttpHandler {
         @Override
         public Cookie[] getCookies() {
             Headers headers = ex.getRequestHeaders();
-            if (headers != null) {
+            if(headers != null) {
                 List<String> strCookies = headers.get("Cookie");
-                if (strCookies != null) {
+                if(strCookies != null) {
                     List<Cookie> cookies = new ArrayList<>();
-                    for (String cookieString : strCookies) {
+                    for(String cookieString : strCookies) {
                         String[] tokens = cookieString.split("\\s*;\\s*");
-                        for (String token : tokens) {
+                        for(String token : tokens) {
                             String[] keyVal = token.split("\\s*=\\s*");
-                            if(keyVal.length == 2){
+                            if(keyVal.length == 2) {
                                 cookies.add(new Cookie(keyVal[0], keyVal[1]));
                             }
                         }
-                   }
-                   return cookies.toArray(new Cookie[0]);
-               }
+                    }
+                    return cookies.toArray(new Cookie[0]);
+                }
             }
             return null;
         }
@@ -232,7 +232,7 @@ public class HttpHandlerWithServletSupport implements HttpHandler {
         @Override
         public void sendError(int sc, String msg) throws IOException {
             this.status = sc;
-            if (msg != null) {
+            if(msg != null) {
                 printWriter.write(msg);
             }
         }
@@ -255,7 +255,7 @@ public class HttpHandlerWithServletSupport implements HttpHandler {
             try {
                 printWriter.flush();
                 ex.sendResponseHeaders(status, outputStream.size());
-                if (outputStream.size() > 0) {
+                if(outputStream.size() > 0) {
                     ex.getResponseBody().write(outputStream.toByteArray());
                 }
                 ex.getResponseBody().flush();
@@ -328,9 +328,9 @@ public class HttpHandlerWithServletSupport implements HttpHandler {
     private static byte[] getBytes(InputStream in) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
-        while (true) {
+        while(true) {
             int r = in.read(buffer);
-            if (r == -1)
+            if(r == -1)
                 break;
             out.write(buffer, 0, r);
         }
@@ -346,8 +346,8 @@ public class HttpHandlerWithServletSupport implements HttpHandler {
             }
         }
 
-        return (T) Proxy.newProxyInstance(UnimplementedHandler.class.getClassLoader(),
-                new Class<?>[] { httpServletApi },
-                new UnimplementedHandler());
+        return (T)Proxy.newProxyInstance(UnimplementedHandler.class.getClassLoader(),
+            new Class<?>[]{httpServletApi},
+            new UnimplementedHandler());
     }
 }

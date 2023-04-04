@@ -51,8 +51,8 @@ public class HollowProducerConsumerTests {
     @Test
     public void publishAndLoadASnapshot() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
         /// Showing verbose version of `runCycle(producer, 1);`
         long version = producer.runCycle(state -> state.add(1));
@@ -66,9 +66,9 @@ public class HollowProducerConsumerTests {
     @Test
     public void initializationTraversesDeltasToGetUpToDate() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .withNumStatesBetweenSnapshots(2) /// do not produce snapshots for v2 or v3
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .withNumStatesBetweenSnapshots(2) /// do not produce snapshots for v2 or v3
+            .build();
 
         long v1 = runCycle(producer, 1);
         long v2 = runCycle(producer, 2);
@@ -87,15 +87,15 @@ public class HollowProducerConsumerTests {
     @Test
     public void consumerAutomaticallyUpdatesBasedOnAnnouncement() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withAnnouncer(announcement)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withAnnouncer(announcement)
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
         long v1 = runCycle(producer, 1);
 
         HollowConsumer consumer = HollowConsumer.withBlobRetriever(blobStore)
-                .withAnnouncementWatcher(announcement)
-                .build();
+            .withAnnouncementWatcher(announcement)
+            .build();
         consumer.triggerRefresh();
 
         Assert.assertEquals(v1, consumer.getCurrentVersionId());
@@ -108,9 +108,9 @@ public class HollowProducerConsumerTests {
     @Test
     public void consumerFollowsReverseDeltas() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .withNumStatesBetweenSnapshots(2) /// do not produce snapshot for v2 or v3
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .withNumStatesBetweenSnapshots(2) /// do not produce snapshot for v2 or v3
+            .build();
 
         long v1 = runCycle(producer, 1);
         runCycle(producer, 2);
@@ -122,7 +122,7 @@ public class HollowProducerConsumerTests {
         Assert.assertEquals(v3, consumer.getCurrentVersionId());
 
         blobStore.removeSnapshot(
-                v1); // <-- not necessary to cause following of reverse deltas -- just asserting that's what happened.
+            v1); // <-- not necessary to cause following of reverse deltas -- just asserting that's what happened.
         consumer.triggerRefreshTo(v1);
 
         Assert.assertEquals(v1, consumer.getCurrentVersionId());
@@ -131,10 +131,10 @@ public class HollowProducerConsumerTests {
     @Test
     public void consumerRespondsToPinnedAnnouncement() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withAnnouncer(announcement)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .withNumStatesBetweenSnapshots(2) /// do not produce snapshot for v2 or v3
-                .build();
+            .withAnnouncer(announcement)
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .withNumStatesBetweenSnapshots(2) /// do not produce snapshot for v2 or v3
+            .build();
 
         long v1 = runCycle(producer, 1);
         runCycle(producer, 2);
@@ -142,8 +142,8 @@ public class HollowProducerConsumerTests {
 
 
         HollowConsumer consumer = HollowConsumer.withBlobRetriever(blobStore)
-                .withAnnouncementWatcher(announcement)
-                .build();
+            .withAnnouncementWatcher(announcement)
+            .build();
         consumer.triggerRefresh();
 
         Assert.assertEquals(v3, consumer.getCurrentVersionId());
@@ -163,9 +163,9 @@ public class HollowProducerConsumerTests {
     @Test
     public void consumerFindsLatestPublishedVersionWithoutAnnouncementWatcher() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withAnnouncer(announcement)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withAnnouncer(announcement)
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
         long v1 = runCycle(producer, 1);
 
@@ -186,14 +186,14 @@ public class HollowProducerConsumerTests {
     @Test
     public void producerRestoresAndProducesDelta() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
         long v1 = runCycle(producer, 1);
 
         HollowProducer redeployedProducer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
         redeployedProducer.initializeDataModel(Integer.class);
         redeployedProducer.restore(v1, blobStore);
@@ -207,11 +207,11 @@ public class HollowProducerConsumerTests {
     @Test
     public void producerUsesCustomSnapshotPublisherExecutor() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .withSnapshotPublishExecutor(command -> {
-                    /// do not publish snapshots!
-                })
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .withSnapshotPublishExecutor(command -> {
+                /// do not publish snapshots!
+            })
+            .build();
 
         long v1 = runCycle(producer, 1);
         long v2 = runCycle(producer, 2);
@@ -228,15 +228,15 @@ public class HollowProducerConsumerTests {
     @Test
     public void producerUsesCustomVersionMinter() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .withVersionMinter(new VersionMinter() {
-                    long counter = 0;
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .withVersionMinter(new VersionMinter() {
+                long counter = 0;
 
-                    public long mint() {
-                        return ++counter;
-                    }
-                })
-                .build();
+                public long mint() {
+                    return ++counter;
+                }
+            })
+            .build();
 
         long v1 = runCycle(producer, 1);
         long v2 = runCycle(producer, 2);
@@ -250,36 +250,40 @@ public class HollowProducerConsumerTests {
     @Test
     public void producerValidatesWithFailure() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .withListener(new ValidatorListener() {
-                    @Override public String getName() {
-                        return "Test validator";
-                    }
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .withListener(new ValidatorListener() {
+                @Override
+                public String getName() {
+                    return "Test validator";
+                }
 
-                    @Override public ValidationResult onValidate(ReadState readState) {
-                        return ValidationResult.from(this).failed("Expected to fail!");
-                    }
-                })
-                .withListener(new ValidationStatusListener() {
-                    boolean isStartCalled;
+                @Override
+                public ValidationResult onValidate(ReadState readState) {
+                    return ValidationResult.from(this).failed("Expected to fail!");
+                }
+            })
+            .withListener(new ValidationStatusListener() {
+                boolean isStartCalled;
 
-                    @Override public void onValidationStatusStart(long version) {
-                        isStartCalled = true;
-                    }
+                @Override
+                public void onValidationStatusStart(long version) {
+                    isStartCalled = true;
+                }
 
-                    @Override public void onValidationStatusComplete(
-                            ValidationStatus status, long version, Duration elapsed) {
-                        Assert.assertTrue(isStartCalled);
-                        Assert.assertTrue(status.failed());
-                        Assert.assertEquals(1, status.getResults().size());
+                @Override
+                public void onValidationStatusComplete(
+                    ValidationStatus status, long version, Duration elapsed) {
+                    Assert.assertTrue(isStartCalled);
+                    Assert.assertTrue(status.failed());
+                    Assert.assertEquals(1, status.getResults().size());
 
-                        ValidationResult r = status.getResults().get(0);
-                        Assert.assertEquals("Test validator", r.getName());
-                        Assert.assertEquals("Expected to fail!", r.getMessage());
-                        Assert.assertEquals(ValidationResultType.FAILED, r.getResultType());
-                    }
-                })
-                .build();
+                    ValidationResult r = status.getResults().get(0);
+                    Assert.assertEquals("Test validator", r.getName());
+                    Assert.assertEquals("Expected to fail!", r.getMessage());
+                    Assert.assertEquals(ValidationResultType.FAILED, r.getResultType());
+                }
+            })
+            .build();
 
         try {
             runCycle(producer, 1);
@@ -299,36 +303,40 @@ public class HollowProducerConsumerTests {
     @Test
     public void producerValidatesWithError() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .withListener(new ValidatorListener() {
-                    @Override public String getName() {
-                        return "Test validator";
-                    }
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .withListener(new ValidatorListener() {
+                @Override
+                public String getName() {
+                    return "Test validator";
+                }
 
-                    @Override public ValidationResult onValidate(ReadState readState) {
-                        throw new RuntimeException("Expected to fail!");
-                    }
-                })
-                .withListener(new ValidationStatusListener() {
-                    boolean isStartCalled;
+                @Override
+                public ValidationResult onValidate(ReadState readState) {
+                    throw new RuntimeException("Expected to fail!");
+                }
+            })
+            .withListener(new ValidationStatusListener() {
+                boolean isStartCalled;
 
-                    @Override public void onValidationStatusStart(long version) {
-                        isStartCalled = true;
-                    }
+                @Override
+                public void onValidationStatusStart(long version) {
+                    isStartCalled = true;
+                }
 
-                    @Override public void onValidationStatusComplete(
-                            ValidationStatus status, long version, Duration elapsed) {
-                        Assert.assertTrue(isStartCalled);
-                        Assert.assertTrue(status.failed());
-                        Assert.assertEquals(1, status.getResults().size());
+                @Override
+                public void onValidationStatusComplete(
+                    ValidationStatus status, long version, Duration elapsed) {
+                    Assert.assertTrue(isStartCalled);
+                    Assert.assertTrue(status.failed());
+                    Assert.assertEquals(1, status.getResults().size());
 
-                        ValidationResult r = status.getResults().get(0);
-                        Assert.assertEquals("Test validator", r.getName());
-                        Assert.assertEquals("Expected to fail!", r.getMessage());
-                        Assert.assertEquals(ValidationResultType.ERROR, r.getResultType());
-                    }
-                })
-                .build();
+                    ValidationResult r = status.getResults().get(0);
+                    Assert.assertEquals("Test validator", r.getName());
+                    Assert.assertEquals("Expected to fail!", r.getMessage());
+                    Assert.assertEquals(ValidationResultType.ERROR, r.getResultType());
+                }
+            })
+            .build();
 
         try {
             runCycle(producer, 1);
@@ -349,48 +357,50 @@ public class HollowProducerConsumerTests {
     public void producerCanContinueAfterValidationFailureNew() {
         AtomicInteger counter = new AtomicInteger();
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .withListener(new ValidatorListener() {
-                    @Override
-                    public String getName() {
-                        return "Test validator";
-                    }
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .withListener(new ValidatorListener() {
+                @Override
+                public String getName() {
+                    return "Test validator";
+                }
 
-                    @Override
-                    public ValidationResult onValidate(ReadState readState) {
-                        if (counter.incrementAndGet() == 2) {
-                            return ValidationResult.from(this).failed("Expected to fail!");
-                        } else {
-                            return ValidationResult.from(this).passed("Pass");
-                        }
+                @Override
+                public ValidationResult onValidate(ReadState readState) {
+                    if(counter.incrementAndGet() == 2) {
+                        return ValidationResult.from(this).failed("Expected to fail!");
+                    } else {
+                        return ValidationResult.from(this).passed("Pass");
                     }
-                })
-                .withListener(new ValidationStatusListener() {
-                    @Override public void onValidationStatusStart(long version) {
+                }
+            })
+            .withListener(new ValidationStatusListener() {
+                @Override
+                public void onValidationStatusStart(long version) {
+                }
+
+                @Override
+                public void onValidationStatusComplete(
+                    ValidationStatus status, long version, Duration elapsed) {
+                    if(counter.get() == 2) {
+                        Assert.assertTrue(status.failed());
+                        Assert.assertEquals(1, status.getResults().size());
+
+                        ValidationResult r = status.getResults().get(0);
+                        Assert.assertEquals("Test validator", r.getName());
+                        Assert.assertEquals("Expected to fail!", r.getMessage());
+                        Assert.assertEquals(ValidationResultType.FAILED, r.getResultType());
+                    } else {
+                        Assert.assertTrue(status.passed());
+                        Assert.assertEquals(1, status.getResults().size());
+
+                        ValidationResult r = status.getResults().get(0);
+                        Assert.assertEquals("Test validator", r.getName());
+                        Assert.assertEquals("Pass", r.getMessage());
+                        Assert.assertEquals(ValidationResultType.PASSED, r.getResultType());
                     }
-
-                    @Override public void onValidationStatusComplete(
-                            ValidationStatus status, long version, Duration elapsed) {
-                        if (counter.get() == 2) {
-                            Assert.assertTrue(status.failed());
-                            Assert.assertEquals(1, status.getResults().size());
-
-                            ValidationResult r = status.getResults().get(0);
-                            Assert.assertEquals("Test validator", r.getName());
-                            Assert.assertEquals("Expected to fail!", r.getMessage());
-                            Assert.assertEquals(ValidationResultType.FAILED, r.getResultType());
-                        } else {
-                            Assert.assertTrue(status.passed());
-                            Assert.assertEquals(1, status.getResults().size());
-
-                            ValidationResult r = status.getResults().get(0);
-                            Assert.assertEquals("Test validator", r.getName());
-                            Assert.assertEquals("Pass", r.getMessage());
-                            Assert.assertEquals(ValidationResultType.PASSED, r.getResultType());
-                        }
-                    }
-                })
-                .build();
+                }
+            })
+            .build();
 
         runCycle(producer, 1);
 
@@ -414,17 +424,17 @@ public class HollowProducerConsumerTests {
     @Test
     public void producerCompacts() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
         producer.runCycle(state -> {
-            for (int i = 0; i < 10000; i++) {
+            for(int i = 0;i < 10000;i++) {
                 state.add(i);
             }
         });
 
         long v2 = producer.runCycle(state -> {
-            for (int i = 10000; i < 20000; i++) {
+            for(int i = 10000;i < 20000;i++) {
                 state.add(i);
             }
         });
@@ -445,12 +455,12 @@ public class HollowProducerConsumerTests {
         Assert.assertEquals(10000, popOrdinalsLength);
 
         BitSet foundValues = new BitSet(20000);
-        for (int i = 0; i < popOrdinalsLength; i++) {
-            foundValues.set(((HollowObjectTypeReadState) consumer.getStateEngine().getTypeState("Integer"))
-                    .readInt(i, 0));
+        for(int i = 0;i < popOrdinalsLength;i++) {
+            foundValues.set(((HollowObjectTypeReadState)consumer.getStateEngine().getTypeState("Integer"))
+                .readInt(i, 0));
         }
 
-        for (int i = 10000; i < 20000; i++) {
+        for(int i = 10000;i < 20000;i++) {
             Assert.assertTrue(foundValues.get(i));
         }
     }
@@ -458,29 +468,29 @@ public class HollowProducerConsumerTests {
     @Test
     public void consumerFilteringSupport() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
         /// Showing verbose version of `runCycle(producer, 1);`
         long version = producer.runCycle(state -> state.add(1));
 
         TypeFilter filterConfig = TypeFilter.newTypeFilter()
-                .excludeAll()
-                .include("String")
-                .build();
+            .excludeAll()
+            .include("String")
+            .build();
 
         HollowConsumer consumer = HollowConsumer.withBlobRetriever(blobStore)
-                .withTypeFilter(filterConfig)
-                .build();
+            .withTypeFilter(filterConfig)
+            .build();
         consumer.triggerRefreshTo(version);
         Assert.assertEquals(version, consumer.getCurrentVersionId());
 
         // Filtering is not supported in shared memory mode
         try {
             HollowConsumer.withBlobRetriever(blobStore)
-                    .withMemoryMode(MemoryMode.SHARED_MEMORY_LAZY)
-                    .withTypeFilter(filterConfig)
-                    .build();
+                .withMemoryMode(MemoryMode.SHARED_MEMORY_LAZY)
+                .withTypeFilter(filterConfig)
+                .build();
         } catch (UnsupportedOperationException e) {
             return;
         }

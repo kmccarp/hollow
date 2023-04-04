@@ -114,9 +114,9 @@ public class StaleHollowReferenceDetector {
     }
 
     public void startMonitoring() {
-        if (monitor == null) {
+        if(monitor == null) {
             daemonThread(new Monitor(this), getClass(), "monitor")
-                    .start();
+                .start();
         }
     }
 
@@ -133,7 +133,7 @@ public class StaleHollowReferenceDetector {
         }
 
         public void run() {
-            while (ref.get() != null) {
+            while(ref.get() != null) {
 
                 try {
                     Thread.sleep(HOUSEKEEPING_INTERVAL);
@@ -141,7 +141,7 @@ public class StaleHollowReferenceDetector {
                     Thread.currentThread().interrupt();
                 }
                 StaleHollowReferenceDetector parent = ref.get();
-                if (parent != null) {
+                if(parent != null) {
                     parent.housekeeping();
 
                     parent.detector.staleReferenceExistenceDetected(parent.countStaleReferenceExistenceSignals());
@@ -225,10 +225,9 @@ public class StaleHollowReferenceDetector {
             if(api != null) {
                 HollowDataAccess dataAccess = api.getDataAccess();
 
-                if (dataAccess instanceof HollowProxyDataAccess)
-                    ((HollowProxyDataAccess) dataAccess).disableDataAccess();
-                else if (dataAccess instanceof HollowReadStateEngine)
-                    ((HollowReadStateEngine) dataAccess).invalidate();
+                if(dataAccess instanceof HollowProxyDataAccess)
+                    ((HollowProxyDataAccess)dataAccess).disableDataAccess();else if(dataAccess instanceof HollowReadStateEngine)
+                    ((HollowReadStateEngine)dataAccess).invalidate();
 
                 api.detachCaches();
             }
@@ -253,7 +252,7 @@ public class StaleHollowReferenceDetector {
             if(api != null) {
                 HollowDataAccess dataAccess = api.getDataAccess();
                 if(dataAccess instanceof HollowProxyDataAccess) {
-                    HollowDataAccess proxiedDataAccess = ((HollowProxyDataAccess) dataAccess).getProxiedDataAccess();
+                    HollowDataAccess proxiedDataAccess = ((HollowProxyDataAccess)dataAccess).getProxiedDataAccess();
                     if(proxiedDataAccess instanceof HollowHistoricalStateDataAccess)
                         ((HollowHistoricalStateDataAccess)proxiedDataAccess).setStackTraceRecorder(config.enableExpiredUsageStackTraces() ? stackTraceRecorder : null);
                 }
@@ -293,8 +292,8 @@ public class StaleHollowReferenceDetector {
             if(myAPI.getDataAccess() instanceof HollowProxyDataAccess && ((HollowProxyDataAccess)myAPI.getDataAccess()).getProxiedDataAccess() == newAPI.getDataAccess())
                 return false;
             if(myAPI.getDataAccess() instanceof HollowProxyDataAccess
-              && newAPI.getDataAccess() instanceof HollowProxyDataAccess
-              && ((HollowProxyDataAccess)myAPI.getDataAccess()).getProxiedDataAccess() == ((HollowProxyDataAccess)newAPI.getDataAccess()).getProxiedDataAccess())
+                && newAPI.getDataAccess() instanceof HollowProxyDataAccess
+                && ((HollowProxyDataAccess)myAPI.getDataAccess()).getProxiedDataAccess() == ((HollowProxyDataAccess)newAPI.getDataAccess()).getProxiedDataAccess())
                 return false;
 
             return true;

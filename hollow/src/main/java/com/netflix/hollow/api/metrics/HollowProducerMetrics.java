@@ -42,8 +42,8 @@ public class HollowProducerMetrics extends HollowMetrics {
      */
     public void updateCycleMetrics(HollowProducerListener.ProducerStatus producerStatus) {
         Status.StatusType st = producerStatus.getStatus() == HollowProducerListener.Status.SUCCESS
-                ? Status.StatusType.SUCCESS
-                : Status.StatusType.FAIL;
+            ? Status.StatusType.SUCCESS
+            : Status.StatusType.FAIL;
 
         updateCycleMetrics(new Status(st, producerStatus.getCause()), producerStatus.getReadState(), producerStatus.getVersion());
     }
@@ -73,15 +73,15 @@ public class HollowProducerMetrics extends HollowMetrics {
 
     public void updateBlobTypeMetrics(HollowProducerListener.PublishStatus publishStatus) {
         Status.StatusType st = publishStatus.getStatus() == HollowProducerListener.Status.SUCCESS
-                ? Status.StatusType.SUCCESS
-                : Status.StatusType.FAIL;
+            ? Status.StatusType.SUCCESS
+            : Status.StatusType.FAIL;
 
         updateBlobTypeMetrics(new Status(st, publishStatus.getCause()), publishStatus.getBlob());
     }
 
     public void updateBlobTypeMetrics(Status status, HollowProducer.Blob blob) {
         HollowProducer.Blob.Type blobType = blob.getType();
-        switch (blobType) {
+        switch(blobType) {
             case SNAPSHOT:
                 if(status.getType() == Status.StatusType.SUCCESS)
                     snapshotsCompleted.incrementAndGet();

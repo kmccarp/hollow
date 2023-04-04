@@ -41,8 +41,8 @@ final class SelectFieldPathResultExtractor<T> {
     final BiObjectIntFunction<HollowAPI, T> extractor;
 
     SelectFieldPathResultExtractor(
-            FieldPaths.FieldPath<FieldPaths.FieldSegment> fieldPath,
-            BiObjectIntFunction<HollowAPI, T> extractor) {
+        FieldPaths.FieldPath<FieldPaths.FieldSegment> fieldPath,
+        BiObjectIntFunction<HollowAPI, T> extractor) {
         this.fieldPath = fieldPath;
         this.extractor = extractor;
     }
@@ -56,91 +56,91 @@ final class SelectFieldPathResultExtractor<T> {
     }
 
     static IllegalArgumentException incompatibleSelectType(
-            Class<?> selectType, String fieldPath, HollowObjectSchema.FieldType schemaFieldType) {
+        Class<?> selectType, String fieldPath, HollowObjectSchema.FieldType schemaFieldType) {
         return new IllegalArgumentException(
-                String.format("Select type %s incompatible with field path %s resolving to field of type %s",
-                        selectType.getName(), fieldPath, schemaFieldType));
+            String.format("Select type %s incompatible with field path %s resolving to field of type %s",
+                selectType.getName(), fieldPath, schemaFieldType));
     }
 
     static IllegalArgumentException incompatibleSelectType(Class<?> selectType, String fieldPath, String typeName) {
         return new IllegalArgumentException(
-                String.format(
-                        "Select type %s incompatible with field path %s resolving to field of reference type %s",
-                        selectType.getName(), fieldPath, typeName));
+            String.format(
+                "Select type %s incompatible with field path %s resolving to field of reference type %s",
+                selectType.getName(), fieldPath, typeName));
     }
 
     static <T> SelectFieldPathResultExtractor<T> from(
-            Class<? extends HollowAPI> apiType, HollowDataset dataset, Class<?> rootType, String fieldPath,
-            Class<T> selectType) {
+        Class<? extends HollowAPI> apiType, HollowDataset dataset, Class<?> rootType, String fieldPath,
+        Class<T> selectType) {
         String rootTypeName = HollowObjectTypeMapper.getDefaultTypeName(rootType);
         FieldPaths.FieldPath<FieldPaths.FieldSegment> fp =
-                FieldPaths.createFieldPathForHashIndex(dataset, rootTypeName, fieldPath);
+            FieldPaths.createFieldPathForHashIndex(dataset, rootTypeName, fieldPath);
 
         String typeName;
-        if (!fp.getSegments().isEmpty()) {
+        if(!fp.getSegments().isEmpty()) {
             // @@@ Method on FieldPath
             FieldPaths.FieldSegment lastSegment = fp.getSegments().get(fp.getSegments().size() - 1);
             HollowSchema.SchemaType schemaType = lastSegment.getEnclosingSchema().getSchemaType();
             HollowObjectSchema.FieldType schemaFieldType;
-            if (schemaType == HollowSchema.SchemaType.OBJECT) {
-                FieldPaths.ObjectFieldSegment os = (FieldPaths.ObjectFieldSegment) lastSegment;
+            if(schemaType == HollowSchema.SchemaType.OBJECT) {
+                FieldPaths.ObjectFieldSegment os = (FieldPaths.ObjectFieldSegment)lastSegment;
                 schemaFieldType = os.getType();
             } else {
                 schemaFieldType = HollowObjectSchema.FieldType.REFERENCE;
             }
             typeName = lastSegment.getTypeName();
 
-            if (schemaFieldType != HollowObjectSchema.FieldType.REFERENCE) {
+            if(schemaFieldType != HollowObjectSchema.FieldType.REFERENCE) {
                 // The field path must reference a field of a reference type
                 // This is contrary to the underlying HollowHashIndex which selects
                 // the enclosing reference type for a field of a value type.
                 // It is considered better to be consistent and literal with field path
                 // expressions
                 throw incompatibleSelectType(selectType, fieldPath, schemaFieldType);
-            } else if (typeName.equals("String")) {
-                if (!HollowObject.class.isAssignableFrom(selectType)) {
+            } else if(typeName.equals("String")) {
+                if(!HollowObject.class.isAssignableFrom(selectType)) {
                     throw incompatibleSelectType(selectType, fieldPath, typeName);
                 }
                 // @@@ Check that object schema has single value field of String type such as HString
-            } else if (!HollowObjectTypeMapper.getDefaultTypeName(selectType).equals(typeName)) {
-                if (schemaType != HollowSchema.SchemaType.OBJECT && !GenericHollowObject.class.isAssignableFrom(
-                        selectType)) {
+            } else if(!HollowObjectTypeMapper.getDefaultTypeName(selectType).equals(typeName)) {
+                if(schemaType != HollowSchema.SchemaType.OBJECT && !GenericHollowObject.class.isAssignableFrom(
+                    selectType)) {
                     throw incompatibleSelectType(selectType, fieldPath, typeName);
                 }
                 // @@@ GenericHollow{List, Set, Map} based on schemaType
-            } else if (!HollowRecord.class.isAssignableFrom(selectType)) {
+            } else if(!HollowRecord.class.isAssignableFrom(selectType)) {
                 throw incompatibleSelectType(selectType, fieldPath, typeName);
             }
         } else {
             typeName = rootTypeName;
         }
 
-        if (GenericHollowObject.class.isAssignableFrom(selectType)) {
+        if(GenericHollowObject.class.isAssignableFrom(selectType)) {
             BiObjectIntFunction<HollowAPI, T> extractor =
-                    (a, o) -> {
-                        @SuppressWarnings("unchecked")
-                        T t = (T) new GenericHollowObject(a.getDataAccess(), typeName, o);
-                        return t;
-                    };
+                (a, o) -> {
+                    @SuppressWarnings("unchecked")
+                    T t = (T)new GenericHollowObject(a.getDataAccess(), typeName, o);
+                    return t;
+                };
             return new SelectFieldPathResultExtractor<>(fp, extractor);
         } else {
             MethodHandle selectInstantiate;
             try {
                 selectInstantiate = MethodHandles.lookup().findVirtual(
-                        apiType,
-                        "get" + selectType.getSimpleName(),
-                        MethodType.methodType(selectType, int.class));
+                    apiType,
+                    "get" + selectType.getSimpleName(),
+                    MethodType.methodType(selectType, int.class));
             } catch (NoSuchMethodException | IllegalAccessException e) {
                 throw new IllegalArgumentException(
-                        String.format("Select type %s is not associated with API %s",
-                                selectType.getName(), apiType.getName()),
-                        e);
+                    String.format("Select type %s is not associated with API %s",
+                        selectType.getName(), apiType.getName()),
+                    e);
             }
 
             BiObjectIntFunction<HollowAPI, T> extractor = (a, i) -> {
                 try {
                     @SuppressWarnings("unchecked")
-                    T s = (T) selectInstantiate.invoke(a, i);
+                    T s = (T)selectInstantiate.invoke(a, i);
                     return s;
                 } catch (RuntimeException | Error e) {
                     throw e;

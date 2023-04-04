@@ -64,7 +64,7 @@ public class DiffFieldPage extends DiffPage {
     private List<HollowObjectPairDiffScore> getObjectDiffScores(HollowTypeDiff typeDiff, HollowFieldDiff fieldDiff, int beginRecord, int pageSize) {
         List<HollowObjectPairDiffScore> list = new ArrayList<HollowObjectPairDiffScore>();
 
-        for(int i=0;i<fieldDiff.getNumDiffs();i++) {
+        for(int i = 0;i < fieldDiff.getNumDiffs();i++) {
             int fromOrdinal = fieldDiff.getFromOrdinal(i);
             int toOrdinal = fieldDiff.getToOrdinal(i);
             String displayKey = typeDiff.getMatcher().getKeyDisplayString(typeDiff.getFromTypeState(), fieldDiff.getFromOrdinal(i));
@@ -80,9 +80,9 @@ public class DiffFieldPage extends DiffPage {
         List<HollowDiffUIBreadcrumbs> breadcrumbs = new ArrayList<HollowDiffUIBreadcrumbs>();
 
         breadcrumbs.add(new HollowDiffUIBreadcrumbs((diffUI.getDiffUIPath() == null || diffUI.getDiffUIPath().length() == 0) ?
-                "/" : diffUI.getDiffUIPath(), "Overview"));
+            "/" : diffUI.getDiffUIPath(), "Overview"));
         breadcrumbs.add(new HollowDiffUIBreadcrumbs((diffUI.getDiffUIPath() == null || diffUI.getDiffUIPath().length() == 0) ?
-                "typediff?type=" + typeDiff.getTypeName() : diffUI.getDiffUIPath() + "/typediff?type=" + typeDiff.getTypeName(), typeDiff.getTypeName()));
+            "typediff?type=" + typeDiff.getTypeName() : diffUI.getDiffUIPath() + "/typediff?type=" + typeDiff.getTypeName(), typeDiff.getTypeName()));
         breadcrumbs.add(new HollowDiffUIBreadcrumbs(null, fieldDiff.getFieldIdentifier().toString()));
 
         return breadcrumbs;

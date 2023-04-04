@@ -44,7 +44,8 @@ public class HollowProducerValidationListenerTest {
             public void publish(HollowProducer.PublishArtifact publishArtifact) {
             }
         };
-        announcer = version -> {};
+        announcer = version -> {
+        };
     }
 
     @Test
@@ -94,15 +95,15 @@ public class HollowProducerValidationListenerTest {
         validationListener = new TestValidationStatusListener();
         cycleAndValidationListener = new TestCycleAndValidationStatusListener();
         Builder builder = HollowProducer.withPublisher(publisher).withAnnouncer(announcer)
-                .withListener(validationListener)
-                .withListener(cycleAndValidationListener)
-                .withListener(countValidator);
-        if (addPrimaryKeyValidator) {
+            .withListener(validationListener)
+            .withListener(cycleAndValidationListener)
+            .withListener(countValidator);
+        if(addPrimaryKeyValidator) {
             builder = builder.withListener(dupeValidator);
         }
 
         HollowProducer hollowProducer = builder.build();
-        if (typeName.equals("MovieWithPrimaryKey")) {
+        if(typeName.equals("MovieWithPrimaryKey")) {
             hollowProducer.initializeDataModel(MovieWithPrimaryKey.class);
         } else {
             hollowProducer.initializeDataModel(MovieWithoutPrimaryKey.class);
@@ -110,7 +111,7 @@ public class HollowProducerValidationListenerTest {
 
         hollowProducer.runCycle(newState -> {
             List<String> actors = Arrays.asList("Angelina Jolie", "Brad Pitt");
-            if (typeName.equals("MovieWithPrimaryKey")) {
+            if(typeName.equals("MovieWithPrimaryKey")) {
                 newState.add(new MovieWithPrimaryKey(123, "someTitle1", actors));
                 newState.add(new MovieWithPrimaryKey(123, "someTitle1", actors));
             } else {
@@ -123,8 +124,8 @@ public class HollowProducerValidationListenerTest {
     private void assertOnValidationStatus(int size, boolean passed) {
         ValidationStatus status = validationListener.getStatus();
         Assert.assertNotNull(
-                "Stats null indicates HollowValidationFakeListener.onValidationComplete() was not called on runCycle.",
-                status);
+            "Stats null indicates HollowValidationFakeListener.onValidationComplete() was not called on runCycle.",
+            status);
         Assert.assertEquals(size, status.getResults().size());
         Assert.assertEquals(passed, status.passed());
     }
@@ -173,7 +174,7 @@ public class HollowProducerValidationListenerTest {
 
         @Override
         public void onValidationStatusComplete(
-                ValidationStatus status, long version, Duration elapsed) {
+            ValidationStatus status, long version, Duration elapsed) {
             this.status = status;
         }
 
@@ -192,12 +193,13 @@ public class HollowProducerValidationListenerTest {
     }
 
     static class TestCycleAndValidationStatusListener extends AbstractHollowProducerListener
-            implements ValidationStatusListener {
+        implements ValidationStatusListener {
         private long cycleVersion;
         private long version;
         private ValidationStatus status;
 
-        @Override public void onCycleStart(long version) {
+        @Override
+        public void onCycleStart(long version) {
             this.cycleVersion = version;
         }
 
@@ -208,7 +210,7 @@ public class HollowProducerValidationListenerTest {
 
         @Override
         public void onValidationStatusComplete(
-                ValidationStatus status, long version, Duration elapsed) {
+            ValidationStatus status, long version, Duration elapsed) {
             this.status = status;
         }
 

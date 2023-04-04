@@ -46,13 +46,13 @@ public class PrimaryKey {
      * @return populated primary key
      */
     public static PrimaryKey create(HollowDataAccess hollowDataAccess, String type, String... fieldPaths) {
-        if (fieldPaths != null && fieldPaths.length != 0) {
+        if(fieldPaths != null && fieldPaths.length != 0) {
             return new PrimaryKey(type, fieldPaths);
         }
 
         HollowSchema schema = hollowDataAccess.getSchema(type);
-        if (schema instanceof HollowObjectSchema) {
-            return ((HollowObjectSchema) schema).getPrimaryKey();
+        if(schema instanceof HollowObjectSchema) {
+            return ((HollowObjectSchema)schema).getPrimaryKey();
         }
         return null;
     }
@@ -69,7 +69,7 @@ public class PrimaryKey {
      * its child record referenced by the field <i>country</i>, and finally the country's field <i>id</i>.
      */
     public PrimaryKey(String type, String... fieldPaths) {
-        if (fieldPaths == null || fieldPaths.length == 0) {
+        if(fieldPaths == null || fieldPaths.length == 0) {
             throw new IllegalArgumentException("fieldPaths can't not be null or empty");
         }
 
@@ -123,7 +123,7 @@ public class PrimaryKey {
     public static FieldType getFieldType(HollowDataset dataAccess, String type, String fieldPath) {
         HollowObjectSchema schema = (HollowObjectSchema)dataAccess.getSchema(type);
         int pathIndexes[] = getFieldPathIndex(dataAccess, type, fieldPath);
-        for(int i=0;i<pathIndexes.length - 1;i++)
+        for(int i = 0;i < pathIndexes.length - 1;i++)
             schema = (HollowObjectSchema)dataAccess.getSchema(schema.getReferencedType(pathIndexes[i]));
         return schema.getFieldType(pathIndexes[pathIndexes.length - 1]);
     }
@@ -139,7 +139,7 @@ public class PrimaryKey {
     public static HollowObjectSchema getFieldSchema(HollowDataset dataAccess, String type, String fieldPath) {
         HollowObjectSchema schema = (HollowObjectSchema)dataAccess.getSchema(type);
         int pathIndexes[] = getFieldPathIndex(dataAccess, type, fieldPath);
-        for (int i = 0; i < pathIndexes.length; i++)
+        for(int i = 0;i < pathIndexes.length;i++)
             schema = (HollowObjectSchema)dataAccess.getSchema(schema.getReferencedType(pathIndexes[i]));
         return schema;
     }
@@ -157,10 +157,10 @@ public class PrimaryKey {
         int fieldPathIdx[] = getFieldPathIndex(dataset, type, fieldPath);
         String fieldPathParts[] = new String[fieldPathIdx.length];
 
-        HollowObjectSchema schema = (HollowObjectSchema) dataset.getSchema(type);
-        for(int i=0;i<fieldPathParts.length;i++) {
+        HollowObjectSchema schema = (HollowObjectSchema)dataset.getSchema(type);
+        for(int i = 0;i < fieldPathParts.length;i++) {
             fieldPathParts[i] = schema.getFieldName(fieldPathIdx[i]);
-            schema = (HollowObjectSchema) dataset.getSchema(schema.getReferencedType(fieldPathIdx[i]));
+            schema = (HollowObjectSchema)dataset.getSchema(schema.getReferencedType(fieldPathIdx[i]));
         }
 
         return fieldPathParts;
@@ -176,8 +176,8 @@ public class PrimaryKey {
      */
     public static int[] getFieldPathIndex(HollowDataset dataset, String type, String fieldPath) {
         return FieldPaths.createFieldPathForPrimaryKey(dataset, type, fieldPath).getSegments().stream()
-                .mapToInt(FieldPaths.ObjectFieldSegment::getIndex)
-                .toArray();
+            .mapToInt(FieldPaths.ObjectFieldSegment::getIndex)
+            .toArray();
     }
 
     @Override
@@ -191,19 +191,19 @@ public class PrimaryKey {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if(this == obj)
             return true;
-        if (obj == null)
+        if(obj == null)
             return false;
-        if (getClass() != obj.getClass())
+        if(getClass() != obj.getClass())
             return false;
-        PrimaryKey other = (PrimaryKey) obj;
-        if (!Arrays.equals(fieldPaths, other.fieldPaths))
+        PrimaryKey other = (PrimaryKey)obj;
+        if(!Arrays.equals(fieldPaths, other.fieldPaths))
             return false;
-        if (type == null) {
-            if (other.type != null)
+        if(type == null) {
+            if(other.type != null)
                 return false;
-        } else if (!type.equals(other.type))
+        } else if(!type.equals(other.type))
             return false;
         return true;
     }

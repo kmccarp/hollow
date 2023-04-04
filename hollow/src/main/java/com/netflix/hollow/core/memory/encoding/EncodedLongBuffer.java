@@ -48,7 +48,8 @@ public class EncodedLongBuffer implements FixedLengthData {
     private BlobByteBuffer bufferView;
     private long maxByteIndex = -1;
 
-    public EncodedLongBuffer() {}
+    public EncodedLongBuffer() {
+    }
 
     /**
      * Returns a new EncodedLongBuffer from deserializing the given input. The value of the first variable length integer
@@ -95,14 +96,14 @@ public class EncodedLongBuffer implements FixedLengthData {
     public long getElementValue(long index, int bitsPerElement, long mask) {
 
         long whichByte = index >>> 3;
-        int whichBit = (int) (index & 0x07);
+        int whichBit = (int)(index & 0x07);
 
-        if (whichByte + ceil((float) bitsPerElement/8) > this.maxByteIndex + 1) {
+        if(whichByte + ceil((float)bitsPerElement / 8) > this.maxByteIndex + 1) {
             throw new IllegalStateException();
         }
 
         long longVal = this.bufferView.getLong(this.bufferView.position() + whichByte);
-        long l =  longVal >>> whichBit;
+        long l = longVal >>> whichBit;
         return l & mask;
     }
 
@@ -116,13 +117,13 @@ public class EncodedLongBuffer implements FixedLengthData {
     public long getLargeElementValue(long index, int bitsPerElement, long mask) {
 
         long whichLong = index >>> 6;
-        int whichBit = (int) (index & 0x3F);
+        int whichBit = (int)(index & 0x3F);
 
         long l = this.bufferView.getLong(bufferView.position() + whichLong * Long.BYTES) >>> whichBit;
 
         int bitsRemaining = 64 - whichBit;
 
-        if (bitsRemaining < bitsPerElement) {
+        if(bitsRemaining < bitsPerElement) {
             whichLong++;
             l |= this.bufferView.getLong(bufferView.position() + whichLong * Long.BYTES) << bitsRemaining;
         }
@@ -136,12 +137,12 @@ public class EncodedLongBuffer implements FixedLengthData {
     }
 
     @Override
-    public void copyBits(FixedLengthData copyFrom, long sourceStartBit, long destStartBit, long numBits){
+    public void copyBits(FixedLengthData copyFrom, long sourceStartBit, long destStartBit, long numBits) {
         throw new UnsupportedOperationException("Not supported in shared-memory mode");
     }
 
     @Override
-    public void incrementMany(long startBit, long increment, long bitsBetweenIncrements, int numIncrements){
+    public void incrementMany(long startBit, long increment, long bitsBetweenIncrements, int numIncrements) {
         throw new UnsupportedOperationException("Not supported in shared-memory mode");
     }
 

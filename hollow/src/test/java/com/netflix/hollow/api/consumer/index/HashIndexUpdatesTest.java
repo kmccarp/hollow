@@ -34,19 +34,19 @@ public class HashIndexUpdatesTest {
 
     void updates(boolean doubleSnapshot) {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
         long v1 = producer.runCycle(ws -> {
             ws.add(new DataModel.Producer.TypeA(1, "1"));
         });
         HollowConsumer consumer = HollowConsumer.withBlobRetriever(blobStore)
-                .withGeneratedAPIClass(DataModel.Consumer.Api.class)
-                .build();
+            .withGeneratedAPIClass(DataModel.Consumer.Api.class)
+            .build();
         consumer.triggerRefreshTo(v1);
 
         HashIndex<DataModel.Consumer.TypeA, Integer> hi = HashIndex.from(consumer, DataModel.Consumer.TypeA.class)
-                .usingPath("i", int.class);
+            .usingPath("i", int.class);
         consumer.addRefreshListener(hi);
 
         Assert.assertEquals(1L, hi.findMatches(1).count());
@@ -56,7 +56,7 @@ public class HashIndexUpdatesTest {
             ws.add(new DataModel.Producer.TypeA(1, "1"));
             ws.add(new DataModel.Producer.TypeA(1, "2"));
         });
-        if (doubleSnapshot) {
+        if(doubleSnapshot) {
             consumer.forceDoubleSnapshotNextUpdate();
         }
         consumer.triggerRefreshTo(v2);
@@ -70,7 +70,7 @@ public class HashIndexUpdatesTest {
             ws.add(new DataModel.Producer.TypeA(1, "2"));
             ws.add(new DataModel.Producer.TypeA(1, "3"));
         });
-        if (doubleSnapshot) {
+        if(doubleSnapshot) {
             consumer.forceDoubleSnapshotNextUpdate();
         }
         consumer.triggerRefreshTo(v3);

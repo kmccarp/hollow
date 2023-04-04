@@ -65,8 +65,8 @@ class HollowListDeltaApplicator {
         target.elementData = new FixedLengthElementArray(target.memoryRecycler, target.totalNumberOfElements * target.bitsPerElement);
 
         if(target.bitsPerListPointer == from.bitsPerListPointer
-                && target.bitsPerElement == from.bitsPerElement)
-                    fastDelta();
+            && target.bitsPerElement == from.bitsPerElement)
+            fastDelta();
         else
             slowDelta();
 
@@ -76,7 +76,7 @@ class HollowListDeltaApplicator {
     }
 
     private void slowDelta() {
-        for(int i=0;i<=target.maxOrdinal;i++) {
+        for(int i = 0;i <= target.maxOrdinal;i++) {
             mergeOrdinal(i);
         }
     }
@@ -133,7 +133,7 @@ class HollowListDeltaApplicator {
         if(i <= from.maxOrdinal) {
             long fromDataEndElement = from.listPointerData.getElementValue(currentFromStateCopyStartBit, from.bitsPerListPointer);
             if(!removeData) {
-                for(long elementIdx=currentFromStateStartElement; elementIdx<fromDataEndElement; elementIdx++) {
+                for(long elementIdx = currentFromStateStartElement;elementIdx < fromDataEndElement;elementIdx++) {
                     long elementOrdinal = from.elementData.getElementValue(elementIdx * from.bitsPerElement, from.bitsPerElement);
                     target.elementData.setElementValue(currentWriteStartElement * target.bitsPerElement, target.bitsPerElement, elementOrdinal);
                     currentWriteStartElement++;
@@ -153,7 +153,7 @@ class HollowListDeltaApplicator {
 
     private void addFromDelta(GapEncodedVariableLengthIntegerReader additionsReader) {
         long deltaDataEndElement = delta.listPointerData.getElementValue(currentDeltaCopyStartBit, delta.bitsPerListPointer);
-        for(long elementIdx=currentDeltaStartElement; elementIdx<deltaDataEndElement; elementIdx++) {
+        for(long elementIdx = currentDeltaStartElement;elementIdx < deltaDataEndElement;elementIdx++) {
             long elementOrdinal = delta.elementData.getElementValue(elementIdx * delta.bitsPerElement, delta.bitsPerElement);
             target.elementData.setElementValue(currentWriteStartElement * target.bitsPerElement, target.bitsPerElement, elementOrdinal);
             currentWriteStartElement++;

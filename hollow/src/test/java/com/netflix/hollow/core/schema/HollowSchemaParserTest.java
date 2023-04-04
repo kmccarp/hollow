@@ -31,15 +31,15 @@ public class HollowSchemaParserTest {
     @Test
     public void parsesObjectSchema() throws IOException {
         String objectSchema =
-                "/* This is a comment\n" +
-                        "   consisting of multiple lines */\n" +
-                        " TypeA {\n" +
-                        "    int a1;\n" +
-                        "    \tstring a2; //This is a comment\n" +
-                        "    String a3;\n" +
-                        "}\n";
+            "/* This is a comment\n" +
+                "   consisting of multiple lines */\n" +
+                " TypeA {\n" +
+                "    int a1;\n" +
+                "    \tstring a2; //This is a comment\n" +
+                "    String a3;\n" +
+                "}\n";
 
-        HollowObjectSchema schema = (HollowObjectSchema) HollowSchemaParser.parseSchema(objectSchema);
+        HollowObjectSchema schema = (HollowObjectSchema)HollowSchemaParser.parseSchema(objectSchema);
 
         Assert.assertEquals("TypeA", schema.getName());
         Assert.assertEquals(3, schema.numFields());
@@ -58,12 +58,12 @@ public class HollowSchemaParserTest {
     @Test
     public void parsesObjectSchemaWithKey() throws IOException {
         String objectSchema = " TypeA @PrimaryKey(a1) {\n" +
-                "    int a1;\n" +
-                "    string a2;\n" +
-                "    String a3;\n" +
-                "}\n";
+            "    int a1;\n" +
+            "    string a2;\n" +
+            "    String a3;\n" +
+            "}\n";
 
-        HollowObjectSchema schema = (HollowObjectSchema) HollowSchemaParser.parseSchema(objectSchema);
+        HollowObjectSchema schema = (HollowObjectSchema)HollowSchemaParser.parseSchema(objectSchema);
 
         Assert.assertEquals("TypeA", schema.getName());
         Assert.assertEquals(3, schema.numFields());
@@ -83,12 +83,12 @@ public class HollowSchemaParserTest {
     @Test
     public void parsesObjectSchemaMultipleWithKey() throws IOException {
         String objectSchema = " TypeA @PrimaryKey(a1, a3.value) {\n" +
-                "    int a1;\n" +
-                "    string a2;\n" +
-                "    String a3;\n" +
-                "}\n";
+            "    int a1;\n" +
+            "    string a2;\n" +
+            "    String a3;\n" +
+            "}\n";
 
-        HollowObjectSchema schema = (HollowObjectSchema) HollowSchemaParser.parseSchema(objectSchema);
+        HollowObjectSchema schema = (HollowObjectSchema)HollowSchemaParser.parseSchema(objectSchema);
 
         Assert.assertEquals("TypeA", schema.getName());
         Assert.assertEquals(3, schema.numFields());
@@ -109,7 +109,7 @@ public class HollowSchemaParserTest {
     public void parsesListSchema() throws IOException {
         String listSchema = "ListOfTypeA List<TypeA>;\n";
 
-        HollowListSchema schema = (HollowListSchema) HollowSchemaParser.parseSchema(listSchema);
+        HollowListSchema schema = (HollowListSchema)HollowSchemaParser.parseSchema(listSchema);
 
         Assert.assertEquals("ListOfTypeA", schema.getName());
         Assert.assertEquals("TypeA", schema.getElementType());
@@ -121,7 +121,7 @@ public class HollowSchemaParserTest {
     public void parsesSetSchema() throws IOException {
         String listSchema = "SetOfTypeA Set<TypeA>;\n";
 
-        HollowSetSchema schema = (HollowSetSchema) HollowSchemaParser.parseSchema(listSchema);
+        HollowSetSchema schema = (HollowSetSchema)HollowSchemaParser.parseSchema(listSchema);
 
         Assert.assertEquals("SetOfTypeA", schema.getName());
         Assert.assertEquals("TypeA", schema.getElementType());
@@ -132,7 +132,7 @@ public class HollowSchemaParserTest {
     public void parsesSetSchemaWithKey() throws IOException {
         String listSchema = "SetOfTypeA Set<TypeA> @HashKey(id.value);\n";
 
-        HollowSetSchema schema = (HollowSetSchema) HollowSchemaParser.parseSchema(listSchema);
+        HollowSetSchema schema = (HollowSetSchema)HollowSchemaParser.parseSchema(listSchema);
 
         Assert.assertEquals("SetOfTypeA", schema.getName());
         Assert.assertEquals("TypeA", schema.getElementType());
@@ -144,7 +144,7 @@ public class HollowSchemaParserTest {
     public void parsesSetSchemaWithMultiFieldKey() throws IOException {
         String listSchema = "SetOfTypeA Set<TypeA> @HashKey(id.value, region.country.id, key);\n";
 
-        HollowSetSchema schema = (HollowSetSchema) HollowSchemaParser.parseSchema(listSchema);
+        HollowSetSchema schema = (HollowSetSchema)HollowSchemaParser.parseSchema(listSchema);
 
         Assert.assertEquals("SetOfTypeA", schema.getName());
         Assert.assertEquals("TypeA", schema.getElementType());
@@ -157,7 +157,7 @@ public class HollowSchemaParserTest {
     public void parsesMapSchema() throws IOException {
         String listSchema = "MapOfStringToTypeA Map<String, TypeA>;\n";
 
-        HollowMapSchema schema = (HollowMapSchema) HollowSchemaParser.parseSchema(listSchema);
+        HollowMapSchema schema = (HollowMapSchema)HollowSchemaParser.parseSchema(listSchema);
 
         Assert.assertEquals("MapOfStringToTypeA", schema.getName());
         Assert.assertEquals("String", schema.getKeyType());
@@ -170,7 +170,7 @@ public class HollowSchemaParserTest {
     public void parsesMapSchemaWithPrimaryKey() throws IOException {
         String listSchema = "MapOfStringToTypeA Map<String, TypeA> @HashKey(value);\n";
 
-        HollowMapSchema schema = (HollowMapSchema) HollowSchemaParser.parseSchema(listSchema);
+        HollowMapSchema schema = (HollowMapSchema)HollowSchemaParser.parseSchema(listSchema);
 
         Assert.assertEquals("MapOfStringToTypeA", schema.getName());
         Assert.assertEquals("String", schema.getKeyType());
@@ -184,7 +184,7 @@ public class HollowSchemaParserTest {
     public void parsesMapSchemaWithMultiFieldPrimaryKey() throws IOException {
         String listSchema = "MapOfStringToTypeA Map<String, TypeA> @HashKey(id.value, region.country.id, key);\n";
 
-        HollowMapSchema schema = (HollowMapSchema) HollowSchemaParser.parseSchema(listSchema);
+        HollowMapSchema schema = (HollowMapSchema)HollowSchemaParser.parseSchema(listSchema);
 
         Assert.assertEquals("MapOfStringToTypeA", schema.getName());
         Assert.assertEquals("String", schema.getKeyType());
@@ -196,16 +196,16 @@ public class HollowSchemaParserTest {
     @Test
     public void parsesManySchemas() throws IOException {
         String manySchemas =
-                "/* This is a comment\n" +
-                        "   consisting of multiple lines */\n" +
-                        " TypeA {\n" +
-                        "    int a1;\n" +
-                        "    \tstring a2; //This is a comment\n" +
-                        "    String a3;\n" +
-                        "}\n\n"+
-                        "MapOfStringToTypeA Map<String, TypeA>;\n"+
-                        "ListOfTypeA List<TypeA>;\n"+
-                        "TypeB { float b1; double b2; boolean b3; }";
+            "/* This is a comment\n" +
+                "   consisting of multiple lines */\n" +
+                " TypeA {\n" +
+                "    int a1;\n" +
+                "    \tstring a2; //This is a comment\n" +
+                "    String a3;\n" +
+                "}\n\n" +
+                "MapOfStringToTypeA Map<String, TypeA>;\n" +
+                "ListOfTypeA List<TypeA>;\n" +
+                "TypeB { float b1; double b2; boolean b3; }";
 
 
         List<HollowSchema> schemas = HollowSchemaParser.parseCollectionOfSchemas(manySchemas);
@@ -219,12 +219,12 @@ public class HollowSchemaParserTest {
         try {
             input = getClass().getResourceAsStream("/schema1.txt");
             List<HollowSchema> schemas =
-                    HollowSchemaParser.parseCollectionOfSchemas(new BufferedReader(new InputStreamReader(input)));
+                HollowSchemaParser.parseCollectionOfSchemas(new BufferedReader(new InputStreamReader(input)));
             Assert.assertEquals("Should have two schemas", 2, schemas.size());
             Assert.assertEquals("Should have Minion schema", "Minion", schemas.get(0).getName());
             Assert.assertEquals("Should have String schema", "String", schemas.get(1).getName());
         } finally {
-            if (input != null) {
+            if(input != null) {
                 input.close();
             }
         }

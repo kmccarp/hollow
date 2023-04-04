@@ -83,7 +83,7 @@ public class HollowMapSchema extends HollowSchema {
 
     @Override
     public boolean equals(Object other) {
-        if (this == other)
+        if(this == other)
             return true;
         if(!(other instanceof HollowMapSchema))
             return false;
@@ -117,7 +117,7 @@ public class HollowMapSchema extends HollowSchema {
             builder.append(" @HashKey(");
             if(hashKey.numFields() > 0) {
                 builder.append(hashKey.getFieldPath(0));
-                for(int i=1;i<hashKey.numFields();i++) {
+                for(int i = 1;i < hashKey.numFields();i++) {
                     builder.append(", ").append(hashKey.getFieldPath(i));
                 }
             }
@@ -143,7 +143,7 @@ public class HollowMapSchema extends HollowSchema {
 
         if(getHashKey() != null) {
             VarInt.writeVInt(dos, getHashKey().numFields());
-            for(int i=0;i<getHashKey().numFields();i++) {
+            for(int i = 0;i < getHashKey().numFields();i++) {
                 dos.writeUTF(getHashKey().getFieldPath(i));
             }
         }

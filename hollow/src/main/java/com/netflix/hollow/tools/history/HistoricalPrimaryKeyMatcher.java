@@ -24,44 +24,44 @@ import com.netflix.hollow.core.schema.HollowObjectSchema.FieldType;
 import java.util.Arrays;
 
 public class HistoricalPrimaryKeyMatcher {
-    
+
     private final HollowObjectTypeDataAccess keyTypeAccess;
     private final int fieldPathIndexes[][];
     private final FieldType[] fieldTypes;
-    
+
     public HistoricalPrimaryKeyMatcher(HollowDataAccess dataAccess, PrimaryKey primaryKey) {
         this.fieldPathIndexes = new int[primaryKey.numFields()][];
         this.fieldTypes = new FieldType[primaryKey.numFields()];
-        
-        for(int i=0;i<primaryKey.numFields();i++) {
+
+        for(int i = 0;i < primaryKey.numFields();i++) {
             fieldPathIndexes[i] = primaryKey.getFieldPathIndex(dataAccess, i);
             fieldTypes[i] = primaryKey.getFieldType(dataAccess, i);
         }
 
-        this.keyTypeAccess = (HollowObjectTypeDataAccess) dataAccess.getTypeDataAccess(primaryKey.getType());
+        this.keyTypeAccess = (HollowObjectTypeDataAccess)dataAccess.getTypeDataAccess(primaryKey.getType());
     }
-    
+
     public boolean keyMatches(int ordinal, Object... keys) {
         if(keys.length != fieldPathIndexes.length)
             return false;
-        
-        for(int i=0;i<keys.length;i++) {
+
+        for(int i = 0;i < keys.length;i++) {
             if(!keyMatches(keys[i], ordinal, i))
                 return false;
         }
-        
+
         return true;
     }
-    
+
     public boolean keyMatches(Object key, int ordinal, int fieldIdx) {
         HollowObjectTypeDataAccess dataAccess = keyTypeAccess;
         HollowObjectSchema schema = dataAccess.getSchema();
 
         int lastFieldPath = fieldPathIndexes[fieldIdx].length - 1;
-        for(int i=0;i<lastFieldPath;i++) {
+        for(int i = 0;i < lastFieldPath;i++) {
             int fieldPosition = fieldPathIndexes[fieldIdx][i];
             ordinal = dataAccess.readOrdinal(ordinal, fieldPosition);
-            dataAccess = (HollowObjectTypeDataAccess) dataAccess.getDataAccess().getTypeDataAccess(schema.getReferencedType(fieldPosition), ordinal);
+            dataAccess = (HollowObjectTypeDataAccess)dataAccess.getDataAccess().getTypeDataAccess(schema.getReferencedType(fieldPosition), ordinal);
             schema = dataAccess.getSchema();
         }
 
@@ -94,7 +94,7 @@ public class HistoricalPrimaryKeyMatcher {
         throw new IllegalArgumentException("I don't know how to compare a " + fieldTypes[fieldIdx]);
 
     }
-    
+
     public FieldType[] getFieldTypes() {
         return fieldTypes;
     }

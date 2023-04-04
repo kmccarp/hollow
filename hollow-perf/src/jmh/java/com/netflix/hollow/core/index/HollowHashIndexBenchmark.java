@@ -35,7 +35,7 @@ public class HollowHashIndexBenchmark {
 
     public static class AbstractHollowHashIndexBenchmark extends AbstractHollowIndexBenchmark<HollowHashIndex> {
         //@Param( {"1", "1000", "10000", "100000"})
-        @Param( {"1000"})
+        @Param({"1000"})
         public int cardinality;
 
         @Override
@@ -51,13 +51,13 @@ public class HollowHashIndexBenchmark {
 
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
-                .include(HollowHashIndexBenchmark.class.getSimpleName())
-                .warmupIterations(5)
-                .warmupTime(TimeValue.seconds(1))
-                .measurementIterations(1)
-                .measurementTime(TimeValue.seconds(3))
-                .forks(1)
-                .build();
+            .include(HollowHashIndexBenchmark.class.getSimpleName())
+            .warmupIterations(5)
+            .warmupTime(TimeValue.seconds(1))
+            .measurementIterations(1)
+            .measurementTime(TimeValue.seconds(3))
+            .forks(1)
+            .build();
         new Runner(opt).run();
     }
 }

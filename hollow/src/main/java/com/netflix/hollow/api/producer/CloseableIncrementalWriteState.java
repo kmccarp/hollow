@@ -16,8 +16,8 @@ final class CloseableIncrementalWriteState implements HollowProducer.Incremental
     private volatile boolean closed;
 
     public CloseableIncrementalWriteState(
-            ConcurrentHashMap<RecordPrimaryKey, Object> events,
-            HollowObjectMapper objectMapper) {
+        ConcurrentHashMap<RecordPrimaryKey, Object> events,
+        HollowObjectMapper objectMapper) {
         this.events = events;
         this.objectMapper = objectMapper;
     }
@@ -50,8 +50,8 @@ final class CloseableIncrementalWriteState implements HollowProducer.Incremental
     }
 
     private RecordPrimaryKey getKey(Object o) {
-        if (o instanceof FlatRecord) {
-            FlatRecord fr = (FlatRecord) o;
+        if(o instanceof FlatRecord) {
+            FlatRecord fr = (FlatRecord)o;
             return fr.getRecordPrimaryKey();
         } else {
             return objectMapper.extractPrimaryKey(o);
@@ -59,13 +59,14 @@ final class CloseableIncrementalWriteState implements HollowProducer.Incremental
     }
 
     private void ensureNotClosed() {
-        if (closed) {
+        if(closed) {
             throw new IllegalStateException(
-                    "Write state operated on after the incremental population stage of a cycle");
+                "Write state operated on after the incremental population stage of a cycle");
         }
     }
 
-    @Override public void close() {
+    @Override
+    public void close() {
         closed = true;
     }
 }

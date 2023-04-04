@@ -30,16 +30,17 @@ class HollowIndexerObjectFieldTraversalNode extends HollowIndexerTraversalNode {
     }
 
     @Override
-    protected void setUpChildren() { }
+    protected void setUpChildren() {
+    }
 
     @Override
-    public int doTraversal(int ordinal) { 
+    public int doTraversal(int ordinal) {
         return 1;
     }
 
     @Override
     protected HollowTypeDataAccess dataAccess() {
-        return (HollowObjectTypeDataAccess) dataAccess;
+        return (HollowObjectTypeDataAccess)dataAccess;
     }
 
     @Override

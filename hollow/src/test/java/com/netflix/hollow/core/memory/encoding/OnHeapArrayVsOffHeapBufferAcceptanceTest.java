@@ -21,7 +21,7 @@ import org.junit.Test;
 public class OnHeapArrayVsOffHeapBufferAcceptanceTest {
 
     private static final String SCRATCH_DIR = System.getProperty("java.io.tmpdir");
-    private static final int TEST_SINGLE_BUFFER_CAPACITY_BYTES =  16;
+    private static final int TEST_SINGLE_BUFFER_CAPACITY_BYTES = 16;
 
     @Test
     public void testParityBetweenFixedLengthDataModes() throws IOException {
@@ -30,7 +30,7 @@ public class OnHeapArrayVsOffHeapBufferAcceptanceTest {
         int numLongsWritten = 14;
 
         // adding padding writes the test longs at a non-aligned byte
-        for (int padding = 0; padding < Long.BYTES; padding ++) {
+        for(int padding = 0;padding < Long.BYTES;padding++) {
             // write a File of TEST_SINGLE_BUFFER_CAPACITY_BYTES*4 size, assuming TEST_SINGLE_BUFFER_CAPACITY_BYTES is 32
             File testFile = writeTestFileUnaligned("/fixed_length_data_modes", padding);
             testFile.deleteOnExit();
@@ -58,15 +58,15 @@ public class OnHeapArrayVsOffHeapBufferAcceptanceTest {
         EncodedLongBuffer testLongBuffer = EncodedLongBuffer.newFrom(hbi2, numLongsWritten);
 
         // read each values starting at each bit index
-        for (int i = 0; i< (numLongsWritten - 1) * Long.BYTES * 8; i ++) {
+        for(int i = 0;i < (numLongsWritten - 1) * Long.BYTES * 8;i++) {
 
             // for bit length 1 to 60
-            for (int j = 1; j < 61; j ++) {
+            for(int j = 1;j < 61;j++) {
                 assertEquals(testLongArray.getElementValue(i, j), testLongBuffer.getElementValue(i, j));
             }
 
             // for bit length 1 to 64
-            for (int j = 1; j <= 64; j ++) {
+            for(int j = 1;j <= 64;j++) {
                 assertEquals(testLongArray.getLargeElementValue(i, j), testLongBuffer.getLargeElementValue(i, j));
             }
         }
@@ -76,7 +76,7 @@ public class OnHeapArrayVsOffHeapBufferAcceptanceTest {
         // get a 15-bit element that is in the last 15 bits of the buffer, but it would enforce an 8-byte long read
         // starting at the last 2 bytes in buffer but extending past the end of the buffer
         assertEquals(testLongArray.getElementValue(numLongsWritten * Long.BYTES * 8 - 2 * 8, 16),
-                     testLongBuffer.getElementValue(numLongsWritten * Long.BYTES * 8 - 2 * 8, 16));
+            testLongBuffer.getElementValue(numLongsWritten * Long.BYTES * 8 - 2 * 8, 16));
 
         // partly out of bounds long and queried bits are out of bounds
         // get a 16-bit element that is in the last 15 bits of the buffer
@@ -105,7 +105,7 @@ public class OnHeapArrayVsOffHeapBufferAcceptanceTest {
         // Add some padding bytes at the beginning of file so that longs are written at unaligned locations
 
         // adding padding writes the test longs at a non-aligned byte
-        for (int padding = 0; padding < Long.BYTES; padding ++) {
+        for(int padding = 0;padding < Long.BYTES;padding++) {
             File testFile = writeTestFileUnaligned("/variable_length_data_modes", padding);
             testFile.deleteOnExit();
 
@@ -153,28 +153,28 @@ public class OnHeapArrayVsOffHeapBufferAcceptanceTest {
         File f = new File(Paths.get(SCRATCH_DIR).toString() + filename + ".test");
         DataOutputStream out = new DataOutputStream(new FileOutputStream(f));
 
-        for (int i=0; i<padding; i++) {
-            out.writeByte((byte) 0xff);
+        for(int i = 0;i < padding;i++) {
+            out.writeByte((byte)0xff);
         }
 
-        byte[] leadingBytes = new byte[] {0, 1, 0, 1, 0, 1, 0, 1};  // bytes 0-7
-        for (int i=0; i<leadingBytes.length; i++) {
+        byte[] leadingBytes = new byte[]{0, 1, 0, 1, 0, 1, 0, 1};  // bytes 0-7
+        for(int i = 0;i < leadingBytes.length;i++) {
             out.writeByte(leadingBytes[i]);
         }
 
         out.writeUTF("abcdef");
 
         long[] values = {
-                123456789000L, 234567891000L,   // bytes 16-31
-                345678912000L, 456789123000L,   // bytes 32-47
-                567891234000L, 678912345000L,   // bytes 48-63
-                789123456000L, 891234567000L,   // bytes 64-79
-                912345678000L, 123456789000L,   // bytes 80-95
-                234567891000L, 345678912000L,   // bytes 96-111
-                Long.MAX_VALUE, Long.MAX_VALUE,   // bytes 112-127
+            123456789000L, 234567891000L,   // bytes 16-31
+            345678912000L, 456789123000L,   // bytes 32-47
+            567891234000L, 678912345000L,   // bytes 48-63
+            789123456000L, 891234567000L,   // bytes 64-79
+            912345678000L, 123456789000L,   // bytes 80-95
+            234567891000L, 345678912000L,   // bytes 96-111
+            Long.MAX_VALUE, Long.MAX_VALUE,   // bytes 112-127
         };
 
-        for (int i=0; i<values.length; i++) {
+        for(int i = 0;i < values.length;i++) {
             out.writeLong(values[i]);
         }
 

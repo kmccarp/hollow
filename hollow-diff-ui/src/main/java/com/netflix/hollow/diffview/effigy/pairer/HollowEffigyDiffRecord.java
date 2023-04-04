@@ -45,7 +45,7 @@ public class HollowEffigyDiffRecord {
                 fieldCount.incrementOriginalCount();
                 totalOriginalFieldCount++;
             } else {
-                traverseOriginalFields((HollowEffigy) field.getValue());
+                traverseOriginalFields((HollowEffigy)field.getValue());
             }
         }
     }
@@ -64,7 +64,7 @@ public class HollowEffigyDiffRecord {
             if(field.isLeafNode()) {
                 FieldDiffCount fieldCount = map.get(field);
                 if(fieldCount == null) {
-                    if(simDiffCount.diffCount+1 >= maxDiff) {
+                    if(simDiffCount.diffCount + 1 >= maxDiff) {
                         simDiffCount.diffCount++;
                         return;
                     }
@@ -79,7 +79,7 @@ public class HollowEffigyDiffRecord {
                     simDiffCount.simCount++;
                 }
             } else {
-                traverseComparisonFields((HollowEffigy) field.getValue(), maxDiff);
+                traverseComparisonFields((HollowEffigy)field.getValue(), maxDiff);
                 if(simDiffCount.diffCount >= maxDiff)
                     return;
             }

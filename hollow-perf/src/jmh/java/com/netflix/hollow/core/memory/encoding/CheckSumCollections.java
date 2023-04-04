@@ -93,26 +93,26 @@ public class CheckSumCollections {
         HollowTypeWriteState typeWriteState;
         IntFunction<Model> f;
         String schemaName;
-        switch (type) {
+        switch(type) {
             case List:
                 schemaName = "ListOfInteger";
                 typeWriteState = new HollowListTypeWriteState(
-                        new HollowListSchema(schemaName, "Integer"),
-                        shards);
+                    new HollowListSchema(schemaName, "Integer"),
+                    shards);
                 f = i -> new Model(IntStream.range(i, i + size).boxed().collect(toList()));
                 break;
             case Set:
                 schemaName = "SetOfInteger";
                 typeWriteState = new HollowSetTypeWriteState(
-                        new HollowSetSchema(schemaName, "Integer"),
-                        shards);
+                    new HollowSetSchema(schemaName, "Integer"),
+                    shards);
                 f = i -> new Model(IntStream.range(i, i + size).boxed().collect(toSet()));
                 break;
             case Map:
                 schemaName = "MapOfIntegerToInteger";
                 typeWriteState = new HollowMapTypeWriteState(
-                        new HollowMapSchema(schemaName, "Integer", "Integer"),
-                        shards);
+                    new HollowMapSchema(schemaName, "Integer", "Integer"),
+                    shards);
                 f = i -> new Model(IntStream.range(i, i + size).boxed().collect(toMap(e -> e, e -> e)));
                 break;
             default:
@@ -121,16 +121,16 @@ public class CheckSumCollections {
         w.addTypeState(typeWriteState);
         HollowObjectMapper m = new HollowObjectMapper(w);
 
-        for (int i = 0; i < n; i++) {
+        for(int i = 0;i < n;i++) {
             m.add(f.apply(i));
         }
 
         readState = new HollowReadStateEngine();
         StateEngineRoundTripper.roundTripSnapshot(w, readState);
 
-        if (remove) {
-            for (int i = 0; i < n; i++) {
-                if (i % 3 == 0) {
+        if(remove) {
+            for(int i = 0;i < n;i++) {
+                if(i % 3 == 0) {
                     m.add(f.apply(i));
                 }
             }

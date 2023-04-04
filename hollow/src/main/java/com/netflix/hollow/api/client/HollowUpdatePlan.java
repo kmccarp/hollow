@@ -68,8 +68,8 @@ public class HollowUpdatePlan implements Iterable<HollowConsumer.Blob> {
 
     public List<HollowConsumer.Blob.BlobType> getTransitionSequence() {
         return transitions.stream()
-                .map(t -> t.getBlobType())
-                .collect(toList());
+            .map(t -> t.getBlobType())
+            .collect(toList());
     }
 
     public long destinationVersion(long currentVersion) {

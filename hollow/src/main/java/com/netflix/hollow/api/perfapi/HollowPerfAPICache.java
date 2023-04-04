@@ -27,14 +27,14 @@ public class HollowPerfAPICache<T> {
     private final Object[] cachedItems;
 
     public HollowPerfAPICache(
-            HollowTypePerfAPI typeAPI,
-            POJOInstantiator<T> instantiator,
-            HollowPerfAPICache<T> previous) {
+        HollowTypePerfAPI typeAPI,
+        POJOInstantiator<T> instantiator,
+        HollowPerfAPICache<T> previous) {
 
         this.typeAPI = typeAPI;
         if(!typeAPI.isMissingType()) {
             PopulatedOrdinalListener listener = typeAPI.typeAccess().getTypeState()
-                    .getListener(PopulatedOrdinalListener.class);
+                .getListener(PopulatedOrdinalListener.class);
             BitSet populatedOrdinals = listener.getPopulatedOrdinals();
             BitSet previousOrdinals = listener.getPreviousOrdinals();
 
@@ -43,19 +43,19 @@ public class HollowPerfAPICache<T> {
             // This is required if removed ordinals are queried in the cache.
             // For example, see SpecificTypeUpdateNotifier.buildFastlaneUpdateNotificationLists
             Object[] arr = previous != null
-                    ? Arrays.copyOf(previous.cachedItems, length)
-                    : new Object[length];
+                ? Arrays.copyOf(previous.cachedItems, length)
+                : new Object[length];
 
-            for (int ordinal = 0; ordinal < length; ordinal++) {
+            for(int ordinal = 0;ordinal < length;ordinal++) {
                 boolean previouslyPopulated = previous != null && previousOrdinals.get(ordinal);
-                if (!previouslyPopulated) {
+                if(!previouslyPopulated) {
                     // If not previously populated and currently populated then create a new cached instance.
                     // Otherwise, if not previously populated and not currently populated than null out any
                     // possibly present old cached value (create a hole)
                     boolean currentlyPopulated = populatedOrdinals.get(ordinal);
                     arr[ordinal] = currentlyPopulated
-                            ? instantiator.instantiate(Ref.toRefWithTypeMasked(typeAPI.maskedTypeIdx, ordinal))
-                            : null;
+                        ? instantiator.instantiate(Ref.toRefWithTypeMasked(typeAPI.maskedTypeIdx, ordinal))
+                        : null;
                 }
                 // If previously populated then retain the cached item
             }
@@ -68,10 +68,10 @@ public class HollowPerfAPICache<T> {
 
     public T get(long ref) {
         @SuppressWarnings("unchecked")
-        T t = (T) cachedItems[typeAPI.ordinal(ref)];
+        T t = (T)cachedItems[typeAPI.ordinal(ref)];
         return t;
     }
-    
+
     public Object[] getCachedItems() {
         return Arrays.copyOf(cachedItems, cachedItems.length);
     }

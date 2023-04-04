@@ -36,7 +36,7 @@ public class SearchUtils {
 
         Object key[] = new Object[fields.length];
 
-        for(int i=0;i<fields.length;i++) {
+        for(int i = 0;i < fields.length;i++) {
             switch(primaryKey.getFieldType(readStateEngine, i)) {
                 case BOOLEAN:
                     key[i] = Boolean.parseBoolean(fields[i]);
@@ -70,7 +70,7 @@ public class SearchUtils {
     public static int[][] getFieldPathIndexes(HollowReadStateEngine readStateEngine, PrimaryKey primaryKey) {
         if(primaryKey != null) {
             int fieldPathIndexes[][] = new int[primaryKey.numFields()][];
-            for(int i=0;i<primaryKey.numFields();i++) {
+            for(int i = 0;i < primaryKey.numFields();i++) {
                 fieldPathIndexes[i] = primaryKey.getFieldPathIndex(readStateEngine, i);
             }
             return fieldPathIndexes;
@@ -89,8 +89,8 @@ public class SearchUtils {
 
         for(HollowTypeStateListener listener : typeState.getListeners()) {
             if(listener instanceof HollowPrimaryKeyIndex) {
-                if(((HollowPrimaryKeyIndex) listener).getPrimaryKey().equals(pkey))
-                    return (HollowPrimaryKeyIndex) listener;
+                if(((HollowPrimaryKeyIndex)listener).getPrimaryKey().equals(pkey))
+                    return (HollowPrimaryKeyIndex)listener;
             }
         }
 
@@ -110,25 +110,25 @@ public class SearchUtils {
      * Returns the ordinal corresponding to the search result of searching by primary key.
      */
     public static Integer getOrdinalToDisplay(HollowReadStateEngine readStateEngine, String query, Object[] parsedKey,
-            int ordinal, BitSet selectedOrdinals, int[][] fieldPathIndexes, HollowTypeReadState keyTypeState) {
+        int ordinal, BitSet selectedOrdinals, int[][] fieldPathIndexes, HollowTypeReadState keyTypeState) {
 
-        if ("".equals(query) && ordinal != ORDINAL_NONE) { // trust ordinal if query is empty
+        if("".equals(query) && ordinal != ORDINAL_NONE) { // trust ordinal if query is empty
             return ordinal;
-        } else if (!"".equals(query)) {
+        } else if(!"".equals(query)) {
             // verify ordinal key matches parsed key
-            if (ordinal != ORDINAL_NONE && selectedOrdinals.get(ordinal)
-                    && recordKeyEquals(keyTypeState, ordinal, parsedKey, fieldPathIndexes)) {
+            if(ordinal != ORDINAL_NONE && selectedOrdinals.get(ordinal)
+                && recordKeyEquals(keyTypeState, ordinal, parsedKey, fieldPathIndexes)) {
                 return ordinal;
             } else {
                 HollowPrimaryKeyIndex idx = findPrimaryKeyIndex(keyTypeState);
-                if (idx != null) {
+                if(idx != null) {
                     // N.B. - findOrdinal can return ORDINAL_NONE, the caller deals with it
                     return idx.getMatchingOrdinal(parsedKey);
                 } else {
                     // no index, scan through records
                     ordinal = selectedOrdinals.nextSetBit(0);
-                    while (ordinal != ORDINAL_NONE) {
-                        if (recordKeyEquals(keyTypeState, ordinal, parsedKey, fieldPathIndexes)) {
+                    while(ordinal != ORDINAL_NONE) {
+                        if(recordKeyEquals(keyTypeState, ordinal, parsedKey, fieldPathIndexes)) {
                             return ordinal;
                         }
                         ordinal = selectedOrdinals.nextSetBit(ordinal + 1);
@@ -142,13 +142,13 @@ public class SearchUtils {
     private static boolean recordKeyEquals(HollowTypeReadState typeState, int ordinal, Object[] key, int[][] fieldPathIndexes) {
         HollowObjectTypeReadState objState = (HollowObjectTypeReadState)typeState;
 
-        for(int i=0;i<fieldPathIndexes.length;i++) {
+        for(int i = 0;i < fieldPathIndexes.length;i++) {
             int curOrdinal = ordinal;
             HollowObjectTypeReadState curState = objState;
 
-            for(int j=0;j<fieldPathIndexes[i].length - 1;j++) {
+            for(int j = 0;j < fieldPathIndexes[i].length - 1;j++) {
                 curOrdinal = curState.readOrdinal(curOrdinal, fieldPathIndexes[i][j]);
-                curState = (HollowObjectTypeReadState) curState.getSchema().getReferencedTypeState(fieldPathIndexes[i][j]);
+                curState = (HollowObjectTypeReadState)curState.getSchema().getReferencedTypeState(fieldPathIndexes[i][j]);
             }
 
             if(!HollowReadFieldUtils.fieldValueEquals(curState, curOrdinal, fieldPathIndexes[i][fieldPathIndexes[i].length - 1], key[i]))

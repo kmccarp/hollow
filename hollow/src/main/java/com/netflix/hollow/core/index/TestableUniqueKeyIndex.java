@@ -15,7 +15,9 @@ interface TestableUniqueKeyIndex {
     void listenForDeltaUpdates();
 
     int getMatchingOrdinal(Object key);
+
     int getMatchingOrdinal(Object key1, Object key2);
+
     int getMatchingOrdinal(Object key1, Object key2, Object key3);
 
     Object[] getRecordKey(int ordinal);

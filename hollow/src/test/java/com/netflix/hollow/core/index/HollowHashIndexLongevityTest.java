@@ -121,8 +121,8 @@ public class HollowHashIndexLongevityTest {
         assertThat(expectedOrdinals).isNotEmpty();
 
         assertThat(toOrdinals(actual))
-                .isNotEmpty()
-                .isNotEqualTo(expectedOrdinals);
+            .isNotEmpty()
+            .isNotEqualTo(expectedOrdinals);
     }
 
     private static Set<Integer> toOrdinals(HollowHashIndexResult result) {
@@ -138,7 +138,7 @@ public class HollowHashIndexLongevityTest {
         return new Condition<HollowHashIndexResult>("HollowHashIndexResult must have 1 result and it must NOT be " + expectedOrdinal) {
             @Override
             public boolean matches(HollowHashIndexResult matches) {
-                if(matches.numResults()!=1) {
+                if(matches.numResults() != 1) {
                     describedAs("HollowHashIndexResult has " + matches.numResults() + " results. Expected only 1.");
                     return false;
                 }
@@ -156,7 +156,7 @@ public class HollowHashIndexLongevityTest {
         return new Condition<HollowHashIndexResult>("HollowHashIndexResult must have 1 result and it must be " + expectedOrdinal) {
             @Override
             public boolean matches(HollowHashIndexResult matches) {
-                if(matches.numResults()!=1) {
+                if(matches.numResults() != 1) {
                     describedAs("HollowHashIndexResult has " + matches.numResults() + " results. Expected only 1.");
                     return false;
                 }
@@ -174,7 +174,7 @@ public class HollowHashIndexLongevityTest {
         return new Condition<HollowHashIndexResult>("HollowHashIndexResult must have at least one result.") {
             @Override
             public boolean matches(HollowHashIndexResult matches) {
-                if(matches.numResults()==0) {
+                if(matches.numResults() == 0) {
                     describedAs("HollowHashIndexResult has " + matches.numResults() + " results. Expected at least one.");
                     return false;
                 }
@@ -202,41 +202,41 @@ public class HollowHashIndexLongevityTest {
 
     private static HollowWriteStateEngine createSnapshot(int start, int end, String value) {
         Object[] objects = IntStream.range(start, end)
-                .mapToObj(id -> new TypeA(id, value))
-                .toArray();
+            .mapToObj(id -> new TypeA(id, value))
+            .toArray();
         return new HollowWriteStateEngineBuilder(Collections.singleton(TypeA.class)).add(objects).build();
     }
 
     private static TestHollowConsumer createHollowConsumer(boolean longevity) {
         return new TestHollowConsumer.Builder()
-                .withBlobRetriever(new TestBlobRetriever())
-                .withObjectLongevityConfig(
-                        new HollowConsumer.ObjectLongevityConfig() {
-                            public long usageDetectionPeriodMillis() {
-                                return 1_000L;
-                            }
+            .withBlobRetriever(new TestBlobRetriever())
+            .withObjectLongevityConfig(
+                new HollowConsumer.ObjectLongevityConfig() {
+                    public long usageDetectionPeriodMillis() {
+                        return 1_000L;
+                    }
 
-                            public long gracePeriodMillis() {
-                                return HOURS.toMillis(2);
-                            }
+                    public long gracePeriodMillis() {
+                        return HOURS.toMillis(2);
+                    }
 
-                            public boolean forceDropData() {
-                                return true;
-                            }
+                    public boolean forceDropData() {
+                        return true;
+                    }
 
-                            public boolean enableLongLivedObjectSupport() {
-                                return longevity;
-                            }
+                    public boolean enableLongLivedObjectSupport() {
+                        return longevity;
+                    }
 
-                            public boolean enableExpiredUsageStackTraces() {
-                                return false;
-                            }
+                    public boolean enableExpiredUsageStackTraces() {
+                        return false;
+                    }
 
-                            public boolean dropDataAutomatically() {
-                                return true;
-                            }
-                        })
-                .build();
+                    public boolean dropDataAutomatically() {
+                        return true;
+                    }
+                })
+            .build();
 
     }
 }

@@ -53,11 +53,11 @@ public class HollowBlobHeader {
     public Map<String, String> getHeaderTags() {
         return headerTags;
     }
-    
+
     public void setSchemas(List<HollowSchema> schemas) {
         this.schemas = schemas;
     }
-    
+
     public List<HollowSchema> getSchemas() {
         return schemas;
     }
@@ -95,9 +95,9 @@ public class HollowBlobHeader {
         if(other instanceof HollowBlobHeader) {
             HollowBlobHeader oh = (HollowBlobHeader)other;
             return blobFormatVersion == oh.blobFormatVersion
-                    && headerTags.equals(oh.getHeaderTags())
-                    && originRandomizedTag == oh.originRandomizedTag
-                    && destinationRandomizedTag == oh.destinationRandomizedTag;
+                && headerTags.equals(oh.getHeaderTags())
+                && originRandomizedTag == oh.originRandomizedTag
+                && destinationRandomizedTag == oh.destinationRandomizedTag;
         }
         return false;
     }
@@ -106,9 +106,9 @@ public class HollowBlobHeader {
     public int hashCode() {
         int result = blobFormatVersion;
         result = 31 * result + Objects.hash(headerTags,
-                originRandomizedTag,
-                destinationRandomizedTag,
-                blobFormatVersion);
+            originRandomizedTag,
+            destinationRandomizedTag,
+            blobFormatVersion);
         return result;
     }
 }

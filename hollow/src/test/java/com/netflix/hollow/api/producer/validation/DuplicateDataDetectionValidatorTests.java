@@ -35,13 +35,13 @@ public class DuplicateDataDetectionValidatorTests {
     public void failTestMissingSchema() {
         try {
             HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                    .withBlobStager(new HollowInMemoryBlobStager())
-                    .withListener(new DuplicateDataDetectionValidator("FakeType")).build();
+                .withBlobStager(new HollowInMemoryBlobStager())
+                .withListener(new DuplicateDataDetectionValidator("FakeType")).build();
             producer.runCycle(writeState -> writeState.add("hello"));
         } catch (ValidationStatusException expected) {
             Assert.assertEquals(1, expected.getValidationStatus().getResults().size());
             Assert.assertTrue(expected.getValidationStatus().getResults().get(0).getMessage()
-                    .endsWith("(see initializeDataModel)"));
+                .endsWith("(see initializeDataModel)"));
         }
     }
 }

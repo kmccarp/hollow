@@ -26,13 +26,13 @@ public class AbstractHollowHashIndexTests {
     static class TypeHashIndex extends AbstractHollowHashIndex<HollowAPI> {
 
         public TypeHashIndex(
-                HollowConsumer consumer, String queryType, String selectFieldPath, String... matchFieldPaths) {
+            HollowConsumer consumer, String queryType, String selectFieldPath, String... matchFieldPaths) {
             super(consumer, false, queryType, selectFieldPath, matchFieldPaths);
         }
 
         public TypeHashIndex(
-                HollowConsumer consumer, boolean isListenToDataRefresh, String queryType, String selectFieldPath,
-                String... matchFieldPaths) {
+            HollowConsumer consumer, boolean isListenToDataRefresh, String queryType, String selectFieldPath,
+            String... matchFieldPaths) {
             super(consumer, isListenToDataRefresh, queryType, selectFieldPath, matchFieldPaths);
         }
 
@@ -46,9 +46,9 @@ public class AbstractHollowHashIndexTests {
     @Test
     public void deltaUpdates() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .withNumStatesBetweenSnapshots(2) /// do not produce snapshots for v2 or v3
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .withNumStatesBetweenSnapshots(2) /// do not produce snapshots for v2 or v3
+            .build();
 
         long v1 = producer.runCycle(ws -> {
             ws.add(new TypeA(1, 1.1d, new TypeB("one")));
@@ -107,9 +107,9 @@ public class AbstractHollowHashIndexTests {
     @Test
     public void deltaSnapshotUpdates() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .withNumStatesBetweenSnapshots(2) /// do not produce snapshots for v2 or v3
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .withNumStatesBetweenSnapshots(2) /// do not produce snapshots for v2 or v3
+            .build();
 
         long v1 = producer.runCycle(ws -> {
             ws.add(new TypeA(1, 1.1d, new TypeB("one")));
@@ -177,9 +177,9 @@ public class AbstractHollowHashIndexTests {
     @Test
     public void snapshotDeltaUpdates() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .withNumStatesBetweenSnapshots(2) /// do not produce snapshots for v2 or v3
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .withNumStatesBetweenSnapshots(2) /// do not produce snapshots for v2 or v3
+            .build();
 
         long v1 = producer.runCycle(ws -> {
             ws.add(new TypeA(1, 1.1d, new TypeB("one")));
@@ -240,12 +240,12 @@ public class AbstractHollowHashIndexTests {
     private void assertIteratorContainsAll(HollowOrdinalIterator iter, int... expectedOrdinals) {
         Set<Integer> ordinalSet = new HashSet<Integer>();
         int ordinal = iter.next();
-        while (ordinal != HollowOrdinalIterator.NO_MORE_ORDINALS) {
+        while(ordinal != HollowOrdinalIterator.NO_MORE_ORDINALS) {
             ordinalSet.add(ordinal);
             ordinal = iter.next();
         }
 
-        for (int ord : expectedOrdinals) {
+        for(int ord : expectedOrdinals) {
             Assert.assertTrue(ordinalSet.contains(ord));
         }
         Assert.assertEquals(expectedOrdinals.length, ordinalSet.size());

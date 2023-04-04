@@ -145,11 +145,11 @@ public class HollowHistoricalObjectDataAccess extends HollowHistoricalTypeDataAc
     }
 
     private HollowObjectTypeReadState removedRecords() {
-        return (HollowObjectTypeReadState) removedRecords;
+        return (HollowObjectTypeReadState)removedRecords;
     }
 
     private HollowObjectSampler sampler() {
-        return (HollowObjectSampler) sampler;
+        return (HollowObjectSampler)sampler;
     }
 
 }

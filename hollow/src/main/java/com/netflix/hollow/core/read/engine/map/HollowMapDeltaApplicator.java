@@ -71,10 +71,10 @@ class HollowMapDeltaApplicator {
         target.entryData = new FixedLengthElementArray(target.memoryRecycler, target.totalNumberOfBuckets * target.bitsPerMapEntry);
 
         if(target.bitsPerMapPointer == from.bitsPerMapPointer
-                && target.bitsPerMapSizeValue == from.bitsPerMapSizeValue
-                && target.bitsPerKeyElement == from.bitsPerKeyElement
-                && target.bitsPerValueElement == from.bitsPerValueElement)
-                    fastDelta();
+            && target.bitsPerMapSizeValue == from.bitsPerMapSizeValue
+            && target.bitsPerKeyElement == from.bitsPerKeyElement
+            && target.bitsPerValueElement == from.bitsPerValueElement)
+            fastDelta();
         else
             slowDelta();
 
@@ -85,13 +85,13 @@ class HollowMapDeltaApplicator {
     }
 
     private void slowDelta() {
-        for(int i=0; i<=target.maxOrdinal; i++) {
+        for(int i = 0;i <= target.maxOrdinal;i++) {
             mergeOrdinal(i);
         }
     }
 
     private void fastDelta() {
-        int i=0;
+        int i = 0;
         int bulkCopyEndOrdinal = Math.min(from.maxOrdinal, target.maxOrdinal);
 
         while(i <= target.maxOrdinal) {
@@ -142,7 +142,7 @@ class HollowMapDeltaApplicator {
         if(ordinal <= from.maxOrdinal) {
             long fromDataEndBucket = from.mapPointerAndSizeData.getElementValue(currentFromStateCopyStartBit, from.bitsPerMapPointer);
             if(!removeData) {
-                for(long bucketIdx=currentFromStateStartBucket; bucketIdx<fromDataEndBucket; bucketIdx++) {
+                for(long bucketIdx = currentFromStateStartBucket;bucketIdx < fromDataEndBucket;bucketIdx++) {
                     long bucketKey = from.entryData.getElementValue(bucketIdx * from.bitsPerMapEntry, from.bitsPerKeyElement);
                     long bucketValue = from.entryData.getElementValue(bucketIdx * from.bitsPerMapEntry + from.bitsPerKeyElement, from.bitsPerValueElement);
                     if(bucketKey == from.emptyBucketKeyValue)
@@ -168,7 +168,7 @@ class HollowMapDeltaApplicator {
 
     private void addFromDelta(GapEncodedVariableLengthIntegerReader additionsReader) {
         long deltaDataEndBucket = delta.mapPointerAndSizeData.getElementValue(currentDeltaCopyStartBit, delta.bitsPerMapPointer);
-        for(long bucketIdx=currentDeltaStartBucket; bucketIdx<deltaDataEndBucket; bucketIdx++) {
+        for(long bucketIdx = currentDeltaStartBucket;bucketIdx < deltaDataEndBucket;bucketIdx++) {
             long bucketEntry = delta.entryData.getElementValue(bucketIdx * delta.bitsPerMapEntry, delta.bitsPerMapEntry);
             target.entryData.setElementValue(currentWriteStartBucket * target.bitsPerMapEntry, target.bitsPerMapEntry, bucketEntry);
             currentWriteStartBucket++;

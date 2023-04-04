@@ -121,15 +121,15 @@ public class AbstractProducerMetricsListenerTest {
                 Assert.assertEquals(TEST_DATA_SIZE, announcementMetrics.getDataSizeBytes());
                 Assert.assertEquals(true, announcementMetrics.getIsAnnouncementSuccess());
                 Assert.assertEquals(TEST_ANNOUNCEMENT_DURATION_MILLIS,
-                        announcementMetrics.getAnnouncementDurationMillis());
+                    announcementMetrics.getAnnouncementDurationMillis());
                 Assert.assertNotEquals(OptionalLong.of(TEST_LAST_ANNOUNCEMENT_NANOS),
-                        announcementMetrics.getLastAnnouncementSuccessTimeNano());
+                    announcementMetrics.getLastAnnouncementSuccessTimeNano());
             }
         }
 
         AbstractProducerMetricsListener concreteProducerMetricsListener = new TestProducerMetricsListener();
         concreteProducerMetricsListener.lastAnnouncementSuccessTimeNanoOptional = OptionalLong.of(
-                TEST_LAST_ANNOUNCEMENT_NANOS);
+            TEST_LAST_ANNOUNCEMENT_NANOS);
         concreteProducerMetricsListener.onAnnouncementStart(TEST_VERSION);
         concreteProducerMetricsListener.onAnnouncementComplete(TEST_STATUS_SUCCESS, mockReadState, TEST_VERSION, Duration.ofMillis(TEST_ANNOUNCEMENT_DURATION_MILLIS));
     }
@@ -143,15 +143,15 @@ public class AbstractProducerMetricsListenerTest {
                 Assert.assertEquals(TEST_DATA_SIZE, announcementMetrics.getDataSizeBytes());
                 Assert.assertFalse(announcementMetrics.getIsAnnouncementSuccess());
                 Assert.assertEquals(TEST_ANNOUNCEMENT_DURATION_MILLIS,
-                        announcementMetrics.getAnnouncementDurationMillis());
+                    announcementMetrics.getAnnouncementDurationMillis());
                 Assert.assertEquals(OptionalLong.of(TEST_LAST_ANNOUNCEMENT_NANOS),
-                        announcementMetrics.getLastAnnouncementSuccessTimeNano());
+                    announcementMetrics.getLastAnnouncementSuccessTimeNano());
             }
         }
 
         AbstractProducerMetricsListener concreteProducerMetricsListener = new TestProducerMetricsListener();
         concreteProducerMetricsListener.lastAnnouncementSuccessTimeNanoOptional = OptionalLong.of(
-                TEST_LAST_ANNOUNCEMENT_NANOS);
+            TEST_LAST_ANNOUNCEMENT_NANOS);
         concreteProducerMetricsListener.onAnnouncementStart(TEST_VERSION);
         concreteProducerMetricsListener.onAnnouncementComplete(TEST_STATUS_FAIL, mockReadState, TEST_VERSION, Duration.ofMillis(TEST_ANNOUNCEMENT_DURATION_MILLIS));
     }

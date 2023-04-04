@@ -17,21 +17,22 @@ public class CustomProducerBuilderTest {
     @Test
     public void defaultBehavior() {
         HollowProducer producer = new AugmentedBuilder()
-                .build();
+            .build();
         Assert.assertFalse(producer instanceof AugmentedProducer);
     }
 
     @Test
     public void augmentedBehavior() {
         HollowProducer consumer = new AugmentedBuilder()
-                .withNumStatesBetweenSnapshots(42) // should be called before custom builder methods
-                .withAugmentation()
-                .build();
+            .withNumStatesBetweenSnapshots(42) // should be called before custom builder methods
+            .withAugmentation()
+            .build();
         Assert.assertTrue(consumer instanceof AugmentedProducer);
     }
 
     private static class AugmentedBuilder extends HollowProducer.Builder<AugmentedBuilder> {
         private boolean shouldAugment = false;
+
         AugmentedBuilder withAugmentation() {
             shouldAugment = true;
             return this;
@@ -51,10 +52,11 @@ public class CustomProducerBuilderTest {
 
     private static class AugmentedProducer extends HollowProducer {
         AugmentedProducer(
-                HollowProducer.Publisher publisher,
-                HollowProducer.Announcer announcer
-        ) {
-            super(publisher, announcer);        }
+            HollowProducer.Publisher publisher,
+            HollowProducer.Announcer announcer
+    ) {
+            super(publisher, announcer);
+        }
 
         @Override
         public String toString() {

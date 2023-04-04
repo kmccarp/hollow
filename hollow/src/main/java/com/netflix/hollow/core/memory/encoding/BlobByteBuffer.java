@@ -39,7 +39,7 @@ public final class BlobByteBuffer {
 
     private BlobByteBuffer(long capacity, int shift, int mask, ByteBuffer[] spine, long position) {
 
-        if (!spine[0].order().equals(ByteOrder.BIG_ENDIAN)) {
+        if(!spine[0].order().equals(ByteOrder.BIG_ENDIAN)) {
             throw new UnsupportedOperationException("Little endian memory layout is not supported");
         }
 
@@ -74,31 +74,31 @@ public final class BlobByteBuffer {
      */
     public static BlobByteBuffer mmapBlob(FileChannel channel, int singleBufferCapacity) throws IOException {
         long size = channel.size();
-        if (size == 0) {
+        if(size == 0) {
             throw new IllegalStateException("File to be mmap-ed has no data");
         }
-        if ((singleBufferCapacity & (singleBufferCapacity - 1)) != 0) { // should be a power of 2
+        if((singleBufferCapacity & (singleBufferCapacity - 1)) != 0) { // should be a power of 2
             throw new IllegalArgumentException("singleBufferCapacity must be a power of 2");
         }
 
         // divide into N buffers with an int capacity that is a power of 2
-        final int bufferCapacity = size > (long) singleBufferCapacity
-                ? singleBufferCapacity
-                : Integer.highestOneBit((int) size);
+        final int bufferCapacity = size > (long)singleBufferCapacity
+            ? singleBufferCapacity
+            : Integer.highestOneBit((int)size);
         long bufferCount = size % bufferCapacity == 0
-                ? size / (long)bufferCapacity
-                : (size / (long)bufferCapacity) + 1;
-        if (bufferCount > Integer.MAX_VALUE)
+            ? size / (long)bufferCapacity
+            : (size / (long)bufferCapacity) + 1;
+        if(bufferCount > Integer.MAX_VALUE)
             throw new IllegalArgumentException("file too large; size=" + size);
 
         int shift = 31 - Integer.numberOfLeadingZeros(bufferCapacity); // log2
         int mask = (1 << shift) - 1;
         ByteBuffer[] spine = new MappedByteBuffer[(int)bufferCount];
-        for (int i = 0; i < bufferCount; i++) {
+        for(int i = 0;i < bufferCount;i++) {
             long pos = (long)i * bufferCapacity;
             int cap = i == (bufferCount - 1)
-                    ? (int)(size - pos)
-                    : bufferCapacity;
+                ? (int)(size - pos)
+                : bufferCapacity;
             ByteBuffer buffer = channel.map(READ_ONLY, pos, cap);
             /*
              * if (!((MappedByteBuffer) buffer).isLoaded()) // TODO(timt): make pre-fetching configurable
@@ -124,7 +124,7 @@ public final class BlobByteBuffer {
      * @return new position in bytes
      */
     public BlobByteBuffer position(long position) {
-        if (position > capacity || position < 0)
+        if(position > capacity || position < 0)
             throw new IllegalArgumentException("invalid position; position=" + position + " capacity=" + capacity);
         this.position = position;
         return this;
@@ -137,18 +137,17 @@ public final class BlobByteBuffer {
      * @throws IndexOutOfBoundsException if index out of bounds of the backing buffer
      */
     public byte getByte(long index) throws BufferUnderflowException {
-        if (index < capacity) {
+        if(index < capacity) {
             int spineIndex = (int)(index >>> (shift));
             int bufferIndex = (int)(index & mask);
             return spine[spineIndex].get(bufferIndex);
-        }
-        else {
+        }else {
             assert(index < capacity + Long.BYTES);
             // this situation occurs when read for bits near the end of the buffer requires reading a long value that
             // extends past the buffer capacity by upto Long.BYTES bytes. To handle this case,
             // return 0 for (index >= capacity - Long.BYTES && index < capacity )
             // these zero bytes will be discarded anyway when the returned long value is shifted to get the queried bits
-            return (byte) 0;
+            return (byte)0;
         }
     }
 
@@ -163,18 +162,18 @@ public final class BlobByteBuffer {
         long nextAlignedPos = startByteIndex - alignmentOffset + Long.BYTES;
 
         byte[] bytes = new byte[Long.BYTES];
-        for (int i = 0; i < Long.BYTES; i ++ ) {
+        for(int i = 0;i < Long.BYTES;i++) {
             bytes[i] = getByte(bigEndian(startByteIndex + i, nextAlignedPos));
         }
 
-        return ((((long) (bytes[7]       )) << 56) |
-                (((long) (bytes[6] & 0xff)) << 48) |
-                (((long) (bytes[5] & 0xff)) << 40) |
-                (((long) (bytes[4] & 0xff)) << 32) |
-                (((long) (bytes[3] & 0xff)) << 24) |
-                (((long) (bytes[2] & 0xff)) << 16) |
-                (((long) (bytes[1] & 0xff)) <<  8) |
-                (((long) (bytes[0] & 0xff))      ));
+        return ((((long)(bytes[7]       )) << 56) |
+            (((long)(bytes[6] & 0xff)) << 48) |
+            (((long)(bytes[5] & 0xff)) << 40) |
+            (((long)(bytes[4] & 0xff)) << 32) |
+            (((long)(bytes[3] & 0xff)) << 24) |
+            (((long)(bytes[2] & 0xff)) << 16) |
+            (((long)(bytes[1] & 0xff)) <<  8) |
+            (((long)(bytes[0] & 0xff))      ));
     }
 
     /**
@@ -186,7 +185,7 @@ public final class BlobByteBuffer {
      */
     private long bigEndian(long index, long boundary) {
         long result;
-        if (index < boundary) {
+        if(index < boundary) {
             result = (boundary - Long.BYTES) + (boundary - index) - 1;
         } else {
             result = boundary + (boundary + Long.BYTES - index) - 1;

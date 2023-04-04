@@ -34,18 +34,18 @@ import java.util.Map;
 
 // Should this class be package private? It appears to be internal
 public class HollowPreindexer {
-    
+
     private final HollowDataAccess stateEngine;
     private final String type;
     private final String selectField;
     private final String[] matchFields;
-    
+
     private HollowTypeDataAccess typeState;
     private HollowHashIndexField[] matchFieldSpecs;
     private int numMatchTraverserFields;
     private HollowHashIndexField selectFieldSpec;
     private HollowIndexerValueTraverser traverser;
-    
+
     public HollowPreindexer(HollowDataAccess stateEngine, String type, String selectField, String... matchFields) {
         this.stateEngine = stateEngine;
         this.type = type;
@@ -60,7 +60,7 @@ public class HollowPreindexer {
 
         matchFieldSpecs = new HollowHashIndexField[matchFields.length];
 
-        for(int i=0;i<matchFields.length;i++) {
+        for(int i = 0;i < matchFields.length;i++) {
             matchFieldSpecs[i] = getHollowHashIndexField(typeState, matchFields[i], baseFieldToIndexMap, true);
         }
 
@@ -77,9 +77,9 @@ public class HollowPreindexer {
     }
 
     private HollowHashIndexField getHollowHashIndexField(HollowTypeDataAccess originalDataAccess, String selectField,
-            Map<String, Integer> baseFieldToIndexMap, boolean truncate) {
+        Map<String, Integer> baseFieldToIndexMap, boolean truncate) {
         FieldPaths.FieldPath<FieldPaths.FieldSegment> path = FieldPaths.createFieldPathForHashIndex(
-                stateEngine, type, selectField);
+            stateEngine, type, selectField);
 
         HollowTypeDataAccess baseTypeState = originalDataAccess;
 
@@ -89,17 +89,17 @@ public class HollowPreindexer {
         FieldPathSegment[] fieldPathIndexes = new FieldPathSegment[segments.size()];
         FieldType fieldType = FieldType.REFERENCE;
 
-        for (int i = 0; i < segments.size(); i++) {
+        for(int i = 0;i < segments.size();i++) {
             FieldPaths.FieldSegment segment = segments.get(i);
 
             HollowSchema schema = segment.enclosingSchema;
-            switch (schema.getSchemaType()) {
+            switch(schema.getSchemaType()) {
                 case OBJECT:
-                    FieldPaths.ObjectFieldSegment objectSegment = (FieldPaths.ObjectFieldSegment) segment;
+                    FieldPaths.ObjectFieldSegment objectSegment = (FieldPaths.ObjectFieldSegment)segment;
                     fieldType = objectSegment.getType();
                     int fieldPosition = objectSegment.getIndex();
                     HollowTypeDataAccess typeDataAccess = originalDataAccess.getDataAccess().getTypeDataAccess(objectSegment.getEnclosingSchema().getName());
-                    fieldPathIndexes[i] = new FieldPathSegment(fieldPosition, (HollowObjectTypeDataAccess) typeDataAccess);
+                    fieldPathIndexes[i] = new FieldPathSegment(fieldPosition, (HollowObjectTypeDataAccess)typeDataAccess);
 
                     if(!truncate)
                         baseFieldPathIdx = i + 1;
@@ -108,7 +108,7 @@ public class HollowPreindexer {
                 case LIST:
                     fieldType = FieldType.REFERENCE;
 
-                    HollowCollectionSchema collectionSchema = (HollowCollectionSchema) schema;
+                    HollowCollectionSchema collectionSchema = (HollowCollectionSchema)schema;
                     baseTypeState = originalDataAccess.getDataAccess().getTypeDataAccess(collectionSchema.getElementType());
 
                     baseFieldPathIdx = i + 1;
@@ -116,7 +116,7 @@ public class HollowPreindexer {
                 case MAP:
                     fieldType = FieldType.REFERENCE;
 
-                    HollowMapSchema mapSchema = (HollowMapSchema) schema;
+                    HollowMapSchema mapSchema = (HollowMapSchema)schema;
                     boolean isKey = "key".equals(segment.getName());
                     String elementType = isKey ? mapSchema.getKeyType() : mapSchema.getValueType();
                     baseTypeState = originalDataAccess.getDataAccess().getTypeDataAccess(elementType);
@@ -127,13 +127,13 @@ public class HollowPreindexer {
         }
 
         String basePath = segments.stream().limit(baseFieldPathIdx)
-                .map(FieldPaths.FieldSegment::getName)
-                .collect(joining("."));
+            .map(FieldPaths.FieldSegment::getName)
+            .collect(joining("."));
         int basePathIdx = baseFieldToIndexMap.computeIfAbsent(basePath, k -> baseFieldToIndexMap.size());
 
         return new HollowHashIndexField(basePathIdx,
-                Arrays.copyOfRange(fieldPathIndexes, baseFieldPathIdx, fieldPathIndexes.length),
-                baseTypeState, fieldType);
+            Arrays.copyOfRange(fieldPathIndexes, baseFieldPathIdx, fieldPathIndexes.length),
+            baseTypeState, fieldType);
     }
 
     public HollowTypeDataAccess getHollowTypeDataAccess() {
@@ -155,5 +155,5 @@ public class HollowPreindexer {
     public HollowIndexerValueTraverser getTraverser() {
         return traverser;
     }
-    
+
 }

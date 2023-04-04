@@ -174,7 +174,7 @@ public class HollowHistoricalStateCreator {
 
         return new HollowHistoricalStateDataAccess(totalHistory, version, roundTripStateEngine(writeEngine), typeRemovedOrdinalLookupMaps, schemaChanges);
     }
-    
+
     private Map<String, HollowHistoricalSchemaChange> calculateSchemaChanges(HollowReadStateEngine previous, HollowReadStateEngine current, DiffEqualityMapping equalityMapping) {
         Map<String, HollowHistoricalSchemaChange> schemaChanges = new HashMap<String, HollowHistoricalSchemaChange>();
         for(HollowTypeReadState previousTypeState : previous.getTypeStates()) {
@@ -182,7 +182,7 @@ public class HollowHistoricalStateCreator {
             HollowTypeReadState currentTypeState = current.getTypeState(typeName);
             if(currentTypeState == null) {
                 schemaChanges.put(typeName, new HollowHistoricalSchemaChange(previousTypeState.getSchema(), null));
-            } else if (equalityMapping.requiresMissingFieldTraversal(typeName)) {
+            } else if(equalityMapping.requiresMissingFieldTraversal(typeName)) {
                 schemaChanges.put(typeName, new HollowHistoricalSchemaChange(previousTypeState.getSchema(), currentTypeState.getSchema()));
             }
         }
@@ -302,7 +302,7 @@ public class HollowHistoricalStateCreator {
         IntMapOrdinalRemapper typeRemovedOrdinalRemapping = new IntMapOrdinalRemapper();
 
         for(String typeName : previous.getAllTypes()) {
-            HollowHistoricalTypeDataAccess typeDataAccess = (HollowHistoricalTypeDataAccess) previous.getTypeDataAccess(typeName);
+            HollowHistoricalTypeDataAccess typeDataAccess = (HollowHistoricalTypeDataAccess)previous.getTypeDataAccess(typeName);
             copyRemappedRecords(typeDataAccess.getRemovedRecords(), ordinalRemapper, writeEngine);
 
             IntMap ordinalLookupMap = remapPreviousOrdinalMapping(typeDataAccess.getOrdinalRemap(), typeName, ordinalRemapper);
@@ -317,7 +317,7 @@ public class HollowHistoricalStateCreator {
         HollowTypeWriteState typeState = writeEngine.getTypeState(typeName);
         HollowRecordCopier copier = HollowRecordCopier.createCopier(readTypeState, ordinalRemapper, false);  ///NOTE: This will invalidate custom hash codes
 
-        for(int i=0;i<=readTypeState.maxOrdinal();i++) {
+        for(int i = 0;i <= readTypeState.maxOrdinal();i++) {
             HollowWriteRecord rec = copier.copy(i);
             typeState.add(rec);
         }
@@ -365,13 +365,13 @@ public class HollowHistoricalStateCreator {
         try {
             executor.awaitSuccessfulCompletion();
         } catch (InterruptedException | ExecutionException e) {
-            if (pipeException == null) {
+            if(pipeException == null) {
                 throw new RuntimeException(e);
             }
 
             pipeException.addSuppressed(e);
         }
-        if (pipeException != null)
+        if(pipeException != null)
             throw new RuntimeException(pipeException);
 
         return removedRecordCopies;

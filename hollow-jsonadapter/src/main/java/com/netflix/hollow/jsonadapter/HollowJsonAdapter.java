@@ -147,9 +147,9 @@ public class HollowJsonAdapter extends AbstractHollowJsonAdaptorTask {
             case MAP:
                 switch(currentToken) {
                     case START_ARRAY:
-                        return addStructuredMap(parser, flatRecordWriter, subType, (HollowMapWriteRecord) getWriteRecord(subType));
+                        return addStructuredMap(parser, flatRecordWriter, subType, (HollowMapWriteRecord)getWriteRecord(subType));
                     case START_OBJECT:
-                        return addUnstructuredMap(parser, flatRecordWriter, subType, (HollowMapWriteRecord) getWriteRecord(subType));
+                        return addUnstructuredMap(parser, flatRecordWriter, subType, (HollowMapWriteRecord)getWriteRecord(subType));
                     default:
                         throw new IOException("Expecting to parse a " + subType + ", which is a " + subTypeSchema.getSchemaType() + ", expected JsonToken.START_ARRAY or JsonToken.START_OBJECT but instead found a " + currentToken.toString());
                 }
@@ -169,7 +169,7 @@ public class HollowJsonAdapter extends AbstractHollowJsonAdaptorTask {
 
         String fieldName = null;
         try {
-            while (token != JsonToken.END_OBJECT) {
+            while(token != JsonToken.END_OBJECT) {
                 if(token != JsonToken.FIELD_NAME) {
                     fieldName = parser.getCurrentName();
                     ObjectMappedFieldPath mappedFieldPath = objectMapping.getMappedFieldPath(fieldName);
@@ -308,7 +308,7 @@ public class HollowJsonAdapter extends AbstractHollowJsonAdaptorTask {
                             writeRec.setString(fieldName, parser.getValueAsString());
                             break;
                         case REFERENCE:
-                            HollowObjectWriteRecord referencedRec = (HollowObjectWriteRecord) getWriteRecord(schema.getReferencedType(fieldPosition));
+                            HollowObjectWriteRecord referencedRec = (HollowObjectWriteRecord)getWriteRecord(schema.getReferencedType(fieldPosition));
                             referencedRec.reset();
                             String refFieldName = referencedRec.getSchema().getFieldName(0);
                             switch(referencedRec.getSchema().getFieldType(0)) {
@@ -349,7 +349,7 @@ public class HollowJsonAdapter extends AbstractHollowJsonAdaptorTask {
         JsonToken token = parser.nextToken();
         arrayRec.reset();
 
-        HollowCollectionSchema schema = (HollowCollectionSchema) hollowSchemas.get(arrayType);
+        HollowCollectionSchema schema = (HollowCollectionSchema)hollowSchemas.get(arrayType);
         ObjectFieldMapping valueRec = null;
         ObjectMappedFieldPath fieldMapping = null;
 
@@ -370,7 +370,7 @@ public class HollowJsonAdapter extends AbstractHollowJsonAdaptorTask {
             }
 
             if(arrayRec instanceof HollowListWriteRecord) {
-                ((HollowListWriteRecord) arrayRec).addElement(elementOrdinal);
+                ((HollowListWriteRecord)arrayRec).addElement(elementOrdinal);
             } else {
                 ((HollowSetWriteRecord)arrayRec).addElement(elementOrdinal);
             }
@@ -385,7 +385,7 @@ public class HollowJsonAdapter extends AbstractHollowJsonAdaptorTask {
         JsonToken token = parser.nextToken();
         mapRec.reset();
 
-        HollowMapSchema schema = (HollowMapSchema) hollowSchemas.get(mapTypeName);
+        HollowMapSchema schema = (HollowMapSchema)hollowSchemas.get(mapTypeName);
 
         while(token != JsonToken.END_ARRAY) {
             if(token == JsonToken.START_OBJECT) {
@@ -394,8 +394,7 @@ public class HollowJsonAdapter extends AbstractHollowJsonAdaptorTask {
 
                     if(token == JsonToken.START_OBJECT || token == JsonToken.START_ARRAY) {
                         if("key".equals(parser.getCurrentName()))
-                            keyOrdinal = parseSubType(parser, flatRecordWriter, token, schema.getKeyType());
-                        else if("value".equals(parser.getCurrentName()))
+                            keyOrdinal = parseSubType(parser, flatRecordWriter, token, schema.getKeyType());else if("value".equals(parser.getCurrentName()))
                             valueOrdinal = parseSubType(parser, flatRecordWriter, token, schema.getValueType());
                     }
 
@@ -414,7 +413,7 @@ public class HollowJsonAdapter extends AbstractHollowJsonAdaptorTask {
     private int addUnstructuredMap(JsonParser parser, FlatRecordWriter flatRecordWriter, String mapTypeName, HollowMapWriteRecord mapRec) throws IOException {
         mapRec.reset();
 
-        HollowMapSchema schema = (HollowMapSchema) hollowSchemas.get(mapTypeName);
+        HollowMapSchema schema = (HollowMapSchema)hollowSchemas.get(mapTypeName);
         ObjectFieldMapping valueRec = null;
         ObjectMappedFieldPath fieldMapping = null;
 
@@ -422,7 +421,7 @@ public class HollowJsonAdapter extends AbstractHollowJsonAdaptorTask {
 
         while(token != JsonToken.END_OBJECT) {
             if(token != JsonToken.FIELD_NAME) {
-                HollowObjectWriteRecord mapKeyWriteRecord = (HollowObjectWriteRecord) getWriteRecord(schema.getKeyType());
+                HollowObjectWriteRecord mapKeyWriteRecord = (HollowObjectWriteRecord)getWriteRecord(schema.getKeyType());
                 String fieldName = mapKeyWriteRecord.getSchema().getFieldName(0);
                 mapKeyWriteRecord.reset();
 
@@ -476,7 +475,7 @@ public class HollowJsonAdapter extends AbstractHollowJsonAdaptorTask {
         JsonToken token = parser.nextToken();
 
         try {
-            while (token != JsonToken.END_OBJECT) {
+            while(token != JsonToken.END_OBJECT) {
                 skipObjectField(parser, token);
                 token = parser.nextToken();
             }
@@ -527,9 +526,9 @@ public class HollowJsonAdapter extends AbstractHollowJsonAdaptorTask {
     }
 
     private void initHollowWriteRecordsIfNecessary() {
-        if (hollowWriteRecordsHolder.get() == null) {
+        if(hollowWriteRecordsHolder.get() == null) {
             synchronized (this) {
-                if (hollowWriteRecordsHolder.get() == null) {
+                if(hollowWriteRecordsHolder.get() == null) {
                     Map<String, HollowWriteRecord> lookupMap = createWriteRecords(stateEngine);
                     hollowWriteRecordsHolder.set(lookupMap);
                     objectFieldMappingHolder.set(cloneFieldMappings());
@@ -541,8 +540,8 @@ public class HollowJsonAdapter extends AbstractHollowJsonAdaptorTask {
     private static Map<String, HollowWriteRecord> createWriteRecords(HollowWriteStateEngine stateEngine) {
         Map<String, HollowWriteRecord> hollowWriteRecords = new HashMap<>();
 
-        for (HollowSchema schema : stateEngine.getSchemas()) {
-            switch (schema.getSchemaType()) {
+        for(HollowSchema schema : stateEngine.getSchemas()) {
+            switch(schema.getSchemaType()) {
                 case LIST:
                     hollowWriteRecords.put(schema.getName(), new HollowListWriteRecord());
                     break;
@@ -582,7 +581,7 @@ public class HollowJsonAdapter extends AbstractHollowJsonAdaptorTask {
     HollowWriteRecord getWriteRecord(String type) throws IOException {
         Map<String, HollowWriteRecord> hollowWriteRecords = hollowWriteRecordsHolder.get();
         HollowWriteRecord wRec = hollowWriteRecords.get(type);
-        if (wRec == null) {
+        if(wRec == null) {
             throw new IOException("WriteRecord for " + type + " not found.  Make sure Schema Discovery is done correctly.");
         }
         return wRec;

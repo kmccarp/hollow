@@ -95,102 +95,102 @@ public class HollowDiffTest {
 
         //// FIRST OBJECT PAIR ////
         addRec(fromStateEngine,
-                "recordOne", 1,
-                cList(
-                        c(1001, true),
-                        c(1002, true),
-                        c(1003, true)
-                        ),
-                dSet(
-                        d(1.001f, 1.00001d, new byte[]{ 1, 1 }),
-                        d(1.002f, 1.00002d, new byte[]{ 1, 2 })
-                        ),
-                map(
-                        entry(
-                                c(1001, true),
-                                d(1.001f, 1.00001d, new byte[]{ 1, 1 })
-                                ),
-                        entry(
-                                c(1002, true),
-                                d(1.002f, 1.00002d, new byte[]{ 1, 2 })
-                                )
-                        ));
+            "recordOne", 1,
+            cList(
+                c(1001, true),
+                c(1002, true),
+                c(1003, true)
+            ),
+            dSet(
+                d(1.001f, 1.00001d, new byte[]{1, 1}),
+                d(1.002f, 1.00002d, new byte[]{1, 2})
+            ),
+            map(
+                entry(
+                    c(1001, true),
+                    d(1.001f, 1.00001d, new byte[]{1, 1})
+                ),
+                entry(
+                    c(1002, true),
+                    d(1.002f, 1.00002d, new byte[]{1, 2})
+                )
+            ));
 
         addRec(toStateEngine,
-                "recordOne", 1,
-                cList(
-                        c(1001, false), // now false instead of true
-                        c(1002, true),
-                        c(1003, false)  // now false instead of true
-                        ),
-                dSet(
-                        d(1.001f, 1.00001d, new byte[]{ 1, 9 }), /// 9 instead of 1
-                        d(1.002f, 1.00002d, new byte[]{ 1, 2 })
-                        ),
-                map(
-                        entry(
-                                c(1001, true),
-                                d(1.001f, 1.00001d, new byte[]{ 1, 9 }) /// 9 instead of 1
-                                ),
-                        entry(
-                                c(1002, true),
-                                d(1.002f, 1.00002d, new byte[]{ 1, 2 })
-                                )
-                        ));
+            "recordOne", 1,
+            cList(
+                c(1001, false), // now false instead of true
+                c(1002, true),
+                c(1003, false)  // now false instead of true
+            ),
+            dSet(
+                d(1.001f, 1.00001d, new byte[]{1, 9}), /// 9 instead of 1
+                d(1.002f, 1.00002d, new byte[]{1, 2})
+            ),
+            map(
+                entry(
+                    c(1001, true),
+                    d(1.001f, 1.00001d, new byte[]{1, 9}) /// 9 instead of 1
+                ),
+                entry(
+                    c(1002, true),
+                    d(1.002f, 1.00002d, new byte[]{1, 2})
+                )
+            ));
 
         //// SECOND OBJECT PAIR ////
         addRec(fromStateEngine,
-                "recordTwo", 2,
-                cList(
-                        c(2001, true),
-                        c(2002, true),
-                        c(2003, true)
-                        ),
-                dSet(
-                        d(2.001f, 2.00001d, new byte[]{ 2, 1 }),
-                        d(2.002f, 2.00002d, new byte[]{ 2, 2 })
-                        ),
-                map(
-                        entry(
-                                c(2001, true),
-                                d(2.001f, 2.00001d, new byte[]{ 2, 1 })
-                                ),
-                        entry(
-                                c(2002, true),
-                                d(2.002f, 2.00002d, new byte[]{ 2, 2 })
-                                )
-                        ));
+            "recordTwo", 2,
+            cList(
+                c(2001, true),
+                c(2002, true),
+                c(2003, true)
+            ),
+            dSet(
+                d(2.001f, 2.00001d, new byte[]{2, 1}),
+                d(2.002f, 2.00002d, new byte[]{2, 2})
+            ),
+            map(
+                entry(
+                    c(2001, true),
+                    d(2.001f, 2.00001d, new byte[]{2, 1})
+                ),
+                entry(
+                    c(2002, true),
+                    d(2.002f, 2.00002d, new byte[]{2, 2})
+                )
+            ));
 
         addRec(toStateEngine,
-                "recordTwo", 2,
-                cList(
-                        c(2001, true),
-                        c(2002, false), // now false instead of true
-                        c(2003, true)
-                        ),
-                dSet(
-                        d(2.001f, 2.00001d, new byte[]{ 2, 7 }), /// 7 instead of 1
-                        d(2.002f, 2.00002d, new byte[]{ 2, 2 })
-                        ),
-                map(
-                        entry(
-                                c(2001, true),
-                                d(2.001f, 2.00001d, new byte[]{ 2, 7 }) /// 7 instead of 1
-                                ),
-                        entry(
-                                c(2002, true),
-                                d(2.002f, 2.00002d, new byte[]{ 2, 2 })
-                                )
-                        ));
+            "recordTwo", 2,
+            cList(
+                c(2001, true),
+                c(2002, false), // now false instead of true
+                c(2003, true)
+            ),
+            dSet(
+                d(2.001f, 2.00001d, new byte[]{2, 7}), /// 7 instead of 1
+                d(2.002f, 2.00002d, new byte[]{2, 2})
+            ),
+            map(
+                entry(
+                    c(2001, true),
+                    d(2.001f, 2.00001d, new byte[]{2, 7}) /// 7 instead of 1
+                ),
+                entry(
+                    c(2002, true),
+                    d(2.002f, 2.00002d, new byte[]{2, 2})
+                )
+            ));
 
 
         //// UNPAIRED OBJECTS ////
         addRec(toStateEngine,
-                "recordThree", 3,
-                cList(), dSet(), map());
+            "recordThree", 3,
+            cList(), dSet(), map());
         addRec(fromStateEngine,
-                "recordThree", 4,
-                cList(), dSet(), map());
+            "recordThree", 4,
+            cList(), dSet(), map());
 
 
         HollowDiff diff = new HollowDiff(readEngine(fromStateEngine), readEngine(toStateEngine), false);
@@ -253,8 +253,8 @@ public class HollowDiffTest {
             Assert.assertEquals(1, matchPathsE.size());
             Assert.assertEquals("e1", matchPathsE.get(0));
 
-            Assert.assertEquals( typeEDiff.getUnmatchedOrdinalsInFrom().size(), 0 );
-            Assert.assertEquals( typeEDiff.getUnmatchedOrdinalsInTo().size(), 1 );
+            Assert.assertEquals(typeEDiff.getUnmatchedOrdinalsInFrom().size(), 0);
+            Assert.assertEquals(typeEDiff.getUnmatchedOrdinalsInTo().size(), 1);
         }
     }
 
@@ -287,8 +287,8 @@ public class HollowDiffTest {
             List<String> matchPaths = matcher.getMatchPaths();
             Assert.assertEquals(0, matchPaths.size());
 
-            Assert.assertEquals( typeDiff.getUnmatchedOrdinalsInFrom().size(), 0 );
-            Assert.assertEquals( typeDiff.getUnmatchedOrdinalsInTo().size(), 1 );
+            Assert.assertEquals(typeDiff.getUnmatchedOrdinalsInFrom().size(), 0);
+            Assert.assertEquals(typeDiff.getUnmatchedOrdinalsInTo().size(), 1);
         }
 
         { // Single Field without Primary Key
@@ -303,8 +303,8 @@ public class HollowDiffTest {
             Assert.assertEquals(1, matchPaths.size());
             Assert.assertEquals("f1", matchPaths.get(0));
 
-            Assert.assertEquals( typeDiff.getUnmatchedOrdinalsInFrom().size(), 1 );
-            Assert.assertEquals( typeDiff.getUnmatchedOrdinalsInTo().size(), 2 );
+            Assert.assertEquals(typeDiff.getUnmatchedOrdinalsInFrom().size(), 1);
+            Assert.assertEquals(typeDiff.getUnmatchedOrdinalsInTo().size(), 2);
         }
     }
 
@@ -347,10 +347,10 @@ public class HollowDiffTest {
     }
 
     private int addRec(HollowWriteStateEngine stateEngine,
-            String a1, int b1,
-            TypeCRec[] typeCs,
-            TypeDRec[] typeDs,
-            MapEntry[] mapEntries) {
+        String a1, int b1,
+        TypeCRec[] typeCs,
+        TypeDRec[] typeDs,
+        MapEntry[] mapEntries) {
         int listOrdinal = addListRec(stateEngine, typeCs);
         int setOrdinal = addSetRec(stateEngine, typeDs);
         int bOrdinal = addBRec(stateEngine, b1, listOrdinal, setOrdinal);

@@ -38,7 +38,7 @@ public class HollowPrimaryKeyIndexLongevityTest {
     public void testIndexSurvives3Updates() throws IOException {
         TestHollowConsumer longConsumer = createHollowConsumer(true);
         TestHollowConsumer shortConsumer = createHollowConsumer(false);
-        HollowWriteStateEngine snapshotEngine = createSnapshot(0,5, "snapshot");
+        HollowWriteStateEngine snapshotEngine = createSnapshot(0, 5, "snapshot");
         longConsumer.applySnapshot(0, snapshotEngine);
         shortConsumer.applySnapshot(0, snapshotEngine);
 
@@ -61,9 +61,8 @@ public class HollowPrimaryKeyIndexLongevityTest {
         assertThat(shortSnapshot0.getMatchingOrdinal(2)).isNotEqualTo(-1);
 
 
-
         //Now we do a delta. Both indexes should work
-        HollowWriteStateEngine delta1Engine = createSnapshot(0,5, "delta1");
+        HollowWriteStateEngine delta1Engine = createSnapshot(0, 5, "delta1");
         longConsumer.applyDelta(1, delta1Engine);
         shortConsumer.applyDelta(1, delta1Engine);
         HollowUniqueKeyIndex longDelta1 = new HollowUniqueKeyIndex(longConsumer.getAPI().getDataAccess(), "TypeA");
@@ -86,7 +85,7 @@ public class HollowPrimaryKeyIndexLongevityTest {
 
 
         //Do another delta. The long index should work. The short index should not.
-        HollowWriteStateEngine delta2Engine = createSnapshot(4,10, "delta1");
+        HollowWriteStateEngine delta2Engine = createSnapshot(4, 10, "delta1");
         longConsumer.applyDelta(2, delta2Engine);
         shortConsumer.applyDelta(2, delta2Engine);
         HollowUniqueKeyIndex longDelta2 = new HollowUniqueKeyIndex(longConsumer.getAPI().getDataAccess(), "TypeA");
@@ -126,41 +125,41 @@ public class HollowPrimaryKeyIndexLongevityTest {
 
     private static HollowWriteStateEngine createSnapshot(int start, int end, String value) {
         Object[] objects = IntStream.range(start, end)
-                .mapToObj(id -> new TypeA(id, value))
-                .toArray();
+            .mapToObj(id -> new TypeA(id, value))
+            .toArray();
         return new HollowWriteStateEngineBuilder(Collections.singleton(TypeA.class)).add(objects).build();
     }
 
     private static TestHollowConsumer createHollowConsumer(boolean longevity) {
         return new TestHollowConsumer.Builder()
-                .withBlobRetriever(new TestBlobRetriever())
-                .withObjectLongevityConfig(
-                        new HollowConsumer.ObjectLongevityConfig() {
-                            public long usageDetectionPeriodMillis() {
-                                return 1_000L;
-                            }
+            .withBlobRetriever(new TestBlobRetriever())
+            .withObjectLongevityConfig(
+                new HollowConsumer.ObjectLongevityConfig() {
+                    public long usageDetectionPeriodMillis() {
+                        return 1_000L;
+                    }
 
-                            public long gracePeriodMillis() {
-                                return HOURS.toMillis(2);
-                            }
+                    public long gracePeriodMillis() {
+                        return HOURS.toMillis(2);
+                    }
 
-                            public boolean forceDropData() {
-                                return true;
-                            }
+                    public boolean forceDropData() {
+                        return true;
+                    }
 
-                            public boolean enableLongLivedObjectSupport() {
-                                return longevity;
-                            }
+                    public boolean enableLongLivedObjectSupport() {
+                        return longevity;
+                    }
 
-                            public boolean enableExpiredUsageStackTraces() {
-                                return false;
-                            }
+                    public boolean enableExpiredUsageStackTraces() {
+                        return false;
+                    }
 
-                            public boolean dropDataAutomatically() {
-                                return true;
-                            }
-                        })
-                .build();
+                    public boolean dropDataAutomatically() {
+                        return true;
+                    }
+                })
+            .build();
 
     }
 }

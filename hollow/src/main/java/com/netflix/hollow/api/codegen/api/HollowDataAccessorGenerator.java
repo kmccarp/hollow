@@ -43,11 +43,11 @@ public class HollowDataAccessorGenerator extends HollowConsumerJavaFileGenerator
     protected final HollowObjectSchema schema;
 
     public HollowDataAccessorGenerator(String packageName, String apiclassName, HollowObjectSchema schema,
-            HollowDataset dataset, CodeGeneratorConfig config) {
+        HollowDataset dataset, CodeGeneratorConfig config) {
         super(packageName, SUB_PACKAGE_NAME, dataset, config);
         this.className = getClassName(schema);
         this.apiclassName = apiclassName;
-        this.type =  hollowImplClassname(schema.getName());
+        this.type = hollowImplClassname(schema.getName());
         this.schema = schema;
     }
 
@@ -67,7 +67,7 @@ public class HollowDataAccessorGenerator extends HollowConsumerJavaFileGenerator
 
         builder.append("\n");
         builder.append("@SuppressWarnings(\"all\")\n");
-        builder.append("public class " + className + " extends " + AbstractHollowDataAccessor.class.getSimpleName() + "<" + type  +"> {\n\n");
+        builder.append("public class " + className + " extends " + AbstractHollowDataAccessor.class.getSimpleName() + "<" + type  + "> {\n\n");
 
         builder.append("    public static final String TYPE = \"" + schema.getName() + "\";\n");
         builder.append("    private " + apiclassName + " api;\n\n");

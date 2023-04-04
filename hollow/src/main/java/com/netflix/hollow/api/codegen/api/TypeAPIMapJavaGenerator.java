@@ -40,7 +40,7 @@ public class TypeAPIMapJavaGenerator extends HollowTypeAPIGenerator {
     private final HollowMapSchema schema;
 
     public TypeAPIMapJavaGenerator(String apiClassname, String packageName, HollowMapSchema schema,
-            HollowDataset dataset, CodeGeneratorConfig config) {
+        HollowDataset dataset, CodeGeneratorConfig config) {
         super(apiClassname, packageName, schema, dataset, config);
         this.schema = schema;
     }

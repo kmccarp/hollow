@@ -38,8 +38,8 @@ public class HollowDiffNodeIdentifier {
 
     public HollowDiffNodeIdentifier(HollowDiffNodeIdentifier parent, String viaFieldName, String typeName) {
         this.parents = parent == null ?
-                Collections.<HollowDiffNodeIdentifier>emptyList()
-                : buildParentsList(parent);
+            Collections.<HollowDiffNodeIdentifier>emptyList()
+            : buildParentsList(parent);
         this.viaFieldName = viaFieldName;
         this.nodeName = typeName;
     }
@@ -66,7 +66,7 @@ public class HollowDiffNodeIdentifier {
     public int hashCode() {
         int hashCode = 0;
 
-        for(int i=0;i<parents.size();i++) {
+        for(int i = 0;i < parents.size();i++) {
             String parentViaFieldName = parents.get(i).getViaFieldName();
             if(parentViaFieldName != null)
                 hashCode = 31 * hashCode + parentViaFieldName.hashCode();
@@ -86,7 +86,7 @@ public class HollowDiffNodeIdentifier {
         if(other instanceof HollowDiffNodeIdentifier) {
             HollowDiffNodeIdentifier otherId = (HollowDiffNodeIdentifier)other;
             if(otherId.getParents().size() == parents.size()) {
-                for(int i=parents.size() - 1;i >= 0;i--) {
+                for(int i = parents.size() - 1;i >= 0;i--) {
                     HollowDiffNodeIdentifier myParent = parents.get(i);
                     HollowDiffNodeIdentifier otherParent = otherId.getParents().get(i);
 
@@ -110,7 +110,7 @@ public class HollowDiffNodeIdentifier {
             builder.append(parents.get(0).getNodeName());
         }
 
-        for(int i=1;i<parents.size();i++) {
+        for(int i = 1;i < parents.size();i++) {
             builder.append('.').append(parents.get(i).getViaFieldName());
         }
 
@@ -123,8 +123,8 @@ public class HollowDiffNodeIdentifier {
 
     private boolean shallowEquals(HollowDiffNodeIdentifier other) {
         if(viaFieldName == null ?
-                other.getViaFieldName() == null
-                : viaFieldName.equals(other.getViaFieldName()))
+            other.getViaFieldName() == null
+            : viaFieldName.equals(other.getViaFieldName()))
             return nodeName.equals(other.getNodeName());
         return false;
     }

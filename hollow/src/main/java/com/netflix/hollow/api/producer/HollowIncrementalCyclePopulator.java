@@ -51,7 +51,7 @@ public class HollowIncrementalCyclePopulator implements HollowProducer.Populator
 
     private final double threadsPerCpu;
     private final Map<RecordPrimaryKey, Object> mutations;
-    
+
 
     HollowIncrementalCyclePopulator(Map<RecordPrimaryKey, Object> mutations, double threadsPerCpu) {
         this.mutations = mutations;
@@ -66,7 +66,7 @@ public class HollowIncrementalCyclePopulator implements HollowProducer.Populator
     }
 
     private void removeRecords(HollowProducer.WriteState newState) {
-        if (newState.getPriorState() != null) {
+        if(newState.getPriorState() != null) {
             Collection<String> types = findTypesWithRemovedRecords(newState.getPriorState());
             Map<String, BitSet> recordsToRemove = markRecordsToRemove(newState.getPriorState(), types);
             removeRecordsFromNewState(newState, recordsToRemove);
@@ -105,7 +105,7 @@ public class HollowIncrementalCyclePopulator implements HollowProducer.Populator
         HollowSchema schema = priorReadState.getSchema();
         int populatedOrdinals = priorReadState.getPopulatedOrdinals().length();
         if(schema.getSchemaType() == HollowSchema.SchemaType.OBJECT) {
-            final HollowPrimaryKeyIndex idx = new HollowPrimaryKeyIndex(priorStateEngine, ((HollowObjectSchema) schema).getPrimaryKey()); ///TODO: Should we scan instead?  Can we create this once and do delta updates?
+            final HollowPrimaryKeyIndex idx = new HollowPrimaryKeyIndex(priorStateEngine, ((HollowObjectSchema)schema).getPrimaryKey()); ///TODO: Should we scan instead?  Can we create this once and do delta updates?
 
             ThreadSafeBitSet typeRecordsToRemove = new ThreadSafeBitSet(ThreadSafeBitSet.DEFAULT_LOG2_SEGMENT_SIZE_IN_BITS, populatedOrdinals);
             SimultaneousExecutor executor = new SimultaneousExecutor(threadsPerCpu, getClass(), "mark-type-records-to-remove");
@@ -126,7 +126,7 @@ public class HollowIncrementalCyclePopulator implements HollowProducer.Populator
 
             try {
                 executor.awaitSuccessfulCompletion();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
 
@@ -144,28 +144,28 @@ public class HollowIncrementalCyclePopulator implements HollowProducer.Populator
             int ordinalToRemove = typeRecordsToRemove.nextSetBit(0);
             while(ordinalToRemove != -1) {
                 writeState.removeOrdinalFromThisCycle(ordinalToRemove);
-                ordinalToRemove = typeRecordsToRemove.nextSetBit(ordinalToRemove+1);
+                ordinalToRemove = typeRecordsToRemove.nextSetBit(ordinalToRemove + 1);
             }
         }
     }
 
     private void addRecords(final HollowProducer.WriteState newState) {
         List<Map.Entry<RecordPrimaryKey, Object>> entryList = new ArrayList<>(mutations.entrySet());
-        
+
         AtomicInteger nextMutation = new AtomicInteger(0);
 
         // @@@ Use parallel stream
         SimultaneousExecutor executor = new SimultaneousExecutor(threadsPerCpu, getClass(), "add-records");
-        for(int i=0;i<executor.getCorePoolSize();i++) {
+        for(int i = 0;i < executor.getCorePoolSize();i++) {
             executor.execute(() -> {
                 FlatRecordDumper flatRecordDumper = null;
                 int currentMutationIdx = nextMutation.getAndIncrement();
-                
+
                 while(currentMutationIdx < entryList.size()) {
                     Object currentMutation = entryList.get(currentMutationIdx).getValue();
 
                     if(currentMutation instanceof AddIfAbsent) {
-                        AddIfAbsent aia = (AddIfAbsent) currentMutation;
+                        AddIfAbsent aia = (AddIfAbsent)currentMutation;
                         if(aia.wasFound)
                             currentMutation = DELETE_RECORD;
                         else
@@ -181,7 +181,7 @@ public class HollowIncrementalCyclePopulator implements HollowProducer.Populator
                             newState.add(currentMutation);
                         }
                     }
-                    
+
                     currentMutationIdx = nextMutation.getAndIncrement();
                 }
 
@@ -190,7 +190,7 @@ public class HollowIncrementalCyclePopulator implements HollowProducer.Populator
 
         try {
             executor.awaitSuccessfulCompletion();
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

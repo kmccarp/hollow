@@ -30,50 +30,50 @@ public class HollowListFastDeltaTest extends AbstractStateEngineTest {
 
     @Test
     public void test() throws IOException {
-        addRecord(10,  20,  30);
-        addRecord(20,  30,  40);
+        addRecord(10, 20, 30);
+        addRecord(20, 30, 40);
         addRecord();
-        addRecord(30,  40,  50);
-        addRecord(40,  50,  60);
-        addRecord(50,  60,  70);
-        addRecord(60,  70,  80, 90, 100, 110, 120);
-        addRecord(70,  80,  90, 100);
-        addRecord(80,  90,  100);
-        addRecord(90,  100, 110);
+        addRecord(30, 40, 50);
+        addRecord(40, 50, 60);
+        addRecord(50, 60, 70);
+        addRecord(60, 70, 80, 90, 100, 110, 120);
+        addRecord(70, 80, 90, 100);
+        addRecord(80, 90, 100);
+        addRecord(90, 100, 110);
         addRecord(100, 110, 120);
         addRecord(110, 120, 130);
         addRecord(120, 130, 140);
 
         roundTripSnapshot();
 
-        addRecord(10,  20,  30);
-        addRecord(20,  30,  40);
+        addRecord(10, 20, 30);
+        addRecord(20, 30, 40);
         addRecord();
-        addRecord(30,  40,  50);
-        addRecord(40,  50,  60);
-        addRecord(50,  60,  70);
-        addRecord(60,  70,  80, 90, 100, 110, 120);
-        addRecord(71,  81,  91, 101);
-        addRecord(80,  90,  100);
-        addRecord(90,  100, 110);
+        addRecord(30, 40, 50);
+        addRecord(40, 50, 60);
+        addRecord(50, 60, 70);
+        addRecord(60, 70, 80, 90, 100, 110, 120);
+        addRecord(71, 81, 91, 101);
+        addRecord(80, 90, 100);
+        addRecord(90, 100, 110);
         addRecord(100, 110, 120);
         addRecord(110, 120, 130);
         addRecord(120, 130, 140);
 
         roundTripDelta();
 
-        HollowListTypeReadState typeState = (HollowListTypeReadState) readStateEngine.getTypeState("TestList");
+        HollowListTypeReadState typeState = (HollowListTypeReadState)readStateEngine.getTypeState("TestList");
 
-        assertList(typeState, 0, 10,  20,  30);
-        assertList(typeState, 1, 20,  30,  40);
+        assertList(typeState, 0, 10, 20, 30);
+        assertList(typeState, 1, 20, 30, 40);
         assertList(typeState, 2);
-        assertList(typeState, 3, 30,  40,  50);
-        assertList(typeState, 4, 40,  50,  60);
-        assertList(typeState, 5, 50,  60,  70);
-        assertList(typeState, 6, 60,  70,  80, 90, 100, 110, 120);
-        assertList(typeState, 7, 70,  80,  90, 100); // ghost
-        assertList(typeState, 8, 80,  90,  100);
-        assertList(typeState, 9, 90,  100, 110);
+        assertList(typeState, 3, 30, 40, 50);
+        assertList(typeState, 4, 40, 50, 60);
+        assertList(typeState, 5, 50, 60, 70);
+        assertList(typeState, 6, 60, 70, 80, 90, 100, 110, 120);
+        assertList(typeState, 7, 70, 80, 90, 100); // ghost
+        assertList(typeState, 8, 80, 90, 100);
+        assertList(typeState, 9, 90, 100, 110);
         assertList(typeState, 10, 100, 110, 120);
         assertList(typeState, 11, 110, 120, 130);
         assertList(typeState, 12, 120, 130, 140);
@@ -82,15 +82,15 @@ public class HollowListFastDeltaTest extends AbstractStateEngineTest {
         Assert.assertEquals(13, typeState.maxOrdinal());
 
 
-        addRecord(10,  20,  30);
-        addRecord(20,  30,  40);
+        addRecord(10, 20, 30);
+        addRecord(20, 30, 40);
         addRecord();
-        addRecord(40,  50,  60);
-        addRecord(50,  60,  70);
-        addRecord(61,  71,  81, 91, 101, 111, 121);
-        addRecord(71,  81,  91, 101);
-        addRecord(80,  90,  100);
-        addRecord(90,  100, 110);
+        addRecord(40, 50, 60);
+        addRecord(50, 60, 70);
+        addRecord(61, 71, 81, 91, 101, 111, 121);
+        addRecord(71, 81, 91, 101);
+        addRecord(80, 90, 100);
+        addRecord(90, 100, 110);
         addRecord(100, 110, 120);
         addRecord(110, 120, 130);
         addRecord(120, 130, 140);
@@ -99,16 +99,16 @@ public class HollowListFastDeltaTest extends AbstractStateEngineTest {
         roundTripDelta();
 
 
-        assertList(typeState, 0, 10,  20,  30);
-        assertList(typeState, 1, 20,  30,  40);
+        assertList(typeState, 0, 10, 20, 30);
+        assertList(typeState, 1, 20, 30, 40);
         assertList(typeState, 2);
-        assertList(typeState, 3, 30,  40,  50); // ghost
-        assertList(typeState, 4, 40,  50,  60);
-        assertList(typeState, 5, 50,  60,  70);
-        assertList(typeState, 6, 60,  70,  80, 90, 100, 110, 120);
-        assertList(typeState, 7, 61,  71,  81, 91, 101, 111, 121);
-        assertList(typeState, 8, 80,  90,  100);
-        assertList(typeState, 9, 90,  100, 110);
+        assertList(typeState, 3, 30, 40, 50); // ghost
+        assertList(typeState, 4, 40, 50, 60);
+        assertList(typeState, 5, 50, 60, 70);
+        assertList(typeState, 6, 60, 70, 80, 90, 100, 110, 120);
+        assertList(typeState, 7, 61, 71, 81, 91, 101, 111, 121);
+        assertList(typeState, 8, 80, 90, 100);
+        assertList(typeState, 9, 90, 100, 110);
         assertList(typeState, 10, 100, 110, 120);
         assertList(typeState, 11, 110, 120, 130);
         assertList(typeState, 12, 120, 130, 140);
@@ -120,7 +120,7 @@ public class HollowListFastDeltaTest extends AbstractStateEngineTest {
     private void addRecord(int... ordinals) {
         HollowListWriteRecord rec = new HollowListWriteRecord();
 
-        for(int i=0;i<ordinals.length;i++) {
+        for(int i = 0;i < ordinals.length;i++) {
             rec.addElement(ordinals[i]);
         }
 
@@ -130,7 +130,7 @@ public class HollowListFastDeltaTest extends AbstractStateEngineTest {
     private void assertList(HollowListTypeReadState readState, int ordinal, int... elements) {
         HollowOrdinalIterator iter = readState.ordinalIterator(ordinal);
 
-        for(int i=0;i<elements.length;i++) {
+        for(int i = 0;i < elements.length;i++) {
             Assert.assertEquals(elements[i], iter.next());
         }
 

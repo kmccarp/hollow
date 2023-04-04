@@ -30,14 +30,14 @@ import com.netflix.hollow.core.schema.HollowMapSchema;
 public class HollowHistoricalMapDataAccess extends HollowHistoricalTypeDataAccess implements HollowMapTypeDataAccess {
 
     private HistoricalPrimaryKeyMatcher keyMatcher;
-    
+
     public HollowHistoricalMapDataAccess(HollowHistoricalStateDataAccess dataAccess, HollowTypeReadState typeState) {
         super(dataAccess, typeState, new HollowMapSampler(typeState.getSchema().getName(), DisabledSamplingDirector.INSTANCE));
     }
-    
+
     @Override
     public HollowMapSchema getSchema() {
-        return (HollowMapSchema) removedRecords.getSchema();
+        return (HollowMapSchema)removedRecords.getSchema();
     }
 
     @Override
@@ -69,7 +69,7 @@ public class HollowHistoricalMapDataAccess extends HollowHistoricalTypeDataAcces
             return ((HollowMapTypeDataAccess)dataAccess.getTypeDataAccess(getSchema().getName(), ordinal)).get(ordinal, keyOrdinal, hashCode);
         return removedRecords().get(getMappedOrdinal(ordinal), keyOrdinal, hashCode);
     }
-    
+
     @Override
     public int findKey(int ordinal, Object... hashKey) {
         return (int)(findEntry(ordinal, hashKey) >> 32);
@@ -84,35 +84,35 @@ public class HollowHistoricalMapDataAccess extends HollowHistoricalTypeDataAcces
     public long findEntry(int ordinal, Object... hashKey) {
         sampler().recordGet();
         recordStackTrace();
-        
+
         if(keyMatcher == null)
             return -1L;
-        
+
         if(!ordinalIsPresent(ordinal))
             return ((HollowMapTypeDataAccess)dataAccess.getTypeDataAccess(getSchema().getName(), ordinal)).findEntry(ordinal, hashKey);
-        
-        
+
+
         ordinal = ordinalRemap.get(ordinal);
-        
+
         HollowMapTypeReadState removedRecords = (HollowMapTypeReadState)getRemovedRecords();
 
         int hashTableSize = HashCodes.hashTableSize(removedRecords.size(ordinal));
         int hash = SetMapKeyHasher.hash(hashKey, keyMatcher.getFieldTypes());
-        
+
         int bucket = hash & (hashTableSize - 1);
         long bucketOrdinals = removedRecords.relativeBucket(ordinal, bucket);
         while(bucketOrdinals != -1L) {
             if(keyMatcher.keyMatches((int)(bucketOrdinals >> 32), hashKey))
                 return bucketOrdinals;
-         
+
             bucket++;
             bucket &= (hashTableSize - 1);
             bucketOrdinals = removedRecords.relativeBucket(ordinal, bucket);
         }
-        
+
         return -1L;
     }
-    
+
 
     @Override
     public HollowMapEntryOrdinalIterator potentialMatchOrdinalIterator(int ordinal, int hashCode) {
@@ -145,13 +145,13 @@ public class HollowHistoricalMapDataAccess extends HollowHistoricalTypeDataAcces
     }
 
     private HollowMapTypeReadState removedRecords() {
-        return (HollowMapTypeReadState) removedRecords;
+        return (HollowMapTypeReadState)removedRecords;
     }
 
     private HollowMapSampler sampler() {
-        return (HollowMapSampler) sampler;
+        return (HollowMapSampler)sampler;
     }
-    
+
     void buildKeyMatcher() {
         PrimaryKey hashKey = getSchema().getHashKey();
         if(hashKey != null)

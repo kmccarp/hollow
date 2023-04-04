@@ -79,12 +79,12 @@ public class AbstractHollowRecordStringifierTest {
      * for all the instances, separated by newlines.
      */
     protected static <T, S extends HollowStringifier> String stringifyType(
-            Class<T> clazz, HollowStringifier<S> stringifier, T... instances) throws IOException {
+        Class<T> clazz, HollowStringifier<S> stringifier, T... instances) throws IOException {
         HollowWriteStateEngine writeStateEngine = new HollowWriteStateEngine();
         HollowObjectMapper objectMapper = new HollowObjectMapper(writeStateEngine);
         // add our types and records to the writeStateEngine
         objectMapper.initializeTypeState(clazz);
-        for (T instance : instances) {
+        for(T instance : instances) {
             objectMapper.add(instance);
         }
         HollowReadStateEngine readStateEngine = new HollowReadStateEngine();
@@ -94,7 +94,7 @@ public class AbstractHollowRecordStringifierTest {
         // use the version of stringify that takes a Writer, since the non-Writer version calls this
         stringifier.stringify(writer, readStateEngine, clazz.getSimpleName(), 0);
         // join all records with newlines
-        for (int i = 1; i < instances.length; i++) {
+        for(int i = 1;i < instances.length;i++) {
             writer.append(NEWLINE);
             stringifier.stringify(writer, readStateEngine, clazz.getSimpleName(), i);
         }

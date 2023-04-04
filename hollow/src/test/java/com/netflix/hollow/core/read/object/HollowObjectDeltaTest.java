@@ -65,7 +65,7 @@ public class HollowObjectDeltaTest extends AbstractStateEngineTest {
 
         roundTripDelta();
 
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("TestObject");
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)readStateEngine.getTypeState("TestObject");
 
         Assert.assertEquals(4, typeState.maxOrdinal());
 
@@ -104,7 +104,7 @@ public class HollowObjectDeltaTest extends AbstractStateEngineTest {
 
         roundTripSnapshot();
 
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("TestObject");
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)readStateEngine.getTypeState("TestObject");
 
         assertObject(typeState, 0, 1, null);
         assertObject(typeState, 1, 2, null);
@@ -118,12 +118,13 @@ public class HollowObjectDeltaTest extends AbstractStateEngineTest {
 
         readStateEngine.invalidate();
 
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("TestObject");
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)readStateEngine.getTypeState("TestObject");
 
         try {
             assertObject(typeState, 0, 0, null);
             Assert.fail("Should have thrown Exception");
-        } catch(NullPointerException expected) { }
+        } catch (NullPointerException expected) {
+        }
     }
 
     private void addRecord(int intVal, String strVal) {

@@ -32,7 +32,7 @@ public class HollowUnsafeHandle {
         try {
             theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
             theUnsafe.setAccessible(true);
-            u = (Unsafe) theUnsafe.get(null);
+            u = (Unsafe)theUnsafe.get(null);
         } catch (Exception e) {
             log.log(Level.SEVERE, "Unsafe access failed", e);
         }

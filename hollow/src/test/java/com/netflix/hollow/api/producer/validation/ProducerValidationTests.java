@@ -38,7 +38,7 @@ public class ProducerValidationTests {
     public void duplicateDetectionFailureTest() {
         duplicateDetectionFailureTest(new DuplicateDataDetectionValidator("TypeWithPrimaryKey"));
         duplicateDetectionFailureTest(
-                new DuplicateDataDetectionValidator("TypeWithPrimaryKey", new String[] {"id", "name"}));
+            new DuplicateDataDetectionValidator("TypeWithPrimaryKey", new String[]{"id", "name"}));
 
         duplicateDetectionFailureTest(new DuplicateDataDetectionValidator(TypeWithPrimaryKey.class));
         duplicateDetectionFailureTest(new DuplicateDataDetectionValidator(TypeWithPrimaryKey2.class));
@@ -53,13 +53,13 @@ public class ProducerValidationTests {
 
     void duplicateDetectionFailureTest(DuplicateDataDetectionValidator v, boolean auto) {
         HollowProducer.Builder<?> b = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager());
-        if (v != null) {
+            .withBlobStager(new HollowInMemoryBlobStager());
+        if(v != null) {
             b.withListener(v);
         }
         HollowProducer producer = b.build();
 
-        if (auto) {
+        if(auto) {
             producer.initializeDataModel(TypeWithPrimaryKey.class);
             DuplicateDataDetectionValidator.addValidatorsForSchemaWithPrimaryKey(producer);
         }
@@ -75,16 +75,16 @@ public class ProducerValidationTests {
         } catch (ValidationStatusException expected) {
             Assert.assertEquals(1, expected.getValidationStatus().getResults().size());
             Assert.assertTrue(expected.getValidationStatus().getResults().get(0).getMessage()
-                    .startsWith("Duplicate keys found for type TypeWithPrimaryKey"));
+                .startsWith("Duplicate keys found for type TypeWithPrimaryKey"));
         }
     }
 
     @Test
     public void duplicateDetectionSuccessTest() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .withListener(new DuplicateDataDetectionValidator("TypeWithPrimaryKey"))
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .withListener(new DuplicateDataDetectionValidator("TypeWithPrimaryKey"))
+            .build();
 
         //runCycle(producer, 1);
         producer.runCycle(newState -> {
@@ -95,25 +95,25 @@ public class ProducerValidationTests {
         HollowConsumer consumer = HollowConsumer.withBlobRetriever(blobStore).build();
         consumer.triggerRefresh();
         Assert.assertEquals(2, consumer.getStateEngine().getTypeState("TypeWithPrimaryKey").getPopulatedOrdinals()
-                .cardinality());
+            .cardinality());
     }
 
     @Test
     public void duplicateDetectionWithRestoreAndNewType() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .withListener(new DuplicateDataDetectionValidator("TypeWithPrimaryKey"))
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .withListener(new DuplicateDataDetectionValidator("TypeWithPrimaryKey"))
+            .build();
 
         // run an initial cycle to get data in, without Type3WithPrimaryKey
         long initialVersion =
-                producer.runCycle(newState -> newState.add(new TypeWithPrimaryKey(1, "Foo", "bar")));
+            producer.runCycle(newState -> newState.add(new TypeWithPrimaryKey(1, "Foo", "bar")));
 
         producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .withListener(new DuplicateDataDetectionValidator("TypeWithPrimaryKey"))
-                .withListener(new DuplicateDataDetectionValidator("TypeWithPrimaryKey3"))
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .withListener(new DuplicateDataDetectionValidator("TypeWithPrimaryKey"))
+            .withListener(new DuplicateDataDetectionValidator("TypeWithPrimaryKey3"))
+            .build();
         producer.initializeDataModel(TypeWithPrimaryKey.class, TypeWithPrimaryKey3.class);
         producer.restore(initialVersion, blobStore);
 
@@ -126,9 +126,9 @@ public class ProducerValidationTests {
     @Test
     public void duplicateDetectionNewType() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .withListener(new DuplicateDataDetectionValidator("TypeWithPrimaryKey"))
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .withListener(new DuplicateDataDetectionValidator("TypeWithPrimaryKey"))
+            .build();
         producer.runCycle(newState -> newState.add(new TypeWithPrimaryKey(1, "Bar", "x")));
         producer.addListener(new DuplicateDataDetectionValidator("TypeWithPrimaryKey3"));
         // this adds the type state for TypeWithPrimarkyKey3

@@ -50,7 +50,7 @@ public class TimeSliceSamplingDirector extends HollowSamplingDirector {
         if(!isInPlay) {
             isInPlay = true;
             daemonThread(new SampleToggler(), getClass(), "toggler")
-                    .start();
+                .start();
         }
     }
 
@@ -82,12 +82,13 @@ public class TimeSliceSamplingDirector extends HollowSamplingDirector {
         private void sleep(int ms) {
             try {
                 Thread.sleep(ms);
-            } catch(InterruptedException ignore) { }
+            } catch (InterruptedException ignore) {
+            }
         }
     }
 
     private void notifyListeners() {
-        for(int i=0;i<listeners.size();i++) {
+        for(int i = 0;i < listeners.size();i++) {
             listeners.get(i).samplingStatusChanged(record);
         }
     }

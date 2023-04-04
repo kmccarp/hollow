@@ -79,7 +79,7 @@ class HollowSetTypeReadStateShard {
 
         return foundData;
     }
-    
+
     public int findElement(int ordinal, Object... hashKey) {
         int hashCode = SetMapKeyHasher.hash(hashKey, keyDeriver.getFieldTypes());
 
@@ -103,10 +103,10 @@ class HollowSetTypeReadStateShard {
             while(bucketOrdinal != currentData.emptyBucketValue) {
                 if(readWasUnsafe(currentData))
                     continue threadsafe;
-                
+
                 if(keyDeriver.keyMatches(bucketOrdinal, hashKey))
                     return bucketOrdinal;
-                
+
                 bucket++;
                 if(bucket == endBucket)
                     bucket = startBucket;
@@ -146,7 +146,7 @@ class HollowSetTypeReadStateShard {
     private int absoluteBucketValue(HollowSetTypeDataElements currentData, long absoluteBucketIndex) {
         return (int)currentData.elementData.getElementValue(absoluteBucketIndex * currentData.bitsPerElement, currentData.bitsPerElement);
     }
-    
+
     void invalidate() {
         setCurrentData(null);
     }
@@ -172,9 +172,9 @@ class HollowSetTypeReadStateShard {
                 int shardOrdinal = ordinal / numShards;
                 int numBuckets = HashCodes.hashTableSize(size(shardOrdinal));
                 long offset = getAbsoluteBucketStart(currentData, shardOrdinal);
-    
+
                 checksum.applyInt(ordinal);
-                for(int i=0;i<numBuckets;i++) {
+                for(int i = 0;i < numBuckets;i++) {
                     int bucketValue = absoluteBucketValue(currentData, offset + i);
                     if(bucketValue != currentData.emptyBucketValue) {
                         checksum.applyInt(i);
@@ -198,22 +198,22 @@ class HollowSetTypeReadStateShard {
         long requiredBits = requiredBitsForSetPointers + requiredBitsForBuckets;
         return requiredBits / 8;
     }
-    
+
     public long getApproximateHoleCostInBytes(BitSet populatedOrdinals, int shardNumber, int numShards) {
         HollowSetTypeDataElements currentData = currentDataVolatile;
         long holeBits = 0;
-        
+
         int holeOrdinal = populatedOrdinals.nextClearBit(0);
         while(holeOrdinal <= currentData.maxOrdinal) {
             if((holeOrdinal & (numShards - 1)) == shardNumber)
                 holeBits += currentData.bitsPerFixedLengthSetPortion;
-            
+
             holeOrdinal = populatedOrdinals.nextClearBit(holeOrdinal + 1);
         }
-        
+
         return holeBits / 8;
     }
-    
+
     public void setKeyDeriver(HollowPrimaryKeyValueDeriver keyDeriver) {
         this.keyDeriver = keyDeriver;
     }

@@ -89,7 +89,7 @@ public class HollowHistoryKeyIndexTest extends AbstractStateEngineTest {
         roundTripDelta();
         keyIdx.update(readStateEngine, true);
 
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("A");
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)readStateEngine.getTypeState("A");
 
         Assert.assertEquals(0, keyIdx.getRecordKeyOrdinal(typeState, 0));
         Assert.assertEquals("1.1:one", keyIdx.getKeyDisplayString("A", 0));
@@ -133,7 +133,7 @@ public class HollowHistoryKeyIndexTest extends AbstractStateEngineTest {
 
         actualResults.sort();
 
-        for(int i=0;i<expectedResults.length;i++) {
+        for(int i = 0;i < expectedResults.length;i++) {
             Assert.assertEquals(expectedResults[i], actualResults.get(i));
         }
     }

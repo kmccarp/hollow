@@ -26,7 +26,7 @@ public class ArgumentParserTest {
         drinkCoffee,
         tossCoffee,
         writeArgumentParserClass;
-    };
+    }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_missingDash() {
@@ -45,12 +45,12 @@ public class ArgumentParserTest {
 
     @Test
     public void test_noCommands() {
-        assertEquals(Arrays.asList(), new ArgumentParser<Commands>(Commands.class, new String[] {}).getParsedArguments());
+        assertEquals(Arrays.asList(), new ArgumentParser<Commands>(Commands.class, new String[]{}).getParsedArguments());
     }
 
     @Test
     public void test_validCommands() {
-        assertEquals(3, new ArgumentParser<Commands>(Commands.class, new String[] {
+        assertEquals(3, new ArgumentParser<Commands>(Commands.class, new String[]{
             "--orderCoffee=first", "--drinkCoffee=next", "--writeArgumentParserClass=yay"}).getParsedArguments().size());
         assertParsedArgument("--orderCoffee=fi.rst", Commands.orderCoffee, "fi.rst");
         assertParsedArgument("--drinkCoffee=ne/x--t", Commands.drinkCoffee, "ne/x--t");
@@ -60,7 +60,7 @@ public class ArgumentParserTest {
     }
 
     private void assertParsedArgument(String commandLineArg, Commands key, String value) {
-        ArgumentParser<Commands>.ParsedArgument parsed = new ArgumentParser<>(Commands.class, new String[] {
+        ArgumentParser<Commands>.ParsedArgument parsed = new ArgumentParser<>(Commands.class, new String[]{
             commandLineArg}).getParsedArguments().get(0);
         assertEquals(key, parsed.getKey());
         assertEquals(value, parsed.getValue());

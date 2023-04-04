@@ -62,7 +62,7 @@ public class LongDelegateCachedImpl extends HollowObjectAbstractDelegate impleme
 
     @Override
     public void updateTypeAPI(HollowTypeAPI typeAPI) {
-        this.typeAPI = (LongTypeAPI) typeAPI;
+        this.typeAPI = (LongTypeAPI)typeAPI;
     }
 
 }

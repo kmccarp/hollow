@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class HollowFrameworkSerializer extends FrameworkSerializer<HollowSerializationRecord>{
+public class HollowFrameworkSerializer extends FrameworkSerializer<HollowSerializationRecord> {
 
     final HollowObjectHashCodeFinder hasher;
 
@@ -45,23 +45,23 @@ public class HollowFrameworkSerializer extends FrameworkSerializer<HollowSeriali
 
     @Override
     public void serializePrimitive(HollowSerializationRecord rec, String fieldName, Object value) {
-        if (value == null)
+        if(value == null)
             return;
 
-        if (value instanceof Integer) {
-            serializePrimitive(rec, fieldName, ((Integer) value).intValue());
-        } else if (value instanceof Long) {
-            serializePrimitive(rec, fieldName, ((Long) value).longValue());
-        } else if (value instanceof Float) {
-            serializePrimitive(rec, fieldName, ((Float) value).floatValue());
-        } else if (value instanceof Double) {
-            serializePrimitive(rec, fieldName, ((Double) value).doubleValue());
-        } else if (value instanceof Boolean) {
-            serializePrimitive(rec, fieldName, ((Boolean) value).booleanValue());
-        } else if (value instanceof String) {
-            serializeString(rec, fieldName, (String) value);
-        } else if (value instanceof byte[]){
-            serializeBytes(rec, fieldName, (byte[]) value);
+        if(value instanceof Integer) {
+            serializePrimitive(rec, fieldName, ((Integer)value).intValue());
+        } else if(value instanceof Long) {
+            serializePrimitive(rec, fieldName, ((Long)value).longValue());
+        } else if(value instanceof Float) {
+            serializePrimitive(rec, fieldName, ((Float)value).floatValue());
+        } else if(value instanceof Double) {
+            serializePrimitive(rec, fieldName, ((Double)value).doubleValue());
+        } else if(value instanceof Boolean) {
+            serializePrimitive(rec, fieldName, ((Boolean)value).booleanValue());
+        } else if(value instanceof String) {
+            serializeString(rec, fieldName, (String)value);
+        } else if(value instanceof byte[]) {
+            serializeBytes(rec, fieldName, (byte[])value);
         } else {
             throw new RuntimeException("Primitive type " + value.getClass().getSimpleName() + " not supported!");
         }

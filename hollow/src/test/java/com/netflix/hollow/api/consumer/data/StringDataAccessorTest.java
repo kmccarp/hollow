@@ -70,7 +70,7 @@ public class StringDataAccessorTest extends AbstractPrimitiveTypeDataAccessorTes
             Assert.assertEquals(0, dAccessor.getUpdatedRecords().size());
         }
 
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("String");
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)readStateEngine.getTypeState("String");
         Assert.assertEquals(4, typeState.maxOrdinal());
 
         assertObject(typeState, 0, "one");
@@ -84,7 +84,7 @@ public class StringDataAccessorTest extends AbstractPrimitiveTypeDataAccessorTes
             StringDataAccessor dAccessor = new StringDataAccessor(readStateEngine, new PrimitiveTypeTestAPI(readStateEngine));
             Assert.assertEquals(0, dAccessor.getAddedRecords().size());
             Assert.assertEquals(4, dAccessor.getRemovedRecords().size());
-            assertList(dAccessor.getRemovedRecords(), Arrays.asList("one",  "three", "one thousand", "zero"));
+            assertList(dAccessor.getRemovedRecords(), Arrays.asList("one", "three", "one thousand", "zero"));
             Assert.assertEquals(0, dAccessor.getUpdatedRecords().size());
         }
 

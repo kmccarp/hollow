@@ -18,6 +18,7 @@ package com.netflix.hollow.diff.ui.jetty;
 
 import com.netflix.hollow.diff.ui.HollowDiffUI;
 import com.netflix.hollow.tools.diff.HollowDiff;
+
 /**
  * @deprecated use {@link com.netflix.hollow.diff.ui.HollowDiffUIServer}. This is deprecated because package name
  * contains "jetty" but jetty-server dep is no longer required. Instead, this class lives on as an adapter

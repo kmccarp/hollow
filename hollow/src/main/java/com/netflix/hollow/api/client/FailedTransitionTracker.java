@@ -99,9 +99,9 @@ public class FailedTransitionTracker {
         @Override
         public int hashCode() {
             return (int)fromState
-                    ^ (int)(fromState >> 32)
-                    ^ (int)toState
-                    ^ (int)(toState >> 32);
+                ^ (int)(fromState >> 32)
+                ^ (int)toState
+                ^ (int)(toState >> 32);
         }
 
         @Override

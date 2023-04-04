@@ -53,7 +53,7 @@ final class MatchFieldPathArgumentExtractor<Q> {
          * Resolves a field path to a {@link FieldPaths.FieldPath}.
          */
         FieldPaths.FieldPath<? extends FieldPaths.FieldSegment> resolve(
-                HollowDataset hollowDataAccess, String type, String fieldPath);
+            HollowDataset hollowDataAccess, String type, String fieldPath);
     }
 
     final FieldPaths.FieldPath<? extends FieldPaths.FieldSegment> fieldPath;
@@ -61,10 +61,10 @@ final class MatchFieldPathArgumentExtractor<Q> {
     final Function<Q, Object> extractor;
 
     MatchFieldPathArgumentExtractor(
-            FieldPaths.FieldPath<? extends FieldPaths.FieldSegment> fieldPath, Function<Q, ?> extractor) {
+        FieldPaths.FieldPath<? extends FieldPaths.FieldSegment> fieldPath, Function<Q, ?> extractor) {
         this.fieldPath = fieldPath;
         @SuppressWarnings("unchecked")
-        Function<Q, Object> erasedResultExtractor = (Function<Q, Object>) extractor;
+        Function<Q, Object> erasedResultExtractor = (Function<Q, Object>)extractor;
         this.extractor = erasedResultExtractor;
     }
 
@@ -73,8 +73,8 @@ final class MatchFieldPathArgumentExtractor<Q> {
     }
 
     static <Q> List<MatchFieldPathArgumentExtractor<Q>> fromHolderClass(
-            HollowDataset dataset, Class<?> rootType, Class<Q> holder,
-            FieldPathResolver fpResolver) {
+        HollowDataset dataset, Class<?> rootType, Class<Q> holder,
+        FieldPathResolver fpResolver) {
         // @@@ Check for duplicates
         // @@@ Cache result for Q, needs to be associated with dataset
         //     and resolving kind (currently implicit to implementation of fpResolver)
@@ -84,144 +84,144 @@ final class MatchFieldPathArgumentExtractor<Q> {
 
         // Query annotated fields
         Stream<Field> fields = Stream.of(holder.getDeclaredFields())
-                .filter(f -> f.isAnnotationPresent(FieldPath.class));
+            .filter(f -> f.isAnnotationPresent(FieldPath.class));
 
         // Query annotated methods (abstract or concrete) that have
         // a return type and no parameter types
         Stream<Method> methods = Stream.of(holder.getDeclaredMethods())
-                .filter(m -> m.isAnnotationPresent(FieldPath.class))
-                .filter(m -> m.getReturnType() != void.class)
-                .filter(m -> m.getParameterCount() == 0)
-                .filter(m -> !m.isSynthetic())
-                .filter(m -> !Modifier.isNative(m.getModifiers()));
+            .filter(m -> m.isAnnotationPresent(FieldPath.class))
+            .filter(m -> m.getReturnType() != void.class)
+            .filter(m -> m.getParameterCount() == 0)
+            .filter(m -> !m.isSynthetic())
+            .filter(m -> !Modifier.isNative(m.getModifiers()));
 
         return Stream.concat(fields, methods)
-                .sorted(Comparator.comparingInt(f -> f.getDeclaredAnnotation(FieldPath.class).order()))
-                .map(ae -> {
-                    try {
-                        if (ae instanceof Field) {
-                            return MatchFieldPathArgumentExtractor.<Q>fromField(dataset, rootType, (Field) ae,
-                                    fpResolver);
-                        } else {
-                            return MatchFieldPathArgumentExtractor.<Q>fromMethod(dataset, rootType, (Method) ae,
-                                    fpResolver);
-                        }
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
+            .sorted(Comparator.comparingInt(f -> f.getDeclaredAnnotation(FieldPath.class).order()))
+            .map(ae -> {
+                try {
+                    if(ae instanceof Field) {
+                        return MatchFieldPathArgumentExtractor.<Q>fromField(dataset, rootType, (Field)ae,
+                            fpResolver);
+                    } else {
+                        return MatchFieldPathArgumentExtractor.<Q>fromMethod(dataset, rootType, (Method)ae,
+                            fpResolver);
                     }
-                })
-                .collect(toList());
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            })
+            .collect(toList());
     }
 
     static <Q> MatchFieldPathArgumentExtractor<Q> fromField(
-            HollowDataset dataset, Class<?> rootType, Field f,
-            FieldPathResolver fpResolver)
-            throws IllegalAccessException {
+        HollowDataset dataset, Class<?> rootType, Field f,
+        FieldPathResolver fpResolver)
+        throws IllegalAccessException {
         f.setAccessible(true);
         return fromHandle(dataset, rootType, getFieldPath(f), MethodHandles.lookup().unreflectGetter(f),
-                fpResolver);
+            fpResolver);
     }
 
     static <Q> MatchFieldPathArgumentExtractor<Q> fromMethod(
-            HollowDataset dataset, Class<?> rootType, Method m,
-            FieldPathResolver fpResolver)
-            throws IllegalAccessException {
-        if (m.getReturnType() == void.class || m.getParameterCount() > 0) {
+        HollowDataset dataset, Class<?> rootType, Method m,
+        FieldPathResolver fpResolver)
+        throws IllegalAccessException {
+        if(m.getReturnType() == void.class || m.getParameterCount() > 0) {
             throw new IllegalArgumentException(String.format(
-                    "A @FieldPath annotated method must have zero parameters and a non-void return type: %s",
-                    m.toGenericString()));
+                "A @FieldPath annotated method must have zero parameters and a non-void return type: %s",
+                m.toGenericString()));
         }
         m.setAccessible(true);
         return fromHandle(dataset, rootType, getFieldPath(m), MethodHandles.lookup().unreflect(m),
-                fpResolver);
+            fpResolver);
     }
 
     static <Q> MatchFieldPathArgumentExtractor<Q> fromHandle(
-            HollowDataset dataset, Class<?> rootType, String fieldPath, MethodHandle mh,
-            FieldPathResolver fpResolver) {
+        HollowDataset dataset, Class<?> rootType, String fieldPath, MethodHandle mh,
+        FieldPathResolver fpResolver) {
         return fromFunction(dataset, rootType, fieldPath, mh.type().returnType(), getterGenericExtractor(mh),
-                fpResolver);
+            fpResolver);
     }
 
     static <T> MatchFieldPathArgumentExtractor<T> fromPathAndType(
-            HollowDataset dataset, Class<?> rootType, String fieldPath, Class<T> type,
-            FieldPathResolver fpResolver) {
+        HollowDataset dataset, Class<?> rootType, String fieldPath, Class<T> type,
+        FieldPathResolver fpResolver) {
         return fromFunction(dataset, rootType, fieldPath, type, Function.identity(),
-                fpResolver);
+            fpResolver);
     }
 
     static IllegalArgumentException incompatibleMatchType(
-            Class<?> extractorType, String fieldPath,
-            HollowObjectSchema.FieldType schemaFieldType) {
+        Class<?> extractorType, String fieldPath,
+        HollowObjectSchema.FieldType schemaFieldType) {
         return new IllegalArgumentException(
-                String.format("Match type %s incompatible with field path %s resolving to field of value type %s",
-                        extractorType.getName(), fieldPath, schemaFieldType));
+            String.format("Match type %s incompatible with field path %s resolving to field of value type %s",
+                extractorType.getName(), fieldPath, schemaFieldType));
     }
 
     static IllegalArgumentException incompatibleMatchType(
-            Class<?> extractorType, String fieldPath, String typeName) {
+        Class<?> extractorType, String fieldPath, String typeName) {
         return new IllegalArgumentException(
-                String.format(
-                        "Match type %s incompatible with field path %s resolving to field of reference type %s",
-                        extractorType.getName(), fieldPath, typeName));
+            String.format(
+                "Match type %s incompatible with field path %s resolving to field of reference type %s",
+                extractorType.getName(), fieldPath, typeName));
     }
 
     static <Q, T> MatchFieldPathArgumentExtractor<Q> fromFunction(
-            HollowDataset dataset, Class<?> rootType, String fieldPath,
-            Class<T> extractorType, Function<Q, T> extractorFunction,
-            FieldPathResolver fpResolver) {
+        HollowDataset dataset, Class<?> rootType, String fieldPath,
+        Class<T> extractorType, Function<Q, T> extractorFunction,
+        FieldPathResolver fpResolver) {
         String rootTypeName = HollowObjectTypeMapper.getDefaultTypeName(rootType);
         FieldPaths.FieldPath<? extends FieldPaths.FieldSegment> fp = fpResolver.resolve(dataset, rootTypeName,
-                fieldPath);
+            fieldPath);
 
         // @@@ Method on FieldPath
         FieldPaths.FieldSegment lastSegment = fp.getSegments().get(fp.getSegments().size() - 1);
         HollowObjectSchema.FieldType schemaFieldType;
-        if (lastSegment.getEnclosingSchema().getSchemaType() == HollowSchema.SchemaType.OBJECT) {
-            FieldPaths.ObjectFieldSegment os = (FieldPaths.ObjectFieldSegment) lastSegment;
+        if(lastSegment.getEnclosingSchema().getSchemaType() == HollowSchema.SchemaType.OBJECT) {
+            FieldPaths.ObjectFieldSegment os = (FieldPaths.ObjectFieldSegment)lastSegment;
             schemaFieldType = os.getType();
         } else {
             schemaFieldType = HollowObjectSchema.FieldType.REFERENCE;
         }
 
         Function<Q, ?> extractor = extractorFunction;
-        switch (schemaFieldType) {
+        switch(schemaFieldType) {
             case BOOLEAN:
-                if (extractorType != boolean.class && extractorType != Boolean.class) {
+                if(extractorType != boolean.class && extractorType != Boolean.class) {
                     throw incompatibleMatchType(extractorType, fieldPath, schemaFieldType);
                 }
                 break;
             case DOUBLE:
-                if (extractorType != double.class && extractorType != Double.class) {
+                if(extractorType != double.class && extractorType != Double.class) {
                     throw incompatibleMatchType(extractorType, fieldPath, schemaFieldType);
                 }
                 break;
             case FLOAT:
-                if (extractorType != float.class && extractorType != Float.class) {
+                if(extractorType != float.class && extractorType != Float.class) {
                     throw incompatibleMatchType(extractorType, fieldPath, schemaFieldType);
                 }
                 break;
             case INT:
-                if (extractorType == byte.class || extractorType == Byte.class) {
+                if(extractorType == byte.class || extractorType == Byte.class) {
                     @SuppressWarnings("unchecked")
-                    Function<Q, Byte> f = (Function<Q, Byte>) extractorFunction;
+                    Function<Q, Byte> f = (Function<Q, Byte>)extractorFunction;
                     extractor = f.andThen(Byte::intValue);
                     break;
-                } else if (extractorType == short.class || extractorType == Short.class) {
+                } else if(extractorType == short.class || extractorType == Short.class) {
                     @SuppressWarnings("unchecked")
-                    Function<Q, Short> f = (Function<Q, Short>) extractorFunction;
+                    Function<Q, Short> f = (Function<Q, Short>)extractorFunction;
                     extractor = f.andThen(Short::intValue);
                     break;
-                } else if (extractorType == char.class || extractorType == Character.class) {
+                } else if(extractorType == char.class || extractorType == Character.class) {
                     @SuppressWarnings("unchecked")
-                    Function<Q, Character> f = (Function<Q, Character>) extractorFunction;
-                    extractor = f.andThen(c -> (int) c);
-                } else if (extractorType != int.class && extractorType != Integer.class) {
+                    Function<Q, Character> f = (Function<Q, Character>)extractorFunction;
+                    extractor = f.andThen(c -> (int)c);
+                } else if(extractorType != int.class && extractorType != Integer.class) {
                     throw incompatibleMatchType(extractorType, fieldPath, schemaFieldType);
                 }
                 break;
             case LONG:
-                if (extractorType != long.class && extractorType != Long.class) {
+                if(extractorType != long.class && extractorType != Long.class) {
                     throw incompatibleMatchType(extractorType, fieldPath, schemaFieldType);
                 }
                 break;
@@ -232,34 +232,34 @@ final class MatchFieldPathArgumentExtractor<Q> {
                 String typeName = lastSegment.getTypeName();
 
                 // Manage for String and all box types
-                if (typeName.equals("String")) {
-                    if (!HollowObject.class.isAssignableFrom(extractorType)) {
+                if(typeName.equals("String")) {
+                    if(!HollowObject.class.isAssignableFrom(extractorType)) {
                         throw incompatibleMatchType(extractorType, fieldPath, typeName);
                     }
                     // @@@ Check that object schema has single value field of String type such as HString
-                } else if (!extractorType.getSimpleName().equals(typeName)) {
+                } else if(!extractorType.getSimpleName().equals(typeName)) {
                     throw incompatibleMatchType(extractorType, fieldPath, typeName);
-                } else if (!HollowRecord.class.isAssignableFrom(extractorType)) {
+                } else if(!HollowRecord.class.isAssignableFrom(extractorType)) {
                     throw incompatibleMatchType(extractorType, fieldPath, typeName);
                 }
 
                 @SuppressWarnings("unchecked")
-                Function<Q, HollowRecord> f = (Function<Q, HollowRecord>) extractorFunction;
+                Function<Q, HollowRecord> f = (Function<Q, HollowRecord>)extractorFunction;
                 extractor = f.andThen(HollowRecord::getOrdinal);
                 break;
             }
             case BYTES:
-                if (extractorType != byte[].class) {
+                if(extractorType != byte[].class) {
                     throw incompatibleMatchType(extractorType, fieldPath, schemaFieldType);
                 }
                 break;
             case STRING:
-                if (extractorType == char[].class) {
+                if(extractorType == char[].class) {
                     @SuppressWarnings("unchecked")
-                    Function<Q, char[]> f = (Function<Q, char[]>) extractorFunction;
+                    Function<Q, char[]> f = (Function<Q, char[]>)extractorFunction;
                     extractor = f.andThen(String::valueOf);
                     break;
-                } else if (extractorType != String.class) {
+                } else if(extractorType != String.class) {
                     throw incompatibleMatchType(extractorType, fieldPath, schemaFieldType);
                 }
                 break;
@@ -272,7 +272,7 @@ final class MatchFieldPathArgumentExtractor<Q> {
         return h -> {
             try {
                 @SuppressWarnings("unchecked")
-                T t = (T) getter.invoke(h);
+                T t = (T)getter.invoke(h);
                 return t;
             } catch (RuntimeException | Error e) {
                 throw e;
@@ -292,12 +292,12 @@ final class MatchFieldPathArgumentExtractor<Q> {
 
     private static String getFieldPath(Member m, AnnotatedElement e) {
         FieldPath fpa = e.getDeclaredAnnotation(FieldPath.class);
-        if (fpa == null) {
+        if(fpa == null) {
             return m.getName();
         }
 
         String fieldPath = e.getDeclaredAnnotation(FieldPath.class).value();
-        if (fieldPath.isEmpty()) {
+        if(fieldPath.isEmpty()) {
             return m.getName();
         }
 

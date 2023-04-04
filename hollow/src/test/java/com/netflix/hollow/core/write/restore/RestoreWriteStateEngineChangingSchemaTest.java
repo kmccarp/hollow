@@ -102,7 +102,7 @@ public class RestoreWriteStateEngineChangingSchemaTest extends AbstractStateEngi
         assertTypeAWithTypeC(3, false, "two", "c2");
         assertTypeAWithTypeC(2, true, "wxyz", "c3");
     }
-    
+
     @Test
     public void doesNotAllowImproperlyInitializedRestoredStateToProduceDelta() throws IOException {
         addState1Record(true, "zero", 0, 0.1f);  // ordinals 0, 0
@@ -117,13 +117,13 @@ public class RestoreWriteStateEngineChangingSchemaTest extends AbstractStateEngi
 
         roundTripDelta();
         afterRestoreWithNewSchemas = true;
-        
+
         ////restore, but initialize type states *after* restore
         writeStateEngine = new HollowWriteStateEngine();
         writeStateEngine.restoreFrom(readStateEngine);
         initializeTypeStates();
         writeStateEngine.prepareForNextCycle();
-        
+
         addState2Record(false, "one", "c1");  // 1, 0
         addState2Record(false, "two", "c2");  // 3, 1
         addState2Record(true, "zero", "c0");  // 0, 2
@@ -132,7 +132,7 @@ public class RestoreWriteStateEngineChangingSchemaTest extends AbstractStateEngi
         try {
             roundTripDelta();
             Assert.fail("Should have thrown Exception when attempting to produce a delta!");
-        } catch(IllegalStateException expected) {
+        } catch (IllegalStateException expected) {
             Assert.assertTrue(expected.getMessage().contains("TypeA"));
         }
 
@@ -156,7 +156,7 @@ public class RestoreWriteStateEngineChangingSchemaTest extends AbstractStateEngi
         Assert.assertEquals(a1, typeAObj.getBoolean("a1"));
         Assert.assertEquals(a2, typeAObj.getString("a2"));
 
-        GenericHollowObject typeCObj = (GenericHollowObject) typeAObj.getReferencedGenericRecord("a4");
+        GenericHollowObject typeCObj = (GenericHollowObject)typeAObj.getReferencedGenericRecord("a4");
 
         Assert.assertEquals(c1, typeCObj.getString("c1"));
     }

@@ -16,8 +16,8 @@ public class FailedTransitionTest {
         InMemoryBlobStore bs = new InMemoryBlobStore();
 
         HollowProducer producer = HollowProducer.withPublisher(bs)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
         long version = producer.runCycle(ws -> {
             ws.add(1);
@@ -25,8 +25,8 @@ public class FailedTransitionTest {
 
         AtomicBoolean failer = new AtomicBoolean();
         HollowConsumer consumer = HollowConsumer
-                .withBlobRetriever(new FailingBlobRetriever(failer::get, bs))
-                .build();
+            .withBlobRetriever(new FailingBlobRetriever(failer::get, bs))
+            .build();
 
         // Fail transitioning to snapshot
         failer.set(true);
@@ -74,8 +74,8 @@ public class FailedTransitionTest {
         InMemoryBlobStore bs = new InMemoryBlobStore();
 
         HollowProducer producer = HollowProducer.withPublisher(bs)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
         long version = producer.runCycle(ws -> {
             ws.add(1);
@@ -83,8 +83,8 @@ public class FailedTransitionTest {
 
         AtomicBoolean failer = new AtomicBoolean();
         HollowConsumer consumer = HollowConsumer
-                .withBlobRetriever(new FailingBlobRetriever(failer::get, bs))
-                .build();
+            .withBlobRetriever(new FailingBlobRetriever(failer::get, bs))
+            .build();
 
         // Transition to snapshot
         consumer.triggerRefreshTo(version);
@@ -120,8 +120,8 @@ public class FailedTransitionTest {
         InMemoryBlobStore bs = new InMemoryBlobStore();
 
         HollowProducer producer = HollowProducer.withPublisher(bs)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
         long version = producer.runCycle(ws -> {
             ws.add(1);
@@ -129,9 +129,9 @@ public class FailedTransitionTest {
 
         AtomicBoolean failer = new AtomicBoolean();
         HollowConsumer consumer = HollowConsumer
-                .withBlobRetriever(new FailingBlobRetriever(failer::get, bs))
-                .withDoubleSnapshotConfig(new NoDoubleSnapshotConfig())
-                .build();
+            .withBlobRetriever(new FailingBlobRetriever(failer::get, bs))
+            .withDoubleSnapshotConfig(new NoDoubleSnapshotConfig())
+            .build();
 
         // Fail transitioning to snapshot
         failer.set(true);
@@ -156,8 +156,8 @@ public class FailedTransitionTest {
         InMemoryBlobStore bs = new InMemoryBlobStore();
 
         HollowProducer producer = HollowProducer.withPublisher(bs)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
         long version = producer.runCycle(ws -> {
             ws.add(1);
@@ -165,9 +165,9 @@ public class FailedTransitionTest {
 
         AtomicBoolean failer = new AtomicBoolean();
         HollowConsumer consumer = HollowConsumer
-                .withBlobRetriever(new FailingBlobRetriever(failer::get, bs))
-                .withDoubleSnapshotConfig(new NoDoubleSnapshotConfig())
-                .build();
+            .withBlobRetriever(new FailingBlobRetriever(failer::get, bs))
+            .withDoubleSnapshotConfig(new NoDoubleSnapshotConfig())
+            .build();
 
         // Transition to snapshot
         consumer.triggerRefreshTo(version);
@@ -197,11 +197,13 @@ public class FailedTransitionTest {
 
 
     static class NoDoubleSnapshotConfig implements HollowConsumer.DoubleSnapshotConfig {
-        @Override public boolean allowDoubleSnapshot() {
+        @Override
+        public boolean allowDoubleSnapshot() {
             return false;
         }
 
-        @Override public int maxDeltasBeforeDoubleSnapshot() {
+        @Override
+        public int maxDeltasBeforeDoubleSnapshot() {
             return 32;
         }
     }
@@ -222,7 +224,7 @@ public class FailedTransitionTest {
 
                 @Override
                 public InputStream getInputStream() throws IOException {
-                    if (failer.getAsBoolean()) {
+                    if(failer.getAsBoolean()) {
                         throw new IOException("FAILED");
                     }
                     return blob.getInputStream();
@@ -230,11 +232,13 @@ public class FailedTransitionTest {
             };
         }
 
-        @Override public HollowConsumer.Blob retrieveSnapshotBlob(long desiredVersion) {
+        @Override
+        public HollowConsumer.Blob retrieveSnapshotBlob(long desiredVersion) {
             HollowConsumer.Blob blob = br.retrieveSnapshotBlob(desiredVersion);
             return new HollowConsumer.Blob(desiredVersion) {
-                @Override public InputStream getInputStream() throws IOException {
-                    if (failer.getAsBoolean()) {
+                @Override
+                public InputStream getInputStream() throws IOException {
+                    if(failer.getAsBoolean()) {
                         throw new IOException("FAILED");
                     }
                     return blob.getInputStream();
@@ -242,11 +246,13 @@ public class FailedTransitionTest {
             };
         }
 
-        @Override public HollowConsumer.Blob retrieveDeltaBlob(long currentVersion) {
+        @Override
+        public HollowConsumer.Blob retrieveDeltaBlob(long currentVersion) {
             HollowConsumer.Blob blob = br.retrieveDeltaBlob(currentVersion);
             return new HollowConsumer.Blob(blob.getFromVersion(), blob.getToVersion()) {
-                @Override public InputStream getInputStream() throws IOException {
-                    if (failer.getAsBoolean()) {
+                @Override
+                public InputStream getInputStream() throws IOException {
+                    if(failer.getAsBoolean()) {
                         throw new IOException("FAILED");
                     }
                     return blob.getInputStream();
@@ -254,11 +260,13 @@ public class FailedTransitionTest {
             };
         }
 
-        @Override public HollowConsumer.Blob retrieveReverseDeltaBlob(long currentVersion) {
+        @Override
+        public HollowConsumer.Blob retrieveReverseDeltaBlob(long currentVersion) {
             HollowConsumer.Blob blob = br.retrieveReverseDeltaBlob(currentVersion);
             return new HollowConsumer.Blob(blob.getFromVersion(), blob.getToVersion()) {
-                @Override public InputStream getInputStream() throws IOException {
-                    if (failer.getAsBoolean()) {
+                @Override
+                public InputStream getInputStream() throws IOException {
+                    if(failer.getAsBoolean()) {
                         throw new IOException("FAILED");
                     }
                     return blob.getInputStream();

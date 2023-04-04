@@ -36,7 +36,8 @@ public class IntegerDataAccessor extends AbstractHollowDataAccessor<Integer> {
         this.api = api;
     }
 
-    @Override public Integer getRecord(int ordinal){
+    @Override
+    public Integer getRecord(int ordinal) {
         HInteger val = api.getHInteger(ordinal);
         return val == null ? null : val.getValueBoxed();
     }

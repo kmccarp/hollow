@@ -112,7 +112,7 @@ public class HollowHistoryListTest extends AbstractStateEngineTest {
     private void assertRecord(HollowDataAccess dataAccess, int ordinal, int... expectedElements) {
         HollowListTypeDataAccess typeDataAccess = (HollowListTypeDataAccess)dataAccess.getTypeDataAccess("TestList");
 
-        for(int i=0;i<expectedElements.length;i++) {
+        for(int i = 0;i < expectedElements.length;i++) {
             Assert.assertEquals(expectedElements[i], typeDataAccess.getElementOrdinal(ordinal, i));
         }
     }

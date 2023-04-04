@@ -25,7 +25,7 @@ public abstract class HollowIndexGenerator extends HollowConsumerJavaFileGenerat
     protected final String apiClassname;
 
     public HollowIndexGenerator(String packageName, String apiClassname, HollowDataset dataset,
-            CodeGeneratorConfig config) {
+        CodeGeneratorConfig config) {
         super(packageName, SUB_PACKAGE_NAME, dataset, config);
         this.apiClassname = apiClassname;
     }

@@ -30,11 +30,11 @@ import com.netflix.hollow.core.read.engine.HollowTypeReadState;
  */
 public class RecordCountVarianceValidator implements ValidatorListener {
     private static final String ZERO_PREVIOUS_COUNT_WARN_MSG_FORMAT =
-            "Previous record count is 0. Not running RecordCountVarianceValidator for type %s. "
-                    + "This scenario is not expected except when starting a new namespace.";
+        "Previous record count is 0. Not running RecordCountVarianceValidator for type %s. "
+            + "This scenario is not expected except when starting a new namespace.";
     private static final String FAILED_RECORD_COUNT_VALIDATION =
-            "Record count validation for type %s has failed as actual change percent %s "
-                    + "is greater than allowed change percent %s.";
+        "Record count validation for type %s has failed as actual change percent %s "
+            + "is greater than allowed change percent %s.";
 
     private static final String DATA_TYPE_NAME = "Typename";
     private static final String ALLOWABLE_VARIANCE_PERCENT_NAME = "AllowableVariancePercent";
@@ -59,10 +59,10 @@ public class RecordCountVarianceValidator implements ValidatorListener {
      */
     public RecordCountVarianceValidator(String typeName, float allowableVariancePercent) {
         this.typeName = typeName;
-        if (allowableVariancePercent < 0) {
+        if(allowableVariancePercent < 0) {
             throw new IllegalArgumentException("RecordCountVarianceValidator for type " + typeName
-                    + ": cannot have allowableVariancePercent less than 0. Value provided: "
-                    + allowableVariancePercent);
+                + ": cannot have allowableVariancePercent less than 0. Value provided: "
+                + allowableVariancePercent);
         }
         this.allowableVariancePercent = allowableVariancePercent;
     }
@@ -76,25 +76,25 @@ public class RecordCountVarianceValidator implements ValidatorListener {
     public ValidationResult onValidate(ReadState readState) {
         ValidationResult.ValidationResultBuilder vrb = ValidationResult.from(this);
         vrb.detail(ALLOWABLE_VARIANCE_PERCENT_NAME, allowableVariancePercent)
-                .detail(DATA_TYPE_NAME, typeName);
+            .detail(DATA_TYPE_NAME, typeName);
 
         HollowTypeReadState typeState = readState.getStateEngine().getTypeState(typeName);
         int latestCardinality = typeState.getPopulatedOrdinals().cardinality();
         int previousCardinality = typeState.getPreviousOrdinals().cardinality();
         vrb.detail(LATEST_CARDINALITY_NAME, latestCardinality)
-                .detail(PREVIOUS_CARDINALITY_NAME, previousCardinality);
+            .detail(PREVIOUS_CARDINALITY_NAME, previousCardinality);
 
-        if (previousCardinality == 0) {
+        if(previousCardinality == 0) {
             return vrb.detail("skipped", Boolean.TRUE).
-                    passed(String.format(ZERO_PREVIOUS_COUNT_WARN_MSG_FORMAT, typeName));
+                passed(String.format(ZERO_PREVIOUS_COUNT_WARN_MSG_FORMAT, typeName));
         }
 
         float actualChangePercent = getChangePercent(latestCardinality, previousCardinality);
         vrb.detail(ACTUAL_CHANGE_PERCENT_NAME, actualChangePercent);
 
-        if (Float.compare(actualChangePercent, allowableVariancePercent) > 0) {
+        if(Float.compare(actualChangePercent, allowableVariancePercent) > 0) {
             String message = String.format(FAILED_RECORD_COUNT_VALIDATION, typeName, actualChangePercent,
-                    allowableVariancePercent);
+                allowableVariancePercent);
             return vrb.failed(message);
         }
 
@@ -107,4 +107,4 @@ public class RecordCountVarianceValidator implements ValidatorListener {
         return (100.0f * diff) / previousCardinality;
     }
 }
-	
+

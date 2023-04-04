@@ -48,21 +48,21 @@ public class HollowObjectExactBitBoundaryEdgeCaseTest extends AbstractStateEngin
 
     @Test
     public void unpopulatedFieldOnSegmentBoundary() throws IOException {
-        for(int i=0;i<4094;i++) {
+        for(int i = 0;i < 4094;i++) {
             addRecord((float)i);
         }
 
-        for(int i=0;i<992;i++) {
+        for(int i = 0;i < 992;i++) {
             addRecord(i);
         }
 
         roundTripSnapshot();
 
-        for(int i=0;i<4096;i++) {
+        for(int i = 0;i < 4096;i++) {
             addRecord((float)i);
         }
 
-        for(int i=0;i<993;i++) {
+        for(int i = 0;i < 993;i++) {
             addRecord(i);
         }
 

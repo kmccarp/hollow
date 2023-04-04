@@ -32,8 +32,8 @@ public class CustomConsumerBuilderTest {
     @Test
     public void defaultBehavior() {
         HollowConsumer consumer = new AugmentedBuilder()
-                .withBlobRetriever(blobStore)
-                .build();
+            .withBlobRetriever(blobStore)
+            .build();
         Assert.assertNotNull(consumer);
         assertThat(consumer).isNotInstanceOf(AugmentedConsumer.class);
     }
@@ -41,18 +41,18 @@ public class CustomConsumerBuilderTest {
     @Test
     public void augmentedBehavior_deprecatedConstructor() {
         HollowConsumer consumer = new AugmentedBuilder()
-                .withBlobRetriever(blobStore) // should be called before custom builder methods
-                .withDeprecatedAugmentation()
-                .build();
+            .withBlobRetriever(blobStore) // should be called before custom builder methods
+            .withDeprecatedAugmentation()
+            .build();
         assertThat(consumer).isInstanceOf(AugmentedConsumer.class);
     }
 
     @Test
     public void augmentedBehavior_builderConstructor() {
         HollowConsumer consumer = new AugmentedBuilder()
-                .withBlobRetriever(blobStore) // should be called before custom builder methods
-                .withAugmentation()
-                .build();
+            .withBlobRetriever(blobStore) // should be called before custom builder methods
+            .withAugmentation()
+            .build();
         assertThat(consumer).isInstanceOf(AugmentedConsumer.class);
     }
 
@@ -60,11 +60,11 @@ public class CustomConsumerBuilderTest {
     public void augmentedBehavior_breakingTypeFilter() {
         try {
             new AugmentedBuilder()
-                    .withBlobRetriever(blobStore)
-                    .withAugmentation()
-                    .withFilterConfig(new HollowFilterConfig(true))
-                    .withTypeFilter(TypeFilter.newTypeFilter().build())
-            .build();
+                .withBlobRetriever(blobStore)
+                .withAugmentation()
+                .withFilterConfig(new HollowFilterConfig(true))
+                .withTypeFilter(TypeFilter.newTypeFilter().build())
+                .build();
             fail();
         } catch (IllegalStateException ex) {
             assertThat(ex.getMessage()).startsWith("Only one of typeFilter");
@@ -101,24 +101,24 @@ public class CustomConsumerBuilderTest {
         public HollowConsumer build() {
             checkArguments();
             HollowConsumer consumer;
-            switch (augmentation) {
+            switch(augmentation) {
                 case none:
                     consumer = super.build();
                     break;
                 case deprecatedConstructor:
                     consumer = new AugmentedConsumer(
-                            blobRetriever,
-                            announcementWatcher,
-                            refreshListeners,
-                            apiFactory,
-                            filterConfig,
-                            objectLongevityConfig,
-                            objectLongevityDetector,
-                            doubleSnapshotConfig,
-                            hashCodeFinder,
-                            refreshExecutor,
-                            memoryMode,
-                            metricsCollector
+                        blobRetriever,
+                        announcementWatcher,
+                        refreshListeners,
+                        apiFactory,
+                        filterConfig,
+                        objectLongevityConfig,
+                        objectLongevityDetector,
+                        doubleSnapshotConfig,
+                        hashCodeFinder,
+                        refreshExecutor,
+                        memoryMode,
+                        metricsCollector
                     );
                     break;
                 case builderConstructor:
@@ -134,31 +134,31 @@ public class CustomConsumerBuilderTest {
 
     private static class AugmentedConsumer extends HollowConsumer {
         AugmentedConsumer(
-                HollowConsumer.BlobRetriever blobRetriever,
-                HollowConsumer.AnnouncementWatcher announcementWatcher,
-                List<RefreshListener> refreshListeners,
-                HollowAPIFactory apiFactory,
-                HollowFilterConfig filterConfig,
-                ObjectLongevityConfig objectLongevityConfig,
-                ObjectLongevityDetector objectLongevityDetector,
-                DoubleSnapshotConfig doubleSnapshotConfig,
-                HollowObjectHashCodeFinder hashCodeFinder,
-                Executor refreshExecutor,
-                MemoryMode memoryMode,
-                HollowMetricsCollector<HollowConsumerMetrics> metricsCollector
-        ) {
+            HollowConsumer.BlobRetriever blobRetriever,
+            HollowConsumer.AnnouncementWatcher announcementWatcher,
+            List<RefreshListener> refreshListeners,
+            HollowAPIFactory apiFactory,
+            HollowFilterConfig filterConfig,
+            ObjectLongevityConfig objectLongevityConfig,
+            ObjectLongevityDetector objectLongevityDetector,
+            DoubleSnapshotConfig doubleSnapshotConfig,
+            HollowObjectHashCodeFinder hashCodeFinder,
+            Executor refreshExecutor,
+            MemoryMode memoryMode,
+            HollowMetricsCollector<HollowConsumerMetrics> metricsCollector
+    ) {
             super(blobRetriever,
-                    announcementWatcher,
-                    refreshListeners,
-                    apiFactory,
-                    filterConfig,
-                    objectLongevityConfig,
-                    objectLongevityDetector,
-                    doubleSnapshotConfig,
-                    hashCodeFinder,
-                    refreshExecutor,
-                    memoryMode,
-                    metricsCollector);
+                announcementWatcher,
+                refreshListeners,
+                apiFactory,
+                filterConfig,
+                objectLongevityConfig,
+                objectLongevityDetector,
+                doubleSnapshotConfig,
+                hashCodeFinder,
+                refreshExecutor,
+                memoryMode,
+                metricsCollector);
         }
 
         AugmentedConsumer(AugmentedBuilder builder) {

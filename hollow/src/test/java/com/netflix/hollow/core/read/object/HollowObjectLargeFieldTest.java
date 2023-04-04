@@ -85,7 +85,7 @@ public class HollowObjectLargeFieldTest extends AbstractStateEngineTest {
     }
 
     private void assertObject(int ordinal, long l, int i, double d) {
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("TestObject");
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)readStateEngine.getTypeState("TestObject");
         GenericHollowObject obj = new GenericHollowObject(new HollowObjectGenericDelegate(typeState), ordinal);
 
         Assert.assertEquals(l, obj.getLong("longField"));

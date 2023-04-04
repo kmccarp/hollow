@@ -57,15 +57,15 @@ public class HollowHistoricalState {
     }
 
     /**
-	 * To find a specific historical record which changed
-	 * in this state:  
-	 * <ul>
-	 * <li>Use the {@link HollowHistoryKeyIndex} from the {@link HollowHistory} to look up a <i>key ordinal</i> by an indexed primary key.</li>
-	 * <li>Use the retrieved <i>key ordinal</i> with the {@link HollowHistoricalStateKeyOrdinalMapping} in this state to find the record's ordinal in this state.</li>
-	 * </ul>
-	 * <p>
-	 * If a change isn't found for the key ordinal in this state, you can try walking the chain of states up to
-	 * the present using successive calls to {@link #getNextState()}
+     * To find a specific historical record which changed
+     * in this state:  
+     * <ul>
+     * <li>Use the {@link HollowHistoryKeyIndex} from the {@link HollowHistory} to look up a <i>key ordinal</i> by an indexed primary key.</li>
+     * <li>Use the retrieved <i>key ordinal</i> with the {@link HollowHistoricalStateKeyOrdinalMapping} in this state to find the record's ordinal in this state.</li>
+     * </ul>
+     * <p>
+     * If a change isn't found for the key ordinal in this state, you can try walking the chain of states up to
+     * the present using successive calls to {@link #getNextState()}
      * 
      * @return the historical state key ordinal mapping
      */
@@ -93,8 +93,8 @@ public class HollowHistoricalState {
 
     public long getApproximateHeapFootprintInBytes() {
         long total = 0L;
-        for (HollowHistoricalTypeDataAccess typeDataAccess : dataAccess.getTypeDataAccessMap().values()) {
-                total += typeDataAccess.removedRecords.getApproximateHeapFootprintInBytes();
+        for(HollowHistoricalTypeDataAccess typeDataAccess : dataAccess.getTypeDataAccessMap().values()) {
+            total += typeDataAccess.removedRecords.getApproximateHeapFootprintInBytes();
         }
         return total;
     }

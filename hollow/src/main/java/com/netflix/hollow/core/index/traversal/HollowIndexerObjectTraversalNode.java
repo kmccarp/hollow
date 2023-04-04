@@ -50,7 +50,7 @@ class HollowIndexerObjectTraversalNode extends HollowIndexerTraversalNode {
     public int doTraversal(int ordinal) {
         prepareMultiply();
 
-        for(int i=0;i<children.length;i++) {
+        for(int i = 0;i < children.length;i++) {
             if(children[i] instanceof HollowIndexerObjectFieldTraversalNode) {
                 children[i].traverse(ordinal);
             } else {
@@ -65,7 +65,7 @@ class HollowIndexerObjectTraversalNode extends HollowIndexerTraversalNode {
 
     @Override
     protected HollowObjectTypeDataAccess dataAccess() {
-        return (HollowObjectTypeDataAccess) dataAccess;
+        return (HollowObjectTypeDataAccess)dataAccess;
     }
 
     @Override

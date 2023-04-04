@@ -31,7 +31,7 @@ public class HollowEffigy {
 
     final HollowTypeDataAccess dataAccess;
     final int ordinal;
-    
+
     private List<Field> fields;
 
     public HollowEffigy(String objectType) {
@@ -41,7 +41,7 @@ public class HollowEffigy {
         this.ordinal = -1;
         this.fields = new ArrayList<Field>();
     }
-    
+
     public HollowEffigy(HollowEffigyFactory factory, HollowTypeDataAccess dataAccess, int ordinal) {
         this.factory = factory;
         this.objectType = null;
@@ -52,17 +52,17 @@ public class HollowEffigy {
     public void add(HollowEffigy.Field field) {
         fields.add(field);
     }
-    
+
     public String getObjectType() {
         if(objectType != null)
             return objectType;
         return dataAccess.getSchema().getName();
     }
-    
+
     public HollowTypeDataAccess getDataAccess() {
         return dataAccess;
     }
-    
+
     public int getOrdinal() {
         return ordinal;
     }
@@ -82,7 +82,7 @@ public class HollowEffigy {
         public Field(String fieldName, HollowEffigy value) {
             this(fieldName, value.getObjectType(), value);
         }
-        
+
         public Field(String fieldName, String typeName, Object value) {
             this.fieldName = fieldName;
             this.typeName = typeName;
@@ -117,10 +117,10 @@ public class HollowEffigy {
                 return true;
 
             if(other instanceof Field) {
-                if(this.fieldName.equals(((Field) other).fieldName) && this.typeName.equals(((Field) other).typeName)) {
+                if(this.fieldName.equals(((Field)other).fieldName) && this.typeName.equals(((Field)other).typeName)) {
                     if(this.value == null)
-                        return ((Field) other).value == null;
-                    return this.value.equals(((Field) other).value);
+                        return ((Field)other).value == null;
+                    return this.value.equals(((Field)other).value);
                 }
             }
 
@@ -146,7 +146,7 @@ public class HollowEffigy {
             return true;
 
         if(other instanceof HollowEffigy) {
-            HollowEffigy otherEffigy = (HollowEffigy) other;
+            HollowEffigy otherEffigy = (HollowEffigy)other;
             return this.getFields().equals(otherEffigy.getFields());
         }
 

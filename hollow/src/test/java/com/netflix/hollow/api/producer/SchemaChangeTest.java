@@ -40,8 +40,8 @@ public class SchemaChangeTest {
         InMemoryBlobStore bs = new InMemoryBlobStore();
 
         HollowProducer producer = HollowProducer.withPublisher(bs)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
         long v1 = producer.runCycle(ws -> {
             ws.add(new V1.A(1));
@@ -51,8 +51,8 @@ public class SchemaChangeTest {
 
 
         producer = HollowProducer.withPublisher(bs)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
         producer.initializeDataModel(V2.A.class);
         producer.restore(v1, bs);
 
@@ -68,26 +68,26 @@ public class SchemaChangeTest {
     }
 
     void testChangeHeader(HollowConsumer.BlobRetriever br,
-            long fromVersion, long toVersion, boolean present) throws IOException {
+        long fromVersion, long toVersion, boolean present) throws IOException {
         testChangeHeader(getHeader(br, r -> r.retrieveSnapshotBlob(toVersion)), present);
 
-        if (fromVersion != Long.MIN_VALUE) {
+        if(fromVersion != Long.MIN_VALUE) {
             testChangeHeader(getHeader(br, r -> r.retrieveDeltaBlob(fromVersion)), present);
         }
     }
 
     void testChangeHeader(HollowBlobHeader header, boolean present) {
         Assert.assertEquals(
-                present,
-                header.getHeaderTags().containsKey(HollowStateEngine.HEADER_TAG_SCHEMA_CHANGE));
-        if (present) {
+            present,
+            header.getHeaderTags().containsKey(HollowStateEngine.HEADER_TAG_SCHEMA_CHANGE));
+        if(present) {
             String v = header.getHeaderTags().get(HollowStateEngine.HEADER_TAG_SCHEMA_CHANGE);
             Assert.assertTrue(Boolean.parseBoolean(v));
         }
     }
 
     HollowBlobHeader getHeader(HollowConsumer.BlobRetriever br,
-            Function<HollowConsumer.BlobRetriever, HollowConsumer.Blob> f) throws IOException {
+        Function<HollowConsumer.BlobRetriever, HollowConsumer.Blob> f) throws IOException {
         HollowConsumer.Blob blob = f.apply(br);
         HollowBlobHeaderReader r = new HollowBlobHeaderReader();
         return r.readHeader(blob.getInputStream());

@@ -26,7 +26,7 @@ import com.netflix.hollow.tools.checksum.HollowChecksum;
 import java.util.BitSet;
 
 class HollowMapTypeReadStateShard {
-    
+
     private volatile HollowMapTypeDataElements currentDataVolatile;
 
     private HollowPrimaryKeyValueDeriver keyDeriver;
@@ -218,7 +218,7 @@ class HollowMapTypeReadStateShard {
                 long offset = getAbsoluteBucketStart(currentData, shardOrdinal);
 
                 checksum.applyInt(ordinal);
-                for(int i=0; i<numBuckets; i++) {
+                for(int i = 0;i < numBuckets;i++) {
                     int bucketKey = getBucketKeyByAbsoluteIndex(currentData, offset + i);
                     if(bucketKey != currentData.emptyBucketKeyValue) {
                         checksum.applyInt(i);
@@ -243,26 +243,26 @@ class HollowMapTypeReadStateShard {
         long requiredBits = requiredBitsForMapPointers + requiredBitsForMapBuckets;
         return requiredBits / 8;
     }
-    
+
     public long getApproximateHoleCostInBytes(BitSet populatedOrdinals, int shardNumber, int numShards) {
         HollowMapTypeDataElements currentData = currentDataVolatile;
         long holeBits = 0;
-        
+
         int holeOrdinal = populatedOrdinals.nextClearBit(0);
         while(holeOrdinal <= currentData.maxOrdinal) {
             if((holeOrdinal & (numShards - 1)) == shardNumber)
                 holeBits += currentData.bitsPerFixedLengthMapPortion;
-            
+
             holeOrdinal = populatedOrdinals.nextClearBit(holeOrdinal + 1);
         }
-        
+
         return holeBits / 8;
     }
 
-    
+
     public void setKeyDeriver(HollowPrimaryKeyValueDeriver keyDeriver) {
         this.keyDeriver = keyDeriver;
     }
 
-    
+
 }

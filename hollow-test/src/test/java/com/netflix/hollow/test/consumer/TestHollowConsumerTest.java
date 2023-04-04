@@ -59,15 +59,15 @@ public class TestHollowConsumerTest {
             .withBlobRetriever(new TestBlobRetriever())
             .build();
         consumer.addSnapshot(latestVersion,
-                new HollowWriteStateEngineBuilder().add("foo").add(2).build());
+            new HollowWriteStateEngineBuilder().add("foo").add(2).build());
         consumer.triggerRefresh();
         HollowDataAccess data = consumer.getAPI().getDataAccess();
         assertEquals("Should have string and int",
-                new HashSet<>(Arrays.asList("String", "Integer")), data.getAllTypes());
+            new HashSet<>(Arrays.asList("String", "Integer")), data.getAllTypes());
         assertEquals("foo",
-                new GenericHollowObject(data, "String", 0).getString("value"));
+            new GenericHollowObject(data, "String", 0).getString("value"));
         assertEquals(2,
-                new GenericHollowObject(data, "Integer", 0).getInt("value"));
+            new GenericHollowObject(data, "Integer", 0).getInt("value"));
     }
 
     @Test
@@ -102,7 +102,7 @@ public class TestHollowConsumerTest {
         consumer.addSnapshot(version2, new HollowWriteStateEngineBuilder().build());
         consumer.triggerRefresh();
         assertEquals("We haven't told announcementWatcher about version2 yet", version1,
-                consumer.getCurrentVersionId());
+            consumer.getCurrentVersionId());
 
         announcementWatcher.setLatestVersion(version2);
         consumer.triggerRefresh();
@@ -113,8 +113,8 @@ public class TestHollowConsumerTest {
     public void testDelta_versionTransition() throws Exception {
         long snapshotVersion = 1l;
         TestHollowConsumer consumer = new TestHollowConsumer.Builder()
-                .withBlobRetriever(new TestBlobRetriever())
-                .build();
+            .withBlobRetriever(new TestBlobRetriever())
+            .build();
 
         HollowWriteStateEngine state1 = new HollowWriteStateEngineBuilder().build();
         consumer.addSnapshot(snapshotVersion, state1);
@@ -133,21 +133,21 @@ public class TestHollowConsumerTest {
     @Test
     public void testSnapshotDeltaSnapshot_dataTransition() throws Exception {
         TestHollowConsumer consumer = new TestHollowConsumer.Builder()
-                .withBlobRetriever(new TestBlobRetriever())
-                .build();
+            .withBlobRetriever(new TestBlobRetriever())
+            .build();
 
         HollowWriteStateEngine state1 = new HollowWriteStateEngineBuilder(Collections.singletonList(Movie.class))
-                .add(new Movie(1, "first"))
-                .build();
+            .add(new Movie(1, "first"))
+            .build();
         HollowWriteStateEngine state2 = new HollowWriteStateEngineBuilder(Collections.singletonList(Movie.class))
-                .add(new Movie(2, "second"))
-                .build();
+            .add(new Movie(2, "second"))
+            .build();
         HollowWriteStateEngine state3 = new HollowWriteStateEngineBuilder(Collections.singletonList(Movie.class))
-                .add(new Movie(3, "third"))
-                .build();
+            .add(new Movie(3, "third"))
+            .build();
         HollowWriteStateEngine state4 = new HollowWriteStateEngineBuilder(Collections.singletonList(Movie.class))
-                .add(new Movie(4, "fourth"))
-                .build();
+            .add(new Movie(4, "fourth"))
+            .build();
 
         // SNAPSHOT
         consumer.applySnapshot(1l, state1);
@@ -171,10 +171,10 @@ public class TestHollowConsumerTest {
     }
 
     @Test
-    public void testDeltaBeforeSnapshot_Unsupported() throws IOException  {
+    public void testDeltaBeforeSnapshot_Unsupported() throws IOException {
         TestHollowConsumer consumer = new TestHollowConsumer.Builder().withBlobRetriever(new TestBlobRetriever()).build();
         HollowWriteStateEngine state = new HollowWriteStateEngineBuilder(Collections.singletonList(Movie.class))
-                .add(new Movie(1, "first")).build();
+            .add(new Movie(1, "first")).build();
         thrown.expect(UnsupportedOperationException.class);
         thrown.expectMessage("Delta can not be applied without first applying a snapshot");
         consumer.applyDelta(1l, state);
@@ -186,12 +186,12 @@ public class TestHollowConsumerTest {
         // The hydration of a movie POJO can be substituted with api.getMovie(ordinal) if generated api is available
         GenericHollowObject actualHollowObject = new GenericHollowObject(data, Movie.class.getSimpleName(), ordinal);
         Movie actualMovie = new Movie(actualHollowObject.getInt("id"),
-                actualHollowObject.getObject("name").getString("value"));
+            actualHollowObject.getObject("name").getString("value"));
 
         assertEquals(actualMovie, m);
     }
 
-    @HollowPrimaryKey(fields="id")
+    @HollowPrimaryKey(fields = "id")
     static class Movie {
         int id;
         String name;
@@ -203,9 +203,9 @@ public class TestHollowConsumerTest {
 
         @Override
         public boolean equals(Object o) {
-            Movie other = (Movie) o;
+            Movie other = (Movie)o;
             return this.id == other.id
-                    && this.name.equals(other.name);
+                && this.name.equals(other.name);
         }
 
         @Override

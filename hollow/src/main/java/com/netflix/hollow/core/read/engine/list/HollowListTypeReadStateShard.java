@@ -37,7 +37,7 @@ class HollowListTypeReadStateShard {
             do {
                 currentData = this.currentDataVolatile;
 
-                if (ordinal == 0) {
+                if(ordinal == 0) {
                     startElement = 0;
                     endElement = currentData.listPointerData.getElementValue(0, currentData.bitsPerListPointer);
                 } else {
@@ -68,7 +68,7 @@ class HollowListTypeReadStateShard {
 
             long startElement;
             long endElement;
-            if (ordinal == 0) {
+            if(ordinal == 0) {
                 startElement = 0;
                 endElement = currentData.listPointerData.getElementValue(0, currentData.bitsPerListPointer);
             } else {
@@ -107,9 +107,9 @@ class HollowListTypeReadStateShard {
             if((ordinal & (numShards - 1)) == shardNumber) {
                 int shardOrdinal = ordinal / numShards;
                 int size = size(shardOrdinal);
-    
+
                 checksum.applyInt(ordinal);
-                for(int i=0;i<size;i++)
+                for(int i = 0;i < size;i++)
                     checksum.applyInt(getElementOrdinal(shardOrdinal, i));
 
                 ordinal = ordinal + numShards;
@@ -129,19 +129,19 @@ class HollowListTypeReadStateShard {
         long requiredBits = requiredListPointerBits + requiredElementBits;
         return requiredBits / 8;
     }
-    
+
     public long getApproximateHoleCostInBytes(BitSet populatedOrdinals, int shardNumber, int numShards) {
         HollowListTypeDataElements currentData = currentDataVolatile;
         long holeBits = 0;
-        
+
         int holeOrdinal = populatedOrdinals.nextClearBit(0);
         while(holeOrdinal <= currentData.maxOrdinal) {
             if((holeOrdinal & (numShards - 1)) == shardNumber)
                 holeBits += currentData.bitsPerListPointer;
-            
+
             holeOrdinal = populatedOrdinals.nextClearBit(holeOrdinal + 1);
         }
-        
+
         return holeBits / 8;
     }
 }

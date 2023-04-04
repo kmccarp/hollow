@@ -49,7 +49,7 @@ public class DataModel {
                 this._long = 1L;
                 this._float = 1.0f;
                 this._double = 1.0d;
-                this._bytes = new byte[] {1};
+                this._bytes = new byte[]{1};
                 this._chars = "1".toCharArray();
             }
         }
@@ -79,15 +79,24 @@ public class DataModel {
         }
 
         public static class InlineBoxes {
-            @HollowInline final Boolean _boolean;
-            @HollowInline final Byte _byte;
-            @HollowInline final Short _short;
-            @HollowInline final Character _char;
-            @HollowInline final Integer _int;
-            @HollowInline final Long _long;
-            @HollowInline final Float _float;
-            @HollowInline final Double _double;
-            @HollowInline final String _string;
+            @HollowInline
+            final Boolean _boolean;
+            @HollowInline
+            final Byte _byte;
+            @HollowInline
+            final Short _short;
+            @HollowInline
+            final Character _char;
+            @HollowInline
+            final Integer _int;
+            @HollowInline
+            final Long _long;
+            @HollowInline
+            final Float _float;
+            @HollowInline
+            final Double _double;
+            @HollowInline
+            final String _string;
 
             public InlineBoxes() {
                 this._boolean = true;
@@ -121,7 +130,8 @@ public class DataModel {
         public static class ReferenceWithStrings {
             final String _string1;
 
-            @HollowTypeName(name = "FieldOfStringRenamed") final String _string2;
+            @HollowTypeName(name = "FieldOfStringRenamed")
+            final String _string2;
 
             public ReferenceWithStrings() {
                 this._string1 = "1";
@@ -156,8 +166,8 @@ public class DataModel {
             final SubTypeOfTypeWithPrimaryKey sub2;
 
             public TypeWithPrimaryKey(
-                    int i, SubTypeOfTypeWithPrimaryKey sub1,
-                    SubTypeOfTypeWithPrimaryKey sub2) {
+                int i, SubTypeOfTypeWithPrimaryKey sub1,
+                SubTypeOfTypeWithPrimaryKey sub2) {
                 this.i = i;
                 this.sub1 = sub1;
                 this.sub2 = sub2;
@@ -226,8 +236,8 @@ public class DataModel {
                 this.referenceWithStrings = new ReferenceWithStrings();
 
                 this.typeWithPrimaryKey = new TypeWithPrimaryKey(1,
-                        new SubTypeOfTypeWithPrimaryKey("1", 1),
-                        new SubTypeOfTypeWithPrimaryKey("2", 2));
+                    new SubTypeOfTypeWithPrimaryKey("1", 1),
+                    new SubTypeOfTypeWithPrimaryKey("2", 2));
             }
         }
     }
@@ -249,21 +259,21 @@ public class DataModel {
             }
 
             public Api(
-                    HollowDataAccess dataAccess, Set<String> cachedTypes,
-                    Map<String, HollowFactory<?>> factoryOverrides) {
+                HollowDataAccess dataAccess, Set<String> cachedTypes,
+                Map<String, HollowFactory<?>> factoryOverrides) {
                 this(dataAccess, cachedTypes, factoryOverrides, null);
             }
 
             public Api(
-                    HollowDataAccess dataAccess, Set<String> cachedTypes,
-                    Map<String, HollowFactory<?>> factoryOverrides, Api previousCycleAPI) {
+                HollowDataAccess dataAccess, Set<String> cachedTypes,
+                Map<String, HollowFactory<?>> factoryOverrides, Api previousCycleAPI) {
                 super(dataAccess);
 
-                this.stringTypeDataAccess = (HollowObjectTypeDataAccess) dataAccess.getTypeDataAccess("String");
+                this.stringTypeDataAccess = (HollowObjectTypeDataAccess)dataAccess.getTypeDataAccess("String");
                 this.stringDelegate = new HollowObjectGenericDelegate(stringTypeDataAccess);
 
-                this.fieldOfStringRenamedTypeDataAccess = (HollowObjectTypeDataAccess) dataAccess.getTypeDataAccess(
-                        "FieldOfStringRenamed");
+                this.fieldOfStringRenamedTypeDataAccess = (HollowObjectTypeDataAccess)dataAccess.getTypeDataAccess(
+                    "FieldOfStringRenamed");
                 this.fieldOfStringRenamedDelegate = new HollowObjectGenericDelegate(fieldOfStringRenamedTypeDataAccess);
             }
 
@@ -338,7 +348,7 @@ public class DataModel {
             }
 
             public String getValue() {
-                return ((HollowObjectGenericDelegate) getDelegate()).getString(getOrdinal(), "value");
+                return ((HollowObjectGenericDelegate)getDelegate()).getString(getOrdinal(), "value");
             }
         }
 
@@ -378,7 +388,7 @@ public class DataModel {
             }
 
             public String getValue() {
-                return ((HollowObjectGenericDelegate) getDelegate()).getString(0, "value");
+                return ((HollowObjectGenericDelegate)getDelegate()).getString(0, "value");
             }
         }
 

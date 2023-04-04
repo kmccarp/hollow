@@ -31,7 +31,7 @@ import java.util.Set;
 public class HollowListTypeMapper extends HollowTypeMapper {
 
     private static final String NULL_ELEMENT_MESSAGE =
-            "Null element contained in instance of a List with schema \"%s\". Lists cannot contain null elements";
+        "Null element contained in instance of a List with schema \"%s\". Lists cannot contain null elements";
 
     private final HollowListSchema schema;
     private final HollowListTypeWriteState writeState;
@@ -60,7 +60,7 @@ public class HollowListTypeMapper extends HollowTypeMapper {
     public int write(Object obj) {
         if(obj instanceof MemoizedList) {
             long assignedOrdinal = ((MemoizedList<?>)obj).__assigned_ordinal;
-            
+
             if((assignedOrdinal & ASSIGNED_ORDINAL_CYCLE_MASK) == cycleSpecificAssignedOrdinalBits())
                 return (int)assignedOrdinal & Integer.MAX_VALUE;
         }
@@ -77,29 +77,29 @@ public class HollowListTypeMapper extends HollowTypeMapper {
 
         return assignedOrdinal;
     }
-    
+
     public int writeFlat(Object obj, FlatRecordWriter flatRecordWriter) {
-    	HollowListWriteRecord rec = copyToWriteRecord((List<?>)obj, flatRecordWriter);
-    	return flatRecordWriter.write(schema, rec);
+        HollowListWriteRecord rec = copyToWriteRecord((List<?>)obj, flatRecordWriter);
+        return flatRecordWriter.write(schema, rec);
     }
 
     private HollowListWriteRecord copyToWriteRecord(List<?> l, FlatRecordWriter flatRecordWriter) {
-        HollowListWriteRecord rec = (HollowListWriteRecord) writeRecord();
-        if (ignoreListOrdering) {
+        HollowListWriteRecord rec = (HollowListWriteRecord)writeRecord();
+        if(ignoreListOrdering) {
             IntList ordinalList = getIntList();
-            for (Object o : l) {
-                if (o == null) {
+            for(Object o : l) {
+                if(o == null) {
                     throw new NullPointerException(String.format(NULL_ELEMENT_MESSAGE, schema));
                 }
                 int ordinal = flatRecordWriter == null ? elementMapper.write(o) : elementMapper.writeFlat(o, flatRecordWriter);
                 ordinalList.add(ordinal);
             }
             ordinalList.sort();
-            for (int i = 0; i < ordinalList.size(); i++)
+            for(int i = 0;i < ordinalList.size();i++)
                 rec.addElement(ordinalList.get(i));
         } else {
-            for (Object o : l) {
-                if (o == null) {
+            for(Object o : l) {
+                if(o == null) {
                     throw new NullPointerException(String.format(NULL_ELEMENT_MESSAGE, schema));
                 }
                 int ordinal = flatRecordWriter == null ? elementMapper.write(o) : elementMapper.writeFlat(o, flatRecordWriter);

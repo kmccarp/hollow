@@ -29,14 +29,14 @@ public abstract class HollowTestListRecord<T> extends HollowTestRecord<T> {
     protected HollowTestListRecord(T parent) {
         super(parent);
     }
-    
+
     protected void addElement(HollowTestRecord<?> element) {
         elements.add(element);
     }
-    
-    @SuppressWarnings({ "hiding", "unchecked" })
+
+    @SuppressWarnings({"hiding", "unchecked"})
     public <T extends HollowTestRecord<?>> T getRecord(int idx) {
-        return (T) elements.get(idx);
+        return (T)elements.get(idx);
     }
 
     public HollowWriteRecord toWriteRecord(HollowWriteStateEngine writeEngine) {

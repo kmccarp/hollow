@@ -76,14 +76,14 @@ public final class Status {
         @SuppressWarnings("unchecked")
         T success() {
             this.type = StatusType.SUCCESS;
-            return (T) this;
+            return (T)this;
         }
 
         @SuppressWarnings("unchecked")
         T fail(Throwable cause) {
             this.type = StatusType.FAIL;
             this.cause = cause;
-            return (T) this;
+            return (T)this;
         }
 
         Status build() {

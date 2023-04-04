@@ -63,7 +63,7 @@ public class HollowClientUpdaterTest {
         MemoryMode memoryMode = MemoryMode.ON_HEAP;
 
         subject = new HollowClientUpdater(retriever, emptyList(), apiFactory, snapshotConfig,
-                null, memoryMode, objectLongevityConfig, objectLongevityDetector, metrics, null);
+            null, memoryMode, objectLongevityConfig, objectLongevityDetector, metrics, null);
     }
 
     @Test
@@ -74,7 +74,7 @@ public class HollowClientUpdaterTest {
         HollowReadStateEngine readStateEngine = subject.getStateEngine();
         assertTrue("Should have no types", readStateEngine.getAllTypes().isEmpty());
         assertTrue("Should create snapshot plan next, even if double snapshot config disallows it",
-                subject.shouldCreateSnapshotPlan());
+            subject.shouldCreateSnapshotPlan());
         assertTrue(subject.updateTo(VERSION_NONE));
         assertTrue("Should still have no types", readStateEngine.getAllTypes().isEmpty());
     }
@@ -94,7 +94,7 @@ public class HollowClientUpdaterTest {
         long v = Long.MAX_VALUE - 1;
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage(String.format("Could not create an update plan for version %s, because that "
-                + "version or any qualifying previous versions could not be retrieved.", v));
+            + "version or any qualifying previous versions could not be retrieved.", v));
         subject.updateTo(v);
     }
 
@@ -110,7 +110,7 @@ public class HollowClientUpdaterTest {
     @Test
     public void initialLoad_firstFailed() {
         when(retriever.retrieveSnapshotBlob(anyLong()))
-                .thenThrow(new RuntimeException("boom"));
+            .thenThrow(new RuntimeException("boom"));
 
         try {
             subject.updateTo(VERSION_LATEST);
@@ -127,8 +127,8 @@ public class HollowClientUpdaterTest {
         // much setup
         // 1. construct a real-ish snapshot blob
         HollowWriteStateEngine stateEngine = new HollowWriteStateEngineBuilder()
-                .add("hello")
-                .build();
+            .add("hello")
+            .build();
         // TODO(timt): DRY with TestHollowConsumer::addSnapshot
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         new HollowBlobWriter(stateEngine).writeSnapshot(os);
@@ -136,12 +136,12 @@ public class HollowClientUpdaterTest {
         // 2. fake a snapshot blob
         HollowConsumer.Blob blob = mock(HollowConsumer.Blob.class);
         when(blob.isSnapshot())
-                .thenReturn(true);
+            .thenReturn(true);
         when(blob.getInputStream())
-                .thenReturn(is);
+            .thenReturn(is);
         // 3. return fake snapshot when asked
         when(retriever.retrieveSnapshotBlob(anyLong()))
-                .thenReturn(blob);
+            .thenReturn(blob);
 
         // such act
         subject.updateTo(VERSION_LATEST);
@@ -153,8 +153,8 @@ public class HollowClientUpdaterTest {
         long v = Long.MAX_VALUE - 1;
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage(String.format("Could not create an update plan for version %s, because that "
-                + "version or any qualifying previous versions could not be retrieved. Consumer will remain at current "
-                + "version %s until next update attempt.", v, subject.getCurrentVersionId()));
+            + "version or any qualifying previous versions could not be retrieved. Consumer will remain at current "
+            + "version %s until next update attempt.", v, subject.getCurrentVersionId()));
         subject.updateTo(v);
     }
 }

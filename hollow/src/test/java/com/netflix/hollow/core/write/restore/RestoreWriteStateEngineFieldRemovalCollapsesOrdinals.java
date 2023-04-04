@@ -126,7 +126,7 @@ public class RestoreWriteStateEngineFieldRemovalCollapsesOrdinals extends Abstra
     }
 
     private void assertTypeA(int ordinal, int a1, int bOrdinal) {
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("TypeA");
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)readStateEngine.getTypeState("TypeA");
         GenericHollowObject obj = new GenericHollowObject(new HollowObjectGenericDelegate(typeState), ordinal);
 
         Assert.assertEquals(a1, obj.getInt("a1"));
@@ -134,7 +134,7 @@ public class RestoreWriteStateEngineFieldRemovalCollapsesOrdinals extends Abstra
     }
 
     private void assertTypeB(int ordinal, int b1) {
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("TypeB");
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)readStateEngine.getTypeState("TypeB");
         GenericHollowObject obj = new GenericHollowObject(new HollowObjectGenericDelegate(typeState), ordinal);
 
         Assert.assertEquals(b1, obj.getInt("b1"));

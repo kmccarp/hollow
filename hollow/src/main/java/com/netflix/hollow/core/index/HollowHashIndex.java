@@ -58,7 +58,7 @@ public class HollowHashIndex implements HollowTypeStateListener {
      * @param matchFields The query will match on the specified match fields.  The match fields may span collection elements and/or map keys or values.
      */
     public HollowHashIndex(HollowReadStateEngine stateEngine, String type, String selectField, String... matchFields) {
-        this((HollowDataAccess) stateEngine, type, selectField, matchFields);
+        this((HollowDataAccess)stateEngine, type, selectField, matchFields);
     }
 
     /**
@@ -73,11 +73,11 @@ public class HollowHashIndex implements HollowTypeStateListener {
     public HollowHashIndex(HollowDataAccess hollowDataAccess, String type, String selectField, String... matchFields) {
         requireNonNull(type, "Hollow Hash Index creation failed because type was null");
         requireNonNull(hollowDataAccess, "Hollow Hash Index creation on type [" + type
-                + "] failed because read state wasn't initialized");
+            + "] failed because read state wasn't initialized");
 
         this.hollowDataAccess = hollowDataAccess;
         this.type = type;
-        this.typeState = (HollowObjectTypeDataAccess) hollowDataAccess.getTypeDataAccess(type);
+        this.typeState = (HollowObjectTypeDataAccess)hollowDataAccess.getTypeDataAccess(type);
         this.selectField = selectField;
         this.matchFields = matchFields;
 
@@ -106,7 +106,7 @@ public class HollowHashIndex implements HollowTypeStateListener {
     public HollowHashIndexResult findMatches(Object... query) {
         int hashCode = 0;
 
-        for(int i=0;i<query.length;i++) {
+        for(int i = 0;i < query.length;i++) {
             if(query[i] == null)
                 throw new IllegalArgumentException("querying by null unsupported; i=" + i);
             hashCode ^= HashCodes.hashInt(keyHashCode(query[i], i));
@@ -121,9 +121,9 @@ public class HollowHashIndex implements HollowTypeStateListener {
             long hashBucketBit = bucket * hashState.getBitsPerMatchHashEntry();
             boolean bucketIsEmpty = hashState.getMatchHashTable().getElementValue(hashBucketBit, hashState.getBitsPerTraverserField()[0]) == 0;
 
-            while (!bucketIsEmpty) {
-                if (matchIsEqual(hashState.getMatchHashTable(), hashBucketBit, query)) {
-                    int selectSize = (int) hashState.getMatchHashTable().getElementValue(hashBucketBit + hashState.getBitsPerMatchHashKey(), hashState.getBitsPerSelectTableSize());
+            while(!bucketIsEmpty) {
+                if(matchIsEqual(hashState.getMatchHashTable(), hashBucketBit, query)) {
+                    int selectSize = (int)hashState.getMatchHashTable().getElementValue(hashBucketBit + hashState.getBitsPerMatchHashKey(), hashState.getBitsPerSelectTableSize());
                     long selectBucketPointer = hashState.getMatchHashTable().getElementValue(hashBucketBit + hashState.getBitsPerMatchHashKey() + hashState.getBitsPerSelectTableSize(), hashState.getBitsPerSelectTablePointer());
 
                     result = new HollowHashIndexResult(hashState, selectBucketPointer, selectSize);
@@ -134,7 +134,7 @@ public class HollowHashIndex implements HollowTypeStateListener {
                 hashBucketBit = bucket * hashState.getBitsPerMatchHashEntry();
                 bucketIsEmpty = hashState.getMatchHashTable().getElementValue(hashBucketBit, hashState.getBitsPerTraverserField()[0]) == 0;
             }
-        } while (hashState != hashStateVolatile);
+        } while(hashState != hashStateVolatile);
 
         return result;
     }
@@ -142,22 +142,22 @@ public class HollowHashIndex implements HollowTypeStateListener {
     private int keyHashCode(Object key, int fieldIdx) {
         HollowHashIndexState hashState = hashStateVolatile;
         switch(hashState.getMatchFields()[fieldIdx].getFieldType()) {
-        case BOOLEAN:
-            return HollowReadFieldUtils.booleanHashCode((Boolean)key);
-        case DOUBLE:
-            return HollowReadFieldUtils.doubleHashCode((Double) key);
-        case FLOAT:
-            return HollowReadFieldUtils.floatHashCode((Float) key);
-        case INT:
-            return HollowReadFieldUtils.intHashCode((Integer) key);
-        case LONG:
-            return HollowReadFieldUtils.longHashCode((Long) key);
-        case REFERENCE:
-            return (Integer) key;
-        case BYTES:
-            return HashCodes.hashCode((byte[])key);
-        case STRING:
-            return HashCodes.hashCode((String)key);
+            case BOOLEAN:
+                return HollowReadFieldUtils.booleanHashCode((Boolean)key);
+            case DOUBLE:
+                return HollowReadFieldUtils.doubleHashCode((Double)key);
+            case FLOAT:
+                return HollowReadFieldUtils.floatHashCode((Float)key);
+            case INT:
+                return HollowReadFieldUtils.intHashCode((Integer)key);
+            case LONG:
+                return HollowReadFieldUtils.longHashCode((Long)key);
+            case REFERENCE:
+                return (Integer)key;
+            case BYTES:
+                return HashCodes.hashCode((byte[])key);
+            case STRING:
+                return HashCodes.hashCode((String)key);
         }
 
         throw new IllegalArgumentException("I don't know how to hash a " + hashState.getMatchFields()[fieldIdx].getFieldType());
@@ -165,17 +165,17 @@ public class HollowHashIndex implements HollowTypeStateListener {
 
     private boolean matchIsEqual(FixedLengthElementArray matchHashTable, long hashBucketBit, Object[] query) {
         HollowHashIndexState hashState = hashStateVolatile;
-        for(int i = 0; i< hashState.getMatchFields().length; i++) {
+        for(int i = 0;i < hashState.getMatchFields().length;i++) {
             HollowHashIndexField field = hashState.getMatchFields()[i];
             int hashOrdinal = (int)matchHashTable.getElementValue(hashBucketBit + hashState.getOffsetPerTraverserField()[field.getBaseIteratorFieldIdx()], hashState.getBitsPerTraverserField()[field.getBaseIteratorFieldIdx()]) - 1;
 
             FieldPathSegment[] fieldPath = field.getSchemaFieldPositionPath();
 
             if(fieldPath.length == 0) {
-                if (!query[i].equals(hashOrdinal))
+                if(!query[i].equals(hashOrdinal))
                     return false;
             } else {
-                for(int j=0;j<fieldPath.length - 1;j++) {
+                for(int j = 0;j < fieldPath.length - 1;j++) {
                     hashOrdinal = fieldPath[j].getOrdinalForField(hashOrdinal);
                     // Cannot find nested ordinal for null parent
                     if(hashOrdinal == HollowConstants.ORDINAL_NONE) {
@@ -202,10 +202,10 @@ public class HollowHashIndex implements HollowTypeStateListener {
      * discarding the index.
      */
     public void listenForDeltaUpdates() {
-        if (!(typeState instanceof HollowObjectTypeReadState))
+        if(!(typeState instanceof HollowObjectTypeReadState))
             throw new IllegalStateException("Cannot listen for delta updates when objectTypeDataAccess is a " + typeState.getClass().getSimpleName() + ". Is this index participating in object longevity?");
 
-        ((HollowObjectTypeReadState) typeState).addListener(this);
+        ((HollowObjectTypeReadState)typeState).addListener(this);
     }
 
     /**
@@ -214,22 +214,25 @@ public class HollowHashIndex implements HollowTypeStateListener {
      * Call this method before discarding indexes which are currently listening for delta updates.
      */
     public void detachFromDeltaUpdates() {
-        if ((typeState instanceof HollowObjectTypeReadState))
-            ((HollowObjectTypeReadState) typeState).removeListener(this);
+        if((typeState instanceof HollowObjectTypeReadState))
+            ((HollowObjectTypeReadState)typeState).removeListener(this);
     }
 
     @Override
-    public void beginUpdate() { }
+    public void beginUpdate() {
+    }
 
     @Override
-    public void addedOrdinal(int ordinal) { }
+    public void addedOrdinal(int ordinal) {
+    }
 
     @Override
-    public void removedOrdinal(int ordinal) { }
+    public void removedOrdinal(int ordinal) {
+    }
 
     @Override
     public void endUpdate() {
-       reindexHashIndex();
+        reindexHashIndex();
     }
 
     /**
@@ -238,7 +241,7 @@ public class HollowHashIndex implements HollowTypeStateListener {
      * index was created from a consumer with hollow object longevity enabled.
      */
     public HollowReadStateEngine getStateEngine() {
-        return (HollowReadStateEngine) hollowDataAccess;
+        return (HollowReadStateEngine)hollowDataAccess;
     }
 
     public HollowDataAccess getHollowDataAccess() {
@@ -275,7 +278,7 @@ public class HollowHashIndex implements HollowTypeStateListener {
             matchHashTable = builder.getFinalMatchHashTable();
             selectHashArray = builder.getFinalSelectHashArray();
             matchFields = builder.getMatchFields();
-            matchHashMask = (int) builder.getFinalMatchHashMask();
+            matchHashMask = (int)builder.getFinalMatchHashMask();
             bitsPerMatchHashKey = builder.getBitsPerMatchHashKey();
             bitsPerMatchHashEntry = builder.getFinalBitsPerMatchHashEntry();
             bitsPerTraverserField = builder.getBitsPerTraverserField();

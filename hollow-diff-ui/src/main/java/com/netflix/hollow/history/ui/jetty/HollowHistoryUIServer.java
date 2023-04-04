@@ -62,8 +62,8 @@ public class HollowHistoryUIServer {
     }
 
     public HollowHistoryUIServer(HollowConsumer consumer, int port, TimeZone timeZone) {
-            server = new com.netflix.hollow.history.ui.HollowHistoryUIServer(consumer, port, timeZone);
-        }
+        server = new com.netflix.hollow.history.ui.HollowHistoryUIServer(consumer, port, timeZone);
+    }
 
     public HollowHistoryUIServer(HollowConsumer consumer, int numStatesToTrack, int port, TimeZone timeZone) {
         server = new com.netflix.hollow.history.ui.HollowHistoryUIServer( consumer, numStatesToTrack, port, timeZone);
@@ -78,7 +78,7 @@ public class HollowHistoryUIServer {
     }
 
     public HollowHistoryUIServer(HollowHistoryUI ui, int port) {
-       server = new com.netflix.hollow.history.ui.HollowHistoryUIServer(ui, port);
+        server = new com.netflix.hollow.history.ui.HollowHistoryUIServer(ui, port);
     }
 
     public HollowHistoryUIServer start() throws Exception {

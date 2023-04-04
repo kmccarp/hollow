@@ -69,11 +69,11 @@ public class HollowHistoricalListDataAccess extends HollowHistoricalTypeDataAcce
     }
 
     private HollowListTypeReadState removedRecords() {
-        return (HollowListTypeReadState) removedRecords;
+        return (HollowListTypeReadState)removedRecords;
     }
 
     private HollowListSampler sampler() {
-        return (HollowListSampler) sampler;
+        return (HollowListSampler)sampler;
     }
 
 }

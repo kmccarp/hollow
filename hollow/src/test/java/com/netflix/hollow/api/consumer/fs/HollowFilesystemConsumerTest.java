@@ -19,8 +19,8 @@ public class HollowFilesystemConsumerTest {
         HollowFilesystemPublisher pub = new HollowFilesystemPublisher(localDir.toPath());
 
         HollowProducer producer = HollowProducer.withPublisher(pub)
-                .withNumStatesBetweenSnapshots(2)
-                .build();
+            .withNumStatesBetweenSnapshots(2)
+            .build();
 
         producer.runCycle(state -> {
             state.add(new Entity(1));
@@ -52,7 +52,7 @@ public class HollowFilesystemConsumerTest {
         return localDir;
     }
 
-    @HollowPrimaryKey(fields="id")
+    @HollowPrimaryKey(fields = "id")
     public static class Entity {
         @SuppressWarnings("unused")
         private final int id;

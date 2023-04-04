@@ -57,16 +57,16 @@ public class GapEncodedVariableLengthIntegerReaderTest {
         ByteDataArray arr = new ByteDataArray(WastefulRecycler.SMALL_ARRAY_RECYCLER);
 
         int cur = 0;
-        for(int i=0;i<values.length;i++) {
+        for(int i = 0;i < values.length;i++) {
             VarInt.writeVInt(arr, values[i] - cur);
             cur = values[i];
         }
 
-        return new GapEncodedVariableLengthIntegerReader(arr.getUnderlyingArray(), (int) arr.length());
+        return new GapEncodedVariableLengthIntegerReader(arr.getUnderlyingArray(), (int)arr.length());
     }
 
     private void assertValues(GapEncodedVariableLengthIntegerReader reader, int... expectedValues) {
-        for(int i=0;i<expectedValues.length;i++) {
+        for(int i = 0;i < expectedValues.length;i++) {
             Assert.assertEquals(expectedValues[i], reader.nextElement());
             reader.advance();
         }

@@ -45,7 +45,7 @@ public class IntList {
     }
 
     public void addAll(IntList list) {
-        for(int i=0;i<list.size;i++)
+        for(int i = 0;i < list.size;i++)
             add(list.get(i));
     }
 
@@ -64,7 +64,7 @@ public class IntList {
     public void sort() {
         Arrays.sort(values, 0, size);
     }
-    
+
     public int binarySearch(int value) {
         return Arrays.binarySearch(values, 0, size, value);
     }
@@ -90,7 +90,7 @@ public class IntList {
         if(other instanceof IntList) {
             IntList that = (IntList)other;
             if(this.size() == that.size()) {
-                for(int i=0;i<size;i++) {
+                for(int i = 0;i < size;i++) {
                     if(this.get(i) != that.get(i))
                         return false;
                 }

@@ -65,7 +65,7 @@ public class BooleanDataAccessorTest extends AbstractPrimitiveTypeDataAccessorTe
             Assert.assertEquals(0, dAccessor.getUpdatedRecords().size());
         }
 
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("Boolean");
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)readStateEngine.getTypeState("Boolean");
         Assert.assertEquals(1, typeState.maxOrdinal());
 
         assertObject(typeState, 0, true);

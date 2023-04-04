@@ -79,7 +79,7 @@ class TST {   // ternary search tree
 
         nodes = new FixedLengthElementArray(memoryRecycler, bitsPerNode * maxNodes);
         ordinalSet = new FixedLengthMultipleOccurrenceElementArray(memoryRecycler,
-                maxNodes, bitsPerOrdinal, estimatedMaxStringDuplicates);
+            maxNodes, bitsPerOrdinal, estimatedMaxStringDuplicates);
         indexTracker = 0;
         maxDepth = 0;
 
@@ -98,8 +98,7 @@ class TST {   // ternary search tree
 
     private long getChildOffset(NodeType nodeType) {
         long offset;
-        if (nodeType.equals(NodeType.Left)) offset = leftChildOffset;
-        else if (nodeType.equals(NodeType.Middle)) offset = middleChildOffset;
+        if(nodeType.equals(NodeType.Left)) offset = leftChildOffset;else if(nodeType.equals(NodeType.Middle)) offset = middleChildOffset;
         else offset = rightChildOffset;
         return offset;
     }
@@ -132,11 +131,11 @@ class TST {   // ternary search tree
     }
 
     List<Integer> getOrdinals(long nodeIndex) {
-        if (nodeIndex < 0) {
+        if(nodeIndex < 0) {
             return Collections.EMPTY_LIST;
         }
         return ordinalSet.getElements(nodeIndex).stream()
-                .map(Long::intValue).collect(Collectors.toList());
+            .map(Long::intValue).collect(Collectors.toList());
     }
 
     /**
@@ -144,40 +143,40 @@ class TST {   // ternary search tree
      * Case sensitivity is specified at the time of index initialization.  nulls and empty strings are not supported.
      */
     void insert(String key, int ordinal) {
-        if (key == null) throw new IllegalArgumentException("Null key cannot be indexed");
-        if (key.length() == 0) throw new IllegalArgumentException("Empty string cannot be indexed");
+        if(key == null) throw new IllegalArgumentException("Null key cannot be indexed");
+        if(key.length() == 0) throw new IllegalArgumentException("Empty string cannot be indexed");
         long currentNodeIndex = 0;
         int keyIndex = 0;
         int depth = 0;
-        if (!caseSensitive) {
+        if(!caseSensitive) {
             key = key.toLowerCase();
         }
 
-        while (keyIndex < key.length()) {
+        while(keyIndex < key.length()) {
             char ch = key.charAt(keyIndex);
-            if (getKey(currentNodeIndex) == 0) {
+            if(getKey(currentNodeIndex) == 0) {
                 setKey(currentNodeIndex, ch);
                 indexTracker++;
-                if (indexTracker >= maxNodes)
+                if(indexTracker >= maxNodes)
                     throw new IllegalStateException("Index Tracker reached max capacity. Try with larger estimate of number of nodes");
             }
 
             long keyAtCurrentNode = getKey(currentNodeIndex);
-            if (ch < keyAtCurrentNode) {
+            if(ch < keyAtCurrentNode) {
                 long leftIndex = getChildIndex(currentNodeIndex, NodeType.Left);
-                if (leftIndex == 0) leftIndex = indexTracker;
+                if(leftIndex == 0) leftIndex = indexTracker;
                 setChildIndex(currentNodeIndex, NodeType.Left, leftIndex);
                 currentNodeIndex = leftIndex;
-            } else if (ch > keyAtCurrentNode) {
+            } else if(ch > keyAtCurrentNode) {
                 long rightIndex = getChildIndex(currentNodeIndex, NodeType.Right);
-                if (rightIndex == 0) rightIndex = indexTracker;
+                if(rightIndex == 0) rightIndex = indexTracker;
                 setChildIndex(currentNodeIndex, NodeType.Right, rightIndex);
                 currentNodeIndex = rightIndex;
             } else {
                 keyIndex++;
-                if (keyIndex < key.length()) {
+                if(keyIndex < key.length()) {
                     long midIndex = getChildIndex(currentNodeIndex, NodeType.Middle);
-                    if (midIndex == 0) midIndex = indexTracker;
+                    if(midIndex == 0) midIndex = indexTracker;
                     setChildIndex(currentNodeIndex, NodeType.Middle, midIndex);
                     currentNodeIndex = midIndex;
                 }
@@ -185,7 +184,7 @@ class TST {   // ternary search tree
             depth++;
         }
         addOrdinal(currentNodeIndex, ordinal);
-        if (depth > maxDepth) {
+        if(depth > maxDepth) {
             maxDepth = depth;
         }
     }
@@ -199,10 +198,10 @@ class TST {   // ternary search tree
      */
     long findLongestMatch(String prefix) {
         long nodeIndex = -1;
-        if (prefix == null || prefix.length() == 0) {
+        if(prefix == null || prefix.length() == 0) {
             return nodeIndex;
         }
-        if (!caseSensitive) {
+        if(!caseSensitive) {
             prefix = prefix.toLowerCase();
         }
 
@@ -210,27 +209,25 @@ class TST {   // ternary search tree
         long currentNodeIndex = 0;
         int keyIndex = 0;
 
-        while (true) {
-            if (currentNodeIndex == 0 && !atRoot) break;
+        while(true) {
+            if(currentNodeIndex == 0 && !atRoot) break;
             long currentValue = getKey(currentNodeIndex);
             char ch = prefix.charAt(keyIndex);
-            if (ch < currentValue) {
+            if(ch < currentValue) {
                 currentNodeIndex = getChildIndex(currentNodeIndex, NodeType.Left);
-            }
-            else if (ch > currentValue) {
+            }else if(ch > currentValue) {
                 currentNodeIndex = getChildIndex(currentNodeIndex, NodeType.Right);
-            }
-            else {
-                if (isEndNode(currentNodeIndex)) {
+            }else {
+                if(isEndNode(currentNodeIndex)) {
                     nodeIndex = currentNodeIndex;   // update longest prefix match
                 }
-                if (keyIndex == (prefix.length() - 1)) {
+                if(keyIndex == (prefix.length() - 1)) {
                     break;
                 }
                 currentNodeIndex = getChildIndex(currentNodeIndex, NodeType.Middle);
-                keyIndex ++;
+                keyIndex++;
             }
-            if (atRoot) atRoot = false;
+            if(atRoot) atRoot = false;
         }
         return nodeIndex;
     }
@@ -243,10 +240,10 @@ class TST {   // ternary search tree
      */
     long findNodeWithKey(String key) {
         long index = -1;
-        if (key == null || key.length() == 0) {
+        if(key == null || key.length() == 0) {
             return index;
         }
-        if (!caseSensitive) {
+        if(!caseSensitive) {
             key = key.toLowerCase();
         }
 
@@ -254,21 +251,19 @@ class TST {   // ternary search tree
         long currentNodeIndex = 0;
         int keyIndex = 0;
 
-        while (true) {
-            if (currentNodeIndex == 0 && !atRoot) break;
+        while(true) {
+            if(currentNodeIndex == 0 && !atRoot) break;
             long currentValue = getKey(currentNodeIndex);
             char ch = key.charAt(keyIndex);
-            if (ch < currentValue) currentNodeIndex = getChildIndex(currentNodeIndex, NodeType.Left);
-            else if (ch > currentValue) currentNodeIndex = getChildIndex(currentNodeIndex, NodeType.Right);
-            else {
-                if (keyIndex == (key.length() - 1)) {
+            if(ch < currentValue) currentNodeIndex = getChildIndex(currentNodeIndex, NodeType.Left);else if(ch > currentValue) currentNodeIndex = getChildIndex(currentNodeIndex, NodeType.Right);else {
+                if(keyIndex == (key.length() - 1)) {
                     index = currentNodeIndex;
                     break;
                 }
                 currentNodeIndex = getChildIndex(currentNodeIndex, NodeType.Middle);
                 keyIndex++;
             }
-            if (atRoot) atRoot = false;
+            if(atRoot) atRoot = false;
         }
         return index;
     }
@@ -284,45 +279,45 @@ class TST {   // ternary search tree
      * return all ordinals indexed in the tree.
      */
     HollowOrdinalIterator findKeysWithPrefix(String prefix) {
-        if (prefix == null){
+        if(prefix == null) {
             throw new IllegalArgumentException("Cannot findKeysWithPrefix null prefix");
         }
-        if (!caseSensitive) {
+        if(!caseSensitive) {
             prefix = prefix.toLowerCase();
         }
 
         final Set<Integer> ordinals = new HashSet<>();
         long currentNodeIndex;
-        if (prefix.length() == 0) {
+        if(prefix.length() == 0) {
             currentNodeIndex = 0;
         } else {
             currentNodeIndex = findNodeWithKey(prefix);
         }
 
-        if (currentNodeIndex >= 0) {
-            if (isEndNode(currentNodeIndex))
+        if(currentNodeIndex >= 0) {
+            if(isEndNode(currentNodeIndex))
                 ordinals.addAll(getOrdinals(currentNodeIndex));
 
             // go to all leaf nodes from current node mid pointer
             Queue<Long> queue = new ArrayDeque<>();
-            if (prefix.length() == 0) {
+            if(prefix.length() == 0) {
                 queue.add(0l);  // root node index
             } else {
                 long subTree = getChildIndex(currentNodeIndex, NodeType.Middle);
-                if (subTree != 0) {
+                if(subTree != 0) {
                     queue.add(subTree);
                 }
             }
-            while (!queue.isEmpty()) {
+            while(!queue.isEmpty()) {
                 long nodeIndex = queue.remove();
                 long left = getChildIndex(nodeIndex, NodeType.Left);
                 long mid = getChildIndex(nodeIndex, NodeType.Middle);
                 long right = getChildIndex(nodeIndex, NodeType.Right);
 
-                if (isEndNode(nodeIndex)) ordinals.addAll(getOrdinals(nodeIndex));
-                if (left != 0) queue.add(left);
-                if (mid != 0) queue.add(mid);
-                if (right != 0) queue.add(right);
+                if(isEndNode(nodeIndex)) ordinals.addAll(getOrdinals(nodeIndex));
+                if(left != 0) queue.add(left);
+                if(mid != 0) queue.add(mid);
+                if(right != 0) queue.add(right);
             }
         }
 
@@ -331,7 +326,7 @@ class TST {   // ternary search tree
 
             @Override
             public int next() {
-                if (it.hasNext()) return it.next();
+                if(it.hasNext()) return it.next();
                 return NO_MORE_ORDINALS;
             }
         };
@@ -393,6 +388,6 @@ class TST {   // ternary search tree
      */
     long approxHeapFootprintInBytes() {
         return nodes.approxHeapFootprintInBytes()
-                + ordinalSet.approxHeapFootprintInBytes();
+            + ordinalSet.approxHeapFootprintInBytes();
     }
 }

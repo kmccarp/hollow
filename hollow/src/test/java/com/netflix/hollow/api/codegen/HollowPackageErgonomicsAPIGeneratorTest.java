@@ -26,7 +26,7 @@ public class HollowPackageErgonomicsAPIGeneratorTest extends AbstractHollowAPIGe
     private static final String API_CLASS_NAME = "PackageErgoTestAPI";
 
     private static final UnaryOperator<HollowAPIGenerator.Builder> customizeBuilder =
-            builder -> builder.withErgonomicShortcuts().withPackageGrouping();
+        builder -> builder.withErgonomicShortcuts().withPackageGrouping();
 
     @Test
     public void test() throws Exception {
@@ -39,7 +39,7 @@ public class HollowPackageErgonomicsAPIGeneratorTest extends AbstractHollowAPIGe
     }
 
     @SuppressWarnings("unused")
-    @HollowPrimaryKey(fields = { "id" })
+    @HollowPrimaryKey(fields = {"id"})
     static class Movie {
         int id;
 

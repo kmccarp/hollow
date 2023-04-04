@@ -39,12 +39,12 @@ public class HollowDiffViewProvider implements HollowObjectViewProvider {
     }
 
     private HollowDiffView getObjectView(HollowUISession session, String type, int fromOrdinal, int toOrdinal) {
-        HollowDiffView objectView = (HollowDiffView) session.getAttribute("hollow-diff-view");
+        HollowDiffView objectView = (HollowDiffView)session.getAttribute("hollow-diff-view");
 
         if(objectView != null
-                && objectView.getType().equals(type)
-                && objectView.getToOrdinal() == toOrdinal
-                && objectView.getFromOrdinal() == fromOrdinal) {
+            && objectView.getType().equals(type)
+            && objectView.getToOrdinal() == toOrdinal
+            && objectView.getFromOrdinal() == fromOrdinal) {
             return objectView;
         }
 

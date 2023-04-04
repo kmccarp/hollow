@@ -22,19 +22,19 @@ public abstract class Listeners {
     }
 
     protected <T extends EventListener> void fire(
-            Class<T> c, Consumer<? super T> r) {
+        Class<T> c, Consumer<? super T> r) {
         fireStream(getListeners(c), r);
     }
 
     protected <T extends EventListener> void fireStream(
-            Stream<T> s, Consumer<? super T> r) {
+        Stream<T> s, Consumer<? super T> r) {
         s.forEach(l -> {
             try {
                 r.accept(l);
             } catch (VetoableListener.ListenerVetoException e) {
                 throw e;
             } catch (RuntimeException e) {
-                if (l instanceof VetoableListener) {
+                if(l instanceof VetoableListener) {
                     throw e;
                 }
                 LOG.log(Level.WARNING, "Error executing listener", e);

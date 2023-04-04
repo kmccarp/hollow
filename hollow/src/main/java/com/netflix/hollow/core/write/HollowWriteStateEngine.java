@@ -64,10 +64,10 @@ public class HollowWriteStateEngine implements HollowStateEngine {
     private final Map<String, HollowTypeWriteState> writeStates;
     private final Map<String, HollowSchema> hollowSchemas;
     private final List<HollowTypeWriteState> orderedTypeStates;
-    private final Map<String,String> headerTags = new ConcurrentHashMap<>();
-    private final Map<String,String> previousHeaderTags = new ConcurrentHashMap<>();
+    private final Map<String, String> headerTags = new ConcurrentHashMap<>();
+    private final Map<String, String> previousHeaderTags = new ConcurrentHashMap<>();
     private final HollowObjectHashCodeFinder hashCodeFinder;
-    
+
     //// target a maximum shard size to reduce excess memory pool requirement 
     private long targetMaxTypeShardSize = Long.MAX_VALUE;
     //// focus filling ordinal holes in as few shards as possible to make delta application more efficient for consumers
@@ -142,12 +142,11 @@ public class HollowWriteStateEngine implements HollowStateEngine {
 
             if(writeState != null) {
                 if(writeState.getNumShards() == -1)
-                    writeState.numShards = readState.numShards();
-                else if(writeState.getNumShards() != readState.numShards())
+                    writeState.numShards = readState.numShards();else if(writeState.getNumShards() != readState.numShards())
                     throw new IllegalStateException("Attempting to restore from a HollowReadStateEngine which does not have the same number of shards as explicitly configured for type " + typeName);
             }
         }
-        
+
         restoredStates = new ArrayList<String>();
 
         SimultaneousExecutor executor = new SimultaneousExecutor(getClass(), "restore");
@@ -155,9 +154,9 @@ public class HollowWriteStateEngine implements HollowStateEngine {
         for(final HollowTypeReadState readState : readStateEngine.getTypeStates()) {
             final String typeName = readState.getSchema().getName();
             final HollowTypeWriteState writeState = writeStates.get(typeName);
-            
+
             restoredStates.add(typeName);
-            
+
             if(writeState != null) {
                 executor.execute(new Runnable() {
                     @Override
@@ -175,7 +174,7 @@ public class HollowWriteStateEngine implements HollowStateEngine {
 
         try {
             executor.awaitSuccessfulCompletion();
-        } catch(Exception e){
+        } catch (Exception e) {
             throw new HollowWriteStateException("Unable to restore write state from read state engine", e);
         }
     }
@@ -202,7 +201,7 @@ public class HollowWriteStateEngine implements HollowStateEngine {
             }
 
             executor.awaitSuccessfulCompletion();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             throw new HollowWriteStateException("Failed to prepare for write", ex);
         }
 
@@ -233,7 +232,7 @@ public class HollowWriteStateEngine implements HollowStateEngine {
             }
 
             executor.awaitSuccessfulCompletion();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             throw new HollowWriteStateException("Failed to prepare for next cycle", ex);
         }
 
@@ -259,7 +258,7 @@ public class HollowWriteStateEngine implements HollowStateEngine {
      * after the last call to {@link #prepareForNextCycle()}
      */
     public void resetToLastPrepareForNextCycle() {
-        
+
         SimultaneousExecutor executor = new SimultaneousExecutor(getClass(), "reset-to-last-prepare-for-next-cycle");
 
         for(final Map.Entry<String, HollowTypeWriteState> typeStateEntry : writeStates.entrySet()) {
@@ -272,14 +271,14 @@ public class HollowWriteStateEngine implements HollowStateEngine {
 
         try {
             executor.awaitSuccessfulCompletion();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             throw new HollowWriteStateException("Unable to reset to the prior version of the write state", ex);
         }
-        
+
         /// recreate a new randomized tag, to avoid any potential conflict with aborted versions
         nextStateRandomizedTag = mintNewRandomizedStateTag();
         preparedForNextCycle = true;
-        
+
     }
 
     /**
@@ -292,29 +291,29 @@ public class HollowWriteStateEngine implements HollowStateEngine {
         }
         return false;
     }
-    
+
     public boolean isRestored() {
         return restoredStates != null;
     }
-    
+
     void ensureAllNecessaryStatesRestored() {
         if(!isRestored())
             return;
-        
+
         List<String> unrestoredStates = new ArrayList<String>();
-        
+
         for(HollowTypeWriteState typeState : orderedTypeStates) {
             if(restoredStates.contains(typeState.getSchema().getName())) {
                 if(!typeState.isRestored())
                     unrestoredStates.add(typeState.getSchema().getName());
             }
         }
-        
+
         if(!unrestoredStates.isEmpty()) {
             throw new IllegalStateException(String.format(
-                    "Current state was restored but contains unrestored state for top-level types %s. " +
+                "Current state was restored but contains unrestored state for top-level types %s. " +
                     "Those types need to be registered with the producer (see HollowProducer.initializeDataModel)",
-                    unrestoredStates));
+                unrestoredStates));
         }
     }
 
@@ -349,9 +348,9 @@ public class HollowWriteStateEngine implements HollowStateEngine {
     @Override
     public HollowSchema getNonNullSchema(String schemaName) {
         HollowSchema schema = getSchema(schemaName);
-        if (schema == null) {
+        if(schema == null) {
             List<String> schemas = new ArrayList<>();
-            for (HollowSchema s : getSchemas()) {
+            for(HollowSchema s : getSchemas()) {
                 schemas.add(s.getName());
             }
             throw new SchemaNotFoundException(schemaName, schemas);
@@ -368,7 +367,7 @@ public class HollowWriteStateEngine implements HollowStateEngine {
         headerTags.put(name, value);
     }
 
-    public void addHeaderTags(Map<String,String> headerTags) {
+    public void addHeaderTags(Map<String, String> headerTags) {
         this.headerTags.putAll(headerTags);
     }
 
@@ -389,7 +388,7 @@ public class HollowWriteStateEngine implements HollowStateEngine {
     public long getPreviousStateRandomizedTag() {
         return previousStateRandomizedTag;
     }
-    
+
     public void overridePreviousStateRandomizedTag(long previousStateRandomizedTag) {
         this.previousStateRandomizedTag = previousStateRandomizedTag;
     }
@@ -398,15 +397,15 @@ public class HollowWriteStateEngine implements HollowStateEngine {
         this.previousHeaderTags.clear();
         this.previousHeaderTags.putAll(previousHeaderTags);
     }
-    
+
     public long getNextStateRandomizedTag() {
         return nextStateRandomizedTag;
     }
-    
+
     public void overrideNextStateRandomizedTag(long nextStateRandomizedTag) {
-    	this.nextStateRandomizedTag = nextStateRandomizedTag;
+        this.nextStateRandomizedTag = nextStateRandomizedTag;
     }
-    
+
     /**
      * Setting a target max type shard size (specified in bytes) will limit the excess memory pool required to perform delta transitions.
      * 
@@ -417,11 +416,11 @@ public class HollowWriteStateEngine implements HollowStateEngine {
     public void setTargetMaxTypeShardSize(long targetMaxTypeShardSize) {
         this.targetMaxTypeShardSize = targetMaxTypeShardSize;
     }
-    
+
     long getTargetMaxTypeShardSize() {
         return targetMaxTypeShardSize;
     }
-    
+
     /**
      * Experimental: Setting this will focus the holes returned by the FreeOrdinalTracker for each state into as few shards as possible.
      *
@@ -437,13 +436,13 @@ public class HollowWriteStateEngine implements HollowStateEngine {
 
     private long mintNewRandomizedStateTag() {
         Random rand = new Random();
-        
+
         long newTag = rand.nextLong();
         while((newTag & HollowTypeMapper.ASSIGNED_ORDINAL_CYCLE_MASK) == 0 ||
-              (newTag & HollowTypeMapper.ASSIGNED_ORDINAL_CYCLE_MASK) == HollowTypeMapper.ASSIGNED_ORDINAL_CYCLE_MASK ||
-              (newTag & HollowTypeMapper.ASSIGNED_ORDINAL_CYCLE_MASK) == (previousStateRandomizedTag & HollowTypeMapper.ASSIGNED_ORDINAL_CYCLE_MASK))
+            (newTag & HollowTypeMapper.ASSIGNED_ORDINAL_CYCLE_MASK) == HollowTypeMapper.ASSIGNED_ORDINAL_CYCLE_MASK ||
+            (newTag & HollowTypeMapper.ASSIGNED_ORDINAL_CYCLE_MASK) == (previousStateRandomizedTag & HollowTypeMapper.ASSIGNED_ORDINAL_CYCLE_MASK))
             newTag = rand.nextLong();
-        
+
         return newTag;
     }
 
@@ -455,7 +454,7 @@ public class HollowWriteStateEngine implements HollowStateEngine {
 
             // Sort to be consistent between cycle
             Set<String> sortedNames = new TreeSet<String>(typeNames);
-            for (String typeName : sortedNames) {
+            for(String typeName : sortedNames) {
                 if(counter++ != 0)
                     typeNamesBuilder.append(",");
                 typeNamesBuilder.append(typeName);

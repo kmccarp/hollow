@@ -36,7 +36,8 @@ public class BooleanDataAccessor extends AbstractHollowDataAccessor<Boolean> {
         this.api = api;
     }
 
-    @Override public Boolean getRecord(int ordinal){
+    @Override
+    public Boolean getRecord(int ordinal) {
         HBoolean val = api.getHBoolean(ordinal);
         return val == null ? null : val.getValueBoxed();
     }

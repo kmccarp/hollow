@@ -59,13 +59,13 @@ public class ObjectModificationValidatorTest {
         HollowProducer producer = getProducer(validator);
         producer.runCycle(writeState -> writeState.add(new TypeA(1, "fo", "bar")));
         verify(filter, never()).test(
-                any(GenericHollowObject.class), any(GenericHollowObject.class));
+            any(GenericHollowObject.class), any(GenericHollowObject.class));
         producer.runCycle(writeState -> {
             writeState.add(new TypeA(1, "fo", "bar"));
             writeState.add(new TypeA(2, "fo", "baz"));
         });
         verify(filter, never()).test(
-                any(GenericHollowObject.class), any(GenericHollowObject.class));
+            any(GenericHollowObject.class), any(GenericHollowObject.class));
     }
 
     @Test
@@ -80,10 +80,10 @@ public class ObjectModificationValidatorTest {
             writeState.add(new TypeA(2, "fo", "baz"));
         });
         verify(filter, never()).test(
-                any(GenericHollowObject.class), any(GenericHollowObject.class));
+            any(GenericHollowObject.class), any(GenericHollowObject.class));
         producer.runCycle(writeState -> writeState.add(new TypeA(1, "fo", "bar")));
         verify(filter, never()).test(
-                any(GenericHollowObject.class), any(GenericHollowObject.class));
+            any(GenericHollowObject.class), any(GenericHollowObject.class));
     }
 
     @Test
@@ -97,27 +97,27 @@ public class ObjectModificationValidatorTest {
             writeState.add(new TypeA(2, "fo", "baz"));
         });
         verify(filter, never()).test(
-                any(GenericHollowObject.class), any(GenericHollowObject.class));
+            any(GenericHollowObject.class), any(GenericHollowObject.class));
         producer.runCycle(writeState -> {
             writeState.add(new TypeA(1, "fo", "baz"));
             writeState.add(new TypeA(2, "fo", "baz"));
         });
         ArgumentCaptor<GenericHollowObject> beforeCaptor =
-                ArgumentCaptor.forClass(GenericHollowObject.class);
+            ArgumentCaptor.forClass(GenericHollowObject.class);
         ArgumentCaptor<GenericHollowObject> afterCaptor =
-                ArgumentCaptor.forClass(GenericHollowObject.class);
+            ArgumentCaptor.forClass(GenericHollowObject.class);
         verify(filter).test(beforeCaptor.capture(), afterCaptor.capture());
         assertEquals("Before value should be correct", "bar",
-                beforeCaptor.getValue().getObject("data").getString("value"));
+            beforeCaptor.getValue().getObject("data").getString("value"));
         assertEquals("After value should be correct", "baz",
-                afterCaptor.getValue().getObject("data").getString("value"));
+            afterCaptor.getValue().getObject("data").getString("value"));
     }
 
     @Test
     public void testValidate_validationFailure() {
         BiPredicate<GenericHollowObject, GenericHollowObject> filter =
-                (a, b) -> a.getObject("data").getString("value").length()
-                        <= b.getObject("data").getString("value").length();
+            (a, b) -> a.getObject("data").getString("value").length()
+                <= b.getObject("data").getString("value").length();
         ObjectModificationValidator<HollowAPI, GenericHollowObject> validator = createValidator(filter);
         HollowProducer producer = getProducer(validator);
         producer.runCycle(writeState -> writeState.add(new TypeA(1, "fo", "bar")));
@@ -130,9 +130,9 @@ public class ObjectModificationValidatorTest {
 
     private static HollowProducer getProducer(ObjectModificationValidator validator) {
         return HollowProducer.withPublisher(new InMemoryBlobStore())
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .withListener(validator)
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .withListener(validator)
+            .build();
     }
 
     @SuppressWarnings("unchecked")
@@ -141,9 +141,9 @@ public class ObjectModificationValidatorTest {
     }
 
     private ObjectModificationValidator<HollowAPI, GenericHollowObject> createValidator(
-            BiPredicate<GenericHollowObject, GenericHollowObject> filter) {
+        BiPredicate<GenericHollowObject, GenericHollowObject> filter) {
         return new ObjectModificationValidator<>(TypeA.class.getSimpleName(), filter,
-                HollowAPI::new, (api, ordinal) -> new GenericHollowObject(api.getDataAccess(),
+            HollowAPI::new, (api, ordinal) -> new GenericHollowObject(api.getDataAccess(),
                 TypeA.class.getSimpleName(), ordinal));
     }
 }

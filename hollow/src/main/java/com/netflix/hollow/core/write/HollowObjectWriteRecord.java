@@ -34,7 +34,7 @@ public class HollowObjectWriteRecord implements HollowWriteRecord {
         this.schema = schema;
         this.fieldData = new ByteDataArray[schema.numFields()];
         this.isNonNull = new boolean[schema.numFields()];
-        for (int i = 0; i < fieldData.length; i++) {
+        for(int i = 0;i < fieldData.length;i++) {
             fieldData[i] = new ByteDataArray(WastefulRecycler.SMALL_ARRAY_RECYCLER);
         }
     }
@@ -50,13 +50,13 @@ public class HollowObjectWriteRecord implements HollowWriteRecord {
      * @param buf the data buffer to write data to
      */
     public void writeDataTo(ByteDataArray buf) {
-        for (int i = 0; i < fieldData.length; i++) {
+        for(int i = 0;i < fieldData.length;i++) {
             writeField(buf, i);
         }
     }
 
     public void writeDataTo(ByteDataArray buf, HollowObjectSchema translate) {
-        for(int i=0; i < translate.numFields(); i++) {
+        for(int i = 0;i < translate.numFields();i++) {
             int fieldIndex = schema.getPosition(translate.getFieldName(i));
 
             if(fieldIndex != -1) {
@@ -68,8 +68,8 @@ public class HollowObjectWriteRecord implements HollowWriteRecord {
     }
 
     private void writeField(ByteDataArray buf, int fieldIndex) {
-        if (isNonNull[fieldIndex]) {
-            if (getSchema().getFieldType(fieldIndex).isVariableLength())
+        if(isNonNull[fieldIndex]) {
+            if(getSchema().getFieldType(fieldIndex).isVariableLength())
                 VarInt.writeVInt(buf, (int)fieldData[fieldIndex].length());
             fieldData[fieldIndex].copyTo(buf);
         } else {
@@ -81,7 +81,7 @@ public class HollowObjectWriteRecord implements HollowWriteRecord {
      * Reset the ByteDataBuffers for each field.
      */
     public void reset() {
-        for (int i = 0; i < fieldData.length; i++) {
+        for(int i = 0;i < fieldData.length;i++) {
             isNonNull[i] = false;
         }
     }
@@ -154,11 +154,11 @@ public class HollowObjectWriteRecord implements HollowWriteRecord {
 
         ByteDataArray buf = getFieldBuffer(fieldIndex);
 
-        buf.write(value ? (byte) 1 : (byte) 0);
+        buf.write(value ? (byte)1 : (byte)0);
     }
 
     public void setBytes(String fieldName, byte[] value) {
-        if(value == null)  return;
+        if(value == null) return;
 
         int fieldIndex = getSchema().getPosition(fieldName);
 
@@ -166,13 +166,13 @@ public class HollowObjectWriteRecord implements HollowWriteRecord {
 
         ByteDataArray buf = getFieldBuffer(fieldIndex);
 
-        for (int i = 0; i < value.length; i++) {
+        for(int i = 0;i < value.length;i++) {
             buf.write(value[i]);
         }
     }
 
     public void setString(String fieldName, String value) {
-        if(value == null)  return;
+        if(value == null) return;
 
         int fieldIndex = getSchema().getPosition(fieldName);
 
@@ -180,7 +180,7 @@ public class HollowObjectWriteRecord implements HollowWriteRecord {
 
         ByteDataArray buf = getFieldBuffer(fieldIndex);
 
-        for(int i=0;i<value.length();i++) {
+        for(int i = 0;i < value.length();i++) {
             VarInt.writeVInt(buf, value.charAt(i));
         }
     }
@@ -233,10 +233,10 @@ public class HollowObjectWriteRecord implements HollowWriteRecord {
      * Write 4 consecutive bytes
      */
     private static void writeFixedLengthInt(ByteDataArray fieldBuffer, int intBits) {
-        fieldBuffer.write((byte) (intBits >>> 24));
-        fieldBuffer.write((byte) (intBits >>> 16));
-        fieldBuffer.write((byte) (intBits >>> 8));
-        fieldBuffer.write((byte) (intBits));
+        fieldBuffer.write((byte)(intBits >>> 24));
+        fieldBuffer.write((byte)(intBits >>> 16));
+        fieldBuffer.write((byte)(intBits >>> 8));
+        fieldBuffer.write((byte)(intBits));
     }
 
     /**
@@ -250,14 +250,14 @@ public class HollowObjectWriteRecord implements HollowWriteRecord {
      * Write 8 consecutive bytes
      */
     private static void writeFixedLengthLong(ByteDataArray fieldBuffer, long intBits) {
-        fieldBuffer.write((byte) (intBits >>> 56));
-        fieldBuffer.write((byte) (intBits >>> 48));
-        fieldBuffer.write((byte) (intBits >>> 40));
-        fieldBuffer.write((byte) (intBits >>> 32));
-        fieldBuffer.write((byte) (intBits >>> 24));
-        fieldBuffer.write((byte) (intBits >>> 16));
-        fieldBuffer.write((byte) (intBits >>> 8));
-        fieldBuffer.write((byte) (intBits));
+        fieldBuffer.write((byte)(intBits >>> 56));
+        fieldBuffer.write((byte)(intBits >>> 48));
+        fieldBuffer.write((byte)(intBits >>> 40));
+        fieldBuffer.write((byte)(intBits >>> 32));
+        fieldBuffer.write((byte)(intBits >>> 24));
+        fieldBuffer.write((byte)(intBits >>> 16));
+        fieldBuffer.write((byte)(intBits >>> 8));
+        fieldBuffer.write((byte)(intBits));
     }
 
     private void validateFieldType(int fieldIndex, String fieldName, FieldType attemptedFieldType) {

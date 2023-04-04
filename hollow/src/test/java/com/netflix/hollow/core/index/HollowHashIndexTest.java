@@ -81,7 +81,7 @@ public class HollowHashIndexTest extends AbstractStateEngineTest {
 
     @Test
     public void testIndexingBytesTypeFieldWithNullValues() throws Exception {
-        byte[] bytes = {-120,0,0,0};
+        byte[] bytes = {-120, 0, 0, 0};
         mapper.add(new TypeBytes(null));
         mapper.add(new TypeBytes(bytes));
 
@@ -306,7 +306,7 @@ public class HollowHashIndexTest extends AbstractStateEngineTest {
         // an iterator doesn't update itself if it was retrieved prior to an update being applied
         assertIteratorContainsAll(preUpdateIterator, 4, 5);
     }
-    
+
     @Test
     public void testGettingPropertiesValues() throws Exception {
         mapper.add(new TypeInlinedString(null));
@@ -324,7 +324,7 @@ public class HollowHashIndexTest extends AbstractStateEngineTest {
     private void assertIteratorContainsAll(HollowOrdinalIterator iter, int... expectedOrdinals) {
         Set<Integer> ordinalSet = new HashSet<>();
         int ordinal = iter.next();
-        while (ordinal != HollowOrdinalIterator.NO_MORE_ORDINALS) {
+        while(ordinal != HollowOrdinalIterator.NO_MORE_ORDINALS) {
             ordinalSet.add(ordinal);
             ordinal = iter.next();
         }

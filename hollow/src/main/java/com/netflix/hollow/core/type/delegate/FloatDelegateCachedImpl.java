@@ -62,7 +62,7 @@ public class FloatDelegateCachedImpl extends HollowObjectAbstractDelegate implem
 
     @Override
     public void updateTypeAPI(HollowTypeAPI typeAPI) {
-        this.typeAPI = (FloatTypeAPI) typeAPI;
+        this.typeAPI = (FloatTypeAPI)typeAPI;
     }
 
 }

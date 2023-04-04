@@ -38,23 +38,23 @@ import java.util.Objects;
 public final class HashIndex<T extends HollowRecord, Q> extends HashIndexSelect<T, T, Q> {
 
     HashIndex(
-            HollowConsumer consumer,
-            Class<T> rootType,
-            Class<Q> matchedFieldsType) {
+        HollowConsumer consumer,
+        Class<T> rootType,
+        Class<Q> matchedFieldsType) {
         super(consumer,
-                rootType,
-                rootType, "",
-                matchedFieldsType);
+            rootType,
+            rootType, "",
+            matchedFieldsType);
     }
 
     HashIndex(
-            HollowConsumer consumer,
-            Class<T> rootType,
-            String fieldPath, Class<Q> matchedFieldType) {
+        HollowConsumer consumer,
+        Class<T> rootType,
+        String fieldPath, Class<Q> matchedFieldType) {
         super(consumer,
-                rootType,
-                rootType, "",
-                fieldPath, matchedFieldType);
+            rootType,
+            rootType, "",
+            fieldPath, matchedFieldType);
     }
 
     /**
@@ -113,7 +113,7 @@ public final class HashIndex<T extends HollowRecord, Q> extends HashIndexSelect<
          */
         public <Q> HashIndex<T, Q> usingPath(String queryFieldPath, Class<Q> queryFieldType) {
             Objects.requireNonNull(queryFieldPath);
-            if (queryFieldPath.isEmpty()) {
+            if(queryFieldPath.isEmpty()) {
                 throw new IllegalArgumentException("queryFieldPath argument is an empty String");
             }
             Objects.requireNonNull(queryFieldType);
@@ -130,7 +130,7 @@ public final class HashIndex<T extends HollowRecord, Q> extends HashIndexSelect<
          * @return a builder of a {@link HashIndexSelect}
          */
         public <S extends HollowRecord> BuilderWithSelect<T, S> selectField(
-                String selectFieldPath, Class<S> selectFieldType) {
+            String selectFieldPath, Class<S> selectFieldType) {
             Objects.requireNonNull(selectFieldPath);
             Objects.requireNonNull(selectFieldType);
             return new BuilderWithSelect<>(consumer, rootType, selectFieldPath, selectFieldType);

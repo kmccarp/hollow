@@ -36,7 +36,8 @@ public class DoubleDataAccessor extends AbstractHollowDataAccessor<Double> {
         this.api = api;
     }
 
-    @Override public Double getRecord(int ordinal){
+    @Override
+    public Double getRecord(int ordinal) {
         HDouble val = api.getHDouble(ordinal);
         return val == null ? null : val.getValueBoxed();
     }

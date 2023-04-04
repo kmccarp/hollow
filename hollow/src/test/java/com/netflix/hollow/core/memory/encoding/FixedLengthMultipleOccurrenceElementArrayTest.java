@@ -31,7 +31,7 @@ public class FixedLengthMultipleOccurrenceElementArrayTest {
     @Before
     public void setUp() {
         array = new FixedLengthMultipleOccurrenceElementArray(
-                WastefulRecycler.SMALL_ARRAY_RECYCLER, 10000L, 5, 4);
+            WastefulRecycler.SMALL_ARRAY_RECYCLER, 10000L, 5, 4);
     }
 
     @Test
@@ -74,7 +74,7 @@ public class FixedLengthMultipleOccurrenceElementArrayTest {
             List<Long> elements = LongStream.range(0, 31).boxed().collect(Collectors.toList());
             elements.forEach(ordinal -> array.addElement(nodeIndex, ordinal));
             assertEquals("nodeIndex " + nodeIndex + " should have correct elements", elements,
-                    array.getElements(nodeIndex));
+                array.getElements(nodeIndex));
         });
     }
 }

@@ -39,8 +39,8 @@ public class RecordCountVarianceValidatorTests {
     public void failTestTooManyAdded() {
         try {
             HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                    .withBlobStager(new HollowInMemoryBlobStager())
-                    .withListener(new RecordCountVarianceValidator("TypeWithPrimaryKey", 1f)).build();
+                .withBlobStager(new HollowInMemoryBlobStager())
+                .withListener(new RecordCountVarianceValidator("TypeWithPrimaryKey", 1f)).build();
 
             producer.runCycle(new Populator() {
                 public void populate(WriteState newState) throws Exception {
@@ -65,7 +65,7 @@ public class RecordCountVarianceValidatorTests {
             Assert.assertEquals(1, expected.getValidationStatus().getResults().size());
             //System.out.println("Message:"+expected.getIndividualFailures().get(0).getMessage());
             Assert.assertTrue(expected.getValidationStatus().getResults().get(0).getMessage()
-                    .startsWith("Record count validation for type"));
+                .startsWith("Record count validation for type"));
         }
     }
 
@@ -73,8 +73,8 @@ public class RecordCountVarianceValidatorTests {
     public void failTestTooManyRemoved() {
         try {
             HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                    .withBlobStager(new HollowInMemoryBlobStager())
-                    .withListener(new RecordCountVarianceValidator("TypeWithPrimaryKey", 1f)).build();
+                .withBlobStager(new HollowInMemoryBlobStager())
+                .withListener(new RecordCountVarianceValidator("TypeWithPrimaryKey", 1f)).build();
 
             producer.runCycle(new Populator() {
                 public void populate(WriteState newState) throws Exception {
@@ -95,14 +95,14 @@ public class RecordCountVarianceValidatorTests {
             //System.out.println("Message:"+expected.getIndividualFailures().get(0).getMessage());
             Assert.assertEquals(1, expected.getValidationStatus().getResults().size());
             Assert.assertTrue(expected.getValidationStatus().getResults().get(0).getMessage()
-                    .startsWith("Record count validation for type"));
+                .startsWith("Record count validation for type"));
         }
     }
 
     @Test
     public void passTestNoMoreChangeThanExpected() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore).withBlobStager(new HollowInMemoryBlobStager())
-                .withListener(new RecordCountVarianceValidator("TypeWithPrimaryKey", 50f)).build();
+            .withListener(new RecordCountVarianceValidator("TypeWithPrimaryKey", 50f)).build();
 
         // runCycle(producer, 1);
         producer.runCycle(new Populator() {
@@ -124,7 +124,7 @@ public class RecordCountVarianceValidatorTests {
         HollowConsumer consumer = HollowConsumer.withBlobRetriever(blobStore).build();
         consumer.triggerRefresh();
         Assert.assertEquals(3, consumer.getStateEngine().getTypeState("TypeWithPrimaryKey").getPopulatedOrdinals()
-                .cardinality());
+            .cardinality());
     }
 
     @Test

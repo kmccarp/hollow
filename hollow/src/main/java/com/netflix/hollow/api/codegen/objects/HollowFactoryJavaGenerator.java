@@ -49,7 +49,7 @@ public class HollowFactoryJavaGenerator extends HollowConsumerJavaFileGenerator 
     private final HollowSchema schema;
 
     public HollowFactoryJavaGenerator(String packageName, HollowSchema schema, HollowDataset dataset,
-            CodeGeneratorConfig config) {
+        CodeGeneratorConfig config) {
         super(packageName, SUB_PACKAGE_NAME, dataset, config);
         this.objectClassName = hollowImplClassname(schema.getName());
         this.className = hollowFactoryClassname(schema.getName());

@@ -60,21 +60,21 @@ public class HollowClientUpdater {
     private TypeFilter filter;
 
     public HollowClientUpdater(HollowConsumer.BlobRetriever transitionCreator,
-                               List<HollowConsumer.RefreshListener> refreshListeners,
-                               HollowAPIFactory apiFactory,
-                               HollowConsumer.DoubleSnapshotConfig doubleSnapshotConfig,
-                               HollowObjectHashCodeFinder hashCodeFinder,
-                               MemoryMode memoryMode,
-                               HollowConsumer.ObjectLongevityConfig objectLongevityConfig,
-                               HollowConsumer.ObjectLongevityDetector objectLongevityDetector,
-                               HollowConsumerMetrics metrics,
-                               HollowMetricsCollector<HollowConsumerMetrics> metricsCollector) {
+        List<HollowConsumer.RefreshListener> refreshListeners,
+        HollowAPIFactory apiFactory,
+        HollowConsumer.DoubleSnapshotConfig doubleSnapshotConfig,
+        HollowObjectHashCodeFinder hashCodeFinder,
+        MemoryMode memoryMode,
+        HollowConsumer.ObjectLongevityConfig objectLongevityConfig,
+        HollowConsumer.ObjectLongevityDetector objectLongevityDetector,
+        HollowConsumerMetrics metrics,
+        HollowMetricsCollector<HollowConsumerMetrics> metricsCollector) {
         this.planner = new HollowUpdatePlanner(transitionCreator, doubleSnapshotConfig);
         this.failedTransitionTracker = new FailedTransitionTracker();
         this.staleReferenceDetector = new StaleHollowReferenceDetector(objectLongevityConfig, objectLongevityDetector);
         // Create a copy of the listeners, removing any duplicates
         this.refreshListeners = new CopyOnWriteArrayList<>(
-                refreshListeners.stream().distinct().toArray(HollowConsumer.RefreshListener[]::new));
+            refreshListeners.stream().distinct().toArray(HollowConsumer.RefreshListener[]::new));
         this.apiFactory = apiFactory;
         this.hashCodeFinder = hashCodeFinder;
         this.memoryMode = memoryMode;
@@ -110,8 +110,8 @@ public class HollowClientUpdater {
      * under us.
      */
     public synchronized boolean updateTo(long requestedVersion) throws Throwable {
-        if (requestedVersion == getCurrentVersionId()) {
-            if (requestedVersion == HollowConstants.VERSION_NONE && hollowDataHolderVolatile == null) {
+        if(requestedVersion == getCurrentVersionId()) {
+            if(requestedVersion == HollowConstants.VERSION_NONE && hollowDataHolderVolatile == null) {
                 LOG.warning("No versions to update to, initializing to empty state");
                 // attempting to refresh, but no available versions - initialize to empty state
                 hollowDataHolderVolatile = newHollowDataHolder();
@@ -123,43 +123,43 @@ public class HollowClientUpdater {
         // Take a snapshot of the listeners to ensure additions or removals may occur concurrently
         // but will not take effect until a subsequent refresh
         final HollowConsumer.RefreshListener[] localListeners =
-                refreshListeners.toArray(new HollowConsumer.RefreshListener[0]);
+            refreshListeners.toArray(new HollowConsumer.RefreshListener[0]);
 
         long beforeVersion = getCurrentVersionId();
 
-        for (HollowConsumer.RefreshListener listener : localListeners)
+        for(HollowConsumer.RefreshListener listener : localListeners)
             listener.refreshStarted(beforeVersion, requestedVersion);
 
         try {
             HollowUpdatePlan updatePlan = shouldCreateSnapshotPlan()
                 ? planner.planInitializingUpdate(requestedVersion)
                 : planner.planUpdate(hollowDataHolderVolatile.getCurrentVersion(), requestedVersion,
-                        doubleSnapshotConfig.allowDoubleSnapshot());
+                doubleSnapshotConfig.allowDoubleSnapshot());
 
-            for (HollowConsumer.RefreshListener listener : localListeners)
-                if (listener instanceof HollowConsumer.TransitionAwareRefreshListener)
+            for(HollowConsumer.RefreshListener listener : localListeners)
+                if(listener instanceof HollowConsumer.TransitionAwareRefreshListener)
                     ((HollowConsumer.TransitionAwareRefreshListener)listener).transitionsPlanned(beforeVersion, requestedVersion, updatePlan.isSnapshotPlan(), updatePlan.getTransitionSequence());
 
-            if (updatePlan.destinationVersion() == HollowConstants.VERSION_NONE
-                    && requestedVersion != HollowConstants.VERSION_LATEST) {
+            if(updatePlan.destinationVersion() == HollowConstants.VERSION_NONE
+                && requestedVersion != HollowConstants.VERSION_LATEST) {
                 String msg = String.format("Could not create an update plan for version %s, because "
-                        + "that version or any qualifying previous versions could not be retrieved.", requestedVersion);
-                if (beforeVersion != HollowConstants.VERSION_NONE) {
+                    + "that version or any qualifying previous versions could not be retrieved.", requestedVersion);
+                if(beforeVersion != HollowConstants.VERSION_NONE) {
                     msg += String.format(" Consumer will remain at current version %s until next update attempt.", beforeVersion);
                 }
                 throw new IllegalArgumentException(msg);
             }
 
-            if (updatePlan.equals(HollowUpdatePlan.DO_NOTHING)
-                    && requestedVersion == HollowConstants.VERSION_LATEST)
+            if(updatePlan.equals(HollowUpdatePlan.DO_NOTHING)
+                && requestedVersion == HollowConstants.VERSION_LATEST)
                 throw new IllegalArgumentException("Could not create an update plan, because no existing versions could be retrieved.");
 
-            if (updatePlan.destinationVersion(requestedVersion) == getCurrentVersionId())
+            if(updatePlan.destinationVersion(requestedVersion) == getCurrentVersionId())
                 return true;
 
-            if (updatePlan.isSnapshotPlan()) {  // 1 snapshot and 0+ delta transitions
+            if(updatePlan.isSnapshotPlan()) {  // 1 snapshot and 0+ delta transitions
                 HollowDataHolder oldDh = hollowDataHolderVolatile;
-                if (oldDh == null || doubleSnapshotConfig.allowDoubleSnapshot()) {
+                if(oldDh == null || doubleSnapshotConfig.allowDoubleSnapshot()) {
                     HollowDataHolder newDh = newHollowDataHolder();
                     try {
                         /* We need to assign the volatile field after API init since it may be
@@ -181,7 +181,8 @@ public class HollowClientUpdater {
                     forceDoubleSnapshot = false;
                 }
             } else {    // 0 snapshot and 1+ delta transitions
-                hollowDataHolderVolatile.update(updatePlan, localListeners, () -> {});
+                hollowDataHolderVolatile.update(updatePlan, localListeners, () -> {
+                });
             }
 
             for(HollowConsumer.RefreshListener refreshListener : localListeners)
@@ -193,7 +194,7 @@ public class HollowClientUpdater {
 
             initialLoad.complete(getCurrentVersionId()); // only set the first time
             return getCurrentVersionId() == requestedVersion;
-        } catch(Throwable th) {
+        } catch (Throwable th) {
             forceDoubleSnapshotNextUpdate();
             metrics.updateRefreshFailed();
             if(metricsCollector != null)
@@ -209,9 +210,9 @@ public class HollowClientUpdater {
     }
 
     public synchronized void addRefreshListener(HollowConsumer.RefreshListener refreshListener,
-            HollowConsumer c) {
-        if (refreshListener instanceof HollowConsumer.RefreshRegistrationListener) {
-            if (!refreshListeners.contains(refreshListener)) {
+        HollowConsumer c) {
+        if(refreshListener instanceof HollowConsumer.RefreshRegistrationListener) {
+            if(!refreshListeners.contains(refreshListener)) {
                 ((HollowConsumer.RefreshRegistrationListener)refreshListener).onBeforeAddition(c);
             }
             refreshListeners.add(refreshListener);
@@ -221,9 +222,9 @@ public class HollowClientUpdater {
     }
 
     public synchronized void removeRefreshListener(HollowConsumer.RefreshListener refreshListener,
-            HollowConsumer c) {
-        if (refreshListeners.remove(refreshListener)) {
-            if (refreshListener instanceof HollowConsumer.RefreshRegistrationListener) {
+        HollowConsumer c) {
+        if(refreshListeners.remove(refreshListener)) {
+            if(refreshListener instanceof HollowConsumer.RefreshRegistrationListener) {
                 ((HollowConsumer.RefreshRegistrationListener)refreshListener).onAfterRemoval(c);
             }
         }
@@ -249,17 +250,17 @@ public class HollowClientUpdater {
 
     private HollowDataHolder newHollowDataHolder() {
         return new HollowDataHolder(newStateEngine(), apiFactory, memoryMode,
-                doubleSnapshotConfig, failedTransitionTracker,
-                staleReferenceDetector, objectLongevityConfig)
-                .setFilter(filter)
-                .setSkipTypeShardUpdateWithNoAdditions(skipTypeShardUpdateWithNoAdditions);
+            doubleSnapshotConfig, failedTransitionTracker,
+            staleReferenceDetector, objectLongevityConfig)
+            .setFilter(filter)
+            .setSkipTypeShardUpdateWithNoAdditions(skipTypeShardUpdateWithNoAdditions);
     }
 
     private HollowReadStateEngine newStateEngine() {
         HollowDataHolder hollowDataHolderLocal = hollowDataHolderVolatile;
-        if (hollowDataHolderLocal != null) {
+        if(hollowDataHolderLocal != null) {
             ArraySegmentRecycler existingRecycler =
-                    hollowDataHolderLocal.getStateEngine().getMemoryRecycler();
+                hollowDataHolderLocal.getStateEngine().getMemoryRecycler();
             return new HollowReadStateEngine(hashCodeFinder, true, existingRecycler);
         }
         return new HollowReadStateEngine(hashCodeFinder);

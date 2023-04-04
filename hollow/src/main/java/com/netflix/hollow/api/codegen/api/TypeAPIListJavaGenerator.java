@@ -40,7 +40,7 @@ public class TypeAPIListJavaGenerator extends HollowTypeAPIGenerator {
     private final HollowListSchema schema;
 
     public TypeAPIListJavaGenerator(String apiClassname, String packageName, HollowListSchema schema,
-            HollowDataset dataset, CodeGeneratorConfig config) {
+        HollowDataset dataset, CodeGeneratorConfig config) {
         super(apiClassname, packageName, schema, dataset, config);
         this.schema = schema;
     }

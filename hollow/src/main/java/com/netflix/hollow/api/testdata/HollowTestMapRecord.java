@@ -30,16 +30,16 @@ public abstract class HollowTestMapRecord<T> extends HollowTestRecord<T> {
     protected HollowTestMapRecord(T parent) {
         super(parent);
     }
-    
+
     protected void addEntry(Entry<? extends HollowTestRecord<?>> entry) {
         entries.add(entry);
     }
 
-    @SuppressWarnings({ "unchecked", "hiding" })
+    @SuppressWarnings({"unchecked", "hiding"})
     public <T> Entry<T> getEntry(int idx) {
-        return (Entry<T>) entries.get(idx);
+        return (Entry<T>)entries.get(idx);
     }
-    
+
     public HollowWriteRecord toWriteRecord(HollowWriteStateEngine writeEngine) {
         HollowMapWriteRecord rec = new HollowMapWriteRecord();
         for(Entry<?> entry : entries) {
@@ -49,30 +49,30 @@ public abstract class HollowTestMapRecord<T> extends HollowTestRecord<T> {
         }
         return rec;
     }
-    
+
     public static class Entry<T> extends HollowTestRecord<T> {
 
         private HollowTestRecord<?> key;
         private HollowTestRecord<?> value;
-        
+
         public Entry(T parent) {
             super(parent);
         }
-        
+
         protected void setKey(HollowTestRecord<?> key) {
             this.key = key;
         }
-        
+
         protected void setValue(HollowTestRecord<?> value) {
             this.value = value;
         }
-        
-        @SuppressWarnings({ "hiding", "unchecked" })
+
+        @SuppressWarnings({"hiding", "unchecked"})
         public <T extends HollowTestRecord<?>> T getKey() {
             return (T)key;
         }
 
-        @SuppressWarnings({ "hiding", "unchecked" })
+        @SuppressWarnings({"hiding", "unchecked"})
         public <T extends HollowTestRecord<?>> T getValue() {
             return (T)value;
         }
@@ -87,5 +87,5 @@ public abstract class HollowTestMapRecord<T> extends HollowTestRecord<T> {
             throw new UnsupportedOperationException();
         }
     }
-    
+
 }

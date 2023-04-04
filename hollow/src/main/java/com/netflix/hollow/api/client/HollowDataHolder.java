@@ -59,12 +59,12 @@ class HollowDataHolder {
     private long currentVersion = HollowConstants.VERSION_NONE;
 
     HollowDataHolder(HollowReadStateEngine stateEngine,
-                            HollowAPIFactory apiFactory,
-                            MemoryMode memoryMode,
-                            HollowConsumer.DoubleSnapshotConfig doubleSnapshotConfig,
-                            FailedTransitionTracker failedTransitionTracker, 
-                            StaleHollowReferenceDetector staleReferenceDetector, 
-                            HollowConsumer.ObjectLongevityConfig objLongevityConfig) {
+        HollowAPIFactory apiFactory,
+        MemoryMode memoryMode,
+        HollowConsumer.DoubleSnapshotConfig doubleSnapshotConfig,
+        FailedTransitionTracker failedTransitionTracker,
+        StaleHollowReferenceDetector staleReferenceDetector,
+        HollowConsumer.ObjectLongevityConfig objLongevityConfig) {
         this.stateEngine = stateEngine;
         this.apiFactory = apiFactory;
         this.memoryMode = memoryMode;
@@ -106,7 +106,7 @@ class HollowDataHolder {
     }
 
     void update(HollowUpdatePlan updatePlan, HollowConsumer.RefreshListener[] refreshListeners,
-            Runnable apiInitCallback) throws Throwable {
+        Runnable apiInitCallback) throws Throwable {
         // Only fail if double snapshot is configured.
         // This is a short term solution until it is decided to either remove this feature
         // or refine it.
@@ -118,11 +118,11 @@ class HollowDataHolder {
         // such as when a new delta is published.
         // Note that a refresh listener may also induce a failed transition, likely unknowingly,
         // by throwing an exception.
-        if (doubleSnapshotConfig.allowDoubleSnapshot() && failedTransitionTracker.anyTransitionWasFailed(updatePlan)) {
+        if(doubleSnapshotConfig.allowDoubleSnapshot() && failedTransitionTracker.anyTransitionWasFailed(updatePlan)) {
             throw new RuntimeException("Update plan contains known failing transition!");
         }
 
-        if (updatePlan.isSnapshotPlan()) {
+        if(updatePlan.isSnapshotPlan()) {
             applySnapshotPlan(updatePlan, refreshListeners, apiInitCallback);
         } else {
             applyDeltaOnlyPlan(updatePlan, refreshListeners);
@@ -130,10 +130,10 @@ class HollowDataHolder {
     }
 
     private void applySnapshotPlan(HollowUpdatePlan updatePlan,
-            HollowConsumer.RefreshListener[] refreshListeners,
-            Runnable apiInitCallback) throws Throwable {
+        HollowConsumer.RefreshListener[] refreshListeners,
+        Runnable apiInitCallback) throws Throwable {
         applySnapshotTransition(updatePlan.getSnapshotTransition(), refreshListeners, apiInitCallback);
-            
+
         for(HollowConsumer.Blob blob : updatePlan.getDeltaTransitions()) {
             applyDeltaTransition(blob, true, refreshListeners);
         }
@@ -141,22 +141,22 @@ class HollowDataHolder {
         try {
             for(HollowConsumer.RefreshListener refreshListener : refreshListeners)
                 refreshListener.snapshotUpdateOccurred(currentAPI, stateEngine, updatePlan.destinationVersion());
-        } catch(Throwable t) {
+        } catch (Throwable t) {
             failedTransitionTracker.markAllTransitionsAsFailed(updatePlan);
             throw t;
         }
     }
 
     private void applySnapshotTransition(HollowConsumer.Blob snapshotBlob,
-            HollowConsumer.RefreshListener[] refreshListeners,
-            Runnable apiInitCallback) throws Throwable {
+        HollowConsumer.RefreshListener[] refreshListeners,
+        Runnable apiInitCallback) throws Throwable {
         try (HollowBlobInput in = HollowBlobInput.modeBasedSelector(memoryMode, snapshotBlob);
              OptionalBlobPartInput optionalPartIn = snapshotBlob.getOptionalBlobPartInputs()) {
             applyStateEngineTransition(in, optionalPartIn, snapshotBlob, refreshListeners);
             initializeAPI(apiInitCallback);
 
-            for (HollowConsumer.RefreshListener refreshListener : refreshListeners) {
-                if (refreshListener instanceof TransitionAwareRefreshListener)
+            for(HollowConsumer.RefreshListener refreshListener : refreshListeners) {
+                if(refreshListener instanceof TransitionAwareRefreshListener)
                     ((TransitionAwareRefreshListener)refreshListener).snapshotApplied(currentAPI, stateEngine, snapshotBlob.getToVersion());
             }
         } catch (Throwable t) {
@@ -169,8 +169,7 @@ class HollowDataHolder {
         if(transition.isSnapshot()) {
             if(filter == null) {
                 reader.readSnapshot(in, optionalPartIn);
-            }
-            else {
+            }else {
                 reader.readSnapshot(in, optionalPartIn, filter);
             }
         } else {
@@ -184,7 +183,7 @@ class HollowDataHolder {
     }
 
     private void initializeAPI(Runnable r) {
-        if (objLongevityConfig.enableLongLivedObjectSupport()) {
+        if(objLongevityConfig.enableLongLivedObjectSupport()) {
             HollowProxyDataAccess dataAccess = new HollowProxyDataAccess();
             dataAccess.setDataAccess(stateEngine);
             currentAPI = apiFactory.createAPI(dataAccess);
@@ -206,7 +205,7 @@ class HollowDataHolder {
     }
 
     private void applyDeltaTransition(HollowConsumer.Blob blob, boolean isSnapshotPlan, HollowConsumer.RefreshListener[] refreshListeners) throws Throwable {
-        if (!memoryMode.equals(MemoryMode.ON_HEAP)) {
+        if(!memoryMode.equals(MemoryMode.ON_HEAP)) {
             LOG.warning("Skipping delta transition in shared-memory mode");
             return;
         }
@@ -239,11 +238,11 @@ class HollowDataHolder {
             for(HollowConsumer.RefreshListener refreshListener : refreshListeners) {
                 if(!isSnapshotPlan)
                     refreshListener.deltaUpdateOccurred(currentAPI, stateEngine, blob.getToVersion());
-                if (refreshListener instanceof TransitionAwareRefreshListener)
+                if(refreshListener instanceof TransitionAwareRefreshListener)
                     ((TransitionAwareRefreshListener)refreshListener).deltaApplied(currentAPI, stateEngine, blob.getToVersion());
             }
 
-        } catch(Throwable t) {
+        } catch (Throwable t) {
             failedTransitionTracker.markFailedTransition(blob);
             throw t;
         }

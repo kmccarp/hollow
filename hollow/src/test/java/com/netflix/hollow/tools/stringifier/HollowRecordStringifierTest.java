@@ -40,74 +40,74 @@ public class HollowRecordStringifierTest extends AbstractHollowRecordStringifier
     public void testStringifyTypeWithString() throws IOException {
         String msg = "String types should be printed correctly";
         Assert.assertEquals(msg, "foo",
-                stringifyType(TypeWithString.class, false, new TypeWithString("foo")));
+            stringifyType(TypeWithString.class, false, new TypeWithString("foo")));
         Assert.assertEquals(msg, "(TypeWithString) (ordinal 0)" + NEWLINE
-                + INDENT + "value: (String) (ordinal 0)" + NEWLINE
-                + INDENT + INDENT + "value: foo",
-                stringifyType(TypeWithString.class, true, new TypeWithString("foo")));
+            + INDENT + "value: (String) (ordinal 0)" + NEWLINE
+            + INDENT + INDENT + "value: foo",
+            stringifyType(TypeWithString.class, true, new TypeWithString("foo")));
     }
 
     @Test
     public void testStringifyTypeWithPrimitive() throws IOException {
         String msg = "Primitive types should be printed correctly";
         Assert.assertEquals(msg, "1337",
-                stringifyType(TypeWithPrimitive.class, false, new TypeWithPrimitive(1337)));
+            stringifyType(TypeWithPrimitive.class, false, new TypeWithPrimitive(1337)));
         Assert.assertEquals(msg,
-                "(TypeWithPrimitive) (ordinal 0)" + NEWLINE + INDENT + "value: 1337",
-                stringifyType(TypeWithPrimitive.class, true, new TypeWithPrimitive(1337)));
+            "(TypeWithPrimitive) (ordinal 0)" + NEWLINE + INDENT + "value: 1337",
+            stringifyType(TypeWithPrimitive.class, true, new TypeWithPrimitive(1337)));
     }
 
     @Test
     public void testStringifyTypeWithNonPrimitive() throws IOException {
         String msg = "Non-primitive types should be printed correctly";
         Assert.assertEquals(msg, "31337",
-                stringifyType(TypeWithNonPrimitive.class, false, new TypeWithNonPrimitive(31337)));
+            stringifyType(TypeWithNonPrimitive.class, false, new TypeWithNonPrimitive(31337)));
         Assert.assertEquals(msg, "(TypeWithNonPrimitive) (ordinal 0)" + NEWLINE
-                + INDENT + "value: (Integer) (ordinal 0)" + NEWLINE
-                + INDENT + INDENT + "value: 31337",
-                stringifyType(TypeWithNonPrimitive.class, true, new TypeWithNonPrimitive(31337)));
+            + INDENT + "value: (Integer) (ordinal 0)" + NEWLINE
+            + INDENT + INDENT + "value: 31337",
+            stringifyType(TypeWithNonPrimitive.class, true, new TypeWithNonPrimitive(31337)));
     }
 
     @Test
     public void testStringifyTypeWithNestedPrimitiveType() throws IOException {
         String msg = "Types with nested primitives should be printed correctly";
         Assert.assertEquals(msg, NEWLINE + INDENT + "value: 42.0" + NEWLINE
-                + INDENT + "nestedType: 42",
-                stringifyType(TypeWithNestedPrimitive.class, false,
-                    new TypeWithNestedPrimitive(42.0, new TypeWithPrimitive(42))));
+            + INDENT + "nestedType: 42",
+            stringifyType(TypeWithNestedPrimitive.class, false,
+                new TypeWithNestedPrimitive(42.0, new TypeWithPrimitive(42))));
         Assert.assertEquals(msg, "(TypeWithNestedPrimitive) (ordinal 0)" + NEWLINE
-                + INDENT + "value: (Double) (ordinal 0)" + NEWLINE
-                + INDENT + INDENT + "value: 42.0" + NEWLINE
-                + INDENT + "nestedType: (TypeWithPrimitive) (ordinal 0)" + NEWLINE
-                + INDENT + INDENT + "value: 42",
-                stringifyType(TypeWithNestedPrimitive.class, true,
-                    new TypeWithNestedPrimitive(42.0, new TypeWithPrimitive(42))));
+            + INDENT + "value: (Double) (ordinal 0)" + NEWLINE
+            + INDENT + INDENT + "value: 42.0" + NEWLINE
+            + INDENT + "nestedType: (TypeWithPrimitive) (ordinal 0)" + NEWLINE
+            + INDENT + INDENT + "value: 42",
+            stringifyType(TypeWithNestedPrimitive.class, true,
+                new TypeWithNestedPrimitive(42.0, new TypeWithPrimitive(42))));
     }
 
     @Test
     public void testStringifyTypeWithNestedNonPrimitiveType() throws IOException {
         String msg = "Types with nested non-primitives should be printed correctly";
         Assert.assertEquals(msg, NEWLINE + INDENT + "value: 42.0" + NEWLINE
-                + INDENT + "nestedType: 42",
-                stringifyType(TypeWithNestedNonPrimitive.class, false,
-                    new TypeWithNestedNonPrimitive(42.0, new TypeWithNonPrimitive(42))));
+            + INDENT + "nestedType: 42",
+            stringifyType(TypeWithNestedNonPrimitive.class, false,
+                new TypeWithNestedNonPrimitive(42.0, new TypeWithNonPrimitive(42))));
         Assert.assertEquals(msg, "(TypeWithNestedNonPrimitive) (ordinal 0)" + NEWLINE
-                + INDENT + "value: (Double) (ordinal 0)" + NEWLINE
-                + INDENT + INDENT
-                + "value: 42.0"
-                + NEWLINE + INDENT + "nestedType: (TypeWithNonPrimitive) (ordinal 0)" + NEWLINE
-                + INDENT + INDENT + "value: (Integer) (ordinal 0)" + NEWLINE
-                + INDENT + INDENT + INDENT + "value: 42",
-                stringifyType(TypeWithNestedNonPrimitive.class, true,
-                    new TypeWithNestedNonPrimitive(42.0, new TypeWithNonPrimitive(42))));
+            + INDENT + "value: (Double) (ordinal 0)" + NEWLINE
+            + INDENT + INDENT
+            + "value: 42.0"
+            + NEWLINE + INDENT + "nestedType: (TypeWithNonPrimitive) (ordinal 0)" + NEWLINE
+            + INDENT + INDENT + "value: (Integer) (ordinal 0)" + NEWLINE
+            + INDENT + INDENT + INDENT + "value: 42",
+            stringifyType(TypeWithNestedNonPrimitive.class, true,
+                new TypeWithNestedNonPrimitive(42.0, new TypeWithNonPrimitive(42))));
     }
 
     @Test
     public void testStringifyMultipleRecords() throws IOException {
         Assert.assertEquals("Multiple records should be printed correctly",
-                "foo" + NEWLINE + "bar",
-                stringifyType(TypeWithString.class, false,
-                    new TypeWithString("foo"), new TypeWithString("bar")));
+            "foo" + NEWLINE + "bar",
+            stringifyType(TypeWithString.class, false,
+                new TypeWithString("foo"), new TypeWithString("bar")));
     }
 
     @Test
@@ -122,17 +122,17 @@ public class HollowRecordStringifierTest extends AbstractHollowRecordStringifier
 
         HollowReadStateEngine readEngine = StateEngineRoundTripper.roundTripSnapshot(writeEngine);
 
-        Iterable<HollowRecord> genericHollowObjects = (Iterable) Arrays.asList(new GenericHollowObject(readEngine, "TestTypeA", 0), new GenericHollowObject(readEngine, "TestTypeA", 1));
+        Iterable<HollowRecord> genericHollowObjects = (Iterable)Arrays.asList(new GenericHollowObject(readEngine, "TestTypeA", 0), new GenericHollowObject(readEngine, "TestTypeA", 1));
 
         StringWriter writer = new StringWriter();
         recordStringifier.stringify(writer, genericHollowObjects);
         Assert.assertEquals("Multiple records should be printed correctly",
-                "[\n" +
-                        "  id: 1\n" +
-                        "  name: one,\n" +
-                        "  id: 2\n" +
-                        "  name: two" +
-                        "\n]", writer.toString());
+            "[\n" +
+                "  id: 1\n" +
+                "  name: one,\n" +
+                "  id: 2\n" +
+                "  name: two" +
+                "\n]", writer.toString());
     }
 
     private static <T> String stringifyType(Class<T> clazz, boolean expanded, T... instances) throws IOException {

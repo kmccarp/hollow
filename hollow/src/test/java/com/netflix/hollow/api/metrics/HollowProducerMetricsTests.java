@@ -40,8 +40,8 @@ public class HollowProducerMetricsTests {
     @Test
     public void metricsWhenPublishingSnapshot() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
         producer.runCycle(new HollowProducer.Populator() {
             public void populate(HollowProducer.WriteState state) throws Exception {
@@ -59,8 +59,8 @@ public class HollowProducerMetricsTests {
     @Test
     public void metricsWhenPublishingFails() {
         HollowProducer producer = HollowProducer.withPublisher(blobStore)
-                .withBlobStager(new HollowInMemoryBlobStager())
-                .build();
+            .withBlobStager(new HollowInMemoryBlobStager())
+            .build();
 
 
         try {
@@ -69,7 +69,8 @@ public class HollowProducerMetricsTests {
                     state.add(null);
                 }
             });
-        } catch (Exception ignored){ }
+        } catch (Exception ignored) {
+        }
 
         HollowProducerMetrics hollowProducerMetrics = producer.getMetrics();
         Assert.assertEquals(hollowProducerMetrics.getCyclesSucceeded(), 0);

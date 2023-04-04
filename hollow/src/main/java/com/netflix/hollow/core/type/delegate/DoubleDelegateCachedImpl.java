@@ -62,7 +62,7 @@ public class DoubleDelegateCachedImpl extends HollowObjectAbstractDelegate imple
 
     @Override
     public void updateTypeAPI(HollowTypeAPI typeAPI) {
-        this.typeAPI = (DoubleTypeAPI) typeAPI;
+        this.typeAPI = (DoubleTypeAPI)typeAPI;
     }
 
 }

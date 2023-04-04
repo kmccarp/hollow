@@ -36,7 +36,8 @@ public class FloatDataAccessor extends AbstractHollowDataAccessor<Float> {
         this.api = api;
     }
 
-    @Override public Float getRecord(int ordinal){
+    @Override
+    public Float getRecord(int ordinal) {
         HFloat val = api.getHFloat(ordinal);
         return val == null ? null : val.getValueBoxed();
     }

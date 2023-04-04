@@ -11,14 +11,15 @@ import org.junit.Test;
 public class HollowWriteStateEngineTest {
 
     private static final String TEST_TAG = "test";
+
     @Test
     public void testHeaderTagsOnDeltaAndReverseDelta() {
         InMemoryBlobStore blobStore = new InMemoryBlobStore();
         HollowInMemoryBlobStager blobStager = new HollowInMemoryBlobStager();
         HollowProducer p = HollowProducer
-                .withPublisher(blobStore)
-                .withBlobStager(blobStager)
-                .build();
+            .withPublisher(blobStore)
+            .withBlobStager(blobStager)
+            .build();
         p.initializeDataModel(String.class);
 
         long version1 = p.runCycle(ws -> {
@@ -28,7 +29,7 @@ public class HollowWriteStateEngineTest {
         });
 
         HollowConsumer consumer = HollowConsumer.withBlobRetriever(blobStore)
-                .build();
+            .build();
         consumer.triggerRefreshTo(version1);    // snapshot load
 
         long version2 = p.runCycle(ws -> {
@@ -44,9 +45,9 @@ public class HollowWriteStateEngineTest {
 
         // now test the RESTORE case
         HollowProducer p2 = HollowProducer
-                .withPublisher(blobStore)
-                .withBlobStager(blobStager)
-                .build();
+            .withPublisher(blobStore)
+            .withBlobStager(blobStager)
+            .build();
         p2.initializeDataModel(String.class);
         p2.restore(version2, blobStore);
 

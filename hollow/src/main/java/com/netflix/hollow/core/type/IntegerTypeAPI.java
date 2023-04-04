@@ -26,7 +26,7 @@ public class IntegerTypeAPI extends HollowObjectTypeAPI {
     private final IntegerDelegateLookupImpl delegateLookupImpl;
 
     public IntegerTypeAPI(HollowAPI api, HollowObjectTypeDataAccess typeDataAccess) {
-        super(api, typeDataAccess, new String[] {
+        super(api, typeDataAccess, new String[]{
             "value"
         });
         this.delegateLookupImpl = new IntegerDelegateLookupImpl(this);

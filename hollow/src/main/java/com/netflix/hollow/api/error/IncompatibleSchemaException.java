@@ -26,9 +26,9 @@ public class IncompatibleSchemaException extends HollowException {
     private final String otherType;
 
     public IncompatibleSchemaException(String typeName, String fieldName, String fieldType,
-            String otherType) {
+        String otherType) {
         super("No common schema exists for " + typeName + ": field " + fieldName
-                + " has unmatched types: " + fieldType + " vs " + otherType);
+            + " has unmatched types: " + fieldType + " vs " + otherType);
         this.typeName = typeName;
         this.fieldName = fieldName;
         this.fieldType = fieldType;

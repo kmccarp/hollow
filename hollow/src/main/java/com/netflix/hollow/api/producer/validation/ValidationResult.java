@@ -32,17 +32,17 @@ public final class ValidationResult {
     private final Map<String, String> details;
 
     ValidationResult(
-            ValidationResultType type,
-            String name,
-            Throwable ex,
-            String message,
-            Map<String, String> details) {
-        if (type == ValidationResultType.ERROR && ex == null) {
+        ValidationResultType type,
+        String name,
+        Throwable ex,
+        String message,
+        Map<String, String> details) {
+        if(type == ValidationResultType.ERROR && ex == null) {
             throw new IllegalArgumentException();
         }
         // @@@ For the moment allow a throwable to be associated with FAILED state
         // This is for compatibility with HollowProducer.Validator.ValidationException
-        if (type == ValidationResultType.PASSED && ex != null) {
+        if(type == ValidationResultType.PASSED && ex != null) {
             throw new IllegalArgumentException();
         }
 
@@ -114,18 +114,18 @@ public final class ValidationResult {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("ValidationResult[")
-                .append("name=\"").append(name).append("\" ")
-                .append("result=").append(type).append(" ");
+            .append("name=\"").append(name).append("\" ")
+            .append("result=").append(type).append(" ");
 
-        if (message == null) {
+        if(message == null) {
             sb.append("message=null ");
         } else {
             sb.append("message=\"").append(message).append("\" ");
         }
 
         sb.append("details=").append(details).append(" ")
-                .append("throwable=").append(ex).append(" ")
-                .append("]");
+            .append("throwable=").append(ex).append(" ")
+            .append("]");
 
         return sb.toString();
     }
@@ -192,11 +192,11 @@ public final class ValidationResult {
          */
         public ValidationResult passed() {
             return new ValidationResult(
-                    ValidationResultType.PASSED,
-                    name,
-                    null,
-                    null,
-                    details
+                ValidationResultType.PASSED,
+                name,
+                null,
+                null,
+                details
             );
         }
 
@@ -208,11 +208,11 @@ public final class ValidationResult {
          */
         public ValidationResult passed(String message) {
             return build(
-                    ValidationResultType.PASSED,
-                    name,
-                    null,
-                    message,
-                    details
+                ValidationResultType.PASSED,
+                name,
+                null,
+                message,
+                details
             );
         }
 
@@ -225,11 +225,11 @@ public final class ValidationResult {
          */
         public ValidationResult failed(String message) {
             return build(
-                    ValidationResultType.FAILED,
-                    name,
-                    null,
-                    message,
-                    details
+                ValidationResultType.FAILED,
+                name,
+                null,
+                message,
+                details
             );
         }
 
@@ -245,20 +245,20 @@ public final class ValidationResult {
         // however for testing purposes of status listeners it's useful.
         public ValidationResult error(Throwable t) {
             return build(
-                    ValidationResultType.ERROR,
-                    name,
-                    t,
-                    t.getMessage(),
-                    details
+                ValidationResultType.ERROR,
+                name,
+                t,
+                t.getMessage(),
+                details
             );
         }
 
         private ValidationResult build(
-                ValidationResultType type,
-                String name,
-                Throwable ex,
-                String message,
-                Map<String, String> details) {
+            ValidationResultType type,
+            String name,
+            Throwable ex,
+            String message,
+            Map<String, String> details) {
             reset();
             return new ValidationResult(type, name, ex, message, details);
         }

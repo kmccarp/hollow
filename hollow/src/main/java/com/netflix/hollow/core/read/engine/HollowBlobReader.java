@@ -109,7 +109,7 @@ public class HollowBlobReader {
     @Deprecated
     public void readSnapshot(InputStream is, HollowFilterConfig filter) throws IOException {
         HollowBlobInput hbi = HollowBlobInput.serial(is);
-        readSnapshot(hbi, (TypeFilter) filter);
+        readSnapshot(hbi, (TypeFilter)filter);
     }
 
     /**
@@ -162,7 +162,7 @@ public class HollowBlobReader {
         int numStates = VarInt.readVInt(in);
 
         Collection<String> typeNames = new TreeSet<>();
-        for(int i=0;i<numStates;i++) {
+        for(int i = 0;i < numStates;i++) {
             String typeName = readTypeStateSnapshot(in, filter);
             typeNames.add(typeName);
         }
@@ -171,7 +171,7 @@ public class HollowBlobReader {
             for(Map.Entry<String, HollowBlobInput> optionalPartEntry : optionalPartInputs.entrySet()) {
                 numStates = VarInt.readVInt(optionalPartEntry.getValue());
 
-                for(int i=0;i<numStates;i++) {
+                for(int i = 0;i < numStates;i++) {
                     String typeName = readTypeStateSnapshot(optionalPartEntry.getValue(), filter);
                     typeNames.add(typeName);
                 }
@@ -232,7 +232,7 @@ public class HollowBlobReader {
         int numStates = VarInt.readVInt(in);
 
         Collection<String> typeNames = new TreeSet<String>();
-        for(int i=0;i<numStates;i++) {
+        for(int i = 0;i < numStates;i++) {
             String typeName = readTypeStateDelta(in);
             typeNames.add(typeName);
             stateEngine.getMemoryRecycler().swap();
@@ -242,7 +242,7 @@ public class HollowBlobReader {
             for(Map.Entry<String, HollowBlobInput> optionalPartEntry : optionalPartInputs.entrySet()) {
                 numStates = VarInt.readVInt(optionalPartEntry.getValue());
 
-                for(int i=0;i<numStates;i++) {
+                for(int i = 0;i < numStates;i++) {
                     String typeName = readTypeStateDelta(optionalPartEntry.getValue());
                     typeNames.add(typeName);
                     stateEngine.getMemoryRecycler().swap();
@@ -279,7 +279,7 @@ public class HollowBlobReader {
             if(!partHeader.getPartName().equals(entry.getKey()))
                 throw new IllegalArgumentException("Optional blob part expected name " + entry.getKey() + " but was " + partHeader.getPartName());
             if(partHeader.getOriginRandomizedTag() != header.getOriginRandomizedTag()
-                    || partHeader.getDestinationRandomizedTag() != header.getDestinationRandomizedTag())
+                || partHeader.getDestinationRandomizedTag() != header.getDestinationRandomizedTag())
                 throw new IllegalArgumentException("Optional blob part " + entry.getKey() + " does not appear to be matched with the main input");
 
             list.add(partHeader);
@@ -302,7 +302,7 @@ public class HollowBlobReader {
     }
 
     private void notifyBeginUpdate() {
-        for(HollowTypeReadState typeFile: stateEngine.getTypeStates()) {
+        for(HollowTypeReadState typeFile : stateEngine.getTypeStates()) {
             for(HollowTypeStateListener listener : typeFile.getListeners()) {
                 listener.beginUpdate();
             }
@@ -332,7 +332,7 @@ public class HollowBlobReader {
                 HollowObjectSchema filteredSchema = unfilteredSchema.filterSchema(filter);
                 populateTypeStateSnapshot(in, new HollowObjectTypeReadState(stateEngine, memoryMode, filteredSchema, unfilteredSchema, numShards));
             }
-        } else if (schema instanceof HollowListSchema) {
+        } else if(schema instanceof HollowListSchema) {
             if(!filter.includes(typeName)) {
                 HollowListTypeReadState.discardSnapshot(in, numShards);
             } else {
@@ -385,11 +385,11 @@ public class HollowBlobReader {
 
         return VarInt.readVInt(in);
     }
-        
+
     private void skipForwardsCompatibilityBytes(HollowBlobInput in) throws IOException {
         int bytesToSkip = VarInt.readVInt(in);
         while(bytesToSkip > 0) {
-            int skippedBytes = (int) in.skipBytes(bytesToSkip);
+            int skippedBytes = (int)in.skipBytes(bytesToSkip);
             if(skippedBytes < 0)
                 throw new EOFException();
             bytesToSkip -= skippedBytes;
@@ -399,19 +399,16 @@ public class HollowBlobReader {
 
     private void discardDelta(HollowBlobInput in, HollowSchema schema, int numShards) throws IOException {
         if(schema instanceof HollowObjectSchema)
-            HollowObjectTypeReadState.discardDelta(in, (HollowObjectSchema)schema, numShards);
-        else if(schema instanceof HollowListSchema)
-            HollowListTypeReadState.discardDelta(in, numShards);
-        else if(schema instanceof HollowSetSchema)
-            HollowSetTypeReadState.discardDelta(in, numShards);
-        else if(schema instanceof HollowMapSchema)
+            HollowObjectTypeReadState.discardDelta(in, (HollowObjectSchema)schema, numShards);else if(schema instanceof HollowListSchema)
+            HollowListTypeReadState.discardDelta(in, numShards);else if(schema instanceof HollowSetSchema)
+            HollowSetTypeReadState.discardDelta(in, numShards);else if(schema instanceof HollowMapSchema)
             HollowMapTypeReadState.discardDelta(in, numShards);
     }
 
     private void validateMemoryMode(MemoryMode inputMode) {
-        if (!memoryMode.equals(inputMode)) {
+        if(!memoryMode.equals(inputMode)) {
             throw new IllegalStateException(String.format("HollowBlobReader is configured for memory mode %s but " +
-                    "HollowBlobInput of mode %s was provided", memoryMode, inputMode));
+                "HollowBlobInput of mode %s was provided", memoryMode, inputMode));
         }
     }
 }

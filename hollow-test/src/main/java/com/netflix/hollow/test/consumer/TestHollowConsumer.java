@@ -74,19 +74,19 @@ public class TestHollowConsumer extends HollowConsumer {
     @Internal
     @Deprecated
     protected TestHollowConsumer(BlobRetriever blobRetriever,
-            AnnouncementWatcher announcementWatcher,
-            List<RefreshListener> refreshListeners,
-            HollowAPIFactory apiFactory,
-            HollowFilterConfig dataFilter,
-            ObjectLongevityConfig objectLongevityConfig,
-            ObjectLongevityDetector objectLongevityDetector,
-            DoubleSnapshotConfig doubleSnapshotConfig,
-            HollowObjectHashCodeFinder hashCodeFinder,
-            Executor refreshExecutor,
-            HollowMetricsCollector<HollowConsumerMetrics> metricsCollector) {
+        AnnouncementWatcher announcementWatcher,
+        List<RefreshListener> refreshListeners,
+        HollowAPIFactory apiFactory,
+        HollowFilterConfig dataFilter,
+        ObjectLongevityConfig objectLongevityConfig,
+        ObjectLongevityDetector objectLongevityDetector,
+        DoubleSnapshotConfig doubleSnapshotConfig,
+        HollowObjectHashCodeFinder hashCodeFinder,
+        Executor refreshExecutor,
+        HollowMetricsCollector<HollowConsumerMetrics> metricsCollector) {
         super(blobRetriever, announcementWatcher, refreshListeners, apiFactory, dataFilter, objectLongevityConfig,
-                objectLongevityDetector, doubleSnapshotConfig, hashCodeFinder, refreshExecutor, MemoryMode.ON_HEAP,
-                metricsCollector);
+            objectLongevityDetector, doubleSnapshotConfig, hashCodeFinder, refreshExecutor, MemoryMode.ON_HEAP,
+            metricsCollector);
         this.blobRetriever = blobRetriever;
     }
 
@@ -114,21 +114,21 @@ public class TestHollowConsumer extends HollowConsumer {
 
     public TestHollowConsumer addSnapshot(long version, HollowWriteStateEngine state) throws IOException {
         // if consumer has state then restore it
-        if (getStateEngine() != null) {
+        if(getStateEngine() != null) {
             HollowWriteStateEngine snapshotState = HollowWriteStateCreator.createWithSchemas(getStateEngine().getSchemas());
             snapshotState.restoreFrom(getStateEngine());
 
             HollowCombiner combiner = new HollowCombiner(HollowCombinerCopyDirector.DEFAULT_DIRECTOR,
-                    snapshotState,      // output
-                    roundTrip(state));  // input
+                snapshotState,      // output
+                roundTrip(state));  // input
             combiner.combine();
         }
 
-        if (blobRetriever instanceof TestBlobRetriever) {
+        if(blobRetriever instanceof TestBlobRetriever) {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             new HollowBlobWriter(state).writeSnapshot(outputStream);
-            ((TestBlobRetriever) blobRetriever).addSnapshot(version, new TestBlob(version,
-                    new ByteArrayInputStream(outputStream.toByteArray())));
+            ((TestBlobRetriever)blobRetriever).addSnapshot(version, new TestBlob(version,
+                new ByteArrayInputStream(outputStream.toByteArray())));
         } else {
             throw new IllegalStateException("Cannot add snapshot if not using TestBlobRetriever");
         }
@@ -136,9 +136,9 @@ public class TestHollowConsumer extends HollowConsumer {
     }
 
     public TestHollowConsumer addDelta(long fromVersion, long toVersion, HollowWriteStateEngine state)
-            throws IOException {
+        throws IOException {
 
-        if (getStateEngine() == null) {
+        if(getStateEngine() == null) {
             throw new UnsupportedOperationException("Delta can not be applied without first applying a snapshot");
         }
 
@@ -148,16 +148,16 @@ public class TestHollowConsumer extends HollowConsumer {
 
         // add all records from passed in {@code state} to delta write state
         HollowCombiner combiner = new HollowCombiner(HollowCombinerCopyDirector.DEFAULT_DIRECTOR,
-                deltaState,          // output
-                roundTrip(state));   // input
+            deltaState,          // output
+            roundTrip(state));   // input
         combiner.combine();
 
         // apply delta write state to consumer
-        if (blobRetriever instanceof TestBlobRetriever) {
+        if(blobRetriever instanceof TestBlobRetriever) {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             new HollowBlobWriter(deltaState).writeDelta(outputStream);
-            ((TestBlobRetriever) blobRetriever).addDelta(fromVersion, new TestBlob(fromVersion, toVersion,
-                    new ByteArrayInputStream(outputStream.toByteArray())));
+            ((TestBlobRetriever)blobRetriever).addDelta(fromVersion, new TestBlob(fromVersion, toVersion,
+                new ByteArrayInputStream(outputStream.toByteArray())));
         } else {
             throw new IllegalStateException("Cannot add delta if not using TestBlobRetriever");
         }

@@ -60,7 +60,7 @@ public class HollowObjectDeltaHistoricalStateCreator {
 
         historicalDataElements.fixedLengthData = new FixedLengthElementArray(historicalDataElements.memoryRecycler, (long)historicalDataElements.bitsPerRecord * (historicalDataElements.maxOrdinal + 1));
 
-        for(int i=0;i<historicalDataElements.schema.numFields();i++) {
+        for(int i = 0;i < historicalDataElements.schema.numFields();i++) {
             if(stateEngineDataElements[0].varLengthData[i] != null) {
                 historicalDataElements.varLengthData[i] = new SegmentedByteArray(historicalDataElements.memoryRecycler);
             }
@@ -107,7 +107,7 @@ public class HollowObjectDeltaHistoricalStateCreator {
         while(ordinal != ORDINAL_NONE) {
             removedEntryCount++;
 
-            for(int i=0;i<totalVarLengthSizes.length;i++) {
+            for(int i = 0;i < totalVarLengthSizes.length;i++) {
                 if(stateEngineDataElements[0].varLengthData[i] != null) {
                     totalVarLengthSizes[i] += varLengthSize(ordinal, i);
                 }
@@ -118,7 +118,7 @@ public class HollowObjectDeltaHistoricalStateCreator {
 
         historicalDataElements.maxOrdinal = removedEntryCount - 1;
 
-        for(int i=0;i<stateEngineDataElements[0].bitsPerField.length;i++) {
+        for(int i = 0;i < stateEngineDataElements[0].bitsPerField.length;i++) {
             if(stateEngineDataElements[0].varLengthData[i] == null) {
                 historicalDataElements.bitsPerField[i] = stateEngineDataElements[0].bitsPerField[i];
             } else {
@@ -135,8 +135,8 @@ public class HollowObjectDeltaHistoricalStateCreator {
 
     private long varLengthSize(int ordinal, int fieldIdx) {
         int shard = ordinal & shardNumberMask;
-        int shardOrdinal = ordinal >> shardOrdinalShift; 
-        
+        int shardOrdinal = ordinal >> shardOrdinalShift;
+
         int numBitsForField = stateEngineDataElements[shard].bitsPerField[fieldIdx];
         long currentBitOffset = ((long)stateEngineDataElements[shard].bitsPerRecord * shardOrdinal) + stateEngineDataElements[shard].bitOffsetPerField[fieldIdx];
         long endByte = stateEngineDataElements[shard].fixedLengthData.getElementValue(currentBitOffset, numBitsForField) & (1L << (numBitsForField - 1)) - 1;
@@ -147,9 +147,9 @@ public class HollowObjectDeltaHistoricalStateCreator {
 
     private void copyRecord(int ordinal) {
         int shard = ordinal & shardNumberMask;
-        int shardOrdinal = ordinal >> shardOrdinalShift; 
+        int shardOrdinal = ordinal >> shardOrdinalShift;
 
-        for(int i=0;i<historicalDataElements.schema.numFields();i++) {
+        for(int i = 0;i < historicalDataElements.schema.numFields();i++) {
             if(historicalDataElements.varLengthData[i] == null) {
                 long value = stateEngineDataElements[shard].fixedLengthData.getLargeElementValue(((long)shardOrdinal * stateEngineDataElements[shard].bitsPerRecord) + stateEngineDataElements[shard].bitOffsetPerField[i], stateEngineDataElements[shard].bitsPerField[i]);
                 historicalDataElements.fixedLengthData.setElementValue(((long)nextOrdinal * historicalDataElements.bitsPerRecord) + historicalDataElements.bitOffsetPerField[i], historicalDataElements.bitsPerField[i], value);

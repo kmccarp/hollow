@@ -32,7 +32,7 @@ public class HollowSetWriteRecord implements HollowHashableWriteRecord {
     public HollowSetWriteRecord() {
         this(HashBehavior.MIXED_HASHES);
     }
-    
+
     public HollowSetWriteRecord(HashBehavior defaultHashBehavior) {
         this.elementsAndHashes = new LongList();
         this.defaultHashBehavior = defaultHashBehavior;
@@ -62,7 +62,7 @@ public class HollowSetWriteRecord implements HollowHashableWriteRecord {
         VarInt.writeVInt(buf, elementsAndHashes.size());
         int previousOrdinal = 0;
 
-        for(int i=0;i<elementsAndHashes.size();i++) {
+        for(int i = 0;i < elementsAndHashes.size();i++) {
             int ordinal = (int)(elementsAndHashes.get(i) >>> 32);
             VarInt.writeVInt(buf, ordinal - previousOrdinal);
 

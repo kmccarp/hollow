@@ -54,14 +54,15 @@ public class HollowMapCollectionTest {
         GenericHollowMap m = new GenericHollowMap(rse, "MapOfIntegerToInteger", 0);
 
         List<Integer> keys = m.entrySet().stream().map(Map.Entry::getKey)
-                .map(r -> (GenericHollowObject) r)
-                .map(o -> o.getInt("value"))
-                .sorted()
-                .collect(toList());
+            .map(r -> (GenericHollowObject)r)
+            .map(o -> o.getInt("value"))
+            .sorted()
+            .collect(toList());
         Assert.assertEquals(Arrays.asList(1, 2, 3), keys);
 
         Iterator<Map.Entry<HollowRecord, HollowRecord>> iterator = m.entrySet().iterator();
-        iterator.forEachRemaining(e -> {});
+        iterator.forEachRemaining(e -> {
+        });
         Assert.assertFalse(iterator.hasNext());
         try {
             iterator.next();
@@ -100,7 +101,7 @@ public class HollowMapCollectionTest {
     }
 
     static void assertMapEquals(Map<?, ?> a, Map<?, ?> b, boolean equal) {
-        if (equal) {
+        if(equal) {
             Assert.assertEquals(a.hashCode(), b.hashCode());
             Assert.assertEquals(a, b);
             Assert.assertTrue(equalsUsingContains(a, b));
@@ -127,7 +128,7 @@ public class HollowMapCollectionTest {
     }
 
     static boolean equalsUsingContains(Map<?, ?> a, Map<?, ?> b) {
-        if (a.size() != b.size()) {
+        if(a.size() != b.size()) {
             return false;
         }
         return a.entrySet().containsAll(b.entrySet());

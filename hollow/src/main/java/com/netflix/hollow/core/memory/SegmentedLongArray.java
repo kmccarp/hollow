@@ -50,7 +50,7 @@ public class SegmentedLongArray {
         long[][] segments = new long[numSegments][];
         this.bitmask = (1 << log2OfSegmentSize) - 1;
 
-        for(int i=0;i<segments.length;i++) {
+        for(int i = 0;i < segments.length;i++) {
             segments[i] = memoryRecycler.getLongArray();
         }
 
@@ -72,11 +72,11 @@ public class SegmentedLongArray {
     public void set(long index, long value) {
         int segmentIndex = (int)(index >> log2OfSegmentSize);
         int longInSegment = (int)(index & bitmask);
-        unsafe.putLong(segments[segmentIndex], (long) Unsafe.ARRAY_LONG_BASE_OFFSET + (8 * longInSegment), value);
+        unsafe.putLong(segments[segmentIndex], (long)Unsafe.ARRAY_LONG_BASE_OFFSET + (8 * longInSegment), value);
 
         /// duplicate the longs here so that we can read faster.
         if(longInSegment == 0 && segmentIndex != 0) {
-            unsafe.putLong(segments[segmentIndex - 1], (long) Unsafe.ARRAY_LONG_BASE_OFFSET + (8 * (1 << log2OfSegmentSize)), value);
+            unsafe.putLong(segments[segmentIndex - 1], (long)Unsafe.ARRAY_LONG_BASE_OFFSET + (8 * (1 << log2OfSegmentSize)), value);
         }
     }
 
@@ -94,9 +94,9 @@ public class SegmentedLongArray {
     }
 
     public void fill(long value) {
-        for(int i=0;i<segments.length;i++) {
+        for(int i = 0;i < segments.length;i++) {
             long offset = Unsafe.ARRAY_LONG_BASE_OFFSET;
-            for(int j=0;j<segments[i].length;j++) {
+            for(int j = 0;j < segments[i].length;j++) {
                 unsafe.putLong(segments[i], offset, value);
                 offset += 8;
             }
@@ -106,20 +106,20 @@ public class SegmentedLongArray {
     public void writeTo(DataOutputStream dos, long numLongs) throws IOException {
         VarInt.writeVLong(dos, numLongs);
 
-        for(long i=0;i<numLongs;i++) {
+        for(long i = 0;i < numLongs;i++) {
             dos.writeLong(get(i));
         }
     }
 
     public void destroy(ArraySegmentRecycler memoryRecycler) {
-        for(int i=0;i<segments.length;i++) {
+        for(int i = 0;i < segments.length;i++) {
             if(segments[i] != null)
                 memoryRecycler.recycleLongArray(segments[i]);
         }
     }
 
     protected void readFrom(HollowBlobInput in, ArraySegmentRecycler memoryRecycler, long numLongs) throws
-            IOException {
+        IOException {
         int segmentSize = 1 << memoryRecycler.getLog2OfLongSegmentSize();
         int segment = 0;
 
@@ -131,17 +131,17 @@ public class SegmentedLongArray {
         while(numLongs > 0) {
             long longsToCopy = Math.min(segmentSize, numLongs);
 
-            unsafe.putLong(segments[segment], (long) Unsafe.ARRAY_LONG_BASE_OFFSET, fencepostLong);
+            unsafe.putLong(segments[segment], (long)Unsafe.ARRAY_LONG_BASE_OFFSET, fencepostLong);
 
             int longsCopied = 1;
 
             while(longsCopied < longsToCopy) {
                 long l = in.readLong();
-                unsafe.putLong(segments[segment], (long) Unsafe.ARRAY_LONG_BASE_OFFSET + (8 * longsCopied++), l);
+                unsafe.putLong(segments[segment], (long)Unsafe.ARRAY_LONG_BASE_OFFSET + (8 * longsCopied++), l);
             }
 
             if(numLongs > longsCopied) {
-                unsafe.putLong(segments[segment], (long) Unsafe.ARRAY_LONG_BASE_OFFSET + (8 * longsCopied), in.readLong());
+                unsafe.putLong(segments[segment], (long)Unsafe.ARRAY_LONG_BASE_OFFSET + (8 * longsCopied), in.readLong());
                 fencepostLong = segments[segment][longsCopied];
             }
 

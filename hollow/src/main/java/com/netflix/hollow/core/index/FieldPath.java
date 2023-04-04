@@ -89,19 +89,19 @@ class FieldPath {
 
     private void initialize() {
         FieldPaths.FieldPath<FieldPaths.FieldSegment> path =
-                FieldPaths.createFieldPathForPrefixIndex(hollowDataAccess, type, fieldPath, autoExpand);
+            FieldPaths.createFieldPathForPrefixIndex(hollowDataAccess, type, fieldPath, autoExpand);
 
         List<String> fields = new ArrayList<>();
         List<Integer> fieldPositions = new ArrayList<>();
         List<FieldType> fieldTypes = new ArrayList<>();
 
         String lastRefType = type;
-        for (FieldPaths.FieldSegment segment : path.getSegments()) {
+        for(FieldPaths.FieldSegment segment : path.getSegments()) {
             fields.add(segment.getName());
 
-            if (segment.getEnclosingSchema().getSchemaType() == SchemaType.OBJECT) {
+            if(segment.getEnclosingSchema().getSchemaType() == SchemaType.OBJECT) {
                 assert segment instanceof FieldPaths.ObjectFieldSegment;
-                FieldPaths.ObjectFieldSegment oSegment = (FieldPaths.ObjectFieldSegment) segment;
+                FieldPaths.ObjectFieldSegment oSegment = (FieldPaths.ObjectFieldSegment)segment;
 
                 fieldPositions.add(oSegment.getIndex());
                 fieldTypes.add(oSegment.getType());
@@ -111,7 +111,7 @@ class FieldPath {
             }
 
             String refType = segment.getTypeName();
-            if (refType != null) {
+            if(refType != null) {
                 lastRefType = refType;
             }
         }
@@ -156,30 +156,30 @@ class FieldPath {
         SchemaType schemaType = hollowDataAccess.getSchema(type).getSchemaType();
         HollowSchema schema = hollowDataAccess.getSchema(type);
 
-        if (schemaType.equals(SchemaType.LIST) || schemaType.equals(SchemaType.SET)) {
+        if(schemaType.equals(SchemaType.LIST) || schemaType.equals(SchemaType.SET)) {
 
-            HollowCollectionTypeDataAccess collectionTypeDataAccess = (HollowCollectionTypeDataAccess) typeDataAccess;
-            HollowCollectionSchema collectionSchema = (HollowCollectionSchema) schema;
+            HollowCollectionTypeDataAccess collectionTypeDataAccess = (HollowCollectionTypeDataAccess)typeDataAccess;
+            HollowCollectionSchema collectionSchema = (HollowCollectionSchema)schema;
             String elementType = collectionSchema.getElementType();
 
             HollowOrdinalIterator it = collectionTypeDataAccess.ordinalIterator(ordinal);
             int refOrdinal = it.next();
-            if (refOrdinal != HollowOrdinalIterator.NO_MORE_ORDINALS) {
+            if(refOrdinal != HollowOrdinalIterator.NO_MORE_ORDINALS) {
                 value = getValue(refOrdinal, elementType, fieldIndex + 1);
             }
             return value;
 
-        } else if (schemaType.equals(SchemaType.MAP)) {
+        } else if(schemaType.equals(SchemaType.MAP)) {
             // Map type
-            HollowMapTypeDataAccess mapTypeDataAccess = (HollowMapTypeDataAccess) typeDataAccess;
-            HollowMapSchema mapSchema = (HollowMapSchema) schema;
+            HollowMapTypeDataAccess mapTypeDataAccess = (HollowMapTypeDataAccess)typeDataAccess;
+            HollowMapSchema mapSchema = (HollowMapSchema)schema;
 
             // what to iterate on in map
             boolean iterateThroughKeys = fields[fieldIndex].equals("key");
             String keyOrValueType = iterateThroughKeys ? mapSchema.getKeyType() : mapSchema.getValueType();
 
             HollowMapEntryOrdinalIterator mapEntryIterator = mapTypeDataAccess.ordinalIterator(ordinal);
-            if (mapEntryIterator.next()) {
+            if(mapEntryIterator.next()) {
                 int keyOrValueOrdinal = iterateThroughKeys ? mapEntryIterator.getKey() : mapEntryIterator.getValue();
                 value = getValue(keyOrValueOrdinal, keyOrValueType, fieldIndex + 1);
             }
@@ -187,13 +187,13 @@ class FieldPath {
 
         } else {
             // Object type
-            HollowObjectSchema objectSchema = (HollowObjectSchema) schema;
-            HollowObjectTypeDataAccess objectTypeDataAccess = (HollowObjectTypeDataAccess) typeDataAccess;
+            HollowObjectSchema objectSchema = (HollowObjectSchema)schema;
+            HollowObjectTypeDataAccess objectTypeDataAccess = (HollowObjectTypeDataAccess)typeDataAccess;
 
-            if (fieldTypes[fieldIndex].equals(FieldType.REFERENCE)) {
+            if(fieldTypes[fieldIndex].equals(FieldType.REFERENCE)) {
 
                 int refOrdinal = objectTypeDataAccess.readOrdinal(ordinal, fieldPositions[fieldIndex]);
-                if (refOrdinal >= 0) {
+                if(refOrdinal >= 0) {
                     String refType = objectSchema.getReferencedType(fieldPositions[fieldIndex]);
                     value = getValue(refOrdinal, refType, fieldIndex + 1);
                 }
@@ -212,28 +212,28 @@ class FieldPath {
         SchemaType schemaType = hollowDataAccess.getSchema(type).getSchemaType();
         HollowSchema schema = hollowDataAccess.getSchema(type);
 
-        if (schemaType.equals(SchemaType.LIST) || schemaType.equals(SchemaType.SET)) {
+        if(schemaType.equals(SchemaType.LIST) || schemaType.equals(SchemaType.SET)) {
 
-            HollowCollectionTypeDataAccess collectionTypeDataAccess = (HollowCollectionTypeDataAccess) typeDataAccess;
-            HollowCollectionSchema collectionSchema = (HollowCollectionSchema) schema;
+            HollowCollectionTypeDataAccess collectionTypeDataAccess = (HollowCollectionTypeDataAccess)typeDataAccess;
+            HollowCollectionSchema collectionSchema = (HollowCollectionSchema)schema;
             String elementType = collectionSchema.getElementType();
 
             HollowOrdinalIterator it = collectionTypeDataAccess.ordinalIterator(ordinal);
             List<Object> valueList = new ArrayList<>();
             int refOrdinal = it.next();
-            while (refOrdinal != HollowOrdinalIterator.NO_MORE_ORDINALS) {
+            while(refOrdinal != HollowOrdinalIterator.NO_MORE_ORDINALS) {
                 Object[] refValues = getAllValues(refOrdinal, elementType, fieldIndex + 1);
-                for (Object value : refValues)
+                for(Object value : refValues)
                     valueList.add(value);
                 refOrdinal = it.next();
             }
             values = new Object[valueList.size()];
             valueList.toArray(values);
 
-        } else if (schemaType.equals(SchemaType.MAP)) {
+        } else if(schemaType.equals(SchemaType.MAP)) {
             // Map type
-            HollowMapTypeDataAccess mapTypeDataAccess = (HollowMapTypeDataAccess) typeDataAccess;
-            HollowMapSchema mapSchema = (HollowMapSchema) schema;
+            HollowMapTypeDataAccess mapTypeDataAccess = (HollowMapTypeDataAccess)typeDataAccess;
+            HollowMapSchema mapSchema = (HollowMapSchema)schema;
 
             // what to iterate on in map
             boolean iterateThroughKeys = fields[fieldIndex].equals("key");
@@ -241,10 +241,10 @@ class FieldPath {
 
             HollowMapEntryOrdinalIterator mapEntryIterator = mapTypeDataAccess.ordinalIterator(ordinal);
             List<Object> valueList = new ArrayList<>();
-            while (mapEntryIterator.next()) {
+            while(mapEntryIterator.next()) {
                 int keyOrValueOrdinal = iterateThroughKeys ? mapEntryIterator.getKey() : mapEntryIterator.getValue();
                 Object[] refValues = getAllValues(keyOrValueOrdinal, keyOrValueType, fieldIndex + 1);
-                for (Object value : refValues)
+                for(Object value : refValues)
                     valueList.add(value);
             }
             values = new Object[valueList.size()];
@@ -253,12 +253,12 @@ class FieldPath {
 
         } else {
             // Object type
-            HollowObjectSchema objectSchema = (HollowObjectSchema) schema;
-            HollowObjectTypeDataAccess objectTypeDataAccess = (HollowObjectTypeDataAccess) typeDataAccess;
+            HollowObjectSchema objectSchema = (HollowObjectSchema)schema;
+            HollowObjectTypeDataAccess objectTypeDataAccess = (HollowObjectTypeDataAccess)typeDataAccess;
 
-            if (fieldTypes[fieldIndex].equals(FieldType.REFERENCE)) {
+            if(fieldTypes[fieldIndex].equals(FieldType.REFERENCE)) {
                 int refOrdinal = objectTypeDataAccess.readOrdinal(ordinal, fieldPositions[fieldIndex]);
-                if (refOrdinal >= 0) {
+                if(refOrdinal >= 0) {
                     String refType = objectSchema.getReferencedType(fieldPositions[fieldIndex]);
                     return getAllValues(refOrdinal, refType, fieldIndex + 1);
                 }
@@ -272,7 +272,7 @@ class FieldPath {
 
     private Object readFromObject(HollowObjectTypeDataAccess objectTypeDataAccess, int ordinal, FieldType fieldType, int fieldPosition) {
         Object value;
-        switch (fieldType) {
+        switch(fieldType) {
             case INT:
                 value = objectTypeDataAccess.readInt(ordinal, fieldPosition);
                 break;

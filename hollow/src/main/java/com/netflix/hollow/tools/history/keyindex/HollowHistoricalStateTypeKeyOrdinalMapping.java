@@ -52,6 +52,7 @@ public class HollowHistoricalStateTypeKeyOrdinalMapping {
         this.addedOrdinalMap = new IntMap(numAdditions);
         this.removedOrdinalMap = new IntMap(numRemovals);
     }
+
     public void added(HollowTypeReadState typeState, int ordinal) {
         int recordKeyOrdinal = keyIndex.findKeyIndexOrdinal((HollowObjectTypeReadState)typeState, ordinal);
         addedOrdinalMap.put(recordKeyOrdinal, ordinal);

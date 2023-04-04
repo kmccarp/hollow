@@ -36,31 +36,31 @@ public class GenericHollowObject extends HollowObject {
     public GenericHollowObject(HollowDataAccess dataAccess, String typeName, int ordinal) {
         this((HollowObjectTypeDataAccess)dataAccess.getTypeDataAccess(typeName, ordinal), ordinal);
     }
-    
+
     public GenericHollowObject(HollowObjectTypeDataAccess dataAccess, int ordinal) {
         this(new HollowObjectGenericDelegate(dataAccess), ordinal);
     }
-    
+
     public GenericHollowObject(HollowObjectDelegate delegate, int ordinal) {
         super(delegate, ordinal);
     }
 
     public GenericHollowObject getObject(String fieldName) {
-        return (GenericHollowObject) getReferencedGenericRecord(fieldName);
+        return (GenericHollowObject)getReferencedGenericRecord(fieldName);
     }
-    
+
     public GenericHollowList getList(String fieldName) {
-        return (GenericHollowList) getReferencedGenericRecord(fieldName);
+        return (GenericHollowList)getReferencedGenericRecord(fieldName);
     }
-    
+
     public GenericHollowSet getSet(String fieldName) {
-        return (GenericHollowSet) getReferencedGenericRecord(fieldName);
+        return (GenericHollowSet)getReferencedGenericRecord(fieldName);
     }
-    
+
     public GenericHollowMap getMap(String fieldName) {
-        return (GenericHollowMap) getReferencedGenericRecord(fieldName);
+        return (GenericHollowMap)getReferencedGenericRecord(fieldName);
     }
-    
+
     public final HollowRecord getReferencedGenericRecord(String fieldName) {
         String referencedType = getSchema().getReferencedType(fieldName);
 
@@ -70,21 +70,21 @@ public class GenericHollowObject extends HollowObject {
                 referencedType = hollowObjectSchema.getReferencedType(fieldName);
                 if(referencedType == null)
                     return null;
-            } catch(Exception e) {
+            } catch (Exception e) {
                 return null;
             }
         }
-        
+
         int ordinal = getOrdinal(fieldName);
         if(ordinal == -1)
             return null;
-        
+
         return GenericHollowRecordHelper.instantiate(getTypeDataAccess().getDataAccess(), referencedType, ordinal);
     }
-    
+
     @Override
     public String toString() {
         return new HollowRecordStringifier().stringify(this);
     }
-    
+
 }

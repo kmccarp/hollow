@@ -38,7 +38,7 @@ public class ObjectFieldMapping {
         this.stateEngine = populator.stateEngine;
         this.typeName = typeName;
         this.populator = populator;
-        HollowObjectTypeWriteState typeState = (HollowObjectTypeWriteState) stateEngine.getTypeState(typeName);
+        HollowObjectTypeWriteState typeState = (HollowObjectTypeWriteState)stateEngine.getTypeState(typeName);
         HollowObjectWriteRecord writeRec = new HollowObjectWriteRecord(typeState.getSchema());
         this.rootInstruction = new RemappingBuilderInstruction(writeRec, typeState);
         this.mappedFieldPaths = new HashMap<String, ObjectMappedFieldPath>();
@@ -66,7 +66,7 @@ public class ObjectFieldMapping {
     }
 
     private void mapAllPaths(HollowObjectSchema schema) {
-        for(int i=0;i<schema.numFields();i++) {
+        for(int i = 0;i < schema.numFields();i++) {
             if(!mappedFieldPaths.containsKey(schema.getFieldName(i))) {
                 HollowObjectWriteRecord rec = getWriteRecord(schema);
                 mappedFieldPaths.put(schema.getFieldName(i), new ObjectMappedFieldPath(rec, schema.getFieldName(i), schema.getName(), schema.getFieldName(i), i, populator.getFieldProcessor(schema.getName(), schema.getFieldName(i))));
@@ -90,13 +90,13 @@ public class ObjectFieldMapping {
     public void addFieldProcessor(FieldProcessor fieldProcessor) {
         for(Map.Entry<String, ObjectMappedFieldPath> entry : mappedFieldPaths.entrySet()) {
             if(fieldProcessor.getEntityName().equals(entry.getValue().getTypeName())
-                    && fieldProcessor.getFieldName().equals(entry.getValue().getFieldName())) {
+                && fieldProcessor.getFieldName().equals(entry.getValue().getFieldName())) {
                 entry.getValue().setFieldProcessor(fieldProcessor);
                 return;
             }
 
             if(fieldProcessor.getEntityName().equals(entry.getValue().getUnmappedTypeName())
-                    && fieldProcessor.getFieldName().equals(entry.getValue().getUnmappedFieldName())) {
+                && fieldProcessor.getFieldName().equals(entry.getValue().getUnmappedFieldName())) {
                 entry.getValue().setFieldProcessor(fieldProcessor);
                 return;
             }
@@ -110,14 +110,14 @@ public class ObjectFieldMapping {
             String referencedType = schema.getReferencedType(fieldPaths[idx]);
 
             if(childInstruction == null) {
-                HollowObjectTypeWriteState childTypeState = (HollowObjectTypeWriteState) stateEngine.getTypeState(referencedType);
+                HollowObjectTypeWriteState childTypeState = (HollowObjectTypeWriteState)stateEngine.getTypeState(referencedType);
                 HollowObjectWriteRecord childWriteRec = getWriteRecord(childTypeState.getSchema());
 
                 childInstruction = new RemappingBuilderInstruction(childWriteRec, childTypeState);
                 instruction.addChildInstruction(fieldPaths[idx], childInstruction);
             }
 
-            return addPathMapping(fieldName, fieldPaths, childInstruction, idx+1);
+            return addPathMapping(fieldName, fieldPaths, childInstruction, idx + 1);
         }
 
         HollowObjectSchema schema = instruction.rec.getSchema();

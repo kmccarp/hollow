@@ -25,7 +25,7 @@ public class HollowPrimaryKeyAPIGeneratorTest extends AbstractHollowAPIGenerator
         String apiClassName = "PrimaryKeyIndexTestAPI";
         String packageName = "codegen.primarykey";
         runGenerator(apiClassName, packageName, Movie.class,
-                builder -> builder.reservePrimaryKeyIndexForTypeWithPrimaryKey(true));
+            builder -> builder.reservePrimaryKeyIndexForTypeWithPrimaryKey(true));
     }
 
     @Test
@@ -33,7 +33,7 @@ public class HollowPrimaryKeyAPIGeneratorTest extends AbstractHollowAPIGenerator
         String apiClassName = "PrimaryKeyIndexTestAPI";
         String packageName = "codegen.primarykey";
         runGenerator(apiClassName, packageName, Movie.class,
-                builder -> builder.withClassPostfix("Generated").withPackageGrouping());
+            builder -> builder.withClassPostfix("Generated").withPackageGrouping());
     }
 
     @HollowPrimaryKey(fields = {"id", "hasSubtitles", "actor", "role.id!", "role.rank"})

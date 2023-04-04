@@ -70,7 +70,7 @@ public class IntegerDataAccessorTest extends AbstractPrimitiveTypeDataAccessorTe
             Assert.assertEquals(0, dAccessor.getUpdatedRecords().size());
         }
 
-        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("Integer");
+        HollowObjectTypeReadState typeState = (HollowObjectTypeReadState)readStateEngine.getTypeState("Integer");
         Assert.assertEquals(4, typeState.maxOrdinal());
 
         assertObject(typeState, 0, new Integer(1));

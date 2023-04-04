@@ -32,7 +32,7 @@ public abstract class HollowTypeMapper {
     public static final long ASSIGNED_ORDINAL_CYCLE_MASK = 0xFFFFFFFF00000000L;
 
     private final ThreadLocal<HollowWriteRecord> writeRec = new ThreadLocal<>();
-    
+
     private final ThreadLocal<ByteDataArray> flatRecBuffer = new ThreadLocal<>();
 
     protected abstract String getTypeName();
@@ -40,7 +40,7 @@ public abstract class HollowTypeMapper {
     protected abstract int write(Object obj);
 
     protected abstract int writeFlat(Object obj, FlatRecordWriter flatRecordWriter);
-    
+
     protected abstract HollowWriteRecord newWriteRecord();
 
     protected abstract HollowTypeWriteState getTypeWriteState();
@@ -59,15 +59,15 @@ public abstract class HollowTypeMapper {
         rec.reset();
         return rec;
     }
-    
+
     protected ByteDataArray flatRecBuffer() {
-    	ByteDataArray buf = flatRecBuffer.get();
-    	if(buf == null) {
-    		buf = new ByteDataArray();
-    		flatRecBuffer.set(buf);
-    	}
-    	buf.reset();
-    	return buf;
+        ByteDataArray buf = flatRecBuffer.get();
+        if(buf == null) {
+            buf = new ByteDataArray();
+            flatRecBuffer.set(buf);
+        }
+        buf.reset();
+        return buf;
     }
 
     /**
@@ -112,7 +112,7 @@ public abstract class HollowTypeMapper {
 
         return clazz.getSimpleName();
     }
-    
+
     protected long cycleSpecificAssignedOrdinalBits() {
         return getTypeWriteState().getStateEngine().getNextStateRandomizedTag() & ASSIGNED_ORDINAL_CYCLE_MASK;
     }

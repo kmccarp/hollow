@@ -20,6 +20,8 @@ package com.netflix.hollow.ui;
 
 public interface UIServer {
     void start() throws Exception;
+
     void stop() throws Exception;
+
     void join() throws InterruptedException;
 }

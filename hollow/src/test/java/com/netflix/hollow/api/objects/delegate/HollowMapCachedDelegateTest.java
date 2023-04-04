@@ -58,8 +58,8 @@ public class HollowMapCachedDelegateTest extends AbstractStateEngineTest {
     private void addRecord(int... ordinals) {
         HollowMapWriteRecord rec = new HollowMapWriteRecord();
 
-        for(int i=0;i<ordinals.length;i+=2) {
-            rec.addEntry(ordinals[i], ordinals[i+1]);
+        for(int i = 0;i < ordinals.length;i += 2) {
+            rec.addEntry(ordinals[i], ordinals[i + 1]);
         }
 
         writeStateEngine.add("TestMap", rec);

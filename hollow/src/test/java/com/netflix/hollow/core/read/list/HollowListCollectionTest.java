@@ -64,13 +64,14 @@ public class HollowListCollectionTest {
         GenericHollowList l = new GenericHollowList(rse, "ListOfInteger", 0);
 
         List<Integer> keys = l.stream()
-                .map(r -> (GenericHollowObject) r)
-                .map(o -> o.getInt("value"))
-                .collect(toList());
+            .map(r -> (GenericHollowObject)r)
+            .map(o -> o.getInt("value"))
+            .collect(toList());
         Assert.assertEquals(Arrays.asList(1, 2, 3), keys);
 
         Iterator<HollowRecord> iterator = l.iterator();
-        iterator.forEachRemaining(e -> {});
+        iterator.forEachRemaining(e -> {
+        });
         Assert.assertFalse(iterator.hasNext());
         try {
             iterator.next();
@@ -109,7 +110,7 @@ public class HollowListCollectionTest {
     }
 
     static void assertListEquals(List<?> a, List<?> b, boolean equal) {
-        if (equal) {
+        if(equal) {
             Assert.assertEquals(a.hashCode(), b.hashCode());
             Assert.assertEquals(a, b);
             Assert.assertTrue(equalsUsingIterator(a, b));
@@ -128,8 +129,8 @@ public class HollowListCollectionTest {
     static boolean equalsUsingIterator(List<?> a, List<?> b) {
         ListIterator<?> ia = a.listIterator();
         ListIterator<?> ib = b.listIterator();
-        while (ia.hasNext() && ib.hasNext()) {
-            if (!Objects.equals(ia.next(), ib.next())) {
+        while(ia.hasNext() && ib.hasNext()) {
+            if(!Objects.equals(ia.next(), ib.next())) {
                 return false;
             }
         }

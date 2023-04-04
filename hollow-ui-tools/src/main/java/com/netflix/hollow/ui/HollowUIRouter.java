@@ -71,9 +71,9 @@ public abstract class HollowUIRouter extends HttpServlet {
         if(target.length() < baseLength)
             return "";
 
-        if (target == null) {
+        if(target == null) {
             throw new IllegalStateException("target is null. It defaults to HttpServletRequest::getPathInfo() but can be " +
-                    "customized by invoking handle method on HollowExplorerUI HollowDiffUI et al classes.");
+                "customized by invoking handle method on HollowExplorerUI HollowDiffUI et al classes.");
         }
         int secondSlashIndex = target.indexOf('/', baseLength);
 
@@ -84,14 +84,14 @@ public abstract class HollowUIRouter extends HttpServlet {
     }
 
     protected String getResourceName(String target, String diffUIKey) {
-        if (diffUIKey == null || diffUIKey.length() == 0) {   // for diff at path ""
+        if(diffUIKey == null || diffUIKey.length() == 0) {   // for diff at path ""
             int baseLength = baseUrlPath.length() + 1;
 
             int secondSlashIndex = target.indexOf('/', baseLength);
             if(secondSlashIndex == -1) {
                 // a diff hosted at path ""
                 secondSlashIndex = target.indexOf('/');
-                if (secondSlashIndex == -1) {
+                if(secondSlashIndex == -1) {
                     return "";
                 }
             }
@@ -125,7 +125,7 @@ public abstract class HollowUIRouter extends HttpServlet {
 
             IOUtils.copy(is, resp.getOutputStream());
             return true;
-        } catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }

@@ -47,8 +47,8 @@ public class HollowMapJavaGenerator extends HollowCollectionsGenerator {
     private final boolean parameterizeValue;
 
     public HollowMapJavaGenerator(String packageName, String apiClassname, HollowMapSchema schema,
-            HollowDataset dataset, Set<String> parameterizedTypes, boolean parameterizeClassNames,
-            CodeGeneratorConfig config) {
+        HollowDataset dataset, Set<String> parameterizedTypes, boolean parameterizeClassNames,
+        CodeGeneratorConfig config) {
         super(packageName, apiClassname, schema, dataset, config);
         this.schema = schema;
         this.keyClassName = hollowImplClassname(schema.getKeyType());
@@ -75,10 +75,8 @@ public class HollowMapJavaGenerator extends HollowCollectionsGenerator {
 
         String classGeneric = "";
         if(parameterizeKey && parameterizeValue)
-            classGeneric = "<K, V>";
-        else if(parameterizeKey)
-            classGeneric = "<K>";
-        else if(parameterizeValue)
+            classGeneric = "<K, V>";else if(parameterizeKey)
+            classGeneric = "<K>";else if(parameterizeValue)
             classGeneric = "<V>";
 
         builder.append("public class " + className + classGeneric + " extends HollowMap<" + keyGeneric + ", " + valueGeneric + "> {\n\n");
@@ -123,11 +121,11 @@ public class HollowMapJavaGenerator extends HollowCollectionsGenerator {
 
             classBuilder.append("    public " + valueReturnType + " get(");
             classBuilder.append(getKeyFieldType(schema.getHashKey().getFieldPath(0))).append(" k0");
-            for(int i=1;i<schema.getHashKey().numFields();i++)
+            for(int i = 1;i < schema.getHashKey().numFields();i++)
                 classBuilder.append(", ").append(getKeyFieldType(schema.getHashKey().getFieldPath(i))).append(" k").append(i);
             classBuilder.append(") {\n");
             classBuilder.append("        return findValue(k0");
-            for(int i=1;i<schema.getHashKey().numFields();i++)
+            for(int i = 1;i < schema.getHashKey().numFields();i++)
                 classBuilder.append(", k").append(i);
             classBuilder.append(");\n");
             classBuilder.append("    }\n\n");
@@ -166,7 +164,7 @@ public class HollowMapJavaGenerator extends HollowCollectionsGenerator {
             String fieldPathElements[] = fieldPath.split("\\.");
             int idx = 0;
 
-            while(idx < fieldPathElements.length-1) {
+            while(idx < fieldPathElements.length - 1) {
                 keySchema = (HollowObjectSchema)dataset.getSchema(keySchema.getReferencedType(fieldPathElements[idx]));
                 idx++;
             }
@@ -174,7 +172,8 @@ public class HollowMapJavaGenerator extends HollowCollectionsGenerator {
             FieldType fieldType = keySchema.getFieldType(keySchema.getPosition(fieldPathElements[idx]));
 
             return HollowCodeGenerationUtils.getJavaBoxedType(fieldType);
-        } catch(Throwable th) { }
+        } catch (Throwable th) {
+        }
         throw new IllegalArgumentException("Field path '" + fieldPath + "' specified incorrectly for type: " + schema.getName());
     }
 

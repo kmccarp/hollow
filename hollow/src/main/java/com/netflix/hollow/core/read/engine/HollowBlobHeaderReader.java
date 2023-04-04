@@ -46,8 +46,8 @@ public class HollowBlobHeaderReader {
         int headerVersion = in.readInt();
         if(headerVersion != HollowBlobHeader.HOLLOW_BLOB_VERSION_HEADER) {
             throw new IOException("The HollowBlob you are trying to read is incompatible. "
-                    + "The expected Hollow blob version was " + HollowBlobHeader.HOLLOW_BLOB_VERSION_HEADER
-                    + " but the actual version was " + headerVersion);
+                + "The expected Hollow blob version was " + HollowBlobHeader.HOLLOW_BLOB_VERSION_HEADER
+                + " but the actual version was " + headerVersion);
         }
 
         header.setBlobFormatVersion(headerVersion);
@@ -78,12 +78,12 @@ public class HollowBlobHeaderReader {
         int headerVersion = in.readInt();
         if(headerVersion != HollowBlobOptionalPartHeader.HOLLOW_BLOB_PART_VERSION_HEADER) {
             throw new IOException("The HollowBlob optional part you are trying to read is incompatible. "
-                    + "The expected Hollow blob version was " + HollowBlobHeader.HOLLOW_BLOB_VERSION_HEADER
-                    + " but the actual version was " + headerVersion);
+                + "The expected Hollow blob version was " + HollowBlobHeader.HOLLOW_BLOB_VERSION_HEADER
+                + " but the actual version was " + headerVersion);
         }
 
         HollowBlobOptionalPartHeader header = new HollowBlobOptionalPartHeader(in.readUTF());
-        
+
         header.setOriginRandomizedTag(in.readLong());
         header.setDestinationRandomizedTag(in.readLong());
 
@@ -94,17 +94,17 @@ public class HollowBlobHeaderReader {
 
         return header;
     }
-    
+
     private List<HollowSchema> readSchemas(HollowBlobInput in) throws IOException {
         int numSchemas = VarInt.readVInt(in);
 
         List<HollowSchema> schemas = new ArrayList<HollowSchema>(numSchemas);
-        for(int i=0;i<numSchemas;i++)
+        for(int i = 0;i < numSchemas;i++)
             schemas.add(HollowSchema.readFrom(in));
 
         return schemas;
     }
-    
+
     private void skipForwardCompatibilityBytes(HollowBlobInput in) throws IOException, EOFException {
         int bytesToSkip = VarInt.readVInt(in);
         while(bytesToSkip > 0) {
@@ -124,7 +124,7 @@ public class HollowBlobHeaderReader {
     private Map<String, String> readHeaderTags(HollowBlobInput in) throws IOException {
         int numHeaderTags = in.readShort();
         Map<String, String> headerTags = new HashMap<String, String>();
-        for (int i = 0; i < numHeaderTags; i++) {
+        for(int i = 0;i < numHeaderTags;i++) {
             headerTags.put(in.readUTF(), in.readUTF());
         }
         return headerTags;
