@@ -80,7 +80,7 @@ public class HollowObjectMapperFlatRecordParserTest {
     type.stringSet = new HashSet<>(type.stringList);
     type.integerStringMap = type.stringList.stream().collect(
         Collectors.toMap(
-            s -> type.stringList.indexOf(s),
+            type.stringList::indexOf,
             s -> s
         )
     );
