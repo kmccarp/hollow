@@ -63,14 +63,16 @@ public class HollowBlobWriter {
         writeHeaders(dos, partStreams, false, hollowBlobHeaderWrapper);
 
         os.flush();
-        if(partStreams != null)
+        if (partStreams != null) {
             partStreams.flush();
+        }
     }
 
     public void writeSnapshot(OutputStream os, ProducerOptionalBlobPartConfig.OptionalBlobPartOutputStreams partStreams) throws IOException {
         Map<String, DataOutputStream> partStreamsByType = Collections.emptyMap();
-        if(partStreams != null)
+        if (partStreams != null) {
             partStreamsByType = partStreams.getStreamsByType();
+        }
 
         stateEngine.prepareForWrite();
 
@@ -96,8 +98,9 @@ public class HollowBlobWriter {
 
         for(HollowTypeWriteState typeState : stateEngine.getOrderedTypeStates()) {
             DataOutputStream partStream = partStreamsByType.get(typeState.getSchema().getName());
-            if(partStream == null)
+            if (partStream == null) {
                 partStream = dos;
+            }
 
             HollowSchema schema = typeState.getSchema();
             schema.writeTo(partStream);
@@ -108,8 +111,9 @@ public class HollowBlobWriter {
         }
 
         os.flush();
-        if(partStreams != null)
+        if (partStreams != null) {
             partStreams.flush();
+        }
     }
 
 
@@ -130,13 +134,15 @@ public class HollowBlobWriter {
 
     public void writeDelta(OutputStream os, ProducerOptionalBlobPartConfig.OptionalBlobPartOutputStreams partStreams) throws IOException {
         Map<String, DataOutputStream> partStreamsByType = Collections.emptyMap();
-        if(partStreams != null)
+        if (partStreams != null) {
             partStreamsByType = partStreams.getStreamsByType();
+        }
 
         stateEngine.prepareForWrite();
-        
-        if(stateEngine.isRestored())
+
+        if (stateEngine.isRestored()) {
             stateEngine.ensureAllNecessaryStatesRestored();
+        }
 
         List<HollowSchema> changedTypes = changedTypes();
         
@@ -149,8 +155,9 @@ public class HollowBlobWriter {
         for(final HollowTypeWriteState typeState : stateEngine.getOrderedTypeStates()) {
             executor.execute(new Runnable() {
                 public void run() {
-                    if(typeState.hasChangedSinceLastCycle())
+                    if (typeState.hasChangedSinceLastCycle()) {
                         typeState.calculateDelta();
+                    }
                 }
             });
         }
@@ -164,8 +171,9 @@ public class HollowBlobWriter {
         for(HollowTypeWriteState typeState : stateEngine.getOrderedTypeStates()) {
             if(typeState.hasChangedSinceLastCycle()) {
                 DataOutputStream partStream = partStreamsByType.get(typeState.getSchema().getName());
-                if(partStream == null)
+                if (partStream == null) {
                     partStream = dos;
+                }
 
                 HollowSchema schema = typeState.getSchema();
                 schema.writeTo(partStream);
@@ -177,8 +185,9 @@ public class HollowBlobWriter {
         }
 
         os.flush();
-        if(partStreams != null)
+        if (partStreams != null) {
             partStreams.flush();
+        }
     }
 
     /**
@@ -198,13 +207,15 @@ public class HollowBlobWriter {
 
     public void writeReverseDelta(OutputStream os, ProducerOptionalBlobPartConfig.OptionalBlobPartOutputStreams partStreams) throws IOException {
         Map<String, DataOutputStream> partStreamsByType = Collections.emptyMap();
-        if(partStreams != null)
+        if (partStreams != null) {
             partStreamsByType = partStreams.getStreamsByType();
+        }
 
         stateEngine.prepareForWrite();
-        
-        if(stateEngine.isRestored())
+
+        if (stateEngine.isRestored()) {
             stateEngine.ensureAllNecessaryStatesRestored();
+        }
         
         List<HollowSchema> changedTypes = changedTypes();
 
@@ -217,8 +228,9 @@ public class HollowBlobWriter {
         for(final HollowTypeWriteState typeState : stateEngine.getOrderedTypeStates()) {
             executor.execute(new Runnable() {
                 public void run() {
-                    if(typeState.hasChangedSinceLastCycle())
+                    if (typeState.hasChangedSinceLastCycle()) {
                         typeState.calculateReverseDelta();
+                    }
                 }
             });
         }
@@ -232,8 +244,9 @@ public class HollowBlobWriter {
         for(HollowTypeWriteState typeState : stateEngine.getOrderedTypeStates()) {
             if(typeState.hasChangedSinceLastCycle()) {
                 DataOutputStream partStream = partStreamsByType.get(typeState.getSchema().getName());
-                if(partStream == null)
+                if (partStream == null) {
                     partStream = dos;
+                }
 
                 HollowSchema schema = typeState.getSchema();
                 schema.writeTo(partStream);
@@ -245,18 +258,20 @@ public class HollowBlobWriter {
         }
 
         os.flush();
-        if(partStreams != null)
+        if (partStreams != null) {
             partStreams.flush();
+        }
     }
 
     private List<HollowSchema> changedTypes() {
-        List<HollowSchema> changedTypes = new ArrayList<HollowSchema>();
+        List<HollowSchema> changedTypes = new ArrayList<>();
         
         List<HollowTypeWriteState> orderedTypeStates = stateEngine.getOrderedTypeStates();
         for(int i=0;i<orderedTypeStates.size();i++) {
             HollowTypeWriteState writeState = orderedTypeStates.get(i);
-            if(writeState.hasChangedSinceLastCycle())
+            if (writeState.hasChangedSinceLastCycle()) {
                 changedTypes.add(writeState.getSchema());
+            }
         }
 
         return changedTypes;
@@ -324,8 +339,9 @@ public class HollowBlobWriter {
                 }
 
                 List<HollowSchema> partSchemas = hollowBlobHeaderWrapper.schemasByPartName.get(partName);
-                if(partSchemas == null)
+                if (partSchemas == null) {
                     partSchemas = Collections.emptyList();
+                }
 
                 partHeader.setSchemas(partSchemas);
 
