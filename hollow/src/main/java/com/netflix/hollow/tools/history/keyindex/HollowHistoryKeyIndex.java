@@ -51,7 +51,7 @@ public class HollowHistoryKeyIndex {
 
     public HollowHistoryKeyIndex(HollowHistory history) {
         this.history = history;
-        this.typeKeyIndexes = new HashMap<String, HollowHistoryTypeKeyIndex>();
+        this.typeKeyIndexes = new HashMap<>();
         this.indexWriteStateEngine = new HollowWriteStateEngine();
         this.indexReadStateEngine = new HollowReadStateEngine();
     }
@@ -141,10 +141,14 @@ public class HollowHistoryKeyIndex {
         for(Map.Entry<String, HollowHistoryTypeKeyIndex> entry : typeKeyIndexes.entrySet()) {
             String type = entry.getKey();
             HollowHistoryTypeKeyIndex index = entry.getValue();
-            if (index.isInitialized()) continue;
+            if (index.isInitialized()) {
+                continue;
+            }
 
             HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) latestStateEngine.getTypeState(type);
-            if (typeState == null) continue;
+            if (typeState == null) {
+                continue;
+            }
 
             index.initialize(typeState);
         }
@@ -175,7 +179,7 @@ public class HollowHistoryKeyIndex {
         HollowBlobWriter writer = new HollowBlobWriter(indexWriteStateEngine);
         // Use existing readStateEngine on initial update or delta;
         // otherwise, create new one to properly handle double snapshot
-        HollowReadStateEngine newReadStateEngine = (isInitialUpdate || !isSnapshot)
+        HollowReadStateEngine newReadStateEngine = isInitialUpdate || !isSnapshot
                 ? indexReadStateEngine : new HollowReadStateEngine();
         HollowBlobReader reader = new HollowBlobReader(newReadStateEngine);
 
@@ -222,8 +226,9 @@ public class HollowHistoryKeyIndex {
 
             pipeException.addSuppressed(e);
         }
-        if (pipeException != null)
+        if (pipeException != null) {
             throw new RuntimeException(pipeException);
+        }
 
         indexWriteStateEngine.prepareForNextCycle();
         return newReadStateEngine;
