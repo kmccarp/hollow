@@ -1412,7 +1412,7 @@ public class HollowIncrementalProducerTest {
     }
 
     private static final class TestVersionMinter implements HollowProducer.VersionMinter {
-        private static int versionCounter = 0;
+        private static int versionCounter;
 
         @Override
         public long mint() {
@@ -1579,7 +1579,7 @@ public class HollowIncrementalProducerTest {
     }
 
     private static class FakeSingleProducerEnforcer implements SingleProducerEnforcer {
-        private boolean primary = false;
+        private boolean primary;
         @Override
         public void enable() {
             primary = true;
