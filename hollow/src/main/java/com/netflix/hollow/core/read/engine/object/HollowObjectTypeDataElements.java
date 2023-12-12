@@ -42,18 +42,18 @@ public class HollowObjectTypeDataElements {
     int maxOrdinal;
 
     FixedLengthData fixedLengthData;
-    final VariableLengthData varLengthData[];
+    final VariableLengthData[] varLengthData;
 
     GapEncodedVariableLengthIntegerReader encodedAdditions;
     GapEncodedVariableLengthIntegerReader encodedRemovals;
 
-    final int bitsPerField[];
-    final int bitOffsetPerField[];
-    final long nullValueForField[];
+    final int[] bitsPerField;
+    final int[] bitOffsetPerField;
+    final long[] nullValueForField;
     int bitsPerRecord;
 
-    private int bitsPerUnfilteredField[];
-    private boolean unfilteredFieldIsIncluded[];
+    private int[] bitsPerUnfilteredField;
+    private boolean[] unfilteredFieldIsIncluded;
 
     final ArraySegmentRecycler memoryRecycler;
     final MemoryMode memoryMode;
@@ -169,8 +169,9 @@ public class HollowObjectTypeDataElements {
     }
 
     static void discardFromInput(HollowBlobInput in, HollowObjectSchema schema, int numShards, boolean isDelta) throws IOException {
-        if(numShards > 1)
-            VarInt.readVInt(in); // max ordinal
+        if(numShards > 1) {
+            VarInt.readVInt(in);
+        } // max ordinal
 
         for(int i=0;i<numShards;i++) {
             VarInt.readVInt(in); // max ordinal
@@ -206,28 +207,26 @@ public class HollowObjectTypeDataElements {
     public void destroy() {
         FixedLengthDataFactory.destroy(fixedLengthData, memoryRecycler);
         for(int i=0;i<varLengthData.length;i++) {
-            if(varLengthData[i] != null)
+            if(varLengthData[i] != null) {
                 VariableLengthDataFactory.destroy(varLengthData[i]);
+            }
         }
     }
 
     static long varLengthStartByte(HollowObjectTypeDataElements from, int ordinal, int fieldIdx) {
-        if(ordinal == 0)
+        if(ordinal == 0) {
             return 0;
+        }
 
         int numBitsForField = from.bitsPerField[fieldIdx];
         long currentBitOffset = ((long)from.bitsPerRecord * ordinal) + from.bitOffsetPerField[fieldIdx];
-        long startByte = from.fixedLengthData.getElementValue(currentBitOffset - from.bitsPerRecord, numBitsForField) & (1L << (numBitsForField - 1)) - 1;
-
-        return startByte;
+        return from.fixedLengthData.getElementValue(currentBitOffset - from.bitsPerRecord, numBitsForField) & (1L << (numBitsForField - 1)) - 1;
     }
 
     static long varLengthEndByte(HollowObjectTypeDataElements from, int ordinal, int fieldIdx) {
         int numBitsForField = from.bitsPerField[fieldIdx];
         long currentBitOffset = ((long)from.bitsPerRecord * ordinal) + from.bitOffsetPerField[fieldIdx];
-        long endByte = from.fixedLengthData.getElementValue(currentBitOffset, numBitsForField) & (1L << (numBitsForField - 1)) - 1;
-
-        return endByte;
+        return from.fixedLengthData.getElementValue(currentBitOffset, numBitsForField) & (1L << (numBitsForField - 1)) - 1;
     }
 
     static long varLengthSize(HollowObjectTypeDataElements from, int ordinal, int fieldIdx) {

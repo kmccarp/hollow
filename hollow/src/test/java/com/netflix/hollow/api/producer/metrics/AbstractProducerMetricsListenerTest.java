@@ -17,14 +17,14 @@ import org.mockito.MockitoAnnotations;
 
 public class AbstractProducerMetricsListenerTest {
 
-    private final long TEST_VERSION = 123l;
-    private final long TEST_LAST_CYCLE_NANOS = 100l;
-    private final long TEST_LAST_ANNOUNCEMENT_NANOS = 200l;
-    private final long TEST_DATA_SIZE = 55l;
-    private final com.netflix.hollow.api.producer.Status TEST_STATUS_SUCCESS = new Status(Status.StatusType.SUCCESS, null);
-    private final com.netflix.hollow.api.producer.Status TEST_STATUS_FAIL = new Status(Status.StatusType.FAIL, null);
-    private final Duration TEST_CYCLE_DURATION_MILLIS = Duration.ofMillis(4l);
-    private final long TEST_ANNOUNCEMENT_DURATION_MILLIS = 2l;
+    private static final long TEST_VERSION = 123L;
+    private static final long TEST_LAST_CYCLE_NANOS = 100L;
+    private static final long TEST_LAST_ANNOUNCEMENT_NANOS = 200L;
+    private static final long TEST_DATA_SIZE = 55L;
+    private static final com.netflix.hollow.api.producer.Status TEST_STATUS_SUCCESS = new Status(Status.StatusType.SUCCESS, null);
+    private static final com.netflix.hollow.api.producer.Status TEST_STATUS_FAIL = new Status(Status.StatusType.FAIL, null);
+    private static final Duration TEST_CYCLE_DURATION_MILLIS = Duration.ofMillis(4l);
+    private static final long TEST_ANNOUNCEMENT_DURATION_MILLIS = 2L;
 
     @Mock
     private HollowProducer.ReadState mockReadState;
