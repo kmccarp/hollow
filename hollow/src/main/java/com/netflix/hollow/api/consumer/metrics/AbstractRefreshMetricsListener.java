@@ -138,8 +138,10 @@ public abstract class AbstractRefreshMetricsListener extends AbstractRefreshList
             refreshEndMetricsReporting(refreshMetrics);
         } catch (Exception e) {
             // Metric reporting is not considered critical to consumer refresh. Log exceptions and continue.
-            log.log(Level.SEVERE, "Encountered an exception in reporting consumer refresh metrics, ignoring exception "
-                    + "and continuing with consumer refresh", e);
+            log.log(Level.SEVERE, """
+                    Encountered an exception in reporting consumer refresh metrics, ignoring exception \
+                    and continuing with consumer refresh\
+                    """, e);
         }
     }
 

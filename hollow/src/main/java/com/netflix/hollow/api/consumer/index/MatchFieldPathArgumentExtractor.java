@@ -99,8 +99,8 @@ final class MatchFieldPathArgumentExtractor<Q> {
                 .sorted(Comparator.comparingInt(f -> f.getDeclaredAnnotation(FieldPath.class).order()))
                 .map(ae -> {
                     try {
-                        if (ae instanceof Field) {
-                            return MatchFieldPathArgumentExtractor.<Q>fromField(dataset, rootType, (Field) ae,
+                        if (ae instanceof Field field) {
+                            return MatchFieldPathArgumentExtractor.<Q>fromField(dataset, rootType, field,
                                     fpResolver);
                         } else {
                             return MatchFieldPathArgumentExtractor.<Q>fromMethod(dataset, rootType, (Method) ae,
@@ -127,9 +127,9 @@ final class MatchFieldPathArgumentExtractor<Q> {
             FieldPathResolver fpResolver)
             throws IllegalAccessException {
         if (m.getReturnType() == void.class || m.getParameterCount() > 0) {
-            throw new IllegalArgumentException(String.format(
-                    "A @FieldPath annotated method must have zero parameters and a non-void return type: %s",
-                    m.toGenericString()));
+            throw new IllegalArgumentException(
+            "A @FieldPath annotated method must have zero parameters and a non-void return type: %s".formatted(
+            m.toGenericString()));
         }
         m.setAccessible(true);
         return fromHandle(dataset, rootType, getFieldPath(m), MethodHandles.lookup().unreflect(m),
@@ -154,16 +154,16 @@ final class MatchFieldPathArgumentExtractor<Q> {
             Class<?> extractorType, String fieldPath,
             HollowObjectSchema.FieldType schemaFieldType) {
         return new IllegalArgumentException(
-                String.format("Match type %s incompatible with field path %s resolving to field of value type %s",
-                        extractorType.getName(), fieldPath, schemaFieldType));
+        "Match type %s incompatible with field path %s resolving to field of value type %s".formatted(
+        extractorType.getName(), fieldPath, schemaFieldType));
     }
 
     static IllegalArgumentException incompatibleMatchType(
             Class<?> extractorType, String fieldPath, String typeName) {
         return new IllegalArgumentException(
-                String.format(
-                        "Match type %s incompatible with field path %s resolving to field of reference type %s",
-                        extractorType.getName(), fieldPath, typeName));
+        
+        "Match type %s incompatible with field path %s resolving to field of reference type %s".formatted(
+        extractorType.getName(), fieldPath, typeName));
     }
 
     static <Q, T> MatchFieldPathArgumentExtractor<Q> fromFunction(

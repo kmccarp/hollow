@@ -203,8 +203,8 @@ public class HollowPOJOClassGenerator implements HollowJavaFileGenerator {
             }
             HollowSchema referencedSchema = dataset.getSchema(schema.getReferencedType(i));
             if (referencedSchema instanceof HollowListSchema || referencedSchema instanceof HollowSetSchema) {
-                HollowSchema elementSchema = dataset.getSchema(referencedSchema instanceof HollowListSchema
-                        ? ((HollowListSchema) referencedSchema).getElementType()
+                HollowSchema elementSchema = dataset.getSchema(referencedSchema instanceof HollowListSchema hls
+                        ? hls.getElementType()
                         : ((HollowSetSchema) referencedSchema).getElementType());
                 String elementType = buildFieldType(elementSchema);
                 Class fieldImplementationType = referencedSchema instanceof HollowListSchema
@@ -378,18 +378,18 @@ public class HollowPOJOClassGenerator implements HollowJavaFileGenerator {
     private String buildFieldType(HollowSchema referencedSchema) {
         if (referencedSchema instanceof HollowObjectSchema) {
             return buildClassName(referencedSchema.getName(), classNameSuffix);
-        } else if (referencedSchema instanceof HollowListSchema) {
+        } else if (referencedSchema instanceof HollowListSchema listSchema) {
             importClasses.add(List.class);
-            HollowSchema elementSchema = dataset.getSchema(((HollowListSchema)referencedSchema).getElementType());
+            HollowSchema elementSchema = dataset.getSchema(listSchema.getElementType());
             return "List<" + buildFieldType(elementSchema) + ">";
-        } else if (referencedSchema instanceof HollowSetSchema) {
+        } else if (referencedSchema instanceof HollowSetSchema setSchema) {
             importClasses.add(Set.class);
-            HollowSchema elementSchema = dataset.getSchema(((HollowSetSchema)referencedSchema).getElementType());
+            HollowSchema elementSchema = dataset.getSchema(setSchema.getElementType());
             return "Set<" + buildFieldType(elementSchema) + ">";
-        } else if (referencedSchema instanceof HollowMapSchema) {
+        } else if (referencedSchema instanceof HollowMapSchema mapSchema) {
             importClasses.add(Map.class);
-            HollowSchema keySchema = dataset.getSchema(((HollowMapSchema)referencedSchema).getKeyType());
-            HollowSchema valueSchema = dataset.getSchema(((HollowMapSchema)referencedSchema).getValueType());
+            HollowSchema keySchema = dataset.getSchema(mapSchema.getKeyType());
+            HollowSchema valueSchema = dataset.getSchema(mapSchema.getValueType());
             return "Map<" + buildFieldType(keySchema) + ", " + buildFieldType(valueSchema) + ">";
         }
 
@@ -399,18 +399,18 @@ public class HollowPOJOClassGenerator implements HollowJavaFileGenerator {
     private String expectedCollectionClassName(HollowSchema referencedSchema) {
         if (referencedSchema instanceof HollowObjectSchema) {
             return referencedSchema.getName();
-        } else if (referencedSchema instanceof HollowListSchema) {
+        } else if (referencedSchema instanceof HollowListSchema listSchema) {
             importClasses.add(List.class);
-            HollowSchema elementSchema = dataset.getSchema(((HollowListSchema)referencedSchema).getElementType());
+            HollowSchema elementSchema = dataset.getSchema(listSchema.getElementType());
             return "ListOf" + expectedCollectionClassName(elementSchema);
-        } else if (referencedSchema instanceof HollowSetSchema) {
+        } else if (referencedSchema instanceof HollowSetSchema setSchema) {
             importClasses.add(Set.class);
-            HollowSchema elementSchema = dataset.getSchema(((HollowSetSchema)referencedSchema).getElementType());
+            HollowSchema elementSchema = dataset.getSchema(setSchema.getElementType());
             return "SetOf" + expectedCollectionClassName(elementSchema);
-        } else if (referencedSchema instanceof HollowMapSchema) {
+        } else if (referencedSchema instanceof HollowMapSchema mapSchema) {
             importClasses.add(Map.class);
-            HollowSchema keySchema = dataset.getSchema(((HollowMapSchema)referencedSchema).getKeyType());
-            HollowSchema valueSchema = dataset.getSchema(((HollowMapSchema)referencedSchema).getValueType());
+            HollowSchema keySchema = dataset.getSchema(mapSchema.getKeyType());
+            HollowSchema valueSchema = dataset.getSchema(mapSchema.getValueType());
             return "MapOf" + expectedCollectionClassName(keySchema) + "To" + expectedCollectionClassName(valueSchema);
         }
         throw new IllegalArgumentException("Expected HollowCollectionSchema or HollowMapSchema but got " + referencedSchema.getClass().getSimpleName());

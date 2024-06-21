@@ -595,11 +595,15 @@ public class HollowPrimaryKeyIndex implements HollowTypeStateListener, TestableU
         } while (value != 0 && bucket != startBucket);
 
         if (value == 0) {
-            throw new OrdinalNotFoundException(String.format("Ordinal not found (found empty entry): "
-                    + "ordinal=%d startBucket=%d", prevOrdinal, startBucket));
+            throw new OrdinalNotFoundException(("""
+            Ordinal not found (found empty entry): \
+            ordinal=%d startBucket=%d\
+            """).formatted(prevOrdinal, startBucket));
         } else {
-            throw new OrdinalNotFoundException(String.format("Ordinal not found (wrapped around table): "
-                    + "ordinal=%d startBucket=%d", prevOrdinal, startBucket));
+            throw new OrdinalNotFoundException(("""
+            Ordinal not found (wrapped around table): \
+            ordinal=%d startBucket=%d\
+            """).formatted(prevOrdinal, startBucket));
         }
     }
 

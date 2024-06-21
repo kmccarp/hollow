@@ -51,8 +51,8 @@ public class HollowFilesystemPublisher implements HollowProducer.Publisher {
 
     @Override
     public void publish(HollowProducer.PublishArtifact publishArtifact) {
-        if (publishArtifact instanceof HollowProducer.HeaderBlob) {
-            publishHeader((HollowProducer.HeaderBlob) publishArtifact);
+        if (publishArtifact instanceof HollowProducer.HeaderBlob blob) {
+            publishHeader(blob);
         } else {
             publishBlob((HollowProducer.Blob) publishArtifact);
         }
@@ -73,7 +73,7 @@ public class HollowFilesystemPublisher implements HollowProducer.Publisher {
     }
 
     private void publishHeader(HollowProducer.HeaderBlob headerBlob) {
-        Path destination = blobStorePath.resolve(String.format("header-%d", headerBlob.getVersion()));
+        Path destination = blobStorePath.resolve("header-%d".formatted(headerBlob.getVersion()));
         publishContent(headerBlob, destination);
     }
 
@@ -82,11 +82,11 @@ public class HollowFilesystemPublisher implements HollowProducer.Publisher {
         
         switch(blob.getType()) {
         case SNAPSHOT:
-            destination = blobStorePath.resolve(String.format("%s-%d", blob.getType().prefix, blob.getToVersion()));
+            destination = blobStorePath.resolve("%s-%d".formatted(blob.getType().prefix, blob.getToVersion()));
             break;
         case DELTA:
         case REVERSE_DELTA:
-            destination = blobStorePath.resolve(String.format("%s-%d-%d", blob.getType().prefix, blob.getFromVersion(), blob.getToVersion()));
+            destination = blobStorePath.resolve("%s-%d-%d".formatted(blob.getType().prefix, blob.getFromVersion(), blob.getToVersion()));
             break;
         }
 
@@ -99,11 +99,11 @@ public class HollowFilesystemPublisher implements HollowProducer.Publisher {
 
                 switch(blob.getType()) {
                 case SNAPSHOT:
-                    partDestination = blobStorePath.resolve(String.format("%s_%s-%d", blob.getType().prefix, partName, blob.getToVersion()));
+                    partDestination = blobStorePath.resolve("%s_%s-%d".formatted(blob.getType().prefix, partName, blob.getToVersion()));
                     break;
                 case DELTA:
                 case REVERSE_DELTA:
-                    partDestination = blobStorePath.resolve(String.format("%s_%s-%d-%d", blob.getType().prefix, partName, blob.getFromVersion(), blob.getToVersion()));
+                    partDestination = blobStorePath.resolve("%s_%s-%d-%d".formatted(blob.getType().prefix, partName, blob.getFromVersion(), blob.getToVersion()));
                     break;
                 }
 

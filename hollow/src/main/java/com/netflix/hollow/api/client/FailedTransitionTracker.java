@@ -106,8 +106,7 @@ public class FailedTransitionTracker {
 
         @Override
         public boolean equals(Object obj) {
-            if(obj instanceof DeltaTransition) {
-                DeltaTransition other = (DeltaTransition)obj;
+            if(obj instanceof DeltaTransition other) {
                 return other.fromState == fromState && other.toState == toState;
             }
             return false;

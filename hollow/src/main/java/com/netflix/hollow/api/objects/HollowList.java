@@ -93,8 +93,7 @@ public abstract class HollowList<T> extends AbstractList<T> implements HollowRec
         }
 
         // If type state is the same then compare ordinals
-        if (o instanceof HollowList) {
-            HollowList<?> that = (HollowList<?>) o;
+        if (o instanceof HollowList<?> that) {
             if (delegate.getTypeDataAccess() == that.delegate.getTypeDataAccess()) {
                 return ordinal == that.ordinal;
             }

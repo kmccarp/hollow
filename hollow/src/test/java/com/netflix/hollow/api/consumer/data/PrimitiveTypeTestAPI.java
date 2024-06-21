@@ -96,8 +96,8 @@ public class PrimitiveTypeTestAPI extends HollowAPI implements  HollowConsumerAP
             factory = new BooleanHollowFactory();
         if(cachedTypes.contains("Boolean")) {
             HollowObjectCacheProvider previousCacheProvider = null;
-            if(previousCycleAPI != null && (previousCycleAPI.booleanProvider instanceof HollowObjectCacheProvider))
-                previousCacheProvider = (HollowObjectCacheProvider) previousCycleAPI.booleanProvider;
+            if(previousCycleAPI != null && (previousCycleAPI.booleanProvider instanceof HollowObjectCacheProvider<?> provider))
+                previousCacheProvider = provider;
             booleanProvider = new HollowObjectCacheProvider(typeDataAccess, booleanTypeAPI, factory, previousCacheProvider);
         } else {
             booleanProvider = new HollowObjectFactoryProvider(typeDataAccess, booleanTypeAPI, factory);
@@ -115,8 +115,8 @@ public class PrimitiveTypeTestAPI extends HollowAPI implements  HollowConsumerAP
             factory = new DoubleHollowFactory();
         if(cachedTypes.contains("Double")) {
             HollowObjectCacheProvider previousCacheProvider = null;
-            if(previousCycleAPI != null && (previousCycleAPI.doubleProvider instanceof HollowObjectCacheProvider))
-                previousCacheProvider = (HollowObjectCacheProvider) previousCycleAPI.doubleProvider;
+            if(previousCycleAPI != null && (previousCycleAPI.doubleProvider instanceof HollowObjectCacheProvider<?> provider))
+                previousCacheProvider = provider;
             doubleProvider = new HollowObjectCacheProvider(typeDataAccess, doubleTypeAPI, factory, previousCacheProvider);
         } else {
             doubleProvider = new HollowObjectFactoryProvider(typeDataAccess, doubleTypeAPI, factory);
@@ -134,8 +134,8 @@ public class PrimitiveTypeTestAPI extends HollowAPI implements  HollowConsumerAP
             factory = new FloatHollowFactory();
         if(cachedTypes.contains("Float")) {
             HollowObjectCacheProvider previousCacheProvider = null;
-            if(previousCycleAPI != null && (previousCycleAPI.floatProvider instanceof HollowObjectCacheProvider))
-                previousCacheProvider = (HollowObjectCacheProvider) previousCycleAPI.floatProvider;
+            if(previousCycleAPI != null && (previousCycleAPI.floatProvider instanceof HollowObjectCacheProvider<?> provider))
+                previousCacheProvider = provider;
             floatProvider = new HollowObjectCacheProvider(typeDataAccess, floatTypeAPI, factory, previousCacheProvider);
         } else {
             floatProvider = new HollowObjectFactoryProvider(typeDataAccess, floatTypeAPI, factory);
@@ -153,8 +153,8 @@ public class PrimitiveTypeTestAPI extends HollowAPI implements  HollowConsumerAP
             factory = new IntegerHollowFactory();
         if(cachedTypes.contains("Integer")) {
             HollowObjectCacheProvider previousCacheProvider = null;
-            if(previousCycleAPI != null && (previousCycleAPI.integerProvider instanceof HollowObjectCacheProvider))
-                previousCacheProvider = (HollowObjectCacheProvider) previousCycleAPI.integerProvider;
+            if(previousCycleAPI != null && (previousCycleAPI.integerProvider instanceof HollowObjectCacheProvider<?> provider))
+                previousCacheProvider = provider;
             integerProvider = new HollowObjectCacheProvider(typeDataAccess, integerTypeAPI, factory, previousCacheProvider);
         } else {
             integerProvider = new HollowObjectFactoryProvider(typeDataAccess, integerTypeAPI, factory);
@@ -172,8 +172,8 @@ public class PrimitiveTypeTestAPI extends HollowAPI implements  HollowConsumerAP
             factory = new LongHollowFactory();
         if(cachedTypes.contains("Long")) {
             HollowObjectCacheProvider previousCacheProvider = null;
-            if(previousCycleAPI != null && (previousCycleAPI.longProvider instanceof HollowObjectCacheProvider))
-                previousCacheProvider = (HollowObjectCacheProvider) previousCycleAPI.longProvider;
+            if(previousCycleAPI != null && (previousCycleAPI.longProvider instanceof HollowObjectCacheProvider<?> provider))
+                previousCacheProvider = provider;
             longProvider = new HollowObjectCacheProvider(typeDataAccess, longTypeAPI, factory, previousCacheProvider);
         } else {
             longProvider = new HollowObjectFactoryProvider(typeDataAccess, longTypeAPI, factory);
@@ -191,8 +191,8 @@ public class PrimitiveTypeTestAPI extends HollowAPI implements  HollowConsumerAP
             factory = new StringHollowFactory();
         if(cachedTypes.contains("String")) {
             HollowObjectCacheProvider previousCacheProvider = null;
-            if(previousCycleAPI != null && (previousCycleAPI.stringProvider instanceof HollowObjectCacheProvider))
-                previousCacheProvider = (HollowObjectCacheProvider) previousCycleAPI.stringProvider;
+            if(previousCycleAPI != null && (previousCycleAPI.stringProvider instanceof HollowObjectCacheProvider<?> provider))
+                previousCacheProvider = provider;
             stringProvider = new HollowObjectCacheProvider(typeDataAccess, stringTypeAPI, factory, previousCacheProvider);
         } else {
             stringProvider = new HollowObjectFactoryProvider(typeDataAccess, stringTypeAPI, factory);
@@ -201,18 +201,18 @@ public class PrimitiveTypeTestAPI extends HollowAPI implements  HollowConsumerAP
 
     @Override
     public void detachCaches() {
-        if(booleanProvider instanceof HollowObjectCacheProvider)
-            ((HollowObjectCacheProvider)booleanProvider).detach();
-        if(doubleProvider instanceof HollowObjectCacheProvider)
-            ((HollowObjectCacheProvider)doubleProvider).detach();
-        if(floatProvider instanceof HollowObjectCacheProvider)
-            ((HollowObjectCacheProvider)floatProvider).detach();
-        if(integerProvider instanceof HollowObjectCacheProvider)
-            ((HollowObjectCacheProvider)integerProvider).detach();
-        if(longProvider instanceof HollowObjectCacheProvider)
-            ((HollowObjectCacheProvider)longProvider).detach();
-        if(stringProvider instanceof HollowObjectCacheProvider)
-            ((HollowObjectCacheProvider)stringProvider).detach();
+        if(booleanProvider instanceof HollowObjectCacheProvider<?> provider)
+            provider.detach();
+        if(doubleProvider instanceof HollowObjectCacheProvider<?> provider)
+            provider.detach();
+        if(floatProvider instanceof HollowObjectCacheProvider<?> provider)
+            provider.detach();
+        if(integerProvider instanceof HollowObjectCacheProvider<?> provider)
+            provider.detach();
+        if(longProvider instanceof HollowObjectCacheProvider<?> provider)
+            provider.detach();
+        if(stringProvider instanceof HollowObjectCacheProvider<?> provider)
+            provider.detach();
     }
 
     public BooleanTypeAPI getBooleanTypeAPI() {

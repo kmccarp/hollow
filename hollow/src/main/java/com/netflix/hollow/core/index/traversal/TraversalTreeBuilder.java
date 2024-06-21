@@ -131,8 +131,7 @@ class TraversalTreeBuilder {
 
 
     private HollowIndexerTraversalNode createChildNode(HollowTypeDataAccess typeDataAccess, String childName) {
-        if(typeDataAccess instanceof HollowObjectTypeDataAccess) {
-            HollowObjectTypeDataAccess objectAccess = (HollowObjectTypeDataAccess) typeDataAccess;
+        if(typeDataAccess instanceof HollowObjectTypeDataAccess objectAccess) {
             HollowObjectSchema schema = objectAccess.getSchema();
             int fieldIdx = schema.getPosition(childName);
 
@@ -176,10 +175,10 @@ class TraversalTreeBuilder {
     }
 
     private HollowIndexerTraversalNode createTypeNode(HollowTypeDataAccess typeDataAccess) {
-        if(typeDataAccess instanceof HollowObjectTypeDataAccess)
-            return new HollowIndexerObjectTraversalNode((HollowObjectTypeDataAccess) typeDataAccess, fieldMatchLists);
-        else if(typeDataAccess instanceof HollowListTypeDataAccess)
-            return new HollowIndexerListTraversalNode((HollowListTypeDataAccess) typeDataAccess, fieldMatchLists);
+        if(typeDataAccess instanceof HollowObjectTypeDataAccess access)
+            return new HollowIndexerObjectTraversalNode(access, fieldMatchLists);
+        else if(typeDataAccess instanceof HollowListTypeDataAccess access)
+            return new HollowIndexerListTraversalNode(access, fieldMatchLists);
         else if(typeDataAccess instanceof HollowSetTypeDataAccess)
             return new HollowIndexerCollectionTraversalNode(typeDataAccess, fieldMatchLists);
         else if(typeDataAccess instanceof HollowMapTypeDataAccess)

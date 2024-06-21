@@ -112,8 +112,10 @@ public class HollowClientUpdaterTest {
     public void testUpdateTo_updateToArbitraryVersionButNoVersionsRetrieved_throwsException() throws Throwable {
         long v = Long.MAX_VALUE - 1;
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage(String.format("Could not create an update plan for version %s, because that "
-                + "version or any qualifying previous versions could not be retrieved.", v));
+        expectedException.expectMessage(("""
+        Could not create an update plan for version %s, because that \
+        version or any qualifying previous versions could not be retrieved.\
+        """).formatted(v));
         subject.updateTo(v);
     }
 
@@ -171,9 +173,11 @@ public class HollowClientUpdaterTest {
         // test exception msg when subsequent update fails to fetch qualifying versions
         long v = Long.MAX_VALUE - 1;
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage(String.format("Could not create an update plan for version %s, because that "
-                + "version or any qualifying previous versions could not be retrieved. Consumer will remain at current "
-                + "version %s until next update attempt.", v, subject.getCurrentVersionId()));
+        expectedException.expectMessage(("""
+        Could not create an update plan for version %s, because that \
+        version or any qualifying previous versions could not be retrieved. Consumer will remain at current \
+        version %s until next update attempt.\
+        """).formatted(v, subject.getCurrentVersionId()));
         subject.updateTo(v);
     }
 
@@ -207,11 +211,13 @@ public class HollowClientUpdaterTest {
     @Test
     public void testDoubleSnapshotOnSchemaChange_noVersionMetadata_logsWarning() throws Exception {
         WarnLogHandler logHandler = (WarnLogHandler) configureLogger(HollowClientUpdater.class.getName(), Level.WARNING,
-                "Double snapshots on schema change are enabled and its functioning depends on " +
-                        "visibility into incoming version's schema through metadata but NO metadata was available " +
-                        "for version 2. Check that the mechanism that triggered " +
-                        "the refresh (usually announcementWatcher) supports passing version metadata. This refresh will " +
-                        "not be able to reflect any schema changes.");
+                """
+                Double snapshots on schema change are enabled and its functioning depends on \
+                visibility into incoming version's schema through metadata but NO metadata was available \
+                for version 2. Check that the mechanism that triggered \
+                the refresh (usually announcementWatcher) supports passing version metadata. This refresh will \
+                not be able to reflect any schema changes.\
+                """);
 
         HollowWriteStateEngine stateEngine = new HollowWriteStateEngine();
         TestHollowConsumer testHollowConsumer = schemaChangeSubject(stateEngine, true, true, false, true);
@@ -238,8 +244,10 @@ public class HollowClientUpdaterTest {
     @Test
     public void testDoubleSnapshotOnSchemaChange_prohibitDoubleSnapshot_logsWarning() throws Exception {
         WarnLogHandler logHandler = (WarnLogHandler) configureLogger(HollowClientUpdater.class.getName(), Level.WARNING,
-                "Auto double snapshots on schema changes are enabled but double snapshots on consumer " +
-                        "are prohibited by doubleSnapshotConfig. This refresh will not be able to reflect any schema changes.");
+                """
+                Auto double snapshots on schema changes are enabled but double snapshots on consumer \
+                are prohibited by doubleSnapshotConfig. This refresh will not be able to reflect any schema changes.\
+                """);
 
         HollowWriteStateEngine stateEngine = new HollowWriteStateEngine();
         TestHollowConsumer testHollowConsumer = schemaChangeSubject(stateEngine, true, true, false, false);

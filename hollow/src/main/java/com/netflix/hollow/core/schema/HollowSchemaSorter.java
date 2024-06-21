@@ -102,17 +102,16 @@ public class HollowSchemaSorter {
         }
 
         private void indexSchema(HollowSchema schema, Collection<HollowSchema> allSchemas) {
-            if(schema instanceof HollowCollectionSchema) {
-                String elementType = ((HollowCollectionSchema) schema).getElementType();
+            if(schema instanceof HollowCollectionSchema collectionSchema) {
+                String elementType = collectionSchema.getElementType();
                 addDependency(schema.getName(), elementType, allSchemas);
-            } else if(schema instanceof HollowMapSchema) {
-                String keyType = ((HollowMapSchema)schema).getKeyType();
-                String valueType = ((HollowMapSchema)schema).getValueType();
+            } else if(schema instanceof HollowMapSchema mapSchema) {
+                String keyType = mapSchema.getKeyType();
+                String valueType = mapSchema.getValueType();
 
                 addDependency(schema.getName(), keyType, allSchemas);
                 addDependency(schema.getName(), valueType, allSchemas);
-            } else if(schema instanceof HollowObjectSchema) {
-                HollowObjectSchema objectSchema = (HollowObjectSchema) schema;
+            } else if(schema instanceof HollowObjectSchema objectSchema) {
                 for(int i=0;i<objectSchema.numFields();i++) {
                     if(objectSchema.getFieldType(i) == FieldType.REFERENCE) {
                         String refType = objectSchema.getReferencedType(i);

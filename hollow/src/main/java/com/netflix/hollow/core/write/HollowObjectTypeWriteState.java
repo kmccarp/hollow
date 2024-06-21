@@ -70,8 +70,10 @@ public class HollowObjectTypeWriteState extends HollowTypeWriteState {
     boolean allowTypeResharding() {
         if (stateEngine.allowTypeResharding()) {
             if (isNumShardsPinned()) {
-                LOG.warning("Type re-sharding feature was enabled but num shards is pinned (likely using the " +
-                        "HollowShardLargeType annotation in the data model). Proceeding with fixed num shards.");
+                LOG.warning("""
+                        Type re-sharding feature was enabled but num shards is pinned (likely using the \
+                        HollowShardLargeType annotation in the data model). Proceeding with fixed num shards.\
+                        """);
                 return false;
             }
         }
@@ -110,7 +112,7 @@ public class HollowObjectTypeWriteState extends HollowTypeWriteState {
                     // limit numShards to 2x or .5x of prevShards per producer cycle
                     numShards = numShards > revNumShards ? revNumShards * 2 : revNumShards / 2;
 
-                    LOG.info(String.format("Num shards for type %s changing from %s to %s", schema.getName(), revNumShards, numShards));
+                    LOG.info("Num shards for type %s changing from %s to %s".formatted(schema.getName(), revNumShards, numShards));
                     addReshardingHeader(revNumShards, numShards);
                 }
             }
@@ -252,7 +254,7 @@ public class HollowObjectTypeWriteState extends HollowTypeWriteState {
     }
 
     public void writeSnapshot(DataOutputStream os) throws IOException {
-        LOG.log(Level.FINE, String.format("Writing snapshot with num shards = %s, revNumShards = %s, max shard ordinals = %s", numShards, revNumShards, Arrays.toString(maxShardOrdinal)));
+        LOG.log(Level.FINE, "Writing snapshot with num shards = %s, revNumShards = %s, max shard ordinals = %s".formatted(numShards, revNumShards, Arrays.toString(maxShardOrdinal)));
         /// for unsharded blobs, support pre v2.1.0 clients
         if(numShards == 1) {
             writeSnapshotShard(os, 0);
@@ -303,7 +305,7 @@ public class HollowObjectTypeWriteState extends HollowTypeWriteState {
 
     @Override
     public void writeDelta(DataOutputStream dos) throws IOException {
-        LOG.log(Level.FINE, String.format("Writing delta with num shards = %s, max shard ordinals = %s", numShards, Arrays.toString(maxShardOrdinal)));
+        LOG.log(Level.FINE, "Writing delta with num shards = %s, max shard ordinals = %s".formatted(numShards, Arrays.toString(maxShardOrdinal)));
         writeCalculatedDelta(dos, numShards, maxShardOrdinal);
     }
 
@@ -314,7 +316,7 @@ public class HollowObjectTypeWriteState extends HollowTypeWriteState {
 
     @Override
     public void writeReverseDelta(DataOutputStream dos) throws IOException {
-        LOG.log(Level.FINE, String.format("Writing reversedelta with num shards = %s, max shard ordinals = %s", revNumShards, Arrays.toString(revMaxShardOrdinal)));
+        LOG.log(Level.FINE, "Writing reversedelta with num shards = %s, max shard ordinals = %s".formatted(revNumShards, Arrays.toString(revMaxShardOrdinal)));
         writeCalculatedDelta(dos, revNumShards, revMaxShardOrdinal);
     }
 

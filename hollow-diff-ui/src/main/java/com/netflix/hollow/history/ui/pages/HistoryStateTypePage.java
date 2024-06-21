@@ -81,7 +81,7 @@ public class HistoryStateTypePage extends HistoryPage {
     		for(RecordDiff diff : addedDiffs) {
     			List<String> data = new ArrayList<String>();
     			data.add(diff.getIdentifierString());
-    			data.add(new Integer(diff.getKeyOrdinal()).toString());
+    			data.add(Integer.valueOf(diff.getKeyOrdinal()).toString());
     			idRecords.add(data);
     		}
     		changes.put("additions", idRecords);
@@ -106,7 +106,7 @@ public class HistoryStateTypePage extends HistoryPage {
     		for(RecordDiff diff : modifiedDiffs) {
     			List<String> data = new ArrayList<String>();
     			data.add(diff.getIdentifierString());
-    			data.add(new Integer(diff.getKeyOrdinal()).toString());
+    			data.add(Integer.valueOf(diff.getKeyOrdinal()).toString());
     			idRecords.add(data);
     		}
     		changes.put("modifications", idRecords);
@@ -131,7 +131,7 @@ public class HistoryStateTypePage extends HistoryPage {
     		for(RecordDiff diff : removedDiffs) {
     			List<String> data = new ArrayList<String>();
     			data.add(diff.getIdentifierString());
-    			data.add(new Integer(diff.getKeyOrdinal()).toString());
+    			data.add(Integer.valueOf(diff.getKeyOrdinal()).toString());
     			idRecords.add(data);
     		}
     		changes.put("removals", idRecords);

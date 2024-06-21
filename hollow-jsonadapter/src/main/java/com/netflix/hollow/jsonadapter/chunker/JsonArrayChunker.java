@@ -125,10 +125,10 @@ public class JsonArrayChunker {
             currentSegment = bufferSegments.remove().join();
         } catch (CompletionException e) {
             Throwable t = e.getCause(); // unwrap
-            if (t instanceof IOException) {
-                throw (IOException) t;
+            if (t instanceof IOException exception) {
+                throw exception;
             } else {
-                throw t instanceof RuntimeException ? (RuntimeException) t : e;
+                throw t instanceof RuntimeException re ? re : e;
             }
         }
         return true;

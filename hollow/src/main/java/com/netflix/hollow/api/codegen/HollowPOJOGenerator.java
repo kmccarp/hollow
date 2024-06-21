@@ -140,8 +140,8 @@ public class HollowPOJOGenerator {
         directory = destinationPath.toFile();
         if (!directory.exists()) directory.mkdirs();
         for (HollowSchema schema : dataset.getSchemas()) {
-            if (schema instanceof HollowObjectSchema && !isPrimitiveType(schema.getName())) {
-                HollowPOJOClassGenerator generator = new HollowPOJOClassGenerator(dataset, (HollowObjectSchema) schema,
+            if (schema instanceof HollowObjectSchema objectSchema && !isPrimitiveType(schema.getName())) {
+                HollowPOJOClassGenerator generator = new HollowPOJOClassGenerator(dataset, objectSchema,
                         packageName, pojoClassNameSuffix);
                 FileWriter writer = new FileWriter(new File(directory, generator.getClassName() + ".java"));
                 writer.write(generator.generate());

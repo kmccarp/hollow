@@ -30,11 +30,15 @@ import com.netflix.hollow.core.read.engine.HollowTypeReadState;
  */
 public class RecordCountVarianceValidator implements ValidatorListener {
     private static final String ZERO_PREVIOUS_COUNT_WARN_MSG_FORMAT =
-            "Previous record count is 0. Not running RecordCountVarianceValidator for type %s. "
-                    + "This scenario is not expected except when starting a new namespace.";
+            """
+            Previous record count is 0. Not running RecordCountVarianceValidator for type %s. \
+            This scenario is not expected except when starting a new namespace.\
+            """;
     private static final String FAILED_RECORD_COUNT_VALIDATION =
-            "Record count validation for type %s has failed as actual change percent %s "
-                    + "is greater than allowed change percent %s.";
+            """
+            Record count validation for type %s has failed as actual change percent %s \
+            is greater than allowed change percent %s.\
+            """;
 
     private static final String DATA_TYPE_NAME = "Typename";
     private static final String ALLOWABLE_VARIANCE_PERCENT_NAME = "AllowableVariancePercent";
@@ -86,15 +90,15 @@ public class RecordCountVarianceValidator implements ValidatorListener {
 
         if (previousCardinality == 0) {
             return vrb.detail("skipped", Boolean.TRUE).
-                    passed(String.format(ZERO_PREVIOUS_COUNT_WARN_MSG_FORMAT, typeName));
+                    passed(ZERO_PREVIOUS_COUNT_WARN_MSG_FORMAT.formatted(typeName));
         }
 
         float actualChangePercent = getChangePercent(latestCardinality, previousCardinality);
         vrb.detail(ACTUAL_CHANGE_PERCENT_NAME, actualChangePercent);
 
         if (Float.compare(actualChangePercent, allowableVariancePercent) > 0) {
-            String message = String.format(FAILED_RECORD_COUNT_VALIDATION, typeName, actualChangePercent,
-                    allowableVariancePercent);
+            String message = FAILED_RECORD_COUNT_VALIDATION.formatted(typeName, actualChangePercent,
+            allowableVariancePercent);
             return vrb.failed(message);
         }
 

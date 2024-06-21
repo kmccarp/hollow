@@ -33,8 +33,8 @@ public class SchemaSolidifier {
             HollowSchema schema = discoveredSchema.toHollowSchema();
             schemaMap.put(schema.getName(), schema);
             
-            if(schema instanceof HollowMapSchema) {
-                String keyType = ((HollowMapSchema)schema).getKeyType();
+            if(schema instanceof HollowMapSchema mapSchema) {
+                String keyType = mapSchema.getKeyType();
                 if(!schemaMap.containsKey(keyType))
                     schemaMap.put(keyType, getStringSchema(keyType));
             } else if(referencesGenericStringSchema(schema)) {
@@ -47,8 +47,7 @@ public class SchemaSolidifier {
     }
     
     private static boolean referencesGenericStringSchema(HollowSchema schema) {
-        if(schema instanceof HollowObjectSchema) {
-            HollowObjectSchema objSchema = (HollowObjectSchema)schema;
+        if(schema instanceof HollowObjectSchema objSchema) {
             for(int i=0;i<objSchema.numFields();i++) {
                 if("String".equals(objSchema.getReferencedType(i))) {
                     return true;

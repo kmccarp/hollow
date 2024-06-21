@@ -99,8 +99,7 @@ public abstract class HollowTypeMapper {
      * @return the type name.
      */
     public static String getDefaultTypeName(Type type) {
-        if(type instanceof Class) {
-            Class<?> clazz = (Class<?>)type;
+        if(type instanceof Class<?> clazz) {
             HollowTypeName explicitTypeName = clazz.getAnnotation(HollowTypeName.class);
             if(explicitTypeName != null)
                 return explicitTypeName.name();

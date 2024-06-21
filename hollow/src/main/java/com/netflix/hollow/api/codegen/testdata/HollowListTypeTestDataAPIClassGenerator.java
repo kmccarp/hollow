@@ -44,8 +44,11 @@ class HollowListTypeTestDataAPIClassGenerator {
         
         builder.append("package " + packageName + ";\n\n");
         
-        builder.append("import com.netflix.hollow.api.testdata.HollowTestListRecord;\n" + 
-                       "import com.netflix.hollow.core.schema.HollowListSchema;\n\n");
+        builder.append("""
+                       import com.netflix.hollow.api.testdata.HollowTestListRecord;
+                       import com.netflix.hollow.core.schema.HollowListSchema;
+                       
+                       """);
         
         builder.append("public class " + className + "<T> extends HollowTestListRecord<T> {\n\n");
 

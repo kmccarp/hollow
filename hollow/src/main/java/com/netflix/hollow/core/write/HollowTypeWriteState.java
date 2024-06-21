@@ -117,15 +117,15 @@ public abstract class HollowTypeWriteState {
 
         int ordinal;
 
-        if(restoredSchema instanceof HollowObjectSchema) {
-            ((HollowObjectWriteRecord)rec).writeDataTo(scratch, (HollowObjectSchema)restoredSchema);
+        if(restoredSchema instanceof HollowObjectSchema objectSchema) {
+            ((HollowObjectWriteRecord)rec).writeDataTo(scratch, objectSchema);
             int preferredOrdinal = restoredMap.get(scratch);
             scratch.reset();
             rec.writeDataTo(scratch);
             ordinal = ordinalMap.getOrAssignOrdinal(scratch, preferredOrdinal);
         } else {
-            if(rec instanceof HollowHashableWriteRecord) {
-                ((HollowHashableWriteRecord) rec).writeDataTo(scratch, IGNORED_HASHES);
+            if(rec instanceof HollowHashableWriteRecord record) {
+                record.writeDataTo(scratch, IGNORED_HASHES);
                 int preferredOrdinal = restoredMap.get(scratch);
                 scratch.reset();
                 rec.writeDataTo(scratch);
@@ -333,8 +333,8 @@ public abstract class HollowTypeWriteState {
         BitSet populatedOrdinals = listener.getPopulatedOrdinals();
 
         restoredReadState = readState;
-        if(schema instanceof HollowObjectSchema)
-            restoredSchema = ((HollowObjectSchema)schema).findCommonSchema((HollowObjectSchema)readState.getSchema());
+        if(schema instanceof HollowObjectSchema objectSchema)
+            restoredSchema = objectSchema.findCommonSchema((HollowObjectSchema)readState.getSchema());
         else
             restoredSchema = readState.getSchema();
         HollowRecordCopier copier = HollowRecordCopier.createCopier(restoredReadState, restoredSchema);
@@ -358,8 +358,8 @@ public abstract class HollowTypeWriteState {
         HollowWriteRecord rec = copier.copy(ordinal);
 
         ByteDataArray scratch = scratch();
-        if(rec instanceof HollowHashableWriteRecord)
-            ((HollowHashableWriteRecord)rec).writeDataTo(scratch, hashBehavior);
+        if(rec instanceof HollowHashableWriteRecord record)
+            record.writeDataTo(scratch, hashBehavior);
         else
             rec.writeDataTo(scratch);
 

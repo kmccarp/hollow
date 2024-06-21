@@ -64,20 +64,20 @@ public abstract class AbstractHollowDataAccessor<T> {
         this.typeState = requireNonNull(rStateEngine.getTypeState(type),
                 "type not loaded or does not exist in dataset; type=" + type);
         HollowSchema schema = typeState.getSchema();
-        if (schema instanceof HollowObjectSchema) {
+        if (schema instanceof HollowObjectSchema objectSchema) {
             this.type = type;
 
             if (primaryKey == null) {
-                HollowObjectSchema oSchema = ((HollowObjectSchema) schema);
+                HollowObjectSchema oSchema =objectSchema;
                 this.primaryKey = oSchema.getPrimaryKey();
             } else {
                 this.primaryKey = primaryKey;
             }
             if (this.primaryKey == null)
-                throw new RuntimeException(String.format("Unsupported DataType=%s with SchemaType=%s : %s", type, schema.getSchemaType(), "PrimaryKey is missing"));
+                throw new RuntimeException("Unsupported DataType=%s with SchemaType=%s : %s".formatted(type, schema.getSchemaType(), "PrimaryKey is missing"));
 
         } else {
-            throw new RuntimeException(String.format("Unsupported DataType=%s with SchemaType=%s : %s", type, schema.getSchemaType(), "Only supported type=" + SchemaType.OBJECT));
+            throw new RuntimeException("Unsupported DataType=%s with SchemaType=%s : %s".formatted(type, schema.getSchemaType(), "Only supported type=" + SchemaType.OBJECT));
         }
     }
 

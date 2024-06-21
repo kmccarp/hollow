@@ -38,10 +38,13 @@ class HollowObjectTypePerfAPIClassGenerator {
 
         builder.append("package " + packageName + ";\n\n");
 
-        builder.append("import com.netflix.hollow.api.perfapi.HollowObjectTypePerfAPI;\n" +
-                "import com.netflix.hollow.api.perfapi.HollowPerformanceAPI;\n" +
-                "import com.netflix.hollow.api.perfapi.Ref;\n" +
-                "import com.netflix.hollow.core.read.dataaccess.HollowDataAccess;\n\n");
+        builder.append("""
+                import com.netflix.hollow.api.perfapi.HollowObjectTypePerfAPI;
+                import com.netflix.hollow.api.perfapi.HollowPerformanceAPI;
+                import com.netflix.hollow.api.perfapi.Ref;
+                import com.netflix.hollow.core.read.dataaccess.HollowDataAccess;
+                
+                """);
 
         builder.append("@SuppressWarnings(\"all\")\n");
         builder.append("public class " + schema.getName() + "PerfAPI extends HollowObjectTypePerfAPI {\n\n");

@@ -67,20 +67,20 @@ public class HollowReadFieldUtils {
         if (value == null) {
             return 0;
         }
-        if(value instanceof Integer) {
-            return HollowReadFieldUtils.intHashCode((Integer)value);
-        } else if(value instanceof String) {
-            return HollowReadFieldUtils.stringHashCode((String)value);
-        } else if(value instanceof Float) {
-            return HollowReadFieldUtils.floatHashCode((Float)value);
-        } else if(value instanceof Double) {
-            return HollowReadFieldUtils.doubleHashCode((Double)value);
-        } else if(value instanceof Boolean) {
-            return HollowReadFieldUtils.booleanHashCode((Boolean) value);
-        } else if(value instanceof Long) {
-            return HollowReadFieldUtils.longHashCode((Long) value);
-        } else if(value instanceof byte[]) {
-            return HollowReadFieldUtils.byteArrayHashCode((byte[]) value);
+        if(value instanceof Integer integer) {
+            return HollowReadFieldUtils.intHashCode(integer);
+        } else if(value instanceof String string) {
+            return HollowReadFieldUtils.stringHashCode(string);
+        } else if(value instanceof Float float1) {
+            return HollowReadFieldUtils.floatHashCode(float1);
+        } else if(value instanceof Double double1) {
+            return HollowReadFieldUtils.doubleHashCode(double1);
+        } else if(value instanceof Boolean boolean1) {
+            return HollowReadFieldUtils.booleanHashCode(boolean1);
+        } else if(value instanceof Long long1) {
+            return HollowReadFieldUtils.longHashCode(long1);
+        } else if(value instanceof byte[] bytes) {
+            return HollowReadFieldUtils.byteArrayHashCode(bytes);
         } else {
             throw new RuntimeException("Unable to hash field of type " + value.getClass().getName());
         }
@@ -230,8 +230,8 @@ public class HollowReadFieldUtils {
                     return testObject.equals(typeAccess.readBoolean(ordinal, fieldPosition));
                 return testObject == null && typeAccess.readBoolean(ordinal, fieldPosition) == null;
             case BYTES:
-                if(testObject instanceof byte[])
-                    return Arrays.equals(typeAccess.readBytes(ordinal, fieldPosition), (byte[])testObject);
+                if(testObject instanceof byte[] bytes)
+                    return Arrays.equals(typeAccess.readBytes(ordinal, fieldPosition), bytes);
                 return testObject == null && typeAccess.readBytes(ordinal, fieldPosition) == null;
             case STRING:
                 if(testObject instanceof String)

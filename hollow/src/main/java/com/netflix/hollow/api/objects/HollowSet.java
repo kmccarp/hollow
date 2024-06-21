@@ -98,8 +98,7 @@ public abstract class HollowSet<T> extends AbstractSet<T> implements HollowRecor
         }
 
         // If type state is the same then compare ordinals
-        if (o instanceof HollowSet) {
-            HollowSet<?> that = (HollowSet<?>) o;
+        if (o instanceof HollowSet<?> that) {
             if (delegate.getTypeDataAccess() == that.delegate.getTypeDataAccess()) {
                 return ordinal == that.ordinal;
             }

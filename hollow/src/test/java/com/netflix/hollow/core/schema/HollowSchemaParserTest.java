@@ -31,13 +31,15 @@ public class HollowSchemaParserTest {
     @Test
     public void parsesObjectSchema() throws IOException {
         String objectSchema =
-                "/* This is a comment\n" +
-                        "   consisting of multiple lines */\n" +
-                        " TypeA {\n" +
-                        "    int a1;\n" +
-                        "    \tstring a2; //This is a comment\n" +
-                        "    String a3;\n" +
-                        "}\n";
+                """
+                /* This is a comment
+                   consisting of multiple lines */
+                 TypeA {
+                    int a1;
+                    	string a2; //This is a comment
+                    String a3;
+                }
+                """;
 
         HollowObjectSchema schema = (HollowObjectSchema) HollowSchemaParser.parseSchema(objectSchema);
 
@@ -57,11 +59,13 @@ public class HollowSchemaParserTest {
 
     @Test
     public void parsesObjectSchemaWithKey() throws IOException {
-        String objectSchema = " TypeA @PrimaryKey(a1) {\n" +
-                "    int a1;\n" +
-                "    string a2;\n" +
-                "    String a3;\n" +
-                "}\n";
+        String objectSchema = """
+                 TypeA @PrimaryKey(a1) {
+                    int a1;
+                    string a2;
+                    String a3;
+                }
+                """;
 
         HollowObjectSchema schema = (HollowObjectSchema) HollowSchemaParser.parseSchema(objectSchema);
 
@@ -82,11 +86,13 @@ public class HollowSchemaParserTest {
 
     @Test
     public void parsesObjectSchemaMultipleWithKey() throws IOException {
-        String objectSchema = " TypeA @PrimaryKey(a1, a3.value) {\n" +
-                "    int a1;\n" +
-                "    string a2;\n" +
-                "    String a3;\n" +
-                "}\n";
+        String objectSchema = """
+                 TypeA @PrimaryKey(a1, a3.value) {
+                    int a1;
+                    string a2;
+                    String a3;
+                }
+                """;
 
         HollowObjectSchema schema = (HollowObjectSchema) HollowSchemaParser.parseSchema(objectSchema);
 
@@ -196,16 +202,19 @@ public class HollowSchemaParserTest {
     @Test
     public void parsesManySchemas() throws IOException {
         String manySchemas =
-                "/* This is a comment\n" +
-                        "   consisting of multiple lines */\n" +
-                        " TypeA {\n" +
-                        "    int a1;\n" +
-                        "    \tstring a2; //This is a comment\n" +
-                        "    String a3;\n" +
-                        "}\n\n"+
-                        "MapOfStringToTypeA Map<String, TypeA>;\n"+
-                        "ListOfTypeA List<TypeA>;\n"+
-                        "TypeB { float b1; double b2; boolean b3; }";
+                """
+                /* This is a comment
+                   consisting of multiple lines */
+                 TypeA {
+                    int a1;
+                    	string a2; //This is a comment
+                    String a3;
+                }
+                
+                MapOfStringToTypeA Map<String, TypeA>;
+                ListOfTypeA List<TypeA>;
+                TypeB { float b1; double b2; boolean b3; }\
+                """;
 
 
         List<HollowSchema> schemas = HollowSchemaParser.parseCollectionOfSchemas(manySchemas);

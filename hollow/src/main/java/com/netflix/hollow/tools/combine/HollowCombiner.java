@@ -425,10 +425,10 @@ public class HollowCombiner {
     }
 
     private boolean isDefinedHashCode(HollowSchema schema) {
-        if(schema instanceof HollowSetSchema)
-            return typeNamesWithDefinedHashCodes.contains(((HollowSetSchema)schema).getElementType());
-        if(schema instanceof HollowMapSchema)
-            return typeNamesWithDefinedHashCodes.contains(((HollowMapSchema)schema).getKeyType());
+        if(schema instanceof HollowSetSchema setSchema)
+            return typeNamesWithDefinedHashCodes.contains(setSchema.getElementType());
+        if(schema instanceof HollowMapSchema mapSchema)
+            return typeNamesWithDefinedHashCodes.contains(mapSchema.getKeyType());
         return false;
     }
 

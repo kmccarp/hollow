@@ -62,17 +62,17 @@ public class HollowObjectCacheProvider<T> extends HollowObjectProvider<T> implem
                 if(previous != null && previousOrdinals.get(ordinal) && populatedOrdinals.get(ordinal)) {
                     T cached = previous.getHollowObject(ordinal);
                     arr.set(ordinal, cached);
-                    if(cached instanceof HollowRecord)
-                        ((HollowCachedDelegate)((HollowRecord)cached).getDelegate()).updateTypeAPI(typeAPI);
+                    if(cached instanceof HollowRecord record)
+                        ((HollowCachedDelegate)record.getDelegate()).updateTypeAPI(typeAPI);
                 } else if(populatedOrdinals.get(ordinal)){
                     arr.set(ordinal, instantiateCachedObject(factory, typeDataAccess, typeAPI, ordinal));
                 }
             }
 
-            if(typeDataAccess instanceof HollowTypeReadState) {
+            if(typeDataAccess instanceof HollowTypeReadState state) {
                 this.factory = factory;
                 this.typeAPI = typeAPI;
-                this.typeReadState = (HollowTypeReadState)typeDataAccess;
+                this.typeReadState = state;
                 this.typeReadState.addListener(this);
             }
 
@@ -86,10 +86,10 @@ public class HollowObjectCacheProvider<T> extends HollowObjectProvider<T> implem
     public T getHollowObject(int ordinal) {
         List<T> refCachedItems = cachedItems;
         if (refCachedItems == null) {
-            throw new IllegalStateException(String.format("HollowObjectCacheProvider for type %s has been detached or was not initialized", typeReadState == null ? null : typeReadState.getSchema().getName()));
+            throw new IllegalStateException("HollowObjectCacheProvider for type %s has been detached or was not initialized".formatted(typeReadState == null ? null : typeReadState.getSchema().getName()));
         }
         if (refCachedItems.size() <= ordinal) {
-            throw new IllegalStateException(String.format("Ordinal %s is out of bounds for pojo cache array of size %s.", ordinal, refCachedItems.size()));
+            throw new IllegalStateException("Ordinal %s is out of bounds for pojo cache array of size %s.".formatted(ordinal, refCachedItems.size()));
         }
         return refCachedItems.get(ordinal);
     }

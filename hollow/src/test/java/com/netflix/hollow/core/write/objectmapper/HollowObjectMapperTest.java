@@ -350,7 +350,7 @@ public class HollowObjectMapperTest extends AbstractStateEngineTest {
             mapper.initializeTypeState(clazz);
             Assert.fail("Expected Exception not thrown");
         } catch (IllegalStateException e) {
-            Assert.assertTrue(String.format("missing expected fieldname %s in the message, was %s", expected, e.getMessage()), e.getMessage().contains(expected));
+            Assert.assertTrue("missing expected fieldname %s in the message, was %s".formatted(expected, e.getMessage()), e.getMessage().contains(expected));
         }
     }
 
@@ -368,7 +368,7 @@ public class HollowObjectMapperTest extends AbstractStateEngineTest {
             mapper.initializeTypeState(clazz);
             Assert.fail("Expected Exception not thrown");
         } catch (IllegalArgumentException e) {
-            Assert.assertTrue(String.format("trying to generate schema based on interface %s, was %s", interfaceClazz.getSimpleName(), e.getMessage()), e.getMessage().contains(expected));
+            Assert.assertTrue("trying to generate schema based on interface %s, was %s".formatted(interfaceClazz.getSimpleName(), e.getMessage()), e.getMessage().contains(expected));
         }
     }
 
@@ -386,7 +386,7 @@ public class HollowObjectMapperTest extends AbstractStateEngineTest {
             mapper.initializeTypeState(clazz);
             Assert.fail("Expected Exception not thrown");
         } catch (IllegalArgumentException e) {
-            Assert.assertTrue(String.format("trying to generate schema based on array %s, was %s", arrayClass.getSimpleName(), e.getMessage()), e.getMessage().contains(expected));
+            Assert.assertTrue("trying to generate schema based on array %s, was %s".formatted(arrayClass.getSimpleName(), e.getMessage()), e.getMessage().contains(expected));
         }
     }
 

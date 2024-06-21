@@ -40,9 +40,11 @@ public class HollowObjectTypeDataElementsSplitter {
             }
         }
         if (from.encodedAdditions != null) {
-            throw new IllegalStateException("Encountered encodedAdditions in data elements splitter- this is not expected " +
-                    "since encodedAdditions only exist on delta data elements and they dont carry over to target data elements, " +
-                    "delta data elements are never split/joined");
+            throw new IllegalStateException("""
+                    Encountered encodedAdditions in data elements splitter- this is not expected \
+                    since encodedAdditions only exist on delta data elements and they dont carry over to target data elements, \
+                    delta data elements are never split/joined\
+                    """);
         }
 
         for(int i=0;i<to.length;i++) {

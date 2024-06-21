@@ -898,8 +898,8 @@ public class HollowProducerTest {
 
         @Override
         public void publish(HollowProducer.PublishArtifact publishArtifact) {
-            if (publishArtifact instanceof HeaderBlob) {
-                publishHeader((HeaderBlob) publishArtifact);
+            if (publishArtifact instanceof HeaderBlob blob) {
+                publishHeader(blob);
             } else {
                 publishBlob((Blob) publishArtifact);
             }

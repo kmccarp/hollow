@@ -245,8 +245,8 @@ public class HollowHashIndex implements HollowTypeStateListener {
         if (typeState == null) {
             return;
         }
-        if ((typeState instanceof HollowObjectTypeReadState))
-            ((HollowObjectTypeReadState) typeState).removeListener(this);
+        if ((typeState instanceof HollowObjectTypeReadState state))
+            state.removeListener(this);
     }
 
     @Override

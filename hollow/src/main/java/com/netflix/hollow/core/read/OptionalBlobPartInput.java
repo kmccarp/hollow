@@ -50,15 +50,15 @@ public class OptionalBlobPartInput implements Closeable {
 
     public File getFile(String partName) {
         Object f = inputsByPartName.get(partName);
-        if(f instanceof File)
-            return (File)f;
+        if(f instanceof File file)
+            return file;
         throw new UnsupportedOperationException();
     }
     
     public InputStream getInputStream(String partName) throws IOException {
         Object o = inputsByPartName.get(partName);
-        if(o instanceof File) {
-            InputStream stream = new BufferedInputStream(new FileInputStream((File)o));
+        if(o instanceof File file) {
+            InputStream stream = new BufferedInputStream(new FileInputStream(file));
             streamsToClose.add(stream);
             return stream;
         }

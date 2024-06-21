@@ -47,19 +47,27 @@ import java.util.stream.Collectors;
  */
 public class DuplicateDataDetectionValidator implements ValidatorListener {
     private static final String DUPLICATE_KEYS_FOUND_ERRRO_MSG_FORMAT =
-            "Duplicate keys found for type %s. Primarykey in schema is %s. "
-                    + "Duplicate IDs are: %s";
+            """
+            Duplicate keys found for type %s. Primarykey in schema is %s. \
+            Duplicate IDs are: %s\
+            """;
     private static final String NO_PRIMARY_KEY_ERROR_MSG_FORMAT =
-            "DuplicateDataDetectionValidator defined but unable to find primary key "
-                    + "for data type %s. Please check schema definition.";
+            """
+            DuplicateDataDetectionValidator defined but unable to find primary key \
+            for data type %s. Please check schema definition.\
+            """;
 
     private static final String NO_SCHEMA_FOUND_MSG_FORMAT =
-            "DuplicateDataDetectionValidator defined for data type %s but schema not found."
-            + "Please check that the HollowProducer is initialized with the data type's schema "
-            + "(see initializeDataModel)";
+            """
+            DuplicateDataDetectionValidator defined for data type %s but schema not found.\
+            Please check that the HollowProducer is initialized with the data type's schema \
+            (see initializeDataModel)\
+            """;
     private static final String NOT_AN_OBJECT_ERROR_MSG_FORMAT =
-            "DuplicateDataDetectionValidator is defined but schema type of %s "
-                    + "is not Object. This validation cannot be done.";
+            """
+            DuplicateDataDetectionValidator is defined but schema type of %s \
+            is not Object. This validation cannot be done.\
+            """;
 
     private static final String FIELD_PATH_NAME = "FieldPaths";
     private static final String DATA_TYPE_NAME = "Typename";
@@ -131,16 +139,16 @@ public class DuplicateDataDetectionValidator implements ValidatorListener {
         if (fieldPathNames == null) {
             HollowSchema schema = readState.getStateEngine().getSchema(dataTypeName);
             if (schema == null) {
-                return vrb.failed(String.format(NO_SCHEMA_FOUND_MSG_FORMAT, dataTypeName));
+                return vrb.failed(NO_SCHEMA_FOUND_MSG_FORMAT.formatted(dataTypeName));
             }
             if (schema.getSchemaType() != SchemaType.OBJECT) {
-                return vrb.failed(String.format(NOT_AN_OBJECT_ERROR_MSG_FORMAT, dataTypeName));
+                return vrb.failed(NOT_AN_OBJECT_ERROR_MSG_FORMAT.formatted(dataTypeName));
             }
 
             HollowObjectSchema oSchema = (HollowObjectSchema) schema;
             primaryKey = oSchema.getPrimaryKey();
             if (primaryKey == null) {
-                return vrb.failed(String.format(NO_PRIMARY_KEY_ERROR_MSG_FORMAT, dataTypeName));
+                return vrb.failed(NO_PRIMARY_KEY_ERROR_MSG_FORMAT.formatted(dataTypeName));
             }
         } else {
             primaryKey = new PrimaryKey(dataTypeName, fieldPathNames);
@@ -151,8 +159,8 @@ public class DuplicateDataDetectionValidator implements ValidatorListener {
 
         Collection<Object[]> duplicateKeys = getDuplicateKeys(readState.getStateEngine(), primaryKey);
         if (!duplicateKeys.isEmpty()) {
-            String message = String.format(DUPLICATE_KEYS_FOUND_ERRRO_MSG_FORMAT, dataTypeName, fieldPaths,
-                    duplicateKeysToString(duplicateKeys));
+            String message = DUPLICATE_KEYS_FOUND_ERRRO_MSG_FORMAT.formatted(dataTypeName, fieldPaths,
+            duplicateKeysToString(duplicateKeys));
             return vrb.failed(message);
         }
 

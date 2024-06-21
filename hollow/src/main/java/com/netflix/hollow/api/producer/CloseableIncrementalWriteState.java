@@ -50,8 +50,7 @@ final class CloseableIncrementalWriteState implements HollowProducer.Incremental
     }
 
     private RecordPrimaryKey getKey(Object o) {
-        if (o instanceof FlatRecord) {
-            FlatRecord fr = (FlatRecord) o;
+        if (o instanceof FlatRecord fr) {
             return fr.getRecordPrimaryKey();
         } else {
             return objectMapper.extractPrimaryKey(o);

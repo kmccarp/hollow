@@ -33,14 +33,14 @@ import org.junit.After;
 
 public class AbstractHollowAPIGeneratorTest {
     protected String tmpFolder = System.getProperty("java.io.tmpdir");
-    protected String sourceFolder = String.format("%s/src", tmpFolder);
-    protected String clazzFolder = String.format("%s/classes", tmpFolder);
+    protected String sourceFolder = "%s/src".formatted(tmpFolder);
+    protected String clazzFolder = "%s/classes".formatted(tmpFolder);
     private Path metaInfoPath = null;
 
     void runGenerator(String apiClassName, String packageName, Class<?> clazz,
             UnaryOperator<HollowAPIGenerator.Builder> generatorCustomizer) throws Exception {
-        System.out.println(String.format("Folders (%s) : \n\tsource=%s \n\tclasses=%s",
-                    getClass().getSimpleName(), sourceFolder, clazzFolder));
+        System.out.println("Folders (%s) : \n\tsource=%s \n\tclasses=%s".formatted(
+        getClass().getSimpleName(), sourceFolder, clazzFolder));
 
         // Setup Folders
         HollowCodeGenerationCompileUtil.cleanupFolder(new File(sourceFolder), null);

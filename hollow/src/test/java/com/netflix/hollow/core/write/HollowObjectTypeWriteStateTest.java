@@ -48,7 +48,7 @@ public class HollowObjectTypeWriteStateTest {
             ws.add("A");
             ws.add("B");
             for (int i=0; i<50; i++) {
-                ws.add(new Long(i));
+                ws.add(Long.valueOf(i));
             }
         });
 
@@ -84,7 +84,7 @@ public class HollowObjectTypeWriteStateTest {
             // override cycle start time with a strictly incrementing count to work around clock skew
             ws.add("A");
             for (int i=0; i<50; i++) { // results in 2 shards at shard size 32
-                ws.add(new Long(i));
+                ws.add(Long.valueOf(i));
             }
         });
 
@@ -124,7 +124,7 @@ public class HollowObjectTypeWriteStateTest {
             // override cycle start time with a strictly incrementing count to work around clock skew
             ws.add("A");
             for (int i=0; i<50; i++) { // results in 2 shards at shard size 32
-                ws.add(new Long(i));
+                ws.add(Long.valueOf(i));
             }
         });
         consumer.triggerRefreshTo(v4);
@@ -151,7 +151,7 @@ public class HollowObjectTypeWriteStateTest {
         long v1 = p1.runCycle(ws -> {
             // override cycle start time with a strictly incrementing count to work around clock skew
             for (int i=0; i<50; i++) { // results in 2 shards at shard size 32
-                ws.add(new Long(i));
+                ws.add(Long.valueOf(i));
             }
         });
 
@@ -180,7 +180,7 @@ public class HollowObjectTypeWriteStateTest {
 
         long v2 = p2.runCycle(ws -> {
             for (int i=0; i<100; i++) { // results in 2 shards at shard size 32
-                ws.add(new Long(i));
+                ws.add(Long.valueOf(i));
             }
         });
 

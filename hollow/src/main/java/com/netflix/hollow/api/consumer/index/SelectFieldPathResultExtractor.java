@@ -58,15 +58,15 @@ final class SelectFieldPathResultExtractor<T> {
     static IllegalArgumentException incompatibleSelectType(
             Class<?> selectType, String fieldPath, HollowObjectSchema.FieldType schemaFieldType) {
         return new IllegalArgumentException(
-                String.format("Select type %s incompatible with field path %s resolving to field of type %s",
-                        selectType.getName(), fieldPath, schemaFieldType));
+        "Select type %s incompatible with field path %s resolving to field of type %s".formatted(
+        selectType.getName(), fieldPath, schemaFieldType));
     }
 
     static IllegalArgumentException incompatibleSelectType(Class<?> selectType, String fieldPath, String typeName) {
         return new IllegalArgumentException(
-                String.format(
-                        "Select type %s incompatible with field path %s resolving to field of reference type %s",
-                        selectType.getName(), fieldPath, typeName));
+        
+        "Select type %s incompatible with field path %s resolving to field of reference type %s".formatted(
+        selectType.getName(), fieldPath, typeName));
     }
 
     static <T> SelectFieldPathResultExtractor<T> from(
@@ -132,8 +132,8 @@ final class SelectFieldPathResultExtractor<T> {
                         MethodType.methodType(selectType, int.class));
             } catch (NoSuchMethodException | IllegalAccessException e) {
                 throw new IllegalArgumentException(
-                        String.format("Select type %s is not associated with API %s",
-                                selectType.getName(), apiType.getName()),
+                "Select type %s is not associated with API %s".formatted(
+                selectType.getName(), apiType.getName()),
                         e);
             }
 

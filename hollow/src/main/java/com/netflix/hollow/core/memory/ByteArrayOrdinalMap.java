@@ -119,9 +119,9 @@ public class ByteArrayOrdinalMap {
     /// acquire the lock before writing.
     private synchronized int assignOrdinal(ByteDataArray serializedRepresentation, int hash, int preferredOrdinal) {
         if (preferredOrdinal < -1 || preferredOrdinal > ORDINAL_MASK) {
-            throw new IllegalArgumentException(String.format(
-                    "The given preferred ordinal %s is out of bounds and not within the closed interval [-1, %s]",
-                    preferredOrdinal, ORDINAL_MASK));
+            throw new IllegalArgumentException(
+            "The given preferred ordinal %s is out of bounds and not within the closed interval [-1, %s]".formatted(
+            preferredOrdinal, ORDINAL_MASK));
         }
         if (size > sizeBeforeGrow) {
             growKeyArray();
@@ -149,9 +149,9 @@ public class ByteArrayOrdinalMap {
         /// it is up to this thread to add it at the current bucket position.
         int ordinal = findFreeOrdinal(preferredOrdinal);
         if (ordinal > ORDINAL_MASK) {
-            throw new IllegalStateException(String.format(
-                    "Ordinal cannot be assigned. The to be assigned ordinal, %s, is greater than the maximum supported ordinal value of %s",
-                    ordinal, ORDINAL_MASK));
+            throw new IllegalStateException(
+            "Ordinal cannot be assigned. The to be assigned ordinal, %s, is greater than the maximum supported ordinal value of %s".formatted(
+            ordinal, ORDINAL_MASK));
         }
 
         long pointer = byteData.length();
@@ -162,9 +162,9 @@ public class ByteArrayOrdinalMap {
         /// of a new segments array (see SegmentedByteArray.ensureCapacity).
         serializedRepresentation.copyTo(byteData);
         if (byteData.length() > MAX_BYTE_DATA_LENGTH) {
-            throw new IllegalStateException(String.format(
-                    "The number of bytes for the serialized representations, %s, is too large and is greater than the maximum of %s bytes",
-                    byteData.length(), MAX_BYTE_DATA_LENGTH));
+            throw new IllegalStateException(
+            "The number of bytes for the serialized representations, %s, is too large and is greater than the maximum of %s bytes".formatted(
+            byteData.length(), MAX_BYTE_DATA_LENGTH));
         }
 
         key = ((long) ordinal << BITS_PER_POINTER) | pointer;
@@ -203,9 +203,9 @@ public class ByteArrayOrdinalMap {
      */
     public void put(ByteDataArray serializedRepresentation, int ordinal) {
         if (ordinal < 0 || ordinal > ORDINAL_MASK) {
-            throw new IllegalArgumentException(String.format(
-                    "The given ordinal %s is out of bounds and not within the closed interval [0, %s]",
-                    ordinal, ORDINAL_MASK));
+            throw new IllegalArgumentException(
+            "The given ordinal %s is out of bounds and not within the closed interval [0, %s]".formatted(
+            ordinal, ORDINAL_MASK));
         }
         if (size > sizeBeforeGrow) {
             growKeyArray();
@@ -229,9 +229,9 @@ public class ByteArrayOrdinalMap {
         VarInt.writeVInt(byteData, (int) serializedRepresentation.length());
         serializedRepresentation.copyTo(byteData);
         if (byteData.length() > MAX_BYTE_DATA_LENGTH) {
-            throw new IllegalStateException(String.format(
-                    "The number of bytes for the serialized representations, %s, is too large and is greater than the maximum of %s bytes",
-                    byteData.length(), MAX_BYTE_DATA_LENGTH));
+            throw new IllegalStateException(
+            "The number of bytes for the serialized representations, %s, is too large and is greater than the maximum of %s bytes".formatted(
+            byteData.length(), MAX_BYTE_DATA_LENGTH));
         }
 
         key = ((long) ordinal << BITS_PER_POINTER) | pointer;

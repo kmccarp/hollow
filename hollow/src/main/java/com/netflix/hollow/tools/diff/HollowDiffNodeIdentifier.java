@@ -83,8 +83,7 @@ public class HollowDiffNodeIdentifier {
     public boolean equals(Object other) {
         if(this == other)
             return true;
-        if(other instanceof HollowDiffNodeIdentifier) {
-            HollowDiffNodeIdentifier otherId = (HollowDiffNodeIdentifier)other;
+        if(other instanceof HollowDiffNodeIdentifier otherId) {
             if(otherId.getParents().size() == parents.size()) {
                 for(int i=parents.size() - 1;i >= 0;i--) {
                     HollowDiffNodeIdentifier myParent = parents.get(i);

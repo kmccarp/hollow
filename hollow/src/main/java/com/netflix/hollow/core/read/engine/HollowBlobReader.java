@@ -324,32 +324,31 @@ public class HollowBlobReader {
         String typeName = schema.getName();
 
 
-        if(schema instanceof HollowObjectSchema) {
+        if(schema instanceof HollowObjectSchema unfilteredSchema) {
             if(!filter.includes(typeName)) {
-                HollowObjectTypeReadState.discardSnapshot(in, (HollowObjectSchema)schema, numShards);
+                HollowObjectTypeReadState.discardSnapshot(in, unfilteredSchema, numShards);
 
             } else {
-                HollowObjectSchema unfilteredSchema = (HollowObjectSchema)schema;
                 HollowObjectSchema filteredSchema = unfilteredSchema.filterSchema(filter);
                 populateTypeStateSnapshotWithNumShards(in, new HollowObjectTypeReadState(stateEngine, memoryMode, filteredSchema, unfilteredSchema), numShards);
             }
-        } else if (schema instanceof HollowListSchema) {
+        } else if (schema instanceof HollowListSchema listSchema) {
             if(!filter.includes(typeName)) {
                 HollowListTypeReadState.discardSnapshot(in, numShards);
             } else {
-                populateTypeStateSnapshot(in, new HollowListTypeReadState(stateEngine, memoryMode, (HollowListSchema)schema, numShards));
+                populateTypeStateSnapshot(in, new HollowListTypeReadState(stateEngine, memoryMode, listSchema, numShards));
             }
-        } else if(schema instanceof HollowSetSchema) {
+        } else if(schema instanceof HollowSetSchema setSchema) {
             if(!filter.includes(typeName)) {
                 HollowSetTypeReadState.discardSnapshot(in, numShards);
             } else {
-                populateTypeStateSnapshot(in, new HollowSetTypeReadState(stateEngine, memoryMode, (HollowSetSchema)schema, numShards));
+                populateTypeStateSnapshot(in, new HollowSetTypeReadState(stateEngine, memoryMode, setSchema, numShards));
             }
-        } else if(schema instanceof HollowMapSchema) {
+        } else if(schema instanceof HollowMapSchema mapSchema) {
             if(!filter.includes(typeName)) {
                 HollowMapTypeReadState.discardSnapshot(in, numShards);
             } else {
-                populateTypeStateSnapshot(in, new HollowMapTypeReadState(stateEngine, memoryMode, (HollowMapSchema)schema, numShards));
+                populateTypeStateSnapshot(in, new HollowMapTypeReadState(stateEngine, memoryMode, mapSchema, numShards));
             }
         }
 
@@ -407,8 +406,8 @@ public class HollowBlobReader {
 
 
     private void discardDelta(HollowBlobInput in, HollowSchema schema, int numShards) throws IOException {
-        if(schema instanceof HollowObjectSchema)
-            HollowObjectTypeReadState.discardDelta(in, (HollowObjectSchema)schema, numShards);
+        if(schema instanceof HollowObjectSchema objectSchema)
+            HollowObjectTypeReadState.discardDelta(in, objectSchema, numShards);
         else if(schema instanceof HollowListSchema)
             HollowListTypeReadState.discardDelta(in, numShards);
         else if(schema instanceof HollowSetSchema)
@@ -419,8 +418,10 @@ public class HollowBlobReader {
 
     private void validateMemoryMode(MemoryMode inputMode) {
         if (!memoryMode.equals(inputMode)) {
-            throw new IllegalStateException(String.format("HollowBlobReader is configured for memory mode %s but " +
-                    "HollowBlobInput of mode %s was provided", memoryMode, inputMode));
+            throw new IllegalStateException(("""
+            HollowBlobReader is configured for memory mode %s but \
+            HollowBlobInput of mode %s was provided\
+            """).formatted(memoryMode, inputMode));
         }
     }
 }

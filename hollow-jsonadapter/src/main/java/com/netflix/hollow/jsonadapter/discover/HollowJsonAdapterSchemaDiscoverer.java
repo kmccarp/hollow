@@ -94,14 +94,14 @@ public class HollowJsonAdapterSchemaDiscoverer extends AbstractHollowJsonAdaptor
                 case START_ARRAY:
                     String listName = schemaNamer.subCollectionName(schema.schemaName, "ArrayOf", fieldName);
                     String elementName = schemaNamer.subObjectName(schema.schemaName, "", fieldName);
-                    if (isDebug) System.out.println(String.format("\t ARR[START] token=%s schemaName=%s fieldName=%s listName=%s elementName=%s", token, schema.schemaName, fieldName, listName, elementName));
+                    if (isDebug) System.out.println("\t ARR[START] token=%s schemaName=%s fieldName=%s listName=%s elementName=%s".formatted(token, schema.schemaName, fieldName, listName, elementName));
 
                     discoveredSchema(listName, DiscoveredSchemaType.LIST, elementName);
                     schema.addField(fieldName, FieldType.REFERENCE, listName);
 
                     HollowDiscoveredSchema elementSchema = discoveredSchema(elementName, DiscoveredSchemaType.OBJECT, null);
                     discoverSubArraySchemas(parser, elementSchema);
-                    if (isDebug) System.out.println(String.format("\t ARR[END] token=%s schemaName=%s fieldName=%s listName=%s elementName=%s elementSchema=%s", token, schema.schemaName, fieldName, listName, elementName, elementSchema));
+                    if (isDebug) System.out.println("\t ARR[END] token=%s schemaName=%s fieldName=%s listName=%s elementName=%s elementSchema=%s".formatted(token, schema.schemaName, fieldName, listName, elementName, elementSchema));
 
                     break;
                 case START_OBJECT:
@@ -109,42 +109,42 @@ public class HollowJsonAdapterSchemaDiscoverer extends AbstractHollowJsonAdaptor
                     //if (isDebug) System.out.println("\t\t [MAP CHECK] subObjectName=" + subObjectName + "\t" + mapTypes.contains(subObjectName) + "\t" + mapTypes);
                     if(mapTypes.contains(subObjectName)) {
                         String subMapName = schemaNamer.subCollectionName(schema.schemaName, "MapOf", fieldName);
-                        if (isDebug) System.out.println(String.format("\t MAP[START] token=%s schemaName=%s fieldName=%s subMapName=%s subObjectName=%s", token, schema.schemaName, fieldName, subMapName, subObjectName));
+                        if (isDebug) System.out.println("\t MAP[START] token=%s schemaName=%s fieldName=%s subMapName=%s subObjectName=%s".formatted(token, schema.schemaName, fieldName, subMapName, subObjectName));
 
                         discoveredSchema(subMapName, DiscoveredSchemaType.MAP, subObjectName);
                         schema.addField(fieldName, FieldType.REFERENCE, subMapName);
 
                         HollowDiscoveredSchema valueSchema = discoveredSchema(subObjectName, DiscoveredSchemaType.OBJECT, null);
                         discoverSubMapSchemas(parser, valueSchema);
-                        if (isDebug) System.out.println(String.format("\t MAP[END] token=%s schemaName=%s fieldName=%s subMapName=%s subObjectName=%s valueSchema=%s", token, schema.schemaName, fieldName, subMapName, subObjectName, valueSchema));
+                        if (isDebug) System.out.println("\t MAP[END] token=%s schemaName=%s fieldName=%s subMapName=%s subObjectName=%s valueSchema=%s".formatted(token, schema.schemaName, fieldName, subMapName, subObjectName, valueSchema));
                     } else {
-                        if (isDebug) System.out.println(String.format("\t OBJ[START] token=%s schemaName=%s fieldName=%s subObjectName=%s", token, schema.schemaName, fieldName, subObjectName));
+                        if (isDebug) System.out.println("\t OBJ[START] token=%s schemaName=%s fieldName=%s subObjectName=%s".formatted(token, schema.schemaName, fieldName, subObjectName));
                         HollowDiscoveredSchema subObjectSchema = discoveredSchema(subObjectName, DiscoveredSchemaType.OBJECT, null);
                         if (fieldName != null) schema.addField(fieldName, FieldType.REFERENCE, subObjectName);
 
                         discoverSchemas(parser, subObjectSchema);
-                        if (isDebug) System.out.println(String.format("\t OBJ[END] token=%s schemaName=%s fieldName=%s subObjectName=%s subObjectSchema=%s", token, schema.schemaName, fieldName, subObjectName, subObjectSchema));
+                        if (isDebug) System.out.println("\t OBJ[END] token=%s schemaName=%s fieldName=%s subObjectName=%s subObjectSchema=%s".formatted(token, schema.schemaName, fieldName, subObjectName, subObjectSchema));
                     }
 
                     break;
                 case VALUE_NUMBER_INT:
-                    if (isDebug) System.out.println(String.format("\t FIELD token=%s schemaName=%s fieldName=%s value=%s", token, schema.schemaName, fieldName, parser.getLongValue()));
+                    if (isDebug) System.out.println("\t FIELD token=%s schemaName=%s fieldName=%s value=%s".formatted(token, schema.schemaName, fieldName, parser.getLongValue()));
                     schema.addField(fieldName, FieldType.LONG);
                     break;
                 case VALUE_NUMBER_FLOAT:
-                    if (isDebug) System.out.println(String.format("\t FIELD token=%s schemaName=%s fieldName=%s value=%s", token, schema.schemaName, fieldName, parser.getDoubleValue()));
+                    if (isDebug) System.out.println("\t FIELD token=%s schemaName=%s fieldName=%s value=%s".formatted(token, schema.schemaName, fieldName, parser.getDoubleValue()));
                     schema.addField(fieldName, FieldType.DOUBLE);
                     break;
                 case VALUE_NULL:
-                    if (isDebug) System.out.println(String.format("\t FIELD token=%s schemaName=%s fieldName=%s", token, schema.schemaName, fieldName));
+                    if (isDebug) System.out.println("\t FIELD token=%s schemaName=%s fieldName=%s".formatted(token, schema.schemaName, fieldName));
                     break;
                 case VALUE_STRING:
-                    if (isDebug) System.out.println(String.format("\t FIELD token=%s schemaName=%s fieldName=%s value=%s", token, schema.schemaName, fieldName, parser.getValueAsString()));
+                    if (isDebug) System.out.println("\t FIELD token=%s schemaName=%s fieldName=%s value=%s".formatted(token, schema.schemaName, fieldName, parser.getValueAsString()));
                     schema.addField(fieldName, FieldType.STRING);
                     break;
                 case VALUE_FALSE:
                 case VALUE_TRUE:
-                    if (isDebug) System.out.println(String.format("\t FIELD token=%s schemaName=%s fieldName=%s value=%s", token, schema.schemaName, fieldName, parser.getBooleanValue()));
+                    if (isDebug) System.out.println("\t FIELD token=%s schemaName=%s fieldName=%s value=%s".formatted(token, schema.schemaName, fieldName, parser.getBooleanValue()));
                     schema.addField(fieldName, FieldType.BOOLEAN);
                     break;
                 default:
@@ -205,7 +205,7 @@ public class HollowJsonAdapterSchemaDiscoverer extends AbstractHollowJsonAdaptor
     }
 
     private static String padRight(String s, int n) {
-        return String.format("%1$-" + n + "s", s);
+        return ("%1$-" + n + "s").formatted(s);
     }
 
     public static void analyzeSchemas(Collection<HollowDiscoveredSchema> schemas, int largeNumOfFieldsThreshold) {
@@ -222,7 +222,7 @@ public class HollowJsonAdapterSchemaDiscoverer extends AbstractHollowJsonAdaptor
             int maxKeyLen = 0;
             String fieldHeaderTemplate = isObjectWithLargeNumOfFieldsFields ? "[***] Object with lots of fields: %s" : "Field Count: %s";
             StringBuilder builder = new StringBuilder("\t  - ");
-            builder.append(String.format(fieldHeaderTemplate, fieldCount)).append("\n");
+            builder.append(fieldHeaderTemplate.formatted(fieldCount)).append("\n");
             for (String key : schema.fields.keySet()) {
                 if (key.length() > maxKeyLen) maxKeyLen = key.length();
             } // find max key len

@@ -115,8 +115,7 @@ public abstract class HollowMap<K, V> extends AbstractMap<K, V> implements Hollo
         }
 
         // If type state is the same then compare ordinals
-        if (o instanceof HollowMap) {
-            HollowMap<?, ?> that = (HollowMap<?, ?>) o;
+        if (o instanceof HollowMap<?,?> that) {
             if (delegate.getTypeDataAccess() == that.delegate.getTypeDataAccess()) {
                 return ordinal == that.ordinal;
             }
@@ -215,8 +214,7 @@ public abstract class HollowMap<K, V> extends AbstractMap<K, V> implements Hollo
                 return false;
             }
 
-            if (o instanceof OrdinalEntry) {
-                OrdinalEntry<?, ?> that = (OrdinalEntry) o;
+            if (o instanceof OrdinalEntry<?,?> that) {
                 if (map.delegate.getTypeDataAccess() == that.map.delegate.getTypeDataAccess()) {
                     return keyOrdinal == that.keyOrdinal &&
                             valueOrdinal == that.valueOrdinal;

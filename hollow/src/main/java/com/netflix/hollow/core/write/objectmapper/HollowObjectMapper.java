@@ -170,8 +170,7 @@ public class HollowObjectMapper {
                 visited = new HashSet<>();
             }
 
-            if (type instanceof ParameterizedType) {
-                ParameterizedType parameterizedType = (ParameterizedType) type;
+            if (type instanceof ParameterizedType parameterizedType) {
                 Class<?> clazz = (Class<?>) parameterizedType.getRawType();
 
                 if (List.class.isAssignableFrom(clazz)) {

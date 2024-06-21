@@ -233,7 +233,7 @@ public class HistoryUITest {
             int ordinal = populatedOrdinals.nextSetBit(0);
             while (ordinal != -1) {
                 HollowObjectTypeReadState o = (HollowObjectTypeReadState) typeReadState;
-                System.out.println(String.format("%s: %s, %s", ordinal, o.readInt(ordinal, 0), o.readInt(ordinal, 1)));
+                System.out.println("%s: %s, %s".formatted(ordinal, o.readInt(ordinal, 0), o.readInt(ordinal, 1)));
                 ordinal = populatedOrdinals.nextSetBit(ordinal + 1);
             }
         }

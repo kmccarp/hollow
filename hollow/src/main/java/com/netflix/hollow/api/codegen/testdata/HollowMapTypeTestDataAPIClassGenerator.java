@@ -46,8 +46,11 @@ class HollowMapTypeTestDataAPIClassGenerator {
         
         builder.append("package " + packageName + ";\n\n");
         
-        builder.append("import com.netflix.hollow.api.testdata.HollowTestMapRecord;\n" +
-                       "import com.netflix.hollow.core.schema.HollowMapSchema;\n\n");
+        builder.append("""
+                       import com.netflix.hollow.api.testdata.HollowTestMapRecord;
+                       import com.netflix.hollow.core.schema.HollowMapSchema;
+                       
+                       """);
         
         builder.append("public class " + className + "<T> extends HollowTestMapRecord<T> {\n\n");
         

@@ -247,8 +247,7 @@ public class HollowObjectMapperFlatRecordParserTest {
 
     @Override
     public boolean equals(Object o) {
-        if(o instanceof TypeWithAllSimpleTypes) {
-            TypeWithAllSimpleTypes other = (TypeWithAllSimpleTypes)o;
+        if(o instanceof TypeWithAllSimpleTypes other) {
             return Objects.equals(boxedIntegerField, other.boxedIntegerField) &&
                 Objects.equals(boxedBooleanField, other.boxedBooleanField) &&
                 Objects.equals(boxedDoubleField, other.boxedDoubleField) &&
@@ -329,8 +328,7 @@ public class HollowObjectMapperFlatRecordParserTest {
 
     @Override
     public boolean equals(Object o) {
-      if(o instanceof TypeWithCollections) {
-        TypeWithCollections other = (TypeWithCollections)o;
+      if(o instanceof TypeWithCollections other) {
         return id == other.id &&
             Objects.equals(stringList, other.stringList) &&
             Objects.equals(stringSet, other.stringSet) &&
@@ -370,8 +368,7 @@ public class HollowObjectMapperFlatRecordParserTest {
 
     @Override
     public boolean equals(Object o) {
-      if(o instanceof VersionedType1) {
-        VersionedType1 other = (VersionedType1)o;
+      if(o instanceof VersionedType1 other) {
         return Objects.equals(stringField, other.stringField) &&
             Objects.equals(boxedIntegerField, other.boxedIntegerField) &&
             primitiveDoubleField == other.primitiveDoubleField &&
@@ -407,8 +404,7 @@ public class HollowObjectMapperFlatRecordParserTest {
 
     @Override
     public boolean equals(Object o) {
-      if(o instanceof VersionedType2) {
-        VersionedType2 other = (VersionedType2)o;
+      if(o instanceof VersionedType2 other) {
         return Objects.equals(boxedIntegerField, other.boxedIntegerField) &&
             primitiveDoubleField == other.primitiveDoubleField &&
             Objects.equals(stringSet, other.stringSet) &&
@@ -452,8 +448,7 @@ public class HollowObjectMapperFlatRecordParserTest {
 
     @Override
     public boolean equals(Object o) {
-      if(o instanceof InternalTypeA) {
-        InternalTypeA other = (InternalTypeA)o;
+      if(o instanceof InternalTypeA other) {
         return id.equals(other.id) && name.equals(other.name);
       }
       return false;
@@ -490,8 +485,7 @@ public class HollowObjectMapperFlatRecordParserTest {
 
     @Override
     public boolean equals(Object o) {
-      if(o instanceof InternalTypeB) {
-        InternalTypeB other = (InternalTypeB)o;
+      if(o instanceof InternalTypeB other) {
         return id.equals(other.id) && name.equals(other.name);
       }
       return false;
@@ -518,8 +512,7 @@ public class HollowObjectMapperFlatRecordParserTest {
       
       @Override
       public boolean equals(Object o) {
-        if(o instanceof InternalTypeC) {
-          InternalTypeC other = (InternalTypeC)o;
+        if(o instanceof InternalTypeC other) {
           return data.equals(other.data);
         }
         return false;
@@ -587,8 +580,7 @@ public class HollowObjectMapperFlatRecordParserTest {
 
     @Override
     public boolean equals(Object o) {
-      if(o instanceof SpecialWrapperTypesTest) {
-        SpecialWrapperTypesTest other = (SpecialWrapperTypesTest)o;
+      if(o instanceof SpecialWrapperTypesTest other) {
         return id == other.id && complexEnum == other.complexEnum && type == other.type && dateCreated.equals(other.dateCreated);
       }
       return false;

@@ -58,20 +58,20 @@ public abstract class HollowTestObjectRecord<T> extends HollowTestRecord<T> {
         
         for(Map.Entry<String, Field> entry : fields.entrySet()) {
             Field field = entry.getValue();
-            if(field.value instanceof Integer) {
-                rec.setInt(field.name, (Integer)field.value);
-            } else if(field.value instanceof Long) {
-                rec.setLong(field.name, (Long)field.value);
-            } else if(field.value instanceof Float) {
-                rec.setFloat(field.name, (Float)field.value);
-            } else if(field.value instanceof Boolean) {
-                rec.setBoolean(field.name, (Boolean)field.value);
-            } else if(field.value instanceof String) {
-                rec.setString(field.name, (String)field.value);
-            } else if(field.value instanceof byte[]) {
-                rec.setBytes(field.name, (byte[])field.value);
-            } else if(field.value instanceof HollowTestRecord) {
-                rec.setReference(field.name, ((HollowTestRecord)field.value).addTo(writeEngine));
+            if(field.value instanceof Integer integer) {
+                rec.setInt(field.name, integer);
+            } else if(field.value instanceof Long long1) {
+                rec.setLong(field.name, long1);
+            } else if(field.value instanceof Float float1) {
+                rec.setFloat(field.name, float1);
+            } else if(field.value instanceof Boolean boolean1) {
+                rec.setBoolean(field.name, boolean1);
+            } else if(field.value instanceof String string) {
+                rec.setString(field.name, string);
+            } else if(field.value instanceof byte[] bytes) {
+                rec.setBytes(field.name, bytes);
+            } else if(field.value instanceof HollowTestRecord<?> record) {
+                rec.setReference(field.name, record.addTo(writeEngine));
             } else {
                 throw new IllegalStateException("Unknown field type: " + field.value.getClass());
             }

@@ -127,12 +127,14 @@ public class HollowRecordStringifierTest extends AbstractHollowRecordStringifier
         StringWriter writer = new StringWriter();
         recordStringifier.stringify(writer, genericHollowObjects);
         Assert.assertEquals("Multiple records should be printed correctly",
-                "[\n" +
-                        "  id: 1\n" +
-                        "  name: one,\n" +
-                        "  id: 2\n" +
-                        "  name: two" +
-                        "\n]", writer.toString());
+                """
+                [
+                  id: 1
+                  name: one,
+                  id: 2
+                  name: two
+                ]\
+                """, writer.toString());
     }
 
     private static <T> String stringifyType(Class<T> clazz, boolean expanded, T... instances) throws IOException {

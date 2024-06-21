@@ -124,7 +124,7 @@ public class HollowFilesystemBlobStager implements BlobStager {
             super(version);
             this.compressor = compressor;
             int randomExtension = new Random().nextInt() & Integer.MAX_VALUE;
-            this.path = dirPath.resolve(String.format("header-%d.%s", version, Integer.toHexString(randomExtension)));
+            this.path = dirPath.resolve("header-%d.%s".formatted(version, Integer.toHexString(randomExtension)));
         }
 
         @Override
@@ -185,11 +185,11 @@ public class HollowFilesystemBlobStager implements BlobStager {
 
             switch (type) {
             case SNAPSHOT:
-                this.path = dirPath.resolve(String.format("%s-%d.%s", type.prefix, toVersion, Integer.toHexString(randomExtension)));
+                this.path = dirPath.resolve("%s-%d.%s".formatted(type.prefix, toVersion, Integer.toHexString(randomExtension)));
                 break;
             case DELTA:
             case REVERSE_DELTA:
-                this.path = dirPath.resolve(String.format("%s-%d-%d.%s", type.prefix, fromVersion, toVersion, Integer.toHexString(randomExtension)));
+                this.path = dirPath.resolve("%s-%d-%d.%s".formatted(type.prefix, fromVersion, toVersion, Integer.toHexString(randomExtension)));
                 break;
             default:
                 throw new IllegalStateException("unknown blob type, type=" + type);
@@ -200,11 +200,11 @@ public class HollowFilesystemBlobStager implements BlobStager {
                     Path partPath;
                     switch (type) {
                     case SNAPSHOT:
-                        partPath = dirPath.resolve(String.format("%s_%s-%d.%s", type.prefix, part, toVersion, Integer.toHexString(randomExtension)));
+                        partPath = dirPath.resolve("%s_%s-%d.%s".formatted(type.prefix, part, toVersion, Integer.toHexString(randomExtension)));
                         break;
                     case DELTA:
                     case REVERSE_DELTA:
-                        partPath = dirPath.resolve(String.format("%s_%s-%d-%d.%s", type.prefix, part, fromVersion, toVersion, Integer.toHexString(randomExtension)));
+                        partPath = dirPath.resolve("%s_%s-%d-%d.%s".formatted(type.prefix, part, fromVersion, toVersion, Integer.toHexString(randomExtension)));
                         break;
                     default:
                         throw new IllegalStateException("unknown blob type, type=" + type);

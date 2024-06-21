@@ -99,8 +99,8 @@ public class HollowDiff {
             schemas.addAll(fromStateEngine.getSchemas());
             schemas.addAll(toStateEngine.getSchemas());
             for (HollowSchema schema : schemas) {
-                if (schema instanceof HollowObjectSchema) {
-                    HollowObjectSchema objectSchema = ((HollowObjectSchema) schema);
+                if (schema instanceof HollowObjectSchema hollowObjectSchema) {
+                    HollowObjectSchema objectSchema =hollowObjectSchema;
                     PrimaryKey pKey = objectSchema.getPrimaryKey();
                     if (pKey==null && !isIncludeNonPrimaryKeyTypes) continue;
 

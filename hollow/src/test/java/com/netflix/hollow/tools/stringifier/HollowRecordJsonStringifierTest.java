@@ -119,22 +119,26 @@ public class HollowRecordJsonStringifierTest extends AbstractHollowRecordStringi
     public void testStringifyWithoutPrettyPrint() throws IOException {
         String msg = "Types should be printed correctly without prettyPrint";
         // without prettyPrint
-        Assert.assertEquals(msg, "{"
-                        + "\"value\": 42.0,"
-                        + "\"nestedType\": 42"
-                        + "}",
+        Assert.assertEquals(msg, """
+                        {\
+                        "value": 42.0,\
+                        "nestedType": 42\
+                        }\
+                        """,
                 stringifyType(TypeWithNestedNonPrimitive.class, false, false,
                         new TypeWithNestedNonPrimitive(42.0, new TypeWithNonPrimitive(42))));
-        Assert.assertEquals(msg, "{"
-                        + "\"value\": {"
-                        + "\"value\": 42.0"
-                        + "},"
-                        + "\"nestedType\": {"
-                        + "\"value\": {"
-                        + "\"value\": 42"
-                        + "}"
-                        + "}"
-                        + "}",
+        Assert.assertEquals(msg, """
+                        {\
+                        "value": {\
+                        "value": 42.0\
+                        },\
+                        "nestedType": {\
+                        "value": {\
+                        "value": 42\
+                        }\
+                        }\
+                        }\
+                        """,
                 stringifyType(TypeWithNestedNonPrimitive.class, false, true,
                         new TypeWithNestedNonPrimitive(42.0, new TypeWithNonPrimitive(42))));
     }

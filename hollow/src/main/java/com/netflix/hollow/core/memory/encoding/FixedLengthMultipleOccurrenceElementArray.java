@@ -158,8 +158,8 @@ public class FixedLengthMultipleOccurrenceElementArray {
                     + currentElementsPerNode + " to " + newElementsPerNode);
         }
         long numBits = numNodes * bitsPerElement * newElementsPerNode;
-        LOG.fine(String.format("Resizing storage: oldStorage=%sbytes, newStorage=%sbits/%sbytes (numNodes=%s bitsPerElement=%s newElementsPerNode=%s)",
-                storage.approxHeapFootprintInBytes(), numBits, numBits/8, numNodes, bitsPerElement, newElementsPerNode));
+        LOG.fine("Resizing storage: oldStorage=%sbytes, newStorage=%sbits/%sbytes (numNodes=%s bitsPerElement=%s newElementsPerNode=%s)".formatted(
+        storage.approxHeapFootprintInBytes(), numBits, numBits / 8, numNodes, bitsPerElement, newElementsPerNode));
         FixedLengthElementArray newStorage = new FixedLengthElementArray(memoryRecycler,
                 numNodes * bitsPerElement * newElementsPerNode);
         LongStream.range(0, numNodes).forEach(nodeIndex -> {

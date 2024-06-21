@@ -31,8 +31,8 @@ public class FixedLengthDataFactory {
     }
 
     public static void destroy(FixedLengthData fld, ArraySegmentRecycler memoryRecycler) {
-        if (fld instanceof FixedLengthElementArray) {
-            ((FixedLengthElementArray) fld).destroy(memoryRecycler);
+        if (fld instanceof FixedLengthElementArray array) {
+            array.destroy(memoryRecycler);
         } else if (fld instanceof EncodedLongBuffer) {
             LOG.warning("Destroy operation is a no-op in shared memory mode");
         } else {

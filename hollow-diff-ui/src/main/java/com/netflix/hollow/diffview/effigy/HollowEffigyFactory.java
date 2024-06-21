@@ -52,12 +52,12 @@ public class HollowEffigyFactory {
         if(typeState == null)
             return null;
 
-        if(typeState instanceof HollowObjectTypeDataAccess) {
-            return new HollowEffigy(this, (HollowObjectTypeDataAccess) typeState, ordinal);
-        } else if(typeState instanceof HollowCollectionTypeDataAccess) {
-            return new HollowEffigy(this, (HollowCollectionTypeDataAccess) typeState, ordinal);
-        } else if(typeState instanceof HollowMapTypeDataAccess){
-            return new HollowEffigy(this, (HollowMapTypeDataAccess) typeState, ordinal);
+        if(typeState instanceof HollowObjectTypeDataAccess access) {
+            return new HollowEffigy(this, access, ordinal);
+        } else if(typeState instanceof HollowCollectionTypeDataAccess access) {
+            return new HollowEffigy(this, access, ordinal);
+        } else if(typeState instanceof HollowMapTypeDataAccess access){
+            return new HollowEffigy(this, access, ordinal);
         }
 
         throw new IllegalArgumentException("I don't know how to effigize a " + typeState.getClass());

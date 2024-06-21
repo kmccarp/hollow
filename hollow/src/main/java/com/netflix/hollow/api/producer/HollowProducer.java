@@ -603,8 +603,8 @@ public class HollowProducer extends AbstractHollowProducer {
          * @param publishArtifact the blob to publish
          */
         default void publish(HollowProducer.PublishArtifact publishArtifact) {
-            if (publishArtifact instanceof HollowProducer.Blob) {
-                publish((HollowProducer.Blob)publishArtifact);
+            if (publishArtifact instanceof HollowProducer.Blob blob) {
+                publish(blob);
             }
         }
     }

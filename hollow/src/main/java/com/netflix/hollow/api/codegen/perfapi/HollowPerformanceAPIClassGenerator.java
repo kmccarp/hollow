@@ -39,18 +39,20 @@ class HollowPerformanceAPIClassGenerator {
 
         builder.append("package " + packageName + ";\n\n");
 
-        builder.append("import com.netflix.hollow.api.perfapi.HollowListTypePerfAPI;\n" +
-                "import com.netflix.hollow.api.perfapi.HollowMapTypePerfAPI;\n" +
-                "import com.netflix.hollow.api.perfapi.HollowPerformanceAPI;\n" +
-                "import com.netflix.hollow.api.perfapi.HollowSetTypePerfAPI;\n" +
-                "import com.netflix.hollow.core.read.dataaccess.HollowDataAccess;\n" +
-                "import com.netflix.hollow.core.read.dataaccess.HollowListTypeDataAccess;\n" +
-                "import com.netflix.hollow.core.read.dataaccess.HollowMapTypeDataAccess;\n" +
-                "import com.netflix.hollow.core.read.dataaccess.HollowObjectTypeDataAccess;\n" +
-                "import com.netflix.hollow.core.read.dataaccess.HollowSetTypeDataAccess;\n" +
-                "import com.netflix.hollow.core.read.dataaccess.HollowTypeDataAccess;\n" +
-                "import java.util.Set;\n" +
-                "\n");
+        builder.append("""
+                import com.netflix.hollow.api.perfapi.HollowListTypePerfAPI;
+                import com.netflix.hollow.api.perfapi.HollowMapTypePerfAPI;
+                import com.netflix.hollow.api.perfapi.HollowPerformanceAPI;
+                import com.netflix.hollow.api.perfapi.HollowSetTypePerfAPI;
+                import com.netflix.hollow.core.read.dataaccess.HollowDataAccess;
+                import com.netflix.hollow.core.read.dataaccess.HollowListTypeDataAccess;
+                import com.netflix.hollow.core.read.dataaccess.HollowMapTypeDataAccess;
+                import com.netflix.hollow.core.read.dataaccess.HollowObjectTypeDataAccess;
+                import com.netflix.hollow.core.read.dataaccess.HollowSetTypeDataAccess;
+                import com.netflix.hollow.core.read.dataaccess.HollowTypeDataAccess;
+                import java.util.Set;
+                
+                """);
 
         builder.append("@SuppressWarnings(\"all\")\n");
         builder.append("public class " + apiClassName + " extends HollowPerformanceAPI {\n\n");

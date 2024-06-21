@@ -283,56 +283,68 @@ public final class FieldPaths {
                 List<FieldSegment> fieldSegments, HollowSchema enclosingSchema, int segmentIndex) {
             switch (error) {
                 case NOT_BINDABLE:
-                    return String.format("Field path \"%s\" cannot be bound to data set %s. " +
-                                    "A schema of type named \"%s\" cannot be found for the last segment of the path prefix \"%s\".",
-                            toPathString(segments), dataset,
-                            getLastTypeName(rootType, fieldSegments), toPathString(segments, segmentIndex + 1));
+                    return ("""
+                    Field path "%s" cannot be bound to data set %s. \
+                    A schema of type named "%s" cannot be found for the last segment of the path prefix "%s".\
+                    """).formatted(
+                    toPathString(segments), dataset,
+                    getLastTypeName(rootType, fieldSegments), toPathString(segments, segmentIndex + 1));
                 case NOT_FOUND:
-                    return String.format("Field path \"%s\" not found in data set %s. " +
-                                    "A schema of type named \"%s\" does not contain a field for the last segment of the path prefix \"%s\".",
-                            toPathString(segments), dataset,
-                            enclosingSchema.getName(), toPathString(segments, segmentIndex + 1));
+                    return ("""
+                    Field path "%s" not found in data set %s. \
+                    A schema of type named "%s" does not contain a field for the last segment of the path prefix "%s".\
+                    """).formatted(
+                    toPathString(segments), dataset,
+                    enclosingSchema.getName(), toPathString(segments, segmentIndex + 1));
                 case NOT_TRAVERSABLE: {
                     if (enclosingSchema.getSchemaType() != HollowSchema.SchemaType.OBJECT) {
-                        return String.format("Field path \"%s\" is not traversable in data set %s. " +
-                                        "A non-object schema of type named \"%s\" and of schema type %s cannot be traversed for the last segment of the path prefix \"%s\".",
-                                toPathString(segments), dataset,
-                                enclosingSchema.getName(), enclosingSchema.getSchemaType(),
-                                toPathString(segments, segmentIndex + 1));
+                        return ("""
+                        Field path "%s" is not traversable in data set %s. \
+                        A non-object schema of type named "%s" and of schema type %s cannot be traversed for the last segment of the path prefix "%s".\
+                        """).formatted(
+                        toPathString(segments), dataset,
+                        enclosingSchema.getName(), enclosingSchema.getSchemaType(),
+                        toPathString(segments, segmentIndex + 1));
                     } else {
-                        return String.format("Field path \"%s\" is not traversable in data set %s. " +
-                                        "An object schema of type named \"%s\" cannot be traversed for the last segment of the path prefix \"%s\". "
-                                        +
-                                        "The last segment of the path prefix refers to a value (non-reference) field.",
-                                toPathString(segments), dataset,
-                                enclosingSchema.getName(),
-                                toPathString(segments, segmentIndex + 1));
+                        return ("""
+                        Field path "%s" is not traversable in data set %s. \
+                        An object schema of type named "%s" cannot be traversed for the last segment of the path prefix "%s". \
+                        The last segment of the path prefix refers to a value (non-reference) field.\
+                        """).formatted(
+                        toPathString(segments), dataset,
+                        enclosingSchema.getName(),
+                        toPathString(segments, segmentIndex + 1));
                     }
                 }
                 case NOT_FULL:
-                    return String.format("Field path \"%s\" is not a full path in data set %s. " +
-                                    "The last segment of the path is not a value (non-reference) field and refers to a reference field whose schema is of type named \"%s\"",
-                            toPathString(segments), dataset,
-                            fieldSegments.get(fieldSegments.size() - 1).getTypeName());
+                    return ("""
+                    Field path "%s" is not a full path in data set %s. \
+                    The last segment of the path is not a value (non-reference) field and refers to a reference field whose schema is of type named "%s"\
+                    """).formatted(
+                    toPathString(segments), dataset,
+                    fieldSegments.get(fieldSegments.size() - 1).getTypeName());
                 case NOT_EXPANDABLE: {
                     if (enclosingSchema.getSchemaType() == HollowSchema.SchemaType.OBJECT) {
                         HollowObjectSchema objectSchema = (HollowObjectSchema) enclosingSchema;
                         if (objectSchema.numFields() != 1 || objectSchema.getPrimaryKey() == null
                                 || objectSchema.getPrimaryKey().numFields() != 1) {
-                            return String.format("Field path \"%s\" is not expandable in data set %s. " +
-                                            "An object schema of type named \"%s\" cannot be traversed for the last segment of the partially expanded path \"%s\". "
-                                            +
-                                            "The schema contains more than one field, or has no primary key, or has a primary key with more than one field path.",
-                                    toPathString(segments), dataset,
-                                    enclosingSchema.getName(),
-                                    toPathString(fieldSegments));
+                            return ("""
+                            Field path "%s" is not expandable in data set %s. \
+                            An object schema of type named "%s" cannot be traversed for the last segment of the partially expanded path "%s". \
+                            The schema contains more than one field, or has no primary key, or has a primary key with more than one field path.\
+                            """).formatted(
+                            toPathString(segments), dataset,
+                            enclosingSchema.getName(),
+                            toPathString(fieldSegments));
                         }
                     }
-                    return String.format("Field path \"%s\" is not expandable in data set %s. " +
-                                    "A non-object schema of type named \"%s\" and of schema type %s cannot be traversed for the last segment of the partially expanded path \"%s\".",
-                            toPathString(segments), dataset,
-                            enclosingSchema.getName(), enclosingSchema.getSchemaType(),
-                            toPathString(fieldSegments));
+                    return ("""
+                    Field path "%s" is not expandable in data set %s. \
+                    A non-object schema of type named "%s" and of schema type %s cannot be traversed for the last segment of the partially expanded path "%s".\
+                    """).formatted(
+                    toPathString(segments), dataset,
+                    enclosingSchema.getName(), enclosingSchema.getSchemaType(),
+                    toPathString(fieldSegments));
                 }
                 default:
                     throw new InternalError("Cannot reach here");

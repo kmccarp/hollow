@@ -36,8 +36,10 @@ public final class ValidationStatusException extends RuntimeException {
         super(message);
 
         if (status.passed()) {
-            throw new IllegalArgumentException("A validation status exception was created "
-                    + "with a status containing results that all passed");
+            throw new IllegalArgumentException("""
+                    A validation status exception was created \
+                    with a status containing results that all passed\
+                    """);
         }
 
         this.status = Objects.requireNonNull(status);

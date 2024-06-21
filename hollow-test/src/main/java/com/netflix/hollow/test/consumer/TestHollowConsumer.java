@@ -124,10 +124,10 @@ public class TestHollowConsumer extends HollowConsumer {
             combiner.combine();
         }
 
-        if (blobRetriever instanceof TestBlobRetriever) {
+        if (blobRetriever instanceof TestBlobRetriever retriever) {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             new HollowBlobWriter(state).writeSnapshot(outputStream);
-            ((TestBlobRetriever) blobRetriever).addSnapshot(version, new TestBlob(version,
+            retriever.addSnapshot(version, new TestBlob(version,
                     new ByteArrayInputStream(outputStream.toByteArray())));
         } else {
             throw new IllegalStateException("Cannot add snapshot if not using TestBlobRetriever");
@@ -153,10 +153,10 @@ public class TestHollowConsumer extends HollowConsumer {
         combiner.combine();
 
         // apply delta write state to consumer
-        if (blobRetriever instanceof TestBlobRetriever) {
+        if (blobRetriever instanceof TestBlobRetriever retriever) {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             new HollowBlobWriter(deltaState).writeDelta(outputStream);
-            ((TestBlobRetriever) blobRetriever).addDelta(fromVersion, new TestBlob(fromVersion, toVersion,
+            retriever.addDelta(fromVersion, new TestBlob(fromVersion, toVersion,
                     new ByteArrayInputStream(outputStream.toByteArray())));
         } else {
             throw new IllegalStateException("Cannot add delta if not using TestBlobRetriever");

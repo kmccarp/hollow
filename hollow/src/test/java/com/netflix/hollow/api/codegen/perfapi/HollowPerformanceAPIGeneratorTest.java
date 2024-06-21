@@ -23,8 +23,8 @@ public class HollowPerformanceAPIGeneratorTest extends AbstractHollowAPIGenerato
   }
 
   private void runGenerator(String apiClassName, String packageName, Class<?> clazz) throws Exception {
-    System.out.println(String.format("Folders (%s) : \n\tsource=%s \n\tclasses=%s",
-        getClass().getSimpleName(), sourceFolder, clazzFolder));
+    System.out.println("Folders (%s) : \n\tsource=%s \n\tclasses=%s".formatted(
+    getClass().getSimpleName(), sourceFolder, clazzFolder));
 
     // Setup Folders
     HollowCodeGenerationCompileUtil.cleanupFolder(new File(sourceFolder), null);

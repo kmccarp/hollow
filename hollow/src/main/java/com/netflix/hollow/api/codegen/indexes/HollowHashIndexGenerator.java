@@ -103,12 +103,12 @@ public class HollowHashIndexGenerator extends HollowIndexGenerator {
 
         builder.append(" * @deprecated see {@link com.netflix.hollow.api.consumer.index.HashIndex} which can be built as follows:\n");
         builder.append(" * <pre>{@code\n");
-        builder.append(String.format(" *     HashIndex<%s, K> uki = HashIndex.from(consumer, %1$s.class)\n", typeName));
+        builder.append(" *     HashIndex<%s, K> uki = HashIndex.from(consumer, %1$s.class)\n".formatted(typeName));
         builder.append(" *         .usingBean(k);\n");
-        builder.append(String.format(" *     Stream<%s> results = uki.findMatches(k);\n", typeName));
+        builder.append(" *     Stream<%s> results = uki.findMatches(k);\n".formatted(typeName));
         builder.append(" * }</pre>\n");
         builder.append(" * where {@code K} is a class declaring key field paths members, annotated with\n");
         builder.append(" * {@link com.netflix.hollow.api.consumer.index.FieldPath}, and {@code k} is an instance of\n");
-        builder.append(String.format(" * {@code K} that is the query to find the matching {@code %s} objects.\n", typeName));
+        builder.append(" * {@code K} that is the query to find the matching {@code %s} objects.\n".formatted(typeName));
     }
 }

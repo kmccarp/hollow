@@ -46,14 +46,14 @@ public class GenericHollowRecordHelper {
         HollowTypeDataAccess typeState = dataAccess.getTypeDataAccess(typeName, ordinal);
 
         if(typeState != null) {
-            if(typeState instanceof HollowObjectTypeDataAccess)
-                return new GenericHollowObject(new HollowObjectGenericDelegate((HollowObjectTypeDataAccess)typeState), ordinal);
-            if(typeState instanceof HollowListTypeDataAccess)
-                return new GenericHollowList(new HollowListLookupDelegate<HollowRecord>((HollowListTypeDataAccess)typeState), ordinal);
-            if(typeState instanceof HollowSetTypeDataAccess)
-                return new GenericHollowSet(new HollowSetLookupDelegate<HollowRecord>((HollowSetTypeDataAccess)typeState), ordinal);
-            if(typeState instanceof HollowMapTypeDataAccess)
-                return new GenericHollowMap(new HollowMapLookupDelegate<HollowRecord, HollowRecord>((HollowMapTypeDataAccess)typeState), ordinal);
+            if(typeState instanceof HollowObjectTypeDataAccess access)
+                return new GenericHollowObject(new HollowObjectGenericDelegate(access), ordinal);
+            if(typeState instanceof HollowListTypeDataAccess access)
+                return new GenericHollowList(new HollowListLookupDelegate<HollowRecord>(access), ordinal);
+            if(typeState instanceof HollowSetTypeDataAccess access)
+                return new GenericHollowSet(new HollowSetLookupDelegate<HollowRecord>(access), ordinal);
+            if(typeState instanceof HollowMapTypeDataAccess access)
+                return new GenericHollowMap(new HollowMapLookupDelegate<HollowRecord, HollowRecord>(access), ordinal);
         } else {
             HollowSchema schema = dataAccess.getMissingDataHandler().handleSchema(typeName);
 
@@ -71,8 +71,7 @@ public class GenericHollowRecordHelper {
     }
 
     public static boolean equalObject(String typeName, int ordinal, Object testObject) {
-        if(testObject instanceof HollowRecord) {
-            HollowRecord testRec = (HollowRecord)testObject;
+        if(testObject instanceof HollowRecord testRec) {
             if(testRec.getOrdinal() == ordinal) {
                 String otherType = testRec.getSchema().getName();
 

@@ -87,8 +87,7 @@ public class IntList {
 
     @Override
     public boolean equals(Object other) {
-        if(other instanceof IntList) {
-            IntList that = (IntList)other;
+        if(other instanceof IntList that) {
             if(this.size() == that.size()) {
                 for(int i=0;i<size;i++) {
                     if(this.get(i) != that.get(i))

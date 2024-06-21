@@ -225,10 +225,10 @@ public class StaleHollowReferenceDetector {
             if(api != null) {
                 HollowDataAccess dataAccess = api.getDataAccess();
 
-                if (dataAccess instanceof HollowProxyDataAccess)
-                    ((HollowProxyDataAccess) dataAccess).disableDataAccess();
-                else if (dataAccess instanceof HollowReadStateEngine)
-                    ((HollowReadStateEngine) dataAccess).invalidate();
+                if (dataAccess instanceof HollowProxyDataAccess access)
+                    access.disableDataAccess();
+                else if (dataAccess instanceof HollowReadStateEngine engine)
+                    engine.invalidate();
 
                 api.detachCaches();
             }
@@ -252,10 +252,10 @@ public class StaleHollowReferenceDetector {
             HollowAPI api = apiHandle.get();
             if(api != null) {
                 HollowDataAccess dataAccess = api.getDataAccess();
-                if(dataAccess instanceof HollowProxyDataAccess) {
-                    HollowDataAccess proxiedDataAccess = ((HollowProxyDataAccess) dataAccess).getProxiedDataAccess();
-                    if(proxiedDataAccess instanceof HollowHistoricalStateDataAccess)
-                        ((HollowHistoricalStateDataAccess)proxiedDataAccess).setStackTraceRecorder(config.enableExpiredUsageStackTraces() ? stackTraceRecorder : null);
+                if(dataAccess instanceof HollowProxyDataAccess access) {
+                    HollowDataAccess proxiedDataAccess = access.getProxiedDataAccess();
+                    if(proxiedDataAccess instanceof HollowHistoricalStateDataAccess access)
+                        access.setStackTraceRecorder(config.enableExpiredUsageStackTraces() ? stackTraceRecorder : null);
                 }
             }
         }

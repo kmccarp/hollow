@@ -98,25 +98,23 @@ public class ObjectInternPool {
         }
         isReadyToRead = false;
 
-        if(objectToIntern instanceof Float) {
-            int intBits = Float.floatToIntBits((Float) objectToIntern);
+        if(objectToIntern instanceof Float float1) {
+            int intBits = Float.floatToIntBits(float1);
             VarInt.writeVInt(buf, intBits);
-        } else if(objectToIntern instanceof Double) {
-            long longBits = Double.doubleToLongBits((Double) objectToIntern);
+        } else if(objectToIntern instanceof Double double1) {
+            long longBits = Double.doubleToLongBits(double1);
             VarInt.writeVLong(buf, longBits);
-        } else if(objectToIntern instanceof Integer) {
-            int intBits = (int) objectToIntern;
+        } else if(objectToIntern instanceof Integer intBits) {
             VarInt.writeVInt(buf, intBits);
-        } else if(objectToIntern instanceof Long) {
-            long longBits = (long) objectToIntern;
+        } else if(objectToIntern instanceof Long longBits) {
             VarInt.writeVLong(buf, longBits);
-        } else if(objectToIntern instanceof String) {
-            VarInt.writeVInt(buf, ((String) objectToIntern).length());
-            for (byte b : ((String) objectToIntern).getBytes()) {
+        } else if(objectToIntern instanceof String string) {
+            VarInt.writeVInt(buf, string.length());
+            for (byte b : string.getBytes()) {
                 buf.write(b);
             }
-        } else if(objectToIntern instanceof Boolean) {
-            int valToWrite = (boolean) objectToIntern ? 1 : 0;
+        } else if(objectToIntern instanceof Boolean boolean1) {
+            int valToWrite = boolean1 ? 1 : 0;
             VarInt.writeVInt(buf, valToWrite);
         } else {
             String className = objectToIntern.getClass().getName();

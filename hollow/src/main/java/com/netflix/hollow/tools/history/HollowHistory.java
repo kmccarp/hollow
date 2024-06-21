@@ -160,8 +160,10 @@ public class HollowHistory {
         // validate fwd moving state initialization
         requireNonNull(fwdMovingHollowReadStateEngine, "Fwd direction read state engine should be initialized");
         if (fwdInitialVersion == VERSION_NONE) {
-            throw new IllegalArgumentException("Valid version corresponding to fwdMovingHollowReadStateEngine should be specified" +
-                    "during HollowHistory initialization");
+            throw new IllegalArgumentException("""
+                    Valid version corresponding to fwdMovingHollowReadStateEngine should be specified\
+                    during HollowHistory initialization\
+                    """);
         }
         this.latestHollowReadStateEngine = fwdMovingHollowReadStateEngine;
         this.fwdInitialVersion = fwdInitialVersion;
@@ -175,8 +177,8 @@ public class HollowHistory {
 
         if (isAutoDiscoverTypeIndex) {
             for (HollowSchema schema : fwdMovingHollowReadStateEngine.getSchemas()) {
-                if (schema instanceof HollowObjectSchema) {
-                    PrimaryKey pKey = ((HollowObjectSchema) schema).getPrimaryKey();
+                if (schema instanceof HollowObjectSchema objectSchema) {
+                    PrimaryKey pKey = objectSchema.getPrimaryKey();
                     if (pKey == null) continue;
 
                     keyIndex.addTypeIndex(pKey);
@@ -192,8 +194,10 @@ public class HollowHistory {
             throw new IllegalArgumentException("Valid version corresponding to revReadStateEngine required");
         }
         if (version != fwdInitialVersion) {
-            throw new IllegalStateException("Reverse state engine version should correspond to the version that fwd state engine" +
-                    "initialized to for a contiguous history chain");
+            throw new IllegalStateException("""
+                    Reverse state engine version should correspond to the version that fwd state engine\
+                    initialized to for a contiguous history chain\
+                    """);
         }
         if (latestHollowReadStateEngine == null) {
             // so that history key index is initialized to latestReadStateEngine, the one we're going to retain forever
@@ -316,14 +320,18 @@ public class HollowHistory {
      */
     public void reverseDeltaOccurred(long newVersion) {
         if (oldestHollowReadStateEngine == null) {
-            throw new IllegalStateException("Read state engine for reverse direction history computation isn't initialized. " +
-                    "This can occur if the required hollow history init sequence isn't followed or if oldestHollowReadStateEngine " +
-                    "was discarded after history was initialized to max old versions");
+            throw new IllegalStateException("""
+                    Read state engine for reverse direction history computation isn't initialized. \
+                    This can occur if the required hollow history init sequence isn't followed or if oldestHollowReadStateEngine \
+                    was discarded after history was initialized to max old versions\
+                    """);
         }
         if(historicalStates.size() >= maxHistoricalStatesToKeep) {
-            throw new IllegalStateException("No. of history states reached max states capacity. HollowHistory does not " +
-                    "support reaching this state when building history in reverse because older states would be evicted " +
-                    "and history past here wouldn't be of contiguous versions");
+            throw new IllegalStateException("""
+                    No. of history states reached max states capacity. HollowHistory does not \
+                    support reaching this state when building history in reverse because older states would be evicted \
+                    and history past here wouldn't be of contiguous versions\
+                    """);
         }
 
         // keyIndex is an ever-growing stat that maintains all primary key values ever seen, and when a reverse delta
@@ -583,13 +591,13 @@ public class HollowHistory {
      */
     public void removeHistoricalStates(int n) {
         if (n < 0) {
-            throw new IllegalArgumentException(String.format(
-                    "Number of states to remove is negative: %d", n));
+            throw new IllegalArgumentException(
+            "Number of states to remove is negative: %d".formatted(n));
         }
         if (n > historicalStates.size()) {
-            throw new IllegalArgumentException(String.format(
-                    "Number of states to remove, %d, is greater than the number of states. %d",
-                    n, historicalStates.size()));
+            throw new IllegalArgumentException(
+            "Number of states to remove, %d, is greater than the number of states. %d".formatted(
+            n, historicalStates.size()));
         }
 
         // drop oldest HollowReadStateEngine if it hasn't already been

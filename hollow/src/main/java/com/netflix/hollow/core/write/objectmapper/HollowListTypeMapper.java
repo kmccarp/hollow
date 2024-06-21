@@ -64,8 +64,8 @@ public class HollowListTypeMapper extends HollowTypeMapper {
 
     @Override
     public int write(Object obj) {
-        if(obj instanceof MemoizedList) {
-            long assignedOrdinal = ((MemoizedList<?>)obj).__assigned_ordinal;
+        if(obj instanceof MemoizedList<?> list) {
+            long assignedOrdinal = list.__assigned_ordinal;
 
             if((assignedOrdinal & ASSIGNED_ORDINAL_CYCLE_MASK) == cycleSpecificAssignedOrdinalBits())
                 return (int)assignedOrdinal & Integer.MAX_VALUE;
@@ -77,8 +77,8 @@ public class HollowListTypeMapper extends HollowTypeMapper {
 
         int assignedOrdinal = writeState.add(rec);
 
-        if(obj instanceof MemoizedList) {
-            ((MemoizedList<?>)obj).__assigned_ordinal = (long)assignedOrdinal | cycleSpecificAssignedOrdinalBits();
+        if(obj instanceof MemoizedList<?> list) {
+            list.__assigned_ordinal = (long)assignedOrdinal | cycleSpecificAssignedOrdinalBits();
         }
 
         return assignedOrdinal;
@@ -95,7 +95,7 @@ public class HollowListTypeMapper extends HollowTypeMapper {
             IntList ordinalList = getIntList();
             for (Object o : l) {
                 if (o == null) {
-                    throw new NullPointerException(String.format(NULL_ELEMENT_MESSAGE, schema));
+                    throw new NullPointerException(NULL_ELEMENT_MESSAGE.formatted(schema));
                 }
                 int ordinal = flatRecordWriter == null ? elementMapper.write(o) : elementMapper.writeFlat(o, flatRecordWriter);
                 ordinalList.add(ordinal);
@@ -106,7 +106,7 @@ public class HollowListTypeMapper extends HollowTypeMapper {
         } else {
             for (Object o : l) {
                 if (o == null) {
-                    throw new NullPointerException(String.format(NULL_ELEMENT_MESSAGE, schema));
+                    throw new NullPointerException(NULL_ELEMENT_MESSAGE.formatted(schema));
                 }
                 int ordinal = flatRecordWriter == null ? elementMapper.write(o) : elementMapper.writeFlat(o, flatRecordWriter);
                 rec.addElement(ordinal);

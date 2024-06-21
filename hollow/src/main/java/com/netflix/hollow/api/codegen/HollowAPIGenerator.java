@@ -505,8 +505,7 @@ public class HollowAPIGenerator {
      */
     protected void generateFile(File directory, HollowJavaFileGenerator generator) throws IOException {
         // create sub folder if not using default package and sub packages are enabled
-        if ((packageName!=null && !packageName.trim().isEmpty()) && config.isUsePackageGrouping() && (generator instanceof HollowConsumerJavaFileGenerator)) {
-            HollowConsumerJavaFileGenerator consumerCodeGenerator = (HollowConsumerJavaFileGenerator)generator;
+        if ((packageName!=null && !packageName.trim().isEmpty()) && config.isUsePackageGrouping() && (generator instanceof HollowConsumerJavaFileGenerator consumerCodeGenerator)) {
             if (hasCollectionsInDataSet) consumerCodeGenerator.useCollectionsImport();
             directory = new File(directory, consumerCodeGenerator.getSubPackageName());
         }
@@ -542,31 +541,31 @@ public class HollowAPIGenerator {
     }
 
     protected HollowJavaFileGenerator getStaticAPIGenerator(HollowSchema schema) {
-        if(schema instanceof HollowObjectSchema) {
-            return new TypeAPIObjectJavaGenerator(apiClassname, packageName, (HollowObjectSchema) schema, dataset, config);
-        } else if(schema instanceof HollowListSchema) {
-            return new TypeAPIListJavaGenerator(apiClassname, packageName, (HollowListSchema)schema, dataset, config);
-        } else if(schema instanceof HollowSetSchema) {
-            return new TypeAPISetJavaGenerator(apiClassname, packageName, (HollowSetSchema)schema, dataset, config);
-        } else if(schema instanceof HollowMapSchema) {
-            return new TypeAPIMapJavaGenerator(apiClassname, packageName, (HollowMapSchema)schema, dataset, config);
+        if(schema instanceof HollowObjectSchema objectSchema) {
+            return new TypeAPIObjectJavaGenerator(apiClassname, packageName, objectSchema, dataset, config);
+        } else if(schema instanceof HollowListSchema listSchema) {
+            return new TypeAPIListJavaGenerator(apiClassname, packageName, listSchema, dataset, config);
+        } else if(schema instanceof HollowSetSchema setSchema) {
+            return new TypeAPISetJavaGenerator(apiClassname, packageName, setSchema, dataset, config);
+        } else if(schema instanceof HollowMapSchema mapSchema) {
+            return new TypeAPIMapJavaGenerator(apiClassname, packageName, mapSchema, dataset, config);
         }
 
         throw new UnsupportedOperationException("What kind of schema is a " + schema.getClass().getName() + "?");
     }
 
     protected HollowJavaFileGenerator getHollowObjectGenerator(HollowSchema schema) {
-        if(schema instanceof HollowObjectSchema) {
-            return new HollowObjectJavaGenerator(packageName, apiClassname, (HollowObjectSchema) schema,
+        if(schema instanceof HollowObjectSchema objectSchema) {
+            return new HollowObjectJavaGenerator(packageName, apiClassname, objectSchema,
                     parameterizedTypes, parameterizeClassNames, ergonomicShortcuts, dataset, config);
-        } else if(schema instanceof HollowListSchema) {
-            return new HollowListJavaGenerator(packageName, apiClassname, (HollowListSchema) schema,
+        } else if(schema instanceof HollowListSchema listSchema) {
+            return new HollowListJavaGenerator(packageName, apiClassname, listSchema,
                     parameterizedTypes, parameterizeClassNames, dataset, config);
-        } else if(schema instanceof HollowSetSchema) {
-            return new HollowSetJavaGenerator(packageName, apiClassname, (HollowSetSchema) schema,
+        } else if(schema instanceof HollowSetSchema setSchema) {
+            return new HollowSetJavaGenerator(packageName, apiClassname, setSchema,
                     parameterizedTypes, parameterizeClassNames, dataset, config);
-        } else if(schema instanceof HollowMapSchema) {
-            return new HollowMapJavaGenerator(packageName, apiClassname, (HollowMapSchema) schema, dataset, parameterizedTypes, parameterizeClassNames, config);
+        } else if(schema instanceof HollowMapSchema mapSchema) {
+            return new HollowMapJavaGenerator(packageName, apiClassname, mapSchema, dataset, parameterizedTypes, parameterizeClassNames, config);
         }
 
         throw new UnsupportedOperationException("What kind of schema is a " + schema.getClass().getName() + "?");

@@ -354,8 +354,7 @@ public class HollowObjectMapperHollowRecordParserTest {
 
     @Override
     public boolean equals(Object o) {
-        if(o instanceof TypeWithAllSimpleTypes) {
-            TypeWithAllSimpleTypes other = (TypeWithAllSimpleTypes)o;
+        if(o instanceof TypeWithAllSimpleTypes other) {
             return Objects.equals(boxedIntegerField, other.boxedIntegerField) &&
                 Objects.equals(boxedBooleanField, other.boxedBooleanField) &&
                 Objects.equals(boxedDoubleField, other.boxedDoubleField) &&
@@ -460,8 +459,7 @@ public class HollowObjectMapperHollowRecordParserTest {
 
     @Override
     public boolean equals(Object o) {
-      if(o instanceof TypeWithCollections) {
-        TypeWithCollections other = (TypeWithCollections)o;
+      if(o instanceof TypeWithCollections other) {
         return id == other.id &&
             Objects.equals(stringList, other.stringList) &&
             Objects.equals(stringSet, other.stringSet) &&
@@ -501,8 +499,7 @@ public class HollowObjectMapperHollowRecordParserTest {
 
     @Override
     public boolean equals(Object o) {
-      if(o instanceof VersionedType1) {
-        VersionedType1 other = (VersionedType1)o;
+      if(o instanceof VersionedType1 other) {
         return Objects.equals(stringField, other.stringField) &&
             Objects.equals(boxedIntegerField, other.boxedIntegerField) &&
             primitiveDoubleField == other.primitiveDoubleField &&
@@ -536,8 +533,7 @@ public class HollowObjectMapperHollowRecordParserTest {
 
     @Override
     public boolean equals(Object o) {
-      if(o instanceof VersionedType2) {
-        VersionedType2 other = (VersionedType2)o;
+      if(o instanceof VersionedType2 other) {
         return Objects.equals(boxedIntegerField, other.boxedIntegerField) &&
             primitiveDoubleField == other.primitiveDoubleField &&
             Objects.equals(stringSet, other.stringSet) &&
@@ -579,8 +575,7 @@ public class HollowObjectMapperHollowRecordParserTest {
 
     @Override
     public boolean equals(Object o) {
-      if(o instanceof InternalTypeA) {
-        InternalTypeA other = (InternalTypeA)o;
+      if(o instanceof InternalTypeA other) {
         return id.equals(other.id) && name.equals(other.name);
       }
       return false;
@@ -615,8 +610,7 @@ public class HollowObjectMapperHollowRecordParserTest {
 
     @Override
     public boolean equals(Object o) {
-      if(o instanceof InternalTypeB) {
-        InternalTypeB other = (InternalTypeB)o;
+      if(o instanceof InternalTypeB other) {
         return id.equals(other.id) && name.equals(other.name);
       }
       return false;
@@ -641,8 +635,7 @@ public class HollowObjectMapperHollowRecordParserTest {
       
       @Override
       public boolean equals(Object o) {
-        if(o instanceof InternalTypeC) {
-          InternalTypeC other = (InternalTypeC)o;
+        if(o instanceof InternalTypeC other) {
           return data.equals(other.data);
         }
         return false;
@@ -710,8 +703,7 @@ public class HollowObjectMapperHollowRecordParserTest {
 
     @Override
     public boolean equals(Object o) {
-      if (o instanceof SpecialWrapperTypesTest) {
-        SpecialWrapperTypesTest other = (SpecialWrapperTypesTest) o;
+      if (o instanceof SpecialWrapperTypesTest other) {
         return Objects.equals(id, other.id) &&
                 Objects.equals(type, other.type) &&
                 Objects.equals(complexEnum, other.complexEnum) &&
@@ -755,8 +747,7 @@ public class HollowObjectMapperHollowRecordParserTest {
 
     @Override
     public boolean equals(Object o) {
-      if(o instanceof TypeA10) {
-        TypeA10 other = (TypeA10)o;
+      if(o instanceof TypeA10 other) {
         return a1 == other.a1 && a2.equals(other.a2) && a3 == other.a3;
       }
       return false;
@@ -777,8 +768,7 @@ public class HollowObjectMapperHollowRecordParserTest {
 
     @Override
     public boolean equals(Object o) {
-      if(o instanceof TypeC10) {
-        TypeC10 other = (TypeC10)o;
+      if(o instanceof TypeC10 other) {
         return Arrays.equals(c1, other.c1);
       }
       return false;

@@ -380,8 +380,7 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
 
             HollowTypeReadState typeState = stateEngine.getTypeState(type);
             HollowSchema schema = typeState.getSchema();
-            if (schema instanceof HollowObjectSchema) {
-                HollowObjectSchema oSchema = (HollowObjectSchema) schema;
+            if (schema instanceof HollowObjectSchema oSchema) {
                 PrimaryKey pKey = oSchema.getPrimaryKey();
                 if (pKey == null) continue;
 

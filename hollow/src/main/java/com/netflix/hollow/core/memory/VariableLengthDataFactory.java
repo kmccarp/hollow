@@ -21,8 +21,8 @@ public class VariableLengthDataFactory {
     }
 
     public static void destroy(VariableLengthData vld) {
-        if (vld instanceof SegmentedByteArray) {
-            ((SegmentedByteArray) vld).destroy();
+        if (vld instanceof SegmentedByteArray array) {
+            array.destroy();
         } else if (vld instanceof EncodedByteBuffer) {
             LOG.warning("Destroy operation is a no-op in shared memory mode");
         } else {

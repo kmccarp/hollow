@@ -11,20 +11,19 @@ public class HollowSchemaSorterTest {
     
     @Test
     public void schemasAreSortedBasedOnDependencies() throws IOException {
-        String schemasText = "TypeB {"
-                           + "    ListOfString str;"
-                           + "}"
-                           + ""
-                           + "String {"
-                           + "    string value;"
-                           + "}"
-                           + ""
-                           + "ListOfString List<String>;"
-                           + ""
-                           + "TypeA {"
-                           + "    TypeB b;"
-                           + "    String str;"
-                           + "}";
+        String schemasText = """
+                           TypeB {\
+                               ListOfString str;\
+                           }\
+                           String {\
+                               string value;\
+                           }\
+                           ListOfString List<String>;\
+                           TypeA {\
+                               TypeB b;\
+                               String str;\
+                           }\
+                           """;
         
         List<HollowSchema> schemas = HollowSchemaParser.parseCollectionOfSchemas(schemasText);
         
@@ -39,8 +38,10 @@ public class HollowSchemaSorterTest {
     
     @Test
     public void sortsSchemasEvenIfDependencyTypesNotPresent() throws IOException {
-        String schemasText = "TypeA { TypeB b; }"
-                           + "TypeB { TypeC c; }";
+        String schemasText = """
+                           TypeA { TypeB b; }\
+                           TypeB { TypeC c; }\
+                           """;
         
         
         List<HollowSchema> schemas = HollowSchemaParser.parseCollectionOfSchemas(schemasText);
@@ -54,9 +55,11 @@ public class HollowSchemaSorterTest {
     
     @Test
     public void determinesIfSchemasAreTransitivelyDependent() throws IOException {
-        String schemasText = "TypeA { TypeB b; }"
-                           + "TypeB { TypeC c; }"
-                           + "TypeC { TypeD d; }";
+        String schemasText = """
+                           TypeA { TypeB b; }\
+                           TypeB { TypeC c; }\
+                           TypeC { TypeD d; }\
+                           """;
         
         List<HollowSchema> schemas = HollowSchemaParser.parseCollectionOfSchemas(schemasText);
         

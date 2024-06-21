@@ -108,14 +108,14 @@ public class DiffEqualityMapping {
     }
 
     private DiffEqualityTypeMapper getTypeMapper(HollowTypeReadState fromState, HollowTypeReadState toState) {
-        if(fromState instanceof HollowObjectTypeReadState)
-            return new DiffEqualityObjectMapper(this, (HollowObjectTypeReadState)fromState, (HollowObjectTypeReadState)toState, oneToOne);
-        if(listOrderingIsImportant && fromState instanceof HollowListTypeReadState)
-            return new DiffEqualityOrderedListMapper(this, (HollowListTypeReadState)fromState, (HollowListTypeReadState)toState, oneToOne);
-        if(fromState instanceof HollowCollectionTypeReadState)
-            return new DiffEqualityCollectionMapper(this, (HollowCollectionTypeReadState)fromState, (HollowCollectionTypeReadState)toState, oneToOne);
-        if(fromState instanceof HollowMapTypeReadState)
-            return new DiffEqualityMapMapper(this, (HollowMapTypeReadState)fromState, (HollowMapTypeReadState)toState, oneToOne);
+        if(fromState instanceof HollowObjectTypeReadState state)
+            return new DiffEqualityObjectMapper(this, state, (HollowObjectTypeReadState)toState, oneToOne);
+        if(listOrderingIsImportant && fromState instanceof HollowListTypeReadState state)
+            return new DiffEqualityOrderedListMapper(this, state, (HollowListTypeReadState)toState, oneToOne);
+        if(fromState instanceof HollowCollectionTypeReadState state)
+            return new DiffEqualityCollectionMapper(this, state, (HollowCollectionTypeReadState)toState, oneToOne);
+        if(fromState instanceof HollowMapTypeReadState state)
+            return new DiffEqualityMapMapper(this, state, (HollowMapTypeReadState)toState, oneToOne);
 
         throw new IllegalArgumentException("I don't know how to map equality for a " + fromState.getClass().getName());
     }

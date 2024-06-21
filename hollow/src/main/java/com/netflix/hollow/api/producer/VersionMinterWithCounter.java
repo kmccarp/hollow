@@ -45,7 +45,7 @@ public class VersionMinterWithCounter implements VersionMinter {
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         String formattedDate = dateFormat.format(new Date());
 
-        String versionStr = formattedDate + String.format("%03d", versionCounter.incrementAndGet() % 1000);
+        String versionStr = formattedDate + "%03d".formatted(versionCounter.incrementAndGet() % 1000);
 
         return Long.parseLong(versionStr);
     }

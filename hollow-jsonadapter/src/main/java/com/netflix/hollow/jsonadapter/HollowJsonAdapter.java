@@ -369,8 +369,8 @@ public class HollowJsonAdapter extends AbstractHollowJsonAdaptorTask {
                 elementOrdinal = valueRec.build(-1, flatRecordWriter);
             }
 
-            if(arrayRec instanceof HollowListWriteRecord) {
-                ((HollowListWriteRecord) arrayRec).addElement(elementOrdinal);
+            if(arrayRec instanceof HollowListWriteRecord record) {
+                record.addElement(elementOrdinal);
             } else {
                 ((HollowSetWriteRecord)arrayRec).addElement(elementOrdinal);
             }

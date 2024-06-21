@@ -165,8 +165,7 @@ public class HollowIncrementalCyclePopulator implements HollowProducer.Populator
                 while(currentMutationIdx < entryList.size()) {
                     Object currentMutation = entryList.get(currentMutationIdx).getValue();
 
-                    if(currentMutation instanceof AddIfAbsent) {
-                        AddIfAbsent aia = (AddIfAbsent) currentMutation;
+                    if(currentMutation instanceof AddIfAbsent aia) {
                         if(aia.wasFound)
                             currentMutation = DELETE_RECORD;
                         else
@@ -174,10 +173,10 @@ public class HollowIncrementalCyclePopulator implements HollowProducer.Populator
                     }
 
                     if(currentMutation != DELETE_RECORD) {
-                        if(currentMutation instanceof FlatRecord) {
+                        if(currentMutation instanceof FlatRecord record) {
                             if(flatRecordDumper == null)
                                 flatRecordDumper = new FlatRecordDumper(newState.getStateEngine());
-                            flatRecordDumper.dump((FlatRecord)currentMutation);
+                            flatRecordDumper.dump(record);
                         } else {
                             newState.add(currentMutation);
                         }

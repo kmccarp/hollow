@@ -149,20 +149,17 @@ public class HollowSerializationFramework extends SerializationFramework {
 
     private void populateStateEngineTypes() {
         for(NFTypeSerializer<?> serializer : getOrderedSerializers()) {
-            if(serializer instanceof ListSerializer) {
-                ListSerializer<?> listSerializer = (ListSerializer<?>)serializer;
+            if(serializer instanceof ListSerializer<?> listSerializer) {
                 TypedFieldDefinition elementFieldDef = (TypedFieldDefinition)listSerializer.getFastBlobSchema().getFieldDefinition(0);
                 HollowListSchema listSchema = new HollowListSchema(serializer.getName(), elementFieldDef.getSubType());
                 HollowTypeWriteState writeState = new HollowListTypeWriteState(listSchema);
                 stateEngine.addTypeState(writeState);
-            } else if(serializer instanceof SetSerializer) {
-                SetSerializer<?> setSerializer = (SetSerializer<?>)serializer;
+            } else if(serializer instanceof SetSerializer<?> setSerializer) {
                 TypedFieldDefinition elementFieldDef = (TypedFieldDefinition)setSerializer.getFastBlobSchema().getFieldDefinition(0);
                 HollowSetSchema setSchema = new HollowSetSchema(serializer.getName(), elementFieldDef.getSubType());
                 HollowTypeWriteState writeState = new HollowSetTypeWriteState(setSchema);
                 stateEngine.addTypeState(writeState);
-            } else if(serializer instanceof MapSerializer) {
-                MapSerializer<?, ?> mapSerializer = (MapSerializer<?, ?>)serializer;
+            } else if(serializer instanceof MapSerializer<?,?> mapSerializer) {
                 MapFieldDefinition fieldDef = (MapFieldDefinition)mapSerializer.getFastBlobSchema().getFieldDefinition(0);
                 HollowMapSchema mapSchema = new HollowMapSchema(serializer.getName(), fieldDef.getKeyType(), fieldDef.getValueType());
                 HollowTypeWriteState writeState = new HollowMapTypeWriteState(mapSchema);

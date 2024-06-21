@@ -133,12 +133,12 @@ public class HollowUniqueKeyIndexGenerator extends HollowIndexGenerator {
         String typeName = hollowImplClassname(type);
         builder.append(" * @deprecated see {@link com.netflix.hollow.api.consumer.index.UniqueKeyIndex} which can be built as follows:\n");
         builder.append(" * <pre>{@code\n");
-        builder.append(String.format(" *     UniqueKeyIndex<%s, K> uki = UniqueKeyIndex.from(consumer, %1$s.class)\n", typeName));
+        builder.append(" *     UniqueKeyIndex<%s, K> uki = UniqueKeyIndex.from(consumer, %1$s.class)\n".formatted(typeName));
         builder.append(" *         .usingBean(k);\n");
-        builder.append(String.format(" *     %s m = uki.findMatch(k);\n", typeName));
+        builder.append(" *     %s m = uki.findMatch(k);\n".formatted(typeName));
         builder.append(" * }</pre>\n");
         builder.append(" * where {@code K} is a class declaring key field paths members, annotated with\n");
         builder.append(" * {@link com.netflix.hollow.api.consumer.index.FieldPath}, and {@code k} is an instance of\n");
-        builder.append(String.format(" * {@code K} that is the key to find the unique {@code %s} object.\n", typeName));
+        builder.append(" * {@code K} that is the key to find the unique {@code %s} object.\n".formatted(typeName));
     }
 }

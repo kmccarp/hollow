@@ -444,8 +444,8 @@ abstract class AbstractHollowProducer {
             }
             cycleStatus.fail(th);
 
-            if (th instanceof RuntimeException) {
-                throw (RuntimeException) th;
+            if (th instanceof RuntimeException exception) {
+                throw exception;
             }
             throw new RuntimeException(th);
         } finally {

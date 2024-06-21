@@ -51,8 +51,8 @@ public class HollowChecksum {
 
     @Override
     public boolean equals(Object other) {
-        if(other instanceof HollowChecksum)
-            return ((HollowChecksum) other).currentChecksum == currentChecksum;
+        if(other instanceof HollowChecksum checksum)
+            return checksum.currentChecksum == currentChecksum;
         return false;
     }
 

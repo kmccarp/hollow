@@ -142,11 +142,11 @@ public class FilteredHollowBlobWriter {
 
             FilteredHollowBlobWriterStreamAndFilter[] streamsWithType = FilteredHollowBlobWriterStreamAndFilter.withType(schema.getName(), allStreamAndFilters);
 
-            if(schema instanceof HollowObjectSchema) {
+            if(schema instanceof HollowObjectSchema objectSchema) {
                 if(streamsWithType.length == 0)
-                    HollowObjectTypeReadState.discardType(in, (HollowObjectSchema)schema, numShards, delta);
+                    HollowObjectTypeReadState.discardType(in, objectSchema, numShards, delta);
                 else
-                    copyFilteredObjectState(delta, in, streamsWithType, (HollowObjectSchema)schema, numShards);
+                    copyFilteredObjectState(delta, in, streamsWithType, objectSchema, numShards);
             } else {
                 for(int j=0;j<streamsWithType.length;j++) {
                     schema.writeTo(streamsWithType[j].getStream());

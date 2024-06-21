@@ -150,15 +150,17 @@ public class HollowClientUpdater {
                         doubleSnapshotConfig.allowDoubleSnapshot());
 
             for (HollowConsumer.RefreshListener listener : localListeners)
-                if (listener instanceof HollowConsumer.TransitionAwareRefreshListener)
-                    ((HollowConsumer.TransitionAwareRefreshListener)listener).transitionsPlanned(beforeVersion, requestedVersion, updatePlan.isSnapshotPlan(), updatePlan.getTransitionSequence());
+                if (listener instanceof HollowConsumer.TransitionAwareRefreshListener refreshListener)
+                    refreshListener.transitionsPlanned(beforeVersion, requestedVersion, updatePlan.isSnapshotPlan(), updatePlan.getTransitionSequence());
 
             if (updatePlan.destinationVersion() == HollowConstants.VERSION_NONE
                     && requestedVersion != HollowConstants.VERSION_LATEST) {
-                String msg = String.format("Could not create an update plan for version %s, because "
-                        + "that version or any qualifying previous versions could not be retrieved.", requestedVersion);
+                String msg = ("""
+                Could not create an update plan for version %s, because \
+                that version or any qualifying previous versions could not be retrieved.\
+                """).formatted(requestedVersion);
                 if (beforeVersion != HollowConstants.VERSION_NONE) {
-                    msg += String.format(" Consumer will remain at current version %s until next update attempt.", beforeVersion);
+                    msg += " Consumer will remain at current version %s until next update attempt.".formatted(beforeVersion);
                 }
                 throw new IllegalArgumentException(msg);
             }
@@ -223,9 +225,9 @@ public class HollowClientUpdater {
 
     public synchronized void addRefreshListener(HollowConsumer.RefreshListener refreshListener,
             HollowConsumer c) {
-        if (refreshListener instanceof HollowConsumer.RefreshRegistrationListener) {
+        if (refreshListener instanceof HollowConsumer.RefreshRegistrationListener listener) {
             if (!refreshListeners.contains(refreshListener)) {
-                ((HollowConsumer.RefreshRegistrationListener)refreshListener).onBeforeAddition(c);
+                listener.onBeforeAddition(c);
             }
             refreshListeners.add(refreshListener);
         } else {
@@ -236,8 +238,8 @@ public class HollowClientUpdater {
     public synchronized void removeRefreshListener(HollowConsumer.RefreshListener refreshListener,
             HollowConsumer c) {
         if (refreshListeners.remove(refreshListener)) {
-            if (refreshListener instanceof HollowConsumer.RefreshRegistrationListener) {
-                ((HollowConsumer.RefreshRegistrationListener)refreshListener).onAfterRemoval(c);
+            if (refreshListener instanceof HollowConsumer.RefreshRegistrationListener listener) {
+                listener.onAfterRemoval(c);
             }
         }
     }
@@ -264,7 +266,7 @@ public class HollowClientUpdater {
         if (doubleSnapshotConfig.doubleSnapshotOnSchemaChange() == true) {
             // double snapshot on schema change relies on presence of a header tag in incoming version metadata
             if (incomingVersionInfo.getAnnouncementMetadata() == null
-             || !incomingVersionInfo.getAnnouncementMetadata().isPresent()) {
+             || incomingVersionInfo.getAnnouncementMetadata().isEmpty()) {
                 LOG.warning("Double snapshots on schema change are enabled and its functioning depends on " +
                         "visibility into incoming version's schema through metadata but NO metadata was available " +
                         "for version " + incomingVersionInfo.getVersion() + ". Check that the mechanism that triggered " +
@@ -281,8 +283,10 @@ public class HollowClientUpdater {
                 return false;
             }
             if (!doubleSnapshotConfig.allowDoubleSnapshot()) {
-                LOG.warning("Auto double snapshots on schema changes are enabled but double snapshots on consumer " +
-                        "are prohibited by doubleSnapshotConfig. This refresh will not be able to reflect any schema changes.");
+                LOG.warning("""
+                        Auto double snapshots on schema changes are enabled but double snapshots on consumer \
+                        are prohibited by doubleSnapshotConfig. This refresh will not be able to reflect any schema changes.\
+                        """);
                 return false;
             }
 

@@ -42,9 +42,9 @@ public class RecordPrimaryKey {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof RecordPrimaryKey) {
-            return type.equals(((RecordPrimaryKey) obj).type) 
-                    && Arrays.equals(key, ((RecordPrimaryKey) obj).key);
+        if(obj instanceof RecordPrimaryKey primaryKey) {
+            return type.equals(primaryKey.type) 
+                    && Arrays.equals(key, primaryKey.key);
         }
         return false;
     }

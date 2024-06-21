@@ -88,9 +88,9 @@ public class SearchUtils {
             return null;
 
         for(HollowTypeStateListener listener : typeState.getListeners()) {
-            if(listener instanceof HollowPrimaryKeyIndex) {
-                if(((HollowPrimaryKeyIndex) listener).getPrimaryKey().equals(pkey))
-                    return (HollowPrimaryKeyIndex) listener;
+            if(listener instanceof HollowPrimaryKeyIndex index) {
+                if(index.getPrimaryKey().equals(pkey))
+                    return index;
             }
         }
 

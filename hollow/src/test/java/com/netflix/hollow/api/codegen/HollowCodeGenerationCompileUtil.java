@@ -119,7 +119,7 @@ public class HollowCodeGenerationCompileUtil {
                     cleanupFolder(file, timestamp);
                     file.delete();
                 } else if (timestamp == null || (timestamp.longValue() - file.lastModified() >= 5000)) { // cleanup file if it is older than specified timestamp with some buffer time
-                    System.out.println(String.format("\t deleting file: %s, lastModified=%s", file.getName(), new Date(file.lastModified())));
+                    System.out.println("\t deleting file: %s, lastModified=%s".formatted(file.getName(), new Date(file.lastModified())));
                     file.delete();
                 }
             }

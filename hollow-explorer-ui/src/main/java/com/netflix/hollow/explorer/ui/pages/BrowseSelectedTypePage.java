@@ -169,9 +169,9 @@ public class BrowseSelectedTypePage extends HollowExplorerPage {
 
                 Object fieldValueObject = HollowReadFieldUtils.fieldValueObject(curState, curOrdinal, fieldPathIndexes[i][fieldPathIndexes[i].length - 1]);
                 keyBuilder.append(fieldValueObject);
-                if (fieldValueObject instanceof String) {
+                if (fieldValueObject instanceof String string) {
                     // escape delimiters if present in the value
-                    delimiterEscapedKeyBuilder.append(((String) fieldValueObject)
+                    delimiterEscapedKeyBuilder.append(string
                             .replaceAll(REGEX_MATCH_DELIMITER, ESCAPED_MULTI_FIELD_KEY_DELIMITER));
                 } else {
                     delimiterEscapedKeyBuilder.append(fieldValueObject);

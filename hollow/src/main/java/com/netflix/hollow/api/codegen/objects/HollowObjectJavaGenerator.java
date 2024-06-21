@@ -465,15 +465,15 @@ public class HollowObjectJavaGenerator extends HollowConsumerJavaFileGenerator {
         switch (type) {
             case STRING:
             case REFERENCE:
-                kindSnippet = String.format("class {@link %s}", keyTypeName);
+                kindSnippet = "class {@link %s}".formatted(keyTypeName);
                 break;
             default:
-                kindSnippet = String.format("type {@code %s}", keyTypeName);
+                kindSnippet = "type {@code %s}".formatted(keyTypeName);
                 break;
         }
         classBuilder.append("    /**\n");
-        classBuilder.append(String.format("     * Creates a unique key index for {@code %s} that has a primary key.\n", className));
-        classBuilder.append(String.format("     * The primary key is represented by the %s.\n", kindSnippet));
+        classBuilder.append("     * Creates a unique key index for {@code %s} that has a primary key.\n".formatted(className));
+        classBuilder.append("     * The primary key is represented by the %s.\n".formatted(kindSnippet));
         classBuilder.append("     * <p>\n");
         classBuilder.append("     * By default the unique key index will not track updates to the {@code consumer} and thus\n");
         classBuilder.append("     * any changes will not be reflected in matched results.  To track updates the index must be\n");

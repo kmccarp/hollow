@@ -1079,10 +1079,10 @@ public class HollowObjectTypeMapper extends HollowTypeMapper {
         }
 
         private String getStringFromField(Object obj, Object fieldObject) {
-            if (obj instanceof String) {
-                return (String) obj;
-            } else if (fieldObject instanceof char[]) {
-                return new String((char[]) fieldObject);
+            if (obj instanceof String string) {
+                return string;
+            } else if (fieldObject instanceof char[] chars) {
+                return new String(chars);
             }
             throw new IllegalArgumentException("Expected char[] or String value container for STRING.");
         }

@@ -46,14 +46,12 @@ public class HollowDiffRecordFieldExtractor {
             HollowTypeDataAccess childDataAccess = null;
             IntList childOrdinals = new IntList();
 
-            if(typeDataAccess instanceof HollowObjectTypeDataAccess) {
-                HollowObjectTypeDataAccess objectAccess = (HollowObjectTypeDataAccess)typeDataAccess;
+            if(typeDataAccess instanceof HollowObjectTypeDataAccess objectAccess) {
                 int fieldIdx = objectAccess.getSchema().getPosition(fieldIdentifier.getParents().get(level+1).getViaFieldName());
                 childDataAccess = typeDataAccess.getDataAccess().getTypeDataAccess(objectAccess.getSchema().getReferencedType(fieldIdx));
                 for(int i=0;i<ordinals.size();i++)
                     childOrdinals.add(objectAccess.readOrdinal(ordinals.get(i), fieldIdx));
-            } else if(typeDataAccess instanceof HollowCollectionTypeDataAccess) {
-                HollowCollectionTypeDataAccess collectionAccess = (HollowCollectionTypeDataAccess)typeDataAccess;
+            } else if(typeDataAccess instanceof HollowCollectionTypeDataAccess collectionAccess) {
                 childDataAccess = typeDataAccess.getDataAccess().getTypeDataAccess(collectionAccess.getSchema().getElementType());
                 for(int i=0;i<ordinals.size();i++) {
                     HollowOrdinalIterator iter = collectionAccess.ordinalIterator(ordinals.get(i));
@@ -63,8 +61,7 @@ public class HollowDiffRecordFieldExtractor {
                         childOrdinal = iter.next();
                     }
                 }
-            } else if(typeDataAccess instanceof HollowMapTypeDataAccess) {
-                HollowMapTypeDataAccess mapAccess = (HollowMapTypeDataAccess)typeDataAccess;
+            } else if(typeDataAccess instanceof HollowMapTypeDataAccess mapAccess) {
                 boolean isValue = fieldIdentifier.getParents().get(level + 1).getViaFieldName().equals("value");
                 String childType = isValue ? mapAccess.getSchema().getValueType() : mapAccess.getSchema().getKeyType();
                 childDataAccess = typeDataAccess.getDataAccess().getTypeDataAccess(childType);

@@ -55,8 +55,8 @@ public class HollowMapTypeMapper extends HollowTypeMapper {
         this.valueMapper = parentMapper.getTypeMapper(type.getActualTypeArguments()[1], null, null, -1, visited);
         String typeName = declaredName != null ? declaredName : getDefaultTypeName(type);
         
-        if(hashKeyFieldPaths == null && useDefaultHashKeys && (keyMapper instanceof HollowObjectTypeMapper))
-            hashKeyFieldPaths = ((HollowObjectTypeMapper)keyMapper).getDefaultElementHashKey();
+        if(hashKeyFieldPaths == null && useDefaultHashKeys && (keyMapper instanceof HollowObjectTypeMapper mapper))
+            hashKeyFieldPaths = mapper.getDefaultElementHashKey();
         
         this.schema = new HollowMapSchema(typeName, keyMapper.getTypeName(), valueMapper.getTypeName(), hashKeyFieldPaths);
         this.hashCodeFinder = stateEngine.getHashCodeFinder();
@@ -72,8 +72,8 @@ public class HollowMapTypeMapper extends HollowTypeMapper {
 
     @Override
     protected int write(Object obj) {
-        if(obj instanceof MemoizedMap) {
-            long assignedOrdinal = ((MemoizedMap<?, ?>)obj).__assigned_ordinal;
+        if(obj instanceof MemoizedMap<?,?> map) {
+            long assignedOrdinal = map.__assigned_ordinal;
             
             if((assignedOrdinal & ASSIGNED_ORDINAL_CYCLE_MASK) == cycleSpecificAssignedOrdinalBits())
                 return (int)assignedOrdinal & Integer.MAX_VALUE;
@@ -85,8 +85,8 @@ public class HollowMapTypeMapper extends HollowTypeMapper {
 
         int assignedOrdinal = writeState.add(rec);
         
-        if(obj instanceof MemoizedMap) {
-            ((MemoizedMap<?, ?>)obj).__assigned_ordinal = (long)assignedOrdinal | cycleSpecificAssignedOrdinalBits();
+        if(obj instanceof MemoizedMap<?,?> map) {
+            map.__assigned_ordinal = (long)assignedOrdinal | cycleSpecificAssignedOrdinalBits();
         }
         
         return assignedOrdinal;
@@ -103,11 +103,11 @@ public class HollowMapTypeMapper extends HollowTypeMapper {
         for (Map.Entry<?, ?> entry : m.entrySet()) {
             Object key = entry.getKey();
             if (key == null) {
-                throw new NullPointerException(String.format(NULL_KEY_MESSAGE, schema));
+                throw new NullPointerException(NULL_KEY_MESSAGE.formatted(schema));
             }
             Object value = entry.getValue();
             if (value == null) {
-                throw new NullPointerException(String.format(NULL_VALUE_MESSAGE, schema));
+                throw new NullPointerException(NULL_VALUE_MESSAGE.formatted(schema));
             }
 
             int keyOrdinal, valueOrdinal;

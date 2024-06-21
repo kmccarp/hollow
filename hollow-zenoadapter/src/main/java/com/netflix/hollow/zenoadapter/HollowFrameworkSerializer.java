@@ -48,20 +48,20 @@ public class HollowFrameworkSerializer extends FrameworkSerializer<HollowSeriali
         if (value == null)
             return;
 
-        if (value instanceof Integer) {
-            serializePrimitive(rec, fieldName, ((Integer) value).intValue());
-        } else if (value instanceof Long) {
-            serializePrimitive(rec, fieldName, ((Long) value).longValue());
-        } else if (value instanceof Float) {
-            serializePrimitive(rec, fieldName, ((Float) value).floatValue());
-        } else if (value instanceof Double) {
-            serializePrimitive(rec, fieldName, ((Double) value).doubleValue());
-        } else if (value instanceof Boolean) {
-            serializePrimitive(rec, fieldName, ((Boolean) value).booleanValue());
-        } else if (value instanceof String) {
-            serializeString(rec, fieldName, (String) value);
-        } else if (value instanceof byte[]){
-            serializeBytes(rec, fieldName, (byte[]) value);
+        if (value instanceof Integer integer) {
+            serializePrimitive(rec, fieldName, integer.intValue());
+        } else if (value instanceof Long long1) {
+            serializePrimitive(rec, fieldName, long1.longValue());
+        } else if (value instanceof Float float1) {
+            serializePrimitive(rec, fieldName, float1.floatValue());
+        } else if (value instanceof Double double1) {
+            serializePrimitive(rec, fieldName, double1.doubleValue());
+        } else if (value instanceof Boolean boolean1) {
+            serializePrimitive(rec, fieldName, boolean1.booleanValue());
+        } else if (value instanceof String string) {
+            serializeString(rec, fieldName, string);
+        } else if (value instanceof byte[] bytes){
+            serializeBytes(rec, fieldName, bytes);
         } else {
             throw new RuntimeException("Primitive type " + value.getClass().getSimpleName() + " not supported!");
         }

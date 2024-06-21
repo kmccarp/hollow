@@ -272,7 +272,7 @@ public class UniqueKeyIndex<T extends HollowObject, Q>
             this.primaryTypeKey = ((HollowObjectSchema) schema).getPrimaryKey();
             if (primaryTypeKey == null) {
                 throw new IllegalArgumentException(
-                        String.format("No primary key associated with primary type %s", uniqueType));
+                "No primary key associated with primary type %s".formatted(uniqueType));
             }
             return this;
         }

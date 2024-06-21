@@ -61,8 +61,8 @@ public class FlatRecordWriter {
 
         int recStart = (int) buf.length();
         VarInt.writeVInt(buf, schemaOrdinal);
-        if (rec instanceof HollowHashableWriteRecord)
-            ((HollowHashableWriteRecord) rec).writeDataTo(buf, HashBehavior.IGNORED_HASHES);
+        if (rec instanceof HollowHashableWriteRecord record)
+            record.writeDataTo(buf, HashBehavior.IGNORED_HASHES);
         else
             rec.writeDataTo(buf);
         int recLen = (int) (buf.length() - recStart);

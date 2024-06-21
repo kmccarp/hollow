@@ -51,8 +51,8 @@ public class PrimaryKey {
         }
 
         HollowSchema schema = hollowDataAccess.getSchema(type);
-        if (schema instanceof HollowObjectSchema) {
-            return ((HollowObjectSchema) schema).getPrimaryKey();
+        if (schema instanceof HollowObjectSchema objectSchema) {
+            return objectSchema.getPrimaryKey();
         }
         return null;
     }

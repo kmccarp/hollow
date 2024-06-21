@@ -92,8 +92,7 @@ public class HollowBlobHeader {
 
     @Override
     public boolean equals(Object other) {
-        if(other instanceof HollowBlobHeader) {
-            HollowBlobHeader oh = (HollowBlobHeader)other;
+        if(other instanceof HollowBlobHeader oh) {
             return blobFormatVersion == oh.blobFormatVersion
                     && headerTags.equals(oh.getHeaderTags())
                     && originRandomizedTag == oh.originRandomizedTag

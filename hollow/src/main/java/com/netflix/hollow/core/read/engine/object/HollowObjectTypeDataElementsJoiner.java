@@ -39,9 +39,11 @@ class HollowObjectTypeDataElementsJoiner {
 
         for (HollowObjectTypeDataElements elements : from) {
             if (elements.encodedAdditions != null) {
-                throw new IllegalStateException("Encountered encodedAdditions in data elements joiner- this is not expected " +
-                        "since encodedAdditions only exist on delta data elements and they dont carry over to target data elements, " +
-                        "delta data elements are never split/joined");
+                throw new IllegalStateException("""
+                        Encountered encodedAdditions in data elements joiner- this is not expected \
+                        since encodedAdditions only exist on delta data elements and they dont carry over to target data elements, \
+                        delta data elements are never split/joined\
+                        """);
             }
         }
 

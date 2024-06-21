@@ -55,8 +55,8 @@ public class DefaultHashCodeFinder implements HollowObjectHashCodeFinder {
     }
 
     public int hashCode(String typeName, Object objectToHash) {
-        if(objectToHash instanceof HollowRecord)
-            return ((HollowRecord)objectToHash).getOrdinal();
+        if(objectToHash instanceof HollowRecord record)
+            return record.getOrdinal();
         return objectToHash.hashCode();
     }
 

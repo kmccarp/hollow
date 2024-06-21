@@ -48,28 +48,28 @@ public class JsonUtil {
             while (token != null && token != JsonToken.END_OBJECT) {
                 switch (token) {
                     case START_ARRAY:
-                        print(index, String.format("fieldname=%s, token=%s", parser.getCurrentName(), token), out);
+                        print(index, "fieldname=%s, token=%s".formatted(parser.getCurrentName(), token), out);
                         print(parser, parser.nextToken(), index + 1, out);
                         break;
                     case START_OBJECT:
-                        print(index, String.format("fieldname=%s, token=%s", parser.getCurrentName(), token), out);
+                        print(index, "fieldname=%s, token=%s".formatted(parser.getCurrentName(), token), out);
                         print(parser, parser.nextToken(), index + 1, out);
                         break;
                     case VALUE_NUMBER_INT:
-                        print(index, String.format("fieldname=%s, token=%s, value=%s", parser.getCurrentName(), token, parser.getLongValue()), out);
+                        print(index, "fieldname=%s, token=%s, value=%s".formatted(parser.getCurrentName(), token, parser.getLongValue()), out);
                         break;
                     case VALUE_NUMBER_FLOAT:
-                        print(index, String.format("fieldname=%s, token=%s, value=%s", parser.getCurrentName(), token, parser.getDoubleValue()), out);
+                        print(index, "fieldname=%s, token=%s, value=%s".formatted(parser.getCurrentName(), token, parser.getDoubleValue()), out);
                         break;
                     case VALUE_NULL:
-                        print(index, String.format("fieldname=%s, token=%s, value=NULL", parser.getCurrentName(), token), out);
+                        print(index, "fieldname=%s, token=%s, value=NULL".formatted(parser.getCurrentName(), token), out);
                         break;
                     case VALUE_STRING:
-                        print(index, String.format("fieldname=%s, token=%s, value=%s", parser.getCurrentName(), token, parser.getValueAsString()), out);
+                        print(index, "fieldname=%s, token=%s, value=%s".formatted(parser.getCurrentName(), token, parser.getValueAsString()), out);
                         break;
                     case VALUE_FALSE:
                     case VALUE_TRUE:
-                        print(index, String.format("fieldname=%s, token=%s, value=%s", parser.getCurrentName(), token, parser.getBooleanValue()), out);
+                        print(index, "fieldname=%s, token=%s, value=%s".formatted(parser.getCurrentName(), token, parser.getBooleanValue()), out);
                         break;
                     case FIELD_NAME:
                         //print(index, String.format("fieldname=%s, token=%s", parser.getCurrentName(), token));

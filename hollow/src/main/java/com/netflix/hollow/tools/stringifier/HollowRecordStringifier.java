@@ -123,14 +123,14 @@ public class HollowRecordStringifier implements HollowStringifier<HollowRecordSt
         } else if (ordinal == -1) {
             writer.append("null");
         } else {
-            if(typeDataAccess instanceof HollowObjectTypeDataAccess) {
-                appendObjectStringify(writer, dataAccess, (HollowObjectTypeDataAccess)typeDataAccess, ordinal, indentation);
-            } else if(typeDataAccess instanceof HollowListTypeDataAccess) {
-                appendListStringify(writer, dataAccess, (HollowListTypeDataAccess)typeDataAccess, ordinal, indentation);
-            } else if(typeDataAccess instanceof HollowSetTypeDataAccess) {
-                appendSetStringify(writer, dataAccess, (HollowSetTypeDataAccess)typeDataAccess, ordinal, indentation);
-            } else if(typeDataAccess instanceof HollowMapTypeDataAccess) {
-                appendMapStringify(writer, dataAccess, (HollowMapTypeDataAccess)typeDataAccess, ordinal, indentation);
+            if(typeDataAccess instanceof HollowObjectTypeDataAccess access) {
+                appendObjectStringify(writer, dataAccess, access, ordinal, indentation);
+            } else if(typeDataAccess instanceof HollowListTypeDataAccess access) {
+                appendListStringify(writer, dataAccess, access, ordinal, indentation);
+            } else if(typeDataAccess instanceof HollowSetTypeDataAccess access) {
+                appendSetStringify(writer, dataAccess, access, ordinal, indentation);
+            } else if(typeDataAccess instanceof HollowMapTypeDataAccess access) {
+                appendMapStringify(writer, dataAccess, access, ordinal, indentation);
             }
         }
 

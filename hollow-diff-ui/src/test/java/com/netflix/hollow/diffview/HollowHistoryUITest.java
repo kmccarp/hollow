@@ -255,11 +255,13 @@ public class HollowHistoryUITest {
         try {
             assertUiParity(historyUiExpected, historyUIServerActual.getUI());
         } catch (AssertionError | Exception e) {
-            System.out.println(String.format("Error when comparing expected and actual history UIs for parity. " +
-                            "Expected and actual history UIs are hosted at ports %s and %s respectively. " +
-                            "Be sure to open in different browsers for isolated sessions state stored in cookie which " +
-                            "could affect the links generated in the output html",
-                    PORT_EXPECTED, PORT_ACTUAL));
+            System.out.println(("""
+            Error when comparing expected and actual history UIs for parity. \
+            Expected and actual history UIs are hosted at ports %s and %s respectively. \
+            Be sure to open in different browsers for isolated sessions state stored in cookie which \
+            could affect the links generated in the output html\
+            """).formatted(
+            PORT_EXPECTED, PORT_ACTUAL));
             e.printStackTrace();
             historyUIServerExpected.start();
             historyUIServerActual.start();

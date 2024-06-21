@@ -116,11 +116,11 @@ public class HollowEffigy {
             if(this == other)
                 return true;
 
-            if(other instanceof Field) {
-                if(this.fieldName.equals(((Field) other).fieldName) && this.typeName.equals(((Field) other).typeName)) {
+            if(other instanceof Field field) {
+                if(this.fieldName.equals(field.fieldName) && this.typeName.equals(field.typeName)) {
                     if(this.value == null)
-                        return ((Field) other).value == null;
-                    return this.value.equals(((Field) other).value);
+                        return field.value == null;
+                    return this.value.equals(field.value);
                 }
             }
 
@@ -145,8 +145,7 @@ public class HollowEffigy {
         if(this == other)
             return true;
 
-        if(other instanceof HollowEffigy) {
-            HollowEffigy otherEffigy = (HollowEffigy) other;
+        if(other instanceof HollowEffigy otherEffigy) {
             return this.getFields().equals(otherEffigy.getFields());
         }
 
